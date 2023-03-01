@@ -3,8 +3,12 @@ import { useEffect } from 'react';
 import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 
 import { useDispatch, useSelector } from 'react-redux';
-
-import { setUser, clearUser } from './redux/actions/user_action';
+import {
+  setUser,
+  clearUser,
+  currentUser,
+  userIsLoading,
+} from './redux/reducer/userSlice';
 
 import { appAuth } from './configs/firebaseconfig';
 import { onAuthStateChanged } from 'firebase/auth';
@@ -17,20 +21,29 @@ function App() {
 
   const navigate = useNavigate();
   let dispatch = useDispatch();
-  const isLoading = useSelector((state) => state.userReducer.isLoading);
-  const currentUser = useSelector((state) => state.userReducer.currentUser);
+
+  const isCurrentUser = useSelector(currentUser);
+  const isLoading = useSelector(userIsLoading);
 
   useEffect(() => {
     onAuthStateChanged(appAuth, (user) => {
       if (user) {
         navigate('/');
-        dispatch(setUser(user));
-      } 
+        dispatch(setUser({          
+          displayName: user.displayName,
+          uid: user.uid,
+          email: user.email,
+          emailVerified: user.emailVerified,
+          photoURL: user.photoURL,
+          isAnonymous: user.isAnonymous
+        }));
+      }
       else {
         navigate('/login');
         dispatch(clearUser());
       }
     });
+    // eslint-disable-next-line
   }, []);
 
   if (isLoading) {
@@ -39,9 +52,9 @@ function App() {
   else {
     return (
       <Routes>
-        <Route path='/' element={currentUser ? <Home /> : <Navigate replace={true} to='/login' />}/>
+        <Route path='/' element={isCurrentUser ? <Home /> : <Navigate replace={true} to='/login' />}/>
   
-        <Route path='/login' element={!currentUser ? <Login /> : <Navigate replace={true} to='/' />}/>
+        <Route path='/login' element={!isCurrentUser ? <Login /> : <Navigate replace={true} to='/' />}/>
       </Routes>
     );
   };
