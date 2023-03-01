@@ -1,5 +1,7 @@
 import { initializeApp } from 'firebase/app';
-import { getAnalytics } from 'firebase/analytics';
+import { getAuth } from 'firebase/auth';
+import { getFirestore, Timestamp } from "firebase/firestore";
+// import { getAnalytics } from 'firebase/analytics';
 
 const firebaseConfig = {
     apiKey: process.env.REACT_APP_API_KEY,
@@ -12,4 +14,9 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+const appAuth = getAuth();
+const appFireStore = getFirestore(app);
+const timeStamp = Timestamp;
+// const analytics = getAnalytics(app);
+
+export { appAuth, appFireStore, timeStamp };
