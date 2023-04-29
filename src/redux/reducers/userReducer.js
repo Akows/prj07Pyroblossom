@@ -11,20 +11,20 @@ const userReducer = (prevState = initialState, action) => {
             return {
                 ...prevState,
                 data: action.data,
-                isLoggingIn: true,
+                isLogin: true,
             };
         case 'LOG_OUT':
             return {
                 ...prevState,
                 data: null,
-                isLoggingIn: false,
+                isLogin: false,
             };
 
         case 'ERROR':
             return {
                 ...prevState,
                 data: action.data,
-                isLoggingIn: false,
+                isLogin: false,
             };
 
         default:

@@ -1,8 +1,6 @@
 import React, { useCallback } from 'react'
 import { useDispatch } from 'react-redux';
 
-// const { logIn } = require('../redux/actions/userAction');
-
 import { logIn, logOut } from '../redux/actions/userAction'
 
 export const Index = () => {

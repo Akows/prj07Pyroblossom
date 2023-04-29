@@ -10,10 +10,10 @@ const initialState = {
 };
 
 const firstMiddleware = (store) => (next) => (action) => {
+    console.log('==========');
     console.log('Log Record.');
     console.log(action);
     console.log('Record End.');
-    console.log('==========');
     console.log('==========');
     next(action);
 };
