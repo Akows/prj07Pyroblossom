@@ -1,3 +1,5 @@
+import { produce } from 'immer'
+
 const initialState = {
     user: {
         data: null,
@@ -6,30 +8,28 @@ const initialState = {
 };
 
 const userReducer = (prevState = initialState, action) => {
-    switch (action.type) {
-        case 'LOG_IN':
-            return {
-                ...prevState,
-                data: action.data,
-                isLogin: true,
-            };
-        case 'LOG_OUT':
-            return {
-                ...prevState,
-                data: null,
-                isLogin: false,
-            };
 
-        case 'ERROR':
-            return {
-                ...prevState,
-                data: action.data,
-                isLogin: false,
-            };
+    return produce(prevState, (draft) => {
+        switch (action.type) {
+            case 'LOG_IN':
+                draft.data = action.data;
+                draft.isLogin = true;
+                break;
+            case 'LOG_OUT':
+                draft.data = null;
+                draft.isLogin = false;
+                break;
+            case 'ERROR':
+                draft.data = action.data;
+                draft.isLogin = false;
+                break;
+            default:
+                break;
+        }
+    });
 
-        default:
-            return prevState;
-    }
+
+
 };
 
-module.exports = userReducer;
+export { userReducer };

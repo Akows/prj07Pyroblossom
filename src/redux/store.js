@@ -9,7 +9,7 @@ const initialState = {
     },
 };
 
-const firstMiddleware = (store) => (next) => (action) => {
+const logMiddleware = (store) => (next) => (action) => {
     console.log('==========');
     console.log('Log Record.');
     console.log(action);
@@ -26,9 +26,9 @@ const thunkMiddleware = (store) => (next) => (action) => {
 };
 
 const enhancer = composeWithDevTools(
-    applyMiddleware(firstMiddleware, thunkMiddleware)
+    applyMiddleware(logMiddleware, thunkMiddleware)
 );
 
 const store = createStore(reducerIndex, initialState, enhancer);
 
-export default store;
+export { store };
