@@ -13,9 +13,13 @@ export const Index = () => {
 
         background-color: antiquewhite;
 
-        font-family: 'moffont';
         font-size: 72px;
         font-weight: 500;
+
+        @media screen and (max-width: 1200px) {
+            width: 95%;
+            background-color: red;
+        }
     `;
 
 
@@ -37,7 +41,7 @@ export const Index = () => {
 
     return (
         <IndexBackGround>
-            다람쥐 헌 쳇바퀴에 타고파. 123
+            다람쥐
 
             <button onClick={onClick}>로그인버튼</button>
             <button onClick={onClick2}>로그아웃버튼</button>
