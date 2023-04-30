@@ -1,9 +1,23 @@
 import React, { useCallback } from 'react'
 import { useDispatch } from 'react-redux';
+import styled from 'styled-components';
 
 import { logIn, logOut } from '../redux/actions/userAction'
 
 export const Index = () => {
+
+    const IndexBackGround = styled.div`
+
+        width: 1200px;
+        height: 100%;
+
+        background-color: antiquewhite;
+
+        font-family: 'moffont';
+        font-size: 72px;
+        font-weight: 500;
+    `;
+
 
     const dispatch = useDispatch();
 
@@ -22,11 +36,11 @@ export const Index = () => {
 
 
     return (
-        <div>
-            Index
+        <IndexBackGround>
+            다람쥐 헌 쳇바퀴에 타고파. 123
 
             <button onClick={onClick}>로그인버튼</button>
             <button onClick={onClick2}>로그아웃버튼</button>
-        </div>
+        </IndexBackGround>
     )
 }

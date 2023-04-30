@@ -1,0 +1,15 @@
+/* 외부 폰트 파일 적용 */
+/* 해양수산부 공식 폰트, 해수체B. */
+
+@font-face {
+    /* 프로젝트 내부에서 사용될 폰트의 명칭. */
+    font-family: 'moffont';
+    /* 폰트의 기본 스타일.*/
+    font-style: normal;
+    /* 폰트의 기본 굵기. */
+    font-weight: 100;
+    /* 폰트 기본 색상. */
+    color: #3d3d3b;
+    /* 폰트 파일 연결. */
+    src: url('./ja-jp.ttf');
+}
