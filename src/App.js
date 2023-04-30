@@ -7,6 +7,14 @@ import styled from 'styled-components';
 import { Index } from './pages/Index';
 import { Navigation } from './components/Navigation';
 
+const AppBackGround = styled.div`
+display: flex;
+flex-direction: column;
+align-items: center;
+
+font-family: 'GIFont';
+`;
+
 const Layout = () => {
   return (
     <div>
@@ -17,14 +25,6 @@ const Layout = () => {
 }
 
 function App() {
-
-  const AppBackGround = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    font-family: 'GIFont';
-  `;
 
   return (
 
