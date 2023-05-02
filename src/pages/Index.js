@@ -8,23 +8,23 @@ const IndexBackGround = styled.div`
     width: 1200px;
     height: 100%;
 
-    background-color: antiquewhite;
+    background-color: black;
 
-    font-size: 72px;
+    margin-top: 5px;
+
+    font-size: 36px;
     font-weight: 500;
 
+    transform: translate3d(0, 0, 0);
+    transition: all 1s ease;
+
     @media screen and (max-width: 1200px) {
-        width: 95%;
-        background-color: red;
+        width: 90%;
     }
 `;
 
-const Back = styled.div`
-    background: black;
-    height: 6000px;
-`;
-
 const Div = styled.div`
+    width: 100%;
     height: 700px;
 
     display: flex;
@@ -34,9 +34,9 @@ const Div = styled.div`
 
     color: white;
 
-    opacity: 0;
+    opacity: 0.3;
     transition: all 0.5s;
-    transform: rotate(-180deg);
+    /* transform: rotate(-180deg); */
 
     border: 1px solid wheat;
 `;
@@ -74,22 +74,24 @@ export const Index = () => {
             entries.forEach((item) => {
                 if (item.isIntersecting) {
                     item.target.style.opacity = 1;
-                    item.target.style.transform = 'rotate(0deg)';
+                    // item.target.style.transform = 'rotate(0deg)';
                 }
                 else {
                     item.target.style.opacity = 0.3;
-                    item.target.style.transform = 'rotate(180deg)';
+                    // item.target.style.transform = 'rotate(180deg)';
                 }
 
                 console.log(item.intersectionRatio);
             });
         }, { threshold: 0.8 });
 
+
+
         for (let index = 0; index < refs.current.children.length; index++) {
             observer.current.observe(refs.current.children[index]);
         }
 
-        console.log(observer.current);
+        // console.log(observer.current);
 
         return () => {
 
@@ -144,11 +146,7 @@ export const Index = () => {
 
     return (
         <>
-            <IndexBackGround>
-
-            </IndexBackGround>
-
-            <Back ref={refs}>
+            <IndexBackGround ref={refs}>
                 <Div>
                     <h1>텍스트1</h1>
                 </Div>
@@ -164,7 +162,7 @@ export const Index = () => {
                 <Div>
                     <h1>텍스트5</h1>
                 </Div>
-            </Back>
+            </IndexBackGround>
         </>
     )
 }

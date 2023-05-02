@@ -8,27 +8,25 @@ import { Index } from './pages/Index';
 import { Navigation } from './components/Navigation';
 
 const AppBackGround = styled.div`
-display: flex;
-flex-direction: column;
-align-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
-font-family: 'GIFont';
+  font-family: 'GIFont';
 `;
 
 const Layout = () => {
   return (
-    <div>
+    <>
       <Navigation />
       <Outlet />
-    </div>
+    </>
   )
 }
 
 function App() {
 
   return (
-
-
     <AppBackGround>
       <Routes>
 
