@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 import { Link } from 'react-router-dom';
 
+import { AiOutlineUser } from 'react-icons/ai';
 import { AiOutlineMenu } from 'react-icons/ai';
 import { AiOutlinePicCenter } from 'react-icons/ai';
 
@@ -111,12 +112,20 @@ const Menus = styled.div`
 const DropDownMenu = styled(Menus)`
     width: 100%;
 `;
-const DownMenuTitle = styled.div`
-    width: 120px;
+const DownMenuIcon = styled.div`
     height: 100%;
 
-    padding: 5px 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+`;
+const DownMenuTitle = styled.div`
+    width: 100%;
+    height: 50px;
 
+    padding: 5px 5px;
+    
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -128,7 +137,7 @@ const DownMenuTitle = styled.div`
 
     & > div {
         display: block; 
-        top: 80px;
+        top: 50px;
     };
 `;
 const DownMenu = styled.div`
@@ -137,14 +146,8 @@ const DownMenu = styled.div`
 
     display: none; 
     position: absolute; 
-    top: 55px; 
 
     background-color: gray;
-
-    &:hover {
-        display: block; 
-        top: 80px;
-    }
 
     & > a { 
         width: 100%;
@@ -182,21 +185,36 @@ export const Navigation = () => {
         <BackGround>
 
             <TitleAndMenuArea
-                onMouseOver={() => setIsHovering(1)}
-                onMouseOut={() => setIsHovering(0)}
+                onClick={() => setIsClick(!isClick)}
             >
                 <DropDownMenu>
-                    {isHovering ?
+                    {isClick ?
                         <>
-                            <AiOutlinePicCenter size={30} />
+                            <DownMenuIcon>
+                                <AiOutlinePicCenter size={30} />
+                            </DownMenuIcon>
 
-
+                            <DownMenuTitle
+                                onClick={(event) => event.stopPropagation()}
+                            >
+                                서브메뉴제목
+                                <DownMenu>
+                                    <Link to='/'>
+                                        서브메뉴1
+                                    </Link>
+                                    <Link to='/'>
+                                        서브메뉴2
+                                    </Link>
+                                    <Link to='/'>
+                                        서브메뉴3
+                                    </Link>
+                                </DownMenu>
+                            </DownMenuTitle>
                         </>
                         :
-                        <>
+                        <DownMenuIcon>
                             <AiOutlineMenu size={30} />
-
-                        </>
+                        </DownMenuIcon>
                     }
                 </DropDownMenu>
             </TitleAndMenuArea>
@@ -220,10 +238,10 @@ export const Navigation = () => {
             </MenuArea>
 
             <UserArea
-                // onMouseOver={() => setIsHovering(1)}
-                // onMouseOut={() => setIsHovering(0)}
+            // onMouseOver={() => setIsHovering(1)}
+            // onMouseOut={() => setIsHovering(0)}
 
-                onClick={() => setIsClick(!isClick)}
+
             >
                 <Menu3>
 
@@ -231,27 +249,6 @@ export const Navigation = () => {
                         onMouseOver={() => setIsHovering(1)}
                         onMouseOut={() => setIsHovering(0)}
                     >
-                        {isClick ?
-                            <>
-                                <AiOutlinePicCenter size={30} />
-
-                                <DownMenu>
-                                    <Link to='/'>
-                                        서브메뉴1
-                                    </Link>
-                                    <Link to='/'>
-                                        서브메뉴2
-                                    </Link>
-                                    <Link to='/'>
-                                        서브메뉴3
-                                    </Link>
-                                </DownMenu>
-                            </>
-                            :
-                            <>
-                                <AiOutlineMenu size={30} />
-                            </>
-                        }
 
 
 
