@@ -21,6 +21,10 @@ const IndexBackGround = styled.div`
     @media screen and (max-width: 1200px) {
         width: 90%;
     }
+
+    @media screen and (max-width: 700px) {
+        margin-top: 80px;
+    }
 `;
 
 const Div = styled.div`
@@ -79,7 +83,7 @@ export const Index = () => {
                     item.target.style.opacity = 0.3;
                 }
 
-                console.log(item.intersectionRatio);
+                // console.log(item.intersectionRatio);
             });
         }, { threshold: 0.8 });
 

@@ -45,6 +45,12 @@ const BackGround = styled.div`
     @media screen and (max-width: 1200px) {
         width: 90%;
     }
+
+    // 700px 이하에서 등장하는 드롭다운 메뉴는 hover 효과가 발동되지 않도록 높이를 80px로 고정.
+    @media screen and (max-width: 700px) {
+        height: 80px;
+        opacity: 1;
+    }
 `;
 
 const NavArea = styled.div`
@@ -103,11 +109,6 @@ const Menus = styled.div`
 
     transform: translate3d(0, 0, 0);
     transition: all 1s ease;
-
-    &:hover{  
-        transform: translate3d(0, 0, 100%);
-        transition: all 1s ease;
-    }
 `;
 const DropDownMenu = styled(Menus)`
     width: 100%;
@@ -134,6 +135,8 @@ const DownMenuTitle = styled.div`
     position: relative;
 
     background-color: gray;
+
+    animation: dropdown30 0.7s ease;
 
     & > div {
         display: block; 
@@ -179,7 +182,7 @@ export const Navigation = () => {
 
     const [isHovering, setIsHovering] = useState(0);
 
-    const [isClick, setIsClick] = useState(true);
+    const [isClick, setIsClick] = useState(false);
 
     return (
         <BackGround>
@@ -240,67 +243,9 @@ export const Navigation = () => {
             <UserArea
             // onMouseOver={() => setIsHovering(1)}
             // onMouseOut={() => setIsHovering(0)}
-
-
             >
                 <Menu3>
-
-                    <DownMenuTitle
-                        onMouseOver={() => setIsHovering(1)}
-                        onMouseOut={() => setIsHovering(0)}
-                    >
-
-
-
-
-                    </DownMenuTitle>
-
-
-                    {/* {isHovering ?
-                        <>
-                            <AiOutlinePicCenter size={30} />
-
-                            <DownMenuTitle>
-                                <div>
-                                    <AiOutlinePicCenter size={30} />
-                                </div>
-
-                                {isClick ?
-                                    <>
-                                        ok
-                                    </>
-                                    :
-                                    <>
-                                        nok
-                                    </>
-                                }
-
-
-                                <DownMenu>
-                                    <Link to='/'>
-                                        서브메뉴1
-                                    </Link>
-                                    <Link to='/'>
-                                        서브메뉴2
-                                    </Link>
-                                    <Link to='/'>
-                                        서브메뉴3
-                                    </Link>
-                                </DownMenu>
-
-                            </DownMenuTitle>
-                        </>
-                        :
-                        <>
-                            <AiOutlineMenu size={30} />
-
-                            <DownMenuTitle>
-                                <AiOutlineMenu size={30} />
-                            </DownMenuTitle>
-                        </>
-
-                    } */}
-
+                    <Link to='/'><AiOutlineUser size={30} /></Link>
                 </Menu3>
             </UserArea>
         </BackGround>
