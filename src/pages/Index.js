@@ -10,7 +10,7 @@ const IndexBackGround = styled.div`
 
     background-color: black;
 
-    margin-top: 5px;
+    margin-top: 50px;
 
     font-size: 36px;
     font-weight: 500;
@@ -74,11 +74,9 @@ export const Index = () => {
             entries.forEach((item) => {
                 if (item.isIntersecting) {
                     item.target.style.opacity = 1;
-                    // item.target.style.transform = 'rotate(0deg)';
                 }
                 else {
                     item.target.style.opacity = 0.3;
-                    // item.target.style.transform = 'rotate(180deg)';
                 }
 
                 console.log(item.intersectionRatio);
@@ -96,7 +94,7 @@ export const Index = () => {
         return () => {
 
         }
-    }, [])
+    }, []);
 
 
 
@@ -141,7 +139,7 @@ export const Index = () => {
             // observer.current.observe(node);
         };
 
-    }, [])
+    }, []);
 
 
     return (
@@ -164,5 +162,5 @@ export const Index = () => {
                 </Div>
             </IndexBackGround>
         </>
-    )
-}
+    );
+};

@@ -9,23 +9,34 @@ import { AiOutlinePicCenter } from 'react-icons/ai';
 // UI 기믹.
 // 1200px 이하에서는 BackGround 너비가 90%로 
 // 1000px 이하에서는 기능 메뉴 버튼의 크기가 축소. 
-// 700px 이하에서는 로고 메뉴와 기능 메뉴가 사라지고 드랍다운 메뉴가 등장.
+// 700px 이하에서는 모든 메뉴가 사라지고, 대신 드랍다운 메뉴가 등장.
 // BackGround와 각 버튼 크기가 변화할 때마다 부드러운 애니매이션 효과가 적용.
 
+// 커서가 상단 메뉴바에 올라갈 경우 바 높이가 50px에서 80px로 확장, opacity: 0.9에서 1로 변경.
 const BackGround = styled.div`
     width: 1200px;
-    height: 80px;
+    height: 50px;
+
+    position: fixed;
+    top: 0;
+
+    z-index: 999;
 
     display: flex;
     flex-direction: row;
     align-items: center;
 
-    background-color: aquamarine;
+    background-color: gray;
+    opacity: 0.9;
 
     transform: translate3d(0, 0, 0);
     transition: all 1s ease;
 
     &:hover{  
+        height: 80px;
+
+        opacity: 1;
+
         transform: translate3d(0, 0, 100%);
         transition: all 1s ease;
     }
@@ -45,7 +56,7 @@ const NavArea = styled.div`
 `;
 
 const TitleAndMenuArea = styled(NavArea)`
-    width: 90%;
+    width: 100%;
     display: none;
 
     @media screen and (max-width: 700px) {
@@ -54,14 +65,14 @@ const TitleAndMenuArea = styled(NavArea)`
 `;
 
 const TitleArea = styled(NavArea)`
-    width: 30%;
+    width: 25%;
 
     @media screen and (max-width: 700px) {
         display: none;
     }
 `;
 const MenuArea = styled(NavArea)`
-    width: 60%;
+    width: 65%;
     justify-content: flex-start;
 
     @media screen and (max-width: 700px) {
@@ -70,6 +81,10 @@ const MenuArea = styled(NavArea)`
 `;
 const UserArea = styled(NavArea)`
     width: 10%;
+
+    @media screen and (max-width: 700px) {
+        display: none;
+    }
 `;
 
 const Menus = styled.div`
@@ -96,6 +111,52 @@ const Menus = styled.div`
 const DropDownMenu = styled(Menus)`
     width: 100%;
 `;
+const DownMenuTitle = styled.div`
+    width: 120px;
+    height: 100%;
+
+    padding: 5px 5px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    position: relative;
+
+    background-color: gray;
+
+    & > div {
+        display: block; 
+        top: 80px;
+    };
+`;
+const DownMenu = styled.div`
+    width: 100%;
+    height: 90px;
+
+    display: none; 
+    position: absolute; 
+    top: 55px; 
+
+    background-color: gray;
+
+    &:hover {
+        display: block; 
+        top: 80px;
+    }
+
+    & > a { 
+        width: 100%;
+        height: 30px;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    };
+`;
+
 const Menu1 = styled(Menus)`
     width: 100%;
 `;
@@ -115,16 +176,28 @@ export const Navigation = () => {
 
     const [isHovering, setIsHovering] = useState(0);
 
+    const [isClick, setIsClick] = useState(true);
+
     return (
-
-        // Genshin Pyro Blossom
-        // Menu1
-
         <BackGround>
 
-            <TitleAndMenuArea>
+            <TitleAndMenuArea
+                onMouseOver={() => setIsHovering(1)}
+                onMouseOut={() => setIsHovering(0)}
+            >
                 <DropDownMenu>
-                    <Link to='/'>드랍다운메뉴</Link>
+                    {isHovering ?
+                        <>
+                            <AiOutlinePicCenter size={30} />
+
+
+                        </>
+                        :
+                        <>
+                            <AiOutlineMenu size={30} />
+
+                        </>
+                    }
                 </DropDownMenu>
             </TitleAndMenuArea>
 
@@ -147,24 +220,92 @@ export const Navigation = () => {
             </MenuArea>
 
             <UserArea
-                onMouseOver={() => setIsHovering(1)}
-                onMouseOut={() => setIsHovering(0)}
+                // onMouseOver={() => setIsHovering(1)}
+                // onMouseOut={() => setIsHovering(0)}
+
+                onClick={() => setIsClick(!isClick)}
             >
                 <Menu3>
-                    <Link to='/'>
-                        {isHovering ?
-                            <AiOutlinePicCenter size={30} />
+
+                    <DownMenuTitle
+                        onMouseOver={() => setIsHovering(1)}
+                        onMouseOut={() => setIsHovering(0)}
+                    >
+                        {isClick ?
+                            <>
+                                <AiOutlinePicCenter size={30} />
+
+                                <DownMenu>
+                                    <Link to='/'>
+                                        서브메뉴1
+                                    </Link>
+                                    <Link to='/'>
+                                        서브메뉴2
+                                    </Link>
+                                    <Link to='/'>
+                                        서브메뉴3
+                                    </Link>
+                                </DownMenu>
+                            </>
                             :
-                            <AiOutlineMenu size={30} />
+                            <>
+                                <AiOutlineMenu size={30} />
+                            </>
                         }
-                    </Link>
+
+
+
+
+                    </DownMenuTitle>
+
+
+                    {/* {isHovering ?
+                        <>
+                            <AiOutlinePicCenter size={30} />
+
+                            <DownMenuTitle>
+                                <div>
+                                    <AiOutlinePicCenter size={30} />
+                                </div>
+
+                                {isClick ?
+                                    <>
+                                        ok
+                                    </>
+                                    :
+                                    <>
+                                        nok
+                                    </>
+                                }
+
+
+                                <DownMenu>
+                                    <Link to='/'>
+                                        서브메뉴1
+                                    </Link>
+                                    <Link to='/'>
+                                        서브메뉴2
+                                    </Link>
+                                    <Link to='/'>
+                                        서브메뉴3
+                                    </Link>
+                                </DownMenu>
+
+                            </DownMenuTitle>
+                        </>
+                        :
+                        <>
+                            <AiOutlineMenu size={30} />
+
+                            <DownMenuTitle>
+                                <AiOutlineMenu size={30} />
+                            </DownMenuTitle>
+                        </>
+
+                    } */}
+
                 </Menu3>
             </UserArea>
-
-
         </BackGround>
-
-
-
-    )
-}
+    );
+};
