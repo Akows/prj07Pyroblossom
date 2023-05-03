@@ -19,7 +19,7 @@ const IndexBackGround = styled.div`
     transition: all 1s ease;
 
     @media screen and (max-width: 1200px) {
-        width: 90%;
+        width: 90.2%;
     }
 
     @media screen and (max-width: 700px) {
@@ -40,7 +40,6 @@ const Div = styled.div`
 
     opacity: 0.3;
     transition: all 0.5s;
-    /* transform: rotate(-180deg); */
 
     border: 1px solid wheat;
 `;

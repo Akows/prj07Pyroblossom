@@ -245,7 +245,7 @@ export const Navigation = () => {
             // onMouseOut={() => setIsHovering(0)}
             >
                 <Menu3>
-                    <Link to='/'><AiOutlineUser size={30} /></Link>
+                    <Link to='/login'><AiOutlineUser size={30} /></Link>
                 </Menu3>
             </UserArea>
         </BackGround>
