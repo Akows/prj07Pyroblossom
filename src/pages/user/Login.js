@@ -1,19 +1,16 @@
-import React from 'react'
+import React, { useCallback, useState } from 'react'
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 const BackGround = styled.div`
     width: 800px;
     height: 100%;
 
-    background-color: antiquewhite;
-
     margin-top: 120px;
 
     display: flex;
     flex-direction: column;
     align-items: center;
-
-    border-radius: 20px;
 
     transform: translate3d(0, 0, 0);
     transition: all 1s ease;
@@ -32,7 +29,15 @@ const centerOption = styled.div`
 
 const Form = styled.form`
     width: 700px;
-    height: 500px;
+    height: 400px;
+
+    background-color: antiquewhite;
+
+    border-radius: 20px;
+
+    @media screen and (max-width: 880px) {
+        width: 90%;
+    }
 `;
 const TitleArea = styled(centerOption)`
     width: 100%;
@@ -46,7 +51,7 @@ const InputArea = styled(centerOption)`
 `;
 const ButtonArea = styled(centerOption)`
     width: 100%;
-    height: 200px;
+    height: 100px;
 
     & > button {
         width: 120px;
@@ -58,7 +63,6 @@ const ButtonArea = styled(centerOption)`
         background-color: aquamarine;
 
         font-family: 'GIFont';
-
     };
     & > button:hover {
         background-color: red;
@@ -66,15 +70,8 @@ const ButtonArea = styled(centerOption)`
     & > button:active {
         background-color: blue;
     };
-
     & > p {
         color: red;
-    };
-    & > b {
-        font-weight: 500;
-        font-size: 18px;
-
-        margin-bottom: 10px;
     };
 `;
 
@@ -130,12 +127,72 @@ const Input = styled(centerOption)`
     }
 `;
 
+const SignupArea = styled(centerOption)`
+    width: 700px;
+    height: 200px;
+
+    margin-top: 20px;
+
+    background-color: antiquewhite;
+
+    border-radius: 20px;
+
+    & > p {
+        font-weight: 500;
+        font-size: 18px;
+
+        margin-bottom: 20px;
+    };
+    & > button {
+        width: 220px;
+        height: 80px;
+
+        border: none;
+        border-radius: 10px;
+
+        background-color: aquamarine;
+
+        font-size: 25px;
+        font-family: 'GIFont';
+    };
+    & > button:hover {
+        background-color: red;
+    };
+    & > button:active {
+        background-color: blue;
+    };
+
+    @media screen and (max-width: 880px) {
+        width: 90%;
+    }
+`;
+
 export const Login = () => {
 
-    const onSubmit = (event) => {
-        event.preventDefault();
-        console.log('Submit!');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
+    const onChange = (event) => {
+        if (event.target.type === 'email') {
+            setEmail(event.target.value);
+        }
+        else if (event.target.type === 'password') {
+            setPassword(event.target.value);
+        }
     };
+
+    const onSubmit = useCallback((event) => {
+        event.preventDefault();
+
+        if (!email || !password) {
+            console.log('아이디 혹은 비밀번호를 모두 입력해야합니다.');
+            return;
+        };
+
+        console.log(email, password);
+    }, [email, password]);
+
+
 
     return (
         <BackGround>
@@ -149,31 +206,34 @@ export const Login = () => {
                 <InputArea>
 
                     <Input>
-                        <label>ID :</label>
-                        <input></input>
+                        <label htmlFor='inputEmail'>ID :</label>
+                        <input type='email' id='inputEmail' onChange={onChange} value={email || ''} />
                         <p>에러문구</p>
                     </Input>
 
                     <Input>
-                        <label>PWD :</label>
-                        <input></input>
+                        <label htmlFor='inputPassword'>PWD :</label>
+                        <input type='password' id='inputPassword' onChange={onChange} value={password || ''} />
                         <p>에러문구</p>
                     </Input>
 
                 </InputArea>
 
                 <ButtonArea>
-                    <button type='submit'>Login</button>
+                    <button type='submit'>로그인</button>
                     <p>에러문구</p>
-
-                    <br />
-
-                    <b>아직 회원이 아니신가요?</b>
-                    <button>회원가입</button>
                 </ButtonArea>
 
-
             </Form>
+
+            <SignupArea>
+                <p>아직 회원이 아니신가요?</p>
+                <button>
+                    <Link to='/signup'>
+                        회원가입
+                    </Link>
+                </button>
+            </SignupArea>
 
 
         </BackGround>
