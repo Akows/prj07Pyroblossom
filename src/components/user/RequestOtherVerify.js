@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 const VerifyForm = styled.div`
     width: 500px;
-    height: 400px;
+    height: 500px;
 
     border: 1px solid gray;
 
@@ -60,7 +60,7 @@ const InputTitle = styled.label`
     }
 `;
 
-const InputPassword = styled.input`
+const InputOther = styled.input`
     width: 90%;
     height: 50px;
 
@@ -111,17 +111,20 @@ export const RequestOtherVerify = ({ onChange, userData, onSubmit }) => {
         <VerifyForm>
             <Input>
 
-                <InputTitle htmlFor='password'>
+                <InputTitle htmlFor='name'>
                     <p>더 다양한 기능을 사용하기 위해서</p>
                     <p>회원님의 나머지 정보를 입력해주세요.</p>
                 </InputTitle>
 
-                <InputPassword type='text' id='password' onChange={onChange} value={userData.password} placeholder='비밀번호를 입력해주세요' spellcheck='false' />
+                <InputOther type='text' id='name' onChange={onChange} value={userData.name} placeholder='사용자 이름을 입력해주세요' spellcheck='false' />
 
-                <InputPassword type='text' id='password' onChange={onChange} value={userData.password} placeholder='비밀번호를 한번 더 입력해주세요' spellcheck='false' />
+                <InputOther type='text' id='displayName' onChange={onChange} value={userData.displayName} placeholder='사용자 닉네임을 입력해주세요' spellcheck='false' />
 
-                <Script>* 보안을 위해서 비밀번호는 2번 입력해야합니다.</Script>
-                <Script>* 두 비밀번호는 반드시 일치하여야합니다.</Script>
+                <InputOther type='text' id='address' onChange={onChange} value={userData.address} placeholder='사용자 주소를 입력해주세요' spellcheck='false' />
+
+
+                <Script>* 사용자 이름과 주소는 팝업 스토어 제품 구매에 필요한 정보입니다.</Script>
+                <Script>* 회원 가입 이후 마이 페이지에서 언제든 수정가능합니다.</Script>
 
                 <SubmitButton onClick={onSubmit}>다음</SubmitButton>
 

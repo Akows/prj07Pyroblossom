@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 // import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
@@ -102,47 +102,47 @@ export const Index = () => {
 
 
 
-    const ref = useCallback(node => {
+    // const ref = useCallback(node => {
 
-        if (observer.current)
-            observer.current.disconnect();
+    //     if (observer.current)
+    //         observer.current.disconnect();
 
-        // IntersectionObserver가 수행할 동작을 작성.
-        observer.current = new IntersectionObserver(entries => {
+    //     // IntersectionObserver가 수행할 동작을 작성.
+    //     observer.current = new IntersectionObserver(entries => {
 
-            entries.forEach((item) => {
-                if (item.isIntersecting) {
-                    item.target.style.opacity = 1;
-                    item.target.style.transform = 'rotate(0deg)';
-                }
-                else {
-                    item.target.style.opacity = 0;
-                    item.target.style.transform = 'rotate(720deg)';
-                }
+    //         entries.forEach((item) => {
+    //             if (item.isIntersecting) {
+    //                 item.target.style.opacity = 1;
+    //                 item.target.style.transform = 'rotate(0deg)';
+    //             }
+    //             else {
+    //                 item.target.style.opacity = 0;
+    //                 item.target.style.transform = 'rotate(720deg)';
+    //             }
 
-                console.log(item.intersectionRatio);
-            });
+    //             console.log(item.intersectionRatio);
+    //         });
 
-            // if (entries[0].isIntersecting) {
-            //     console.log(entries);
-            // }
-        });
+    //         // if (entries[0].isIntersecting) {
+    //         //     console.log(entries);
+    //         // }
+    //     });
 
-        // DOM으로 제어된 HTML Element를 observe.
-        if (node) {
+    //     // DOM으로 제어된 HTML Element를 observe.
+    //     if (node) {
 
-            for (let index = 0; index < node.children.length; index++) {
-                observer.current.observe(node.children[index]);
-            }
+    //         for (let index = 0; index < node.children.length; index++) {
+    //             observer.current.observe(node.children[index]);
+    //         }
 
 
 
-            // console.log(node.children);
+    //         // console.log(node.children);
 
-            // observer.current.observe(node);
-        };
+    //         // observer.current.observe(node);
+    //     };
 
-    }, []);
+    // }, []);
 
 
     return (

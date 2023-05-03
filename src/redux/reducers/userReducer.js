@@ -1,35 +1,32 @@
 import { produce } from 'immer'
 
-const initialState = {
-    user: {
-        data: null,
-        isLogin: false,
-    },
-};
-
-const userReducer = (prevState = initialState, action) => {
-
+const userReducer = (prevState = {}, action) => {
     return produce(prevState, (draft) => {
         switch (action.type) {
+            case 'SIGN_UP':
+                draft.isLogin = false;
+                draft.isError = false;
+                draft.data = null;
+                break;
             case 'LOG_IN':
-                draft.data = action.data;
                 draft.isLogin = true;
+                draft.isError = false;
+                draft.data = action.data;
                 break;
             case 'LOG_OUT':
-                draft.data = null;
                 draft.isLogin = false;
+                draft.isError = false;
+                draft.data = null;
                 break;
             case 'ERROR':
-                draft.data = action.data;
                 draft.isLogin = false;
+                draft.isError = true;
+                draft.data = action.data;
                 break;
             default:
                 break;
         }
     });
-
-
-
 };
 
 export { userReducer };

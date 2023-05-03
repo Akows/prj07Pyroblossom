@@ -1,8 +1,11 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { RequestEmailVerify } from '../../components/user/RequestEmailVerify';
 import { RequestOtherVerify } from '../../components/user/RequestOtherVerify';
 import { RequestPasswordVerify } from '../../components/user/RequestPasswordVerify';
+import { SignUp } from '../../redux/actions/userAction';
 
 const BackGround = styled.div`
     width: 800px;
@@ -79,6 +82,11 @@ const ButtonArea = styled(centerOption)`
 
 export const Signup = () => {
 
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    const getIsError = useSelector((state) => state.isError);
+
     const [userData, setUserData] = useState({
         email: '',
         password: '',
@@ -86,16 +94,7 @@ export const Signup = () => {
         displayName: '',
         address: '',
     });
-
-    const [errorMassage, setErrorMassage] = useState({
-        emailErrorMassage: '',
-        pwdErrorMassage: '',
-        nameErrorMassage: '',
-        displayNameErrorMassage: '',
-        addressErrorMassage: '',
-        isError: true
-    });
-
+    const [isError, setIsError] = useState(false);
     const [isEmailEntered, setIsEmailEntered] = useState(false);
     const [isPasswordEntered, setIsPasswordEntered] = useState(true);
     const [isOtherEntered, setIsOtherEntered] = useState(true);
@@ -107,16 +106,22 @@ export const Signup = () => {
     const onSubmit = (event) => {
         event.preventDefault();
         setIsOtherEntered(true);
+        dispatch(SignUp(userData));
 
-        console.log(isEmailEntered);
-        console.log(isPasswordEntered);
-        console.log(isOtherEntered);
-
-        console.log(userData);
+        if (!isError) {
+            alert('회원가입이 완료되었습니다.');
+            navigate('/', { replace: true });
+        }
+        else {
+            alert('에러가 발생하였습니다.');
+            navigate('/', { replace: true });
+        }
     };
 
-
-
+    useEffect(() => {
+        setIsError(getIsError);
+        console.log(getIsError);
+    }, [getIsError]);
 
     return (
         <BackGround>

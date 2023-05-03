@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components';
 
 const VerifyForm = styled.div`
@@ -107,10 +107,37 @@ const SubmitButton = styled.button`
 
 export const RequestPasswordVerify = ({ onChange, userData, setIsPasswordEntered, setIsOtherEntered }) => {
 
-    const onSubmit = () => {
-        setIsPasswordEntered(true);
-        setIsOtherEntered(false);
+    const [passwordCheck, setPasswordCheck] = useState('');
+    const [isPasswordRight, setIsPasswordRight] = useState(false);
+
+    const onChangeCheck = (event) => {
+        setPasswordCheck(event.target.value);
     };
+
+    const onSubmit = (event) => {
+        event.preventDefault();
+
+        if (isPasswordRight) {
+            setIsPasswordEntered(true);
+            setIsOtherEntered(false);
+        }
+        else {
+            alert('비밀번호가 일치하지 않습니다.');
+            return;
+        }
+    };
+
+    useEffect(() => {
+        if (userData.password !== passwordCheck) {
+            setIsPasswordRight(false);
+            return;
+        }
+        else {
+            setIsPasswordRight(true);
+        };
+        // eslint-disable-next-line
+    }, [passwordCheck]);
+
 
     return (
         <VerifyForm>
@@ -123,7 +150,7 @@ export const RequestPasswordVerify = ({ onChange, userData, setIsPasswordEntered
 
                 <InputPassword type='text' id='password' onChange={onChange} value={userData.password} placeholder='비밀번호를 입력해주세요' spellcheck='false' />
 
-                <InputPassword type='text' id='password' onChange={onChange} value={userData.password} placeholder='비밀번호를 한번 더 입력해주세요' spellcheck='false' />
+                <InputPassword type='text' id='passwordCheck' onChange={onChangeCheck} value={passwordCheck} placeholder='비밀번호를 한번 더 입력해주세요' spellcheck='false' />
 
                 <Script>* 보안을 위해서 비밀번호는 2번 입력해야합니다.</Script>
                 <Script>* 두 비밀번호는 반드시 일치하여야합니다.</Script>

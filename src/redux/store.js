@@ -4,8 +4,15 @@ import reducerIndex from "./reducers/reducerIndex";
 
 const initialState = {
     user: {
-        data: null,
         isLogin: false,
+        isError: false,
+        data: {
+            email: '',
+            password: '',
+            name: '',
+            displayName: '',
+            address: '',
+        },
     },
 };
 
@@ -14,7 +21,6 @@ const logMiddleware = (store) => (next) => (action) => {
     console.log('Log Record.');
     console.log(action);
     console.log('Record End.');
-    console.log('==========');
     next(action);
 };
 
