@@ -1,5 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components';
+import { RequestEmailVerify } from '../../components/user/RequestEmailVerify';
+import { RequestOtherVerify } from '../../components/user/RequestOtherVerify';
+import { RequestPasswordVerify } from '../../components/user/RequestPasswordVerify';
 
 const BackGround = styled.div`
     width: 800px;
@@ -72,61 +75,9 @@ const ButtonArea = styled(centerOption)`
     };
 `;
 
-const Input = styled(centerOption)`
-    width: 500px;
-    height: 50%;
 
-    align-items: flex-start;
-
-    & > label {
-        font-size: 18px;
-    };
-    & > input {
-        width: 100%;
-        height: 40px;
-
-        border-radius: 10px;
-
-        font-size: 18px;
-        font-family: 'GIFont';
-
-        background-color: gray;
-    };
-    & > input:focus {
-        background-color: white;
-    };
-    & > p {
-        color: red;
-    };
-
-    transform: translate3d(0, 0, 0);
-    transition: all 1s ease;
-
-    @media screen and (max-width: 880px) {
-        width: 400px;
-
-        transform: translate3d(0, 0, 0);
-        transition: all 1s ease;
-    }
-
-    @media screen and (max-width: 500px) {
-        width: 300px;
-
-        transform: translate3d(0, 0, 0);
-        transition: all 1s ease;
-    }
-
-    @media screen and (max-width: 400px) {
-        width: 250px;
-
-        transform: translate3d(0, 0, 0);
-        transition: all 1s ease;
-    }
-`;
 
 export const Signup = () => {
-
-    const [pictrue, setPictrue] = useState('');
 
     const [userData, setUserData] = useState({
         email: '',
@@ -137,7 +88,6 @@ export const Signup = () => {
     });
 
     const [errorMassage, setErrorMassage] = useState({
-        picErrorMassage: '',
         emailErrorMassage: '',
         pwdErrorMassage: '',
         nameErrorMassage: '',
@@ -146,14 +96,24 @@ export const Signup = () => {
         isError: true
     });
 
+    const [isEmailEntered, setIsEmailEntered] = useState(false);
+    const [isPasswordEntered, setIsPasswordEntered] = useState(true);
+    const [isOtherEntered, setIsOtherEntered] = useState(true);
+
     const onChange = (event) => {
         setUserData({ ...userData, [event.target.id]: event.target.value });
     };
 
-    const onSubmit = useCallback((event) => {
+    const onSubmit = (event) => {
         event.preventDefault();
+        setIsOtherEntered(true);
+
+        console.log(isEmailEntered);
+        console.log(isPasswordEntered);
+        console.log(isOtherEntered);
+
         console.log(userData);
-    }, []);
+    };
 
 
 
@@ -161,55 +121,44 @@ export const Signup = () => {
     return (
         <BackGround>
 
-            <Form onSubmit={onSubmit}>
+            <Form>
 
                 <TitleArea>
-                    회원가입
+                    Genshin Pyro Blossom
                 </TitleArea>
 
                 <InputArea>
 
-                    <Input>
-                        <label htmlFor='inputPictrue'>프로필 사진 :</label>
-                        <input type='file' id='inputPictrue' onChange={onChange} value={pictrue || ''} />
-                        <p>{errorMassage.picErrorMassage}</p>
-                    </Input>
+                    {isEmailEntered ?
+                        <>
 
-                    <Input>
-                        <label htmlFor='email'>ID :</label>
-                        <input type='email' id='email' onChange={onChange} value={userData.email} />
-                        <p>{!userData.email ? <>이메일 주소를 입력해주세요</> : <></>}</p>
-                    </Input>
+                        </>
+                        :
+                        <RequestEmailVerify onChange={onChange} userData={userData} setIsEmailEntered={setIsEmailEntered} setIsPasswordEntered={setIsPasswordEntered} />
+                    }
 
-                    <Input>
-                        <label htmlFor='password'>PWD :</label>
-                        <input type='password' id='password' onChange={onChange} value={userData.password} />
-                        <p>{errorMassage.pwdErrorMassage}</p>
-                    </Input>
+                    {isPasswordEntered ?
+                        <>
 
-                    <Input>
-                        <label htmlFor='name'>Name :</label>
-                        <input type='text' id='name' onChange={onChange} value={userData.name} />
-                        <p>{errorMassage.nameErrorMassage}</p>
-                    </Input>
+                        </>
+                        :
+                        <RequestPasswordVerify onChange={onChange} userData={userData} setIsPasswordEntered={setIsPasswordEntered} setIsOtherEntered={setIsOtherEntered} />
+                    }
 
-                    <Input>
-                        <label htmlFor='displayName'>NickName :</label>
-                        <input type='text' id='displayName' onChange={onChange} value={userData.displayName} />
-                        <p>{errorMassage.displayNameErrorMassage}</p>
-                    </Input>
+                    {isOtherEntered ?
+                        <>
 
-                    <Input>
-                        <label htmlFor='address'>Address :</label>
-                        <input type='text' id='address' onChange={onChange} value={userData.address} />
-                        <p>{errorMassage.addressErrorMassage}</p>
-                    </Input>
+                        </>
+                        :
+                        <RequestOtherVerify onChange={onChange} userData={userData} onSubmit={onSubmit} />
+                    }
+
+
 
                 </InputArea>
 
                 <ButtonArea>
-                    <button type='submit'>회원가입</button>
-                    <p>에러문구</p>
+
                 </ButtonArea>
 
             </Form>
