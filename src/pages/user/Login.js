@@ -1,6 +1,8 @@
-import React, { useCallback, useState } from 'react'
-import { Link } from 'react-router-dom';
+import React, { useCallback, useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { logIn } from '../../redux/actions/userAction';
 
 const BackGround = styled.div`
     width: 800px;
@@ -31,44 +33,44 @@ const Form = styled.form`
     width: 700px;
     height: 400px;
 
-    background-color: antiquewhite;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 
-    border-radius: 20px;
+    border: 1px solid gray;
 
     @media screen and (max-width: 880px) {
         width: 90%;
     }
 `;
 const TitleArea = styled(centerOption)`
-    width: 100%;
+    width: 71%;
     height: 80px;
 
     font-size: 24px;
+    align-items: flex-start;
 `;
 const InputArea = styled(centerOption)`
     width: 100%;
-    height: 220px;
+    height: 200px;
 `;
 const ButtonArea = styled(centerOption)`
     width: 100%;
     height: 100px;
 
     & > button {
-        width: 120px;
-        height: 40px;
+        width: 220px;
+        height: 60px;
 
         border: none;
         border-radius: 10px;
 
-        background-color: aquamarine;
-
         font-family: 'GIFont';
+        font-size: 20px;
     };
     & > button:hover {
-        background-color: red;
-    };
-    & > button:active {
-        background-color: blue;
+        background-color: gray;
     };
     & > p {
         color: red;
@@ -77,26 +79,22 @@ const ButtonArea = styled(centerOption)`
 
 const Input = styled(centerOption)`
     width: 500px;
-    height: 50%;
+    height: 40%;
 
     align-items: flex-start;
 
-    & > label {
-        font-size: 18px;
-    };
     & > input {
         width: 100%;
         height: 40px;
 
-        border-radius: 10px;
+        border: none;
+        border-bottom: 1px solid black;
 
         font-size: 18px;
         font-family: 'GIFont';
-
-        background-color: gray;
     };
     & > input:focus {
-        background-color: white;
+        border-bottom: 1px solid gray;
     };
     & > p {
         color: red;
@@ -127,15 +125,20 @@ const Input = styled(centerOption)`
     }
 `;
 
+const WarningMassage = styled.div`
+    width: 90%;
+
+    font-size: 14px;
+    color: red;
+`;
+
 const SignupArea = styled(centerOption)`
     width: 700px;
     height: 200px;
 
     margin-top: 20px;
 
-    background-color: antiquewhite;
-
-    border-radius: 20px;
+    border: 1px solid gray;
 
     & > p {
         font-weight: 500;
@@ -150,24 +153,31 @@ const SignupArea = styled(centerOption)`
         border: none;
         border-radius: 10px;
 
-        background-color: aquamarine;
-
-        font-size: 25px;
         font-family: 'GIFont';
+        font-size: 20px;
     };
     & > button:hover {
-        background-color: red;
+        background-color: gray;
     };
-    & > button:active {
-        background-color: blue;
+    & > button > a {
+        text-decoration: none;
+        color: black;
     };
 
     @media screen and (max-width: 880px) {
         width: 90%;
-    }
+    };
 `;
 
 export const Login = () => {
+
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    // const getIsError = useSelector((state) => state.isError);
+    // const getIsLoading = useSelector((state) => state.isLoading);
+    const [isError, setIsError] = useState(useSelector((state) => state.isError));
+    const [isLoading, setIsLoading] = useState(useSelector((state) => state.isLoading));
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -189,10 +199,24 @@ export const Login = () => {
             return;
         };
 
-        console.log(email, password);
+        dispatch(logIn(email, password));
+
+        if (!isError) {
+            alert('환영합니다.');
+            navigate('/', { replace: true });
+        }
+        else {
+            alert('에러가 발생하였습니다.');
+            navigate('/', { replace: true });
+        }
+
+        // eslint-disable-next-line
     }, [email, password]);
 
-
+    useEffect(() => {
+        setIsError(isError);
+        setIsLoading(isLoading);
+    }, [isError, isLoading]);
 
     return (
         <BackGround>
@@ -206,22 +230,54 @@ export const Login = () => {
                 <InputArea>
 
                     <Input>
-                        <label htmlFor='inputEmail'>ID :</label>
-                        <input type='email' id='inputEmail' onChange={onChange} value={email || ''} />
-                        <p>에러문구</p>
+                        <input type='email' id='inputEmail' onChange={onChange} value={email || ''} placeholder='이메일 주소를 입력해주세요' />
+                        {!email ?
+                            <>
+                                <WarningMassage>이메일 주소를 입력해주세요.</WarningMassage>
+                            </>
+                            :
+                            <>
+
+                            </>
+                        }
                     </Input>
 
                     <Input>
-                        <label htmlFor='inputPassword'>PWD :</label>
-                        <input type='password' id='inputPassword' onChange={onChange} value={password || ''} />
-                        <p>에러문구</p>
+                        <input type='password' id='inputPassword' onChange={onChange} value={password || ''} placeholder='비밀번호를 입력해주세요' />
+                        {!password ?
+                            <>
+                                <WarningMassage>비밀번호를 입력해주세요.</WarningMassage>
+                            </>
+                            :
+                            <>
+
+                            </>
+                        }
                     </Input>
 
                 </InputArea>
 
                 <ButtonArea>
                     <button type='submit'>로그인</button>
-                    <p>에러문구</p>
+                    {!isError ?
+                        <>
+
+                        </>
+                        :
+                        <>
+                            <WarningMassage>에러가 발생하였습니다.</WarningMassage>
+                        </>
+                    }
+
+                    {!isLoading ?
+                        <>
+
+                        </>
+                        :
+                        <>
+                            <WarningMassage>로딩 중입니다..</WarningMassage>
+                        </>
+                    }
                 </ButtonArea>
 
             </Form>

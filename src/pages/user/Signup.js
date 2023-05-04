@@ -120,7 +120,6 @@ export const Signup = () => {
 
     useEffect(() => {
         setIsError(getIsError);
-        console.log(getIsError);
     }, [getIsError]);
 
     return (

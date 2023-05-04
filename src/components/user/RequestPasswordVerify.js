@@ -77,6 +77,20 @@ const InputPassword = styled.input`
     };
 `;
 
+const WarningMassage = styled.div`
+    width: 90%;
+
+    font-size: 14px;
+    color: red;
+`;
+
+const OkMassage = styled.div`
+    width: 90%;
+
+    font-size: 14px;
+    color: green;
+`;
+
 const Script = styled.div`
     width: 90%;
     height: 15px;
@@ -107,36 +121,30 @@ const SubmitButton = styled.button`
 
 export const RequestPasswordVerify = ({ onChange, userData, setIsPasswordEntered, setIsOtherEntered }) => {
 
-    const [passwordCheck, setPasswordCheck] = useState('');
-    const [isPasswordRight, setIsPasswordRight] = useState(false);
+    const [isChecked, setIsChecked] = useState(false);
+    const [passwordRewrite, setPasswordRewrite] = useState('');
 
     const onChangeCheck = (event) => {
-        setPasswordCheck(event.target.value);
+        setPasswordRewrite(event.target.value);
     };
 
     const onSubmit = (event) => {
         event.preventDefault();
 
-        if (isPasswordRight) {
-            setIsPasswordEntered(true);
-            setIsOtherEntered(false);
-        }
-        else {
-            alert('비밀번호가 일치하지 않습니다.');
+        if (!isChecked) {
+            alert('비밀번호가 유효하지 않습니다.');
             return;
         }
+
+        setIsPasswordEntered(true);
+        setIsOtherEntered(false);
     };
 
     useEffect(() => {
-        if (userData.password !== passwordCheck) {
-            setIsPasswordRight(false);
-            return;
-        }
-        else {
-            setIsPasswordRight(true);
-        };
+        setIsChecked(userData.password === passwordRewrite);
+
         // eslint-disable-next-line
-    }, [passwordCheck]);
+    }, [userData.password, passwordRewrite]);
 
 
     return (
@@ -150,7 +158,25 @@ export const RequestPasswordVerify = ({ onChange, userData, setIsPasswordEntered
 
                 <InputPassword type='text' id='password' onChange={onChange} value={userData.password} placeholder='비밀번호를 입력해주세요' spellcheck='false' />
 
-                <InputPassword type='text' id='passwordCheck' onChange={onChangeCheck} value={passwordCheck} placeholder='비밀번호를 한번 더 입력해주세요' spellcheck='false' />
+                <InputPassword type='text' id='passwordCheck' onChange={onChangeCheck} value={passwordRewrite} placeholder='비밀번호를 한번 더 입력해주세요' spellcheck='false' />
+
+                {!userData.password ?
+                    <>
+                        <WarningMassage>* 비밀번호를 입력해주세요.</WarningMassage>
+                    </>
+                    :
+                    <>
+                        {!isChecked ?
+                            <>
+                                <WarningMassage>* 유효하지 않은 비밀번호입니다.</WarningMassage>
+                            </>
+                            :
+                            <>
+                                <OkMassage>* 사용가능한 비밀번호입니다.</OkMassage>
+                            </>
+                        }
+                    </>
+                }
 
                 <Script>* 보안을 위해서 비밀번호는 2번 입력해야합니다.</Script>
                 <Script>* 두 비밀번호는 반드시 일치하여야합니다.</Script>

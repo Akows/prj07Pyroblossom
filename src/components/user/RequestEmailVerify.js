@@ -49,8 +49,6 @@ const InputTitle = styled.label`
 
     padding: 5px;
 
-    /* border: 1px solid red; */
-
     text-align: left;
 
     & > p {
@@ -132,11 +130,14 @@ const SubmitButton = styled.button`
 
 export const RequestEmailVerify = ({ onChange, userData, setIsEmailEntered, setIsPasswordEntered }) => {
 
+    // eslint-disable-next-line
     const validatePattern = new RegExp('[a-z0-9]+@[a-z]+\.[a-z]{2,3}');
 
     const [isChecked, setIsChecked] = useState(false);
 
-    const onSubmit = () => {
+    const onSubmit = (event) => {
+        event.preventDefault();
+
         if (!isChecked) {
             alert('이메일 주소가 유효하지 않습니다.');
             return;
@@ -148,6 +149,7 @@ export const RequestEmailVerify = ({ onChange, userData, setIsEmailEntered, setI
 
     useEffect(() => {
         setIsChecked(validatePattern.test(userData.email));
+        // eslint-disable-next-line
     }, [userData.email]);
 
     return (
