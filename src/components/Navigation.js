@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
 import styled from 'styled-components';
 
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { AiOutlineUser } from 'react-icons/ai';
 import { AiOutlineMenu } from 'react-icons/ai';
 import { AiOutlinePicCenter } from 'react-icons/ai';
+import { useDispatch, useSelector } from 'react-redux';
+import { logOut } from '../redux/actions/userAction';
 
 // UI 기믹.
 // 1200px 이하에서는 BackGround 너비가 90%로 
@@ -180,9 +182,21 @@ const Menu3 = styled(Menus)`
 
 export const Navigation = () => {
 
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    const getUserData = useSelector((state) => state.user);
+
+    // eslint-disable-next-line
     const [isHovering, setIsHovering] = useState(0);
 
     const [isClick, setIsClick] = useState(false);
+
+    const logOuts = () => {
+        dispatch(logOut());
+        alert('로그아웃되었습니다. 방문해주셔서 감사합니다.');
+        navigate('/', { replace: true });
+    };
 
     return (
         <BackGround>
@@ -245,7 +259,20 @@ export const Navigation = () => {
             // onMouseOut={() => setIsHovering(0)}
             >
                 <Menu3>
-                    <Link to='/login'><AiOutlineUser size={30} /></Link>
+
+
+                    {getUserData.data ?
+                        <>
+                            <div onClick={logOuts}>{getUserData.data.displayName}</div>
+                        </>
+                        :
+                        <>
+                            <Link to='/login'><AiOutlineUser size={30} /></Link>
+                        </>
+                    }
+
+
+
                 </Menu3>
             </UserArea>
         </BackGround>

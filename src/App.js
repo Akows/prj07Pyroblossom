@@ -8,6 +8,9 @@ import { Navigation } from './components/Navigation';
 import { Index } from './pages/Index';
 import { Login } from './pages/user/Login';
 import { Signup } from './pages/user/Signup';
+import { isLoginCheck } from './redux/actions/userAction';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 const AppBackGround = styled.div`
   display: flex;
@@ -28,6 +31,18 @@ const Layout = () => {
 
 function App() {
 
+  const dispatch = useDispatch();
+
+  const getUserData = useSelector((state) => state.user);
+
+  useEffect(() => {
+    dispatch(isLoginCheck());
+
+    console.log(getUserData);
+
+    // eslint-disable-next-line
+  }, [])
+
   return (
     <AppBackGround>
       <Routes>
@@ -35,10 +50,9 @@ function App() {
         <Route path='/' element={<Layout />} >
           <Route index element={<Index />} />
 
-          <Route path='login' element={<Login />} />
-          <Route path='signup' element={<Signup />} />
+          <Route path='/login' element={<Login />} />
+          <Route path='/signup' element={<Signup />} />
         </Route>
-
 
       </Routes>
     </AppBackGround>

@@ -6,6 +6,7 @@ const initialState = {
     user: {
         isLogin: false,
         isError: false,
+        isLoading: false,
         data: {
             email: '',
             password: '',
@@ -13,14 +14,14 @@ const initialState = {
             displayName: '',
             address: '',
         },
+        errorMassage: '',
     },
 };
 
 const logMiddleware = (store) => (next) => (action) => {
-    console.log('==========');
     console.log('Log Record.');
     console.log(action);
-    console.log('Record End.');
+    console.log('===');
     next(action);
 };
 
