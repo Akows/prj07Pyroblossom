@@ -174,8 +174,8 @@ export const Login = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    // const getIsError = useSelector((state) => state.isError);
-    // const getIsLoading = useSelector((state) => state.isLoading);
+    // const isLogin = useSelector((state) => state.isLogin);
+
     const [isError, setIsError] = useState(useSelector((state) => state.isError));
     const [isLoading, setIsLoading] = useState(useSelector((state) => state.isLoading));
 
@@ -218,6 +218,25 @@ export const Login = () => {
         setIsLoading(isLoading);
     }, [isError, isLoading]);
 
+    // useEffect(() => {
+    //     console.log(isLogin);
+
+    //     if (isLogin) {
+    //         alert('이미 로그인된 사용자입니다.');
+    //         navigate('/', { replace: true });
+    //     }
+    //     else {
+
+    //     }
+    //     // eslint-disable-next-line
+    // }, [isLogin]);
+
+    const devLogin = () => {
+        dispatch(logIn('admin@admin.com', '123123'));
+        alert('환영합니다.');
+        navigate('/', { replace: true });
+    };
+
     return (
         <BackGround>
 
@@ -258,23 +277,13 @@ export const Login = () => {
                 </InputArea>
 
                 <ButtonArea>
-                    <button type='submit'>로그인</button>
-                    {!isError ?
-                        <>
-
-                        </>
-                        :
-                        <>
-                            <WarningMassage>에러가 발생하였습니다.</WarningMassage>
-                        </>
-                    }
-
                     {!isLoading ?
                         <>
-
+                            <button type='submit'>로그인</button>
                         </>
                         :
                         <>
+                            <button>로그인</button>
                             <WarningMassage>로딩 중입니다..</WarningMassage>
                         </>
                     }
@@ -290,6 +299,10 @@ export const Login = () => {
                     </Link>
                 </button>
             </SignupArea>
+
+
+            <br /><br /><br /><br />
+            <button onClick={devLogin}>개발로그인</button>
 
 
         </BackGround>

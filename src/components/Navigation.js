@@ -3,11 +3,14 @@ import styled from 'styled-components';
 
 import { Link, useNavigate } from 'react-router-dom';
 
+import { useDispatch, useSelector } from 'react-redux';
+import { logOut } from '../redux/actions/userAction';
+
 import { AiOutlineUser } from 'react-icons/ai';
 import { AiOutlineMenu } from 'react-icons/ai';
 import { AiOutlinePicCenter } from 'react-icons/ai';
-import { useDispatch, useSelector } from 'react-redux';
-import { logOut } from '../redux/actions/userAction';
+
+import { FiLogIn, FiLogOut } from "react-icons/fi";
 
 // UI 기믹.
 // 1200px 이하에서는 BackGround 너비가 90%로 
@@ -81,7 +84,7 @@ const TitleArea = styled(NavArea)`
     }
 `;
 const MenuArea = styled(NavArea)`
-    width: 65%;
+    width: 60%;
     justify-content: flex-start;
 
     @media screen and (max-width: 700px) {
@@ -89,7 +92,7 @@ const MenuArea = styled(NavArea)`
     }
 `;
 const UserArea = styled(NavArea)`
-    width: 10%;
+    width: 15%;
 
     @media screen and (max-width: 700px) {
         display: none;
@@ -176,7 +179,17 @@ const Menu2 = styled(Menus)`
     }
 `;
 const Menu3 = styled(Menus)`
-    width: 120px;
+    width: 100%;
+`;
+
+const UserMenu = styled.div`
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
 `;
 
 
@@ -193,9 +206,17 @@ export const Navigation = () => {
     const [isClick, setIsClick] = useState(false);
 
     const logOuts = () => {
-        dispatch(logOut());
-        alert('로그아웃되었습니다. 방문해주셔서 감사합니다.');
-        navigate('/', { replace: true });
+
+        const logOutChoice = window.confirm('로그아웃 하시겠어요?');
+
+        if (!logOutChoice) {
+            return;
+        }
+        else {
+            dispatch(logOut());
+            alert('로그아웃되었습니다. 방문해주셔서 감사합니다.');
+            navigate('/', { replace: true });
+        };
     };
 
     return (
@@ -259,20 +280,30 @@ export const Navigation = () => {
             // onMouseOut={() => setIsHovering(0)}
             >
                 <Menu3>
-
-
                     {getUserData.data ?
                         <>
-                            <div onClick={logOuts}>{getUserData.data.displayName}</div>
+                            <UserMenu>
+                                {getUserData.data.displayName === '관리자' ?
+                                    <>
+                                        <Link to='/admin'>
+                                            <AiOutlineUser size={40} />
+                                        </Link>
+                                    </>
+                                    :
+                                    <>
+                                        <Link to='/mypage'>
+                                            <AiOutlineUser size={40} />
+                                        </Link>
+                                    </>
+                                }
+                                <FiLogOut onClick={logOuts} size={40} />
+                            </UserMenu>
                         </>
                         :
                         <>
-                            <Link to='/login'><AiOutlineUser size={30} /></Link>
+                            <Link to='/login'><FiLogIn size={30} /></Link>
                         </>
                     }
-
-
-
                 </Menu3>
             </UserArea>
         </BackGround>
