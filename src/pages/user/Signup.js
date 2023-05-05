@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react'
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { RequestEmailVerify } from '../../components/user/RequestEmailVerify';
 import { RequestOtherVerify } from '../../components/user/RequestOtherVerify';
@@ -83,9 +82,6 @@ const ButtonArea = styled(centerOption)`
 export const Signup = () => {
 
     const dispatch = useDispatch();
-    const navigate = useNavigate();
-
-    const getIsError = useSelector((state) => state.isError);
 
     const [userData, setUserData] = useState({
         email: '',
@@ -94,7 +90,7 @@ export const Signup = () => {
         displayName: '',
         address: '',
     });
-    const [isError, setIsError] = useState(false);
+
     const [isEmailEntered, setIsEmailEntered] = useState(false);
     const [isPasswordEntered, setIsPasswordEntered] = useState(true);
     const [isOtherEntered, setIsOtherEntered] = useState(true);
@@ -107,20 +103,7 @@ export const Signup = () => {
         event.preventDefault();
         setIsOtherEntered(true);
         dispatch(SignUp(userData));
-
-        if (!isError) {
-            alert('회원가입이 완료되었습니다.');
-            navigate('/', { replace: true });
-        }
-        else {
-            alert('에러가 발생하였습니다.');
-            navigate('/', { replace: true });
-        }
     };
-
-    useEffect(() => {
-        setIsError(getIsError);
-    }, [getIsError]);
 
     return (
         <BackGround>
@@ -156,8 +139,6 @@ export const Signup = () => {
                         :
                         <RequestOtherVerify onChange={onChange} userData={userData} onSubmit={onSubmit} />
                     }
-
-
 
                 </InputArea>
 

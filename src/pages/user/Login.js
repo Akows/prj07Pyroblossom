@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -174,10 +174,9 @@ export const Login = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    // const isLogin = useSelector((state) => state.isLogin);
+    const getUserData = useSelector((state) => state.user);
 
-    const [isError, setIsError] = useState(useSelector((state) => state.isError));
-    const [isLoading, setIsLoading] = useState(useSelector((state) => state.isLoading));
+    const [isLoading, setIsLoading] = useState(false);
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -191,7 +190,7 @@ export const Login = () => {
         }
     };
 
-    const onSubmit = useCallback((event) => {
+    const onSubmit = (event) => {
         event.preventDefault();
 
         if (!email || !password) {
@@ -200,36 +199,13 @@ export const Login = () => {
         };
 
         dispatch(logIn(email, password));
-
-        if (!isError) {
-            alert('환영합니다.');
-            navigate('/', { replace: true });
-        }
-        else {
-            alert('에러가 발생하였습니다.');
-            navigate('/', { replace: true });
-        }
-
         // eslint-disable-next-line
-    }, [email, password]);
+    };
 
     useEffect(() => {
-        setIsError(isError);
-        setIsLoading(isLoading);
-    }, [isError, isLoading]);
-
-    // useEffect(() => {
-    //     console.log(isLogin);
-
-    //     if (isLogin) {
-    //         alert('이미 로그인된 사용자입니다.');
-    //         navigate('/', { replace: true });
-    //     }
-    //     else {
-
-    //     }
-    //     // eslint-disable-next-line
-    // }, [isLogin]);
+        setIsLoading(getUserData.isLoading);
+        // eslint-disable-next-line
+    }, [getUserData]);
 
     const devLogin = () => {
         dispatch(logIn('admin@admin.com', '123123'));
