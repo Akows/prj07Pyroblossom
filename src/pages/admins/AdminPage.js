@@ -10,7 +10,7 @@ export const AdminPage = () => {
     // const [isLoading, setIsLoading] = useState(useSelector((state) => state.isLoading));
     // const [eMSG, setEMSG] = useState(useSelector((state) => state.errorMassage));
 
-    const data = useSelector((state) => state.user);
+    const data = useSelector((state) => state.user.errorinfo);
 
     const test = () => {
         const userData = {

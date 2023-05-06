@@ -6,7 +6,7 @@ import styled from 'styled-components';
 
 import { isLoginCheck } from './redux/actions/userAction';
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import { Navigation } from './components/Navigation';
 import { Index } from './pages/Index';
@@ -37,13 +37,8 @@ function App() {
 
   const dispatch = useDispatch();
 
-  const getUserData = useSelector((state) => state.user);
-
   useEffect(() => {
     dispatch(isLoginCheck());
-
-    console.log(getUserData);
-
     // eslint-disable-next-line
   }, [])
 

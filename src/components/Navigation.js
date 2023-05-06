@@ -202,11 +202,9 @@ export const Navigation = () => {
 
     // eslint-disable-next-line
     const [isHovering, setIsHovering] = useState(0);
-
     const [isClick, setIsClick] = useState(false);
 
     const logOuts = () => {
-
         const logOutChoice = window.confirm('로그아웃 하시겠어요?');
 
         if (!logOutChoice) {
@@ -280,10 +278,10 @@ export const Navigation = () => {
             // onMouseOut={() => setIsHovering(0)}
             >
                 <Menu3>
-                    {getUserData.data ?
+                    {getUserData.processvalue.isLogin ?
                         <>
                             <UserMenu>
-                                {getUserData.data.displayName === '관리자' ?
+                                {getUserData.userdata.displayName === '관리자' ?
                                     <>
                                         <Link to='/admin'>
                                             <AiOutlineUser size={40} />

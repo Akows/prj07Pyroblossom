@@ -1,5 +1,6 @@
 import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut, updateProfile } from 'firebase/auth'
 import { collection, doc, getCountFromServer, getDoc, query, setDoc } from 'firebase/firestore';
+import { useNavigate } from 'react-router-dom';
 import { appAuth, appFireStore, timeStamp } from '../../firebase/config'
 
 // 파이어베이스 user 컬렉션 Ref.
@@ -14,6 +15,7 @@ const createErrorData = (error) => {
     };
     return errorData;
 };
+
 
 // 회원가입 기능.
 const SignUp = (userData) => {
@@ -132,11 +134,17 @@ const logIn = (email, password) => {
                     throw new Error('로그인에 실패했습니다.');
                 }
                 dispatch({ type: 'LOG_IN_SUCCESS', payload: userCredential.user });
+
                 alert('환영합니다.');
-                window.location.replace('/');
+
+                const navigate = useNavigate();
+                navigate('/', { replace: true });
+
+                // window.location.replace('/');
             })
             .catch((error) => {
                 dispatch({ type: 'ERROR', payload: createErrorData(error) });
+
                 if (createErrorData(error).errorCode === 'auth/user-not-found') {
                     alert('존재하지 않는 사용자입니다.');
                 };
@@ -147,6 +155,8 @@ const logIn = (email, password) => {
 
 const logOut = () => {
     return (dispatch, getState) => {
+        dispatch({ type: 'LOADING' });
+
         signOut(appAuth)
             .then(() => {
                 dispatch({ type: 'LOG_OUT' });
@@ -154,16 +164,16 @@ const logOut = () => {
             .catch((error) => {
                 dispatch({ type: 'ERROR', payload: createErrorData(error) });
                 alert(createErrorData(error).errorCode);
-                window.location.replace('/login');
+                window.location.replace('/');
             });
     }
 };
 
 const isLoginCheck = () => {
     return (dispatch, getState) => {
-        onAuthStateChanged(appAuth, (user) => {
-            console.log(user);
+        dispatch({ type: 'LOADING' });
 
+        onAuthStateChanged(appAuth, (user) => {
             if (user) {
                 const userData = {
                     email: user.email,
@@ -171,6 +181,9 @@ const isLoginCheck = () => {
                 };
 
                 dispatch({ type: 'LOG_IN_SUCCESS', payload: userData });
+
+                console.log('현재 유저 정보');
+                console.log(user);
             }
             else {
                 const errorData = {
@@ -180,6 +193,9 @@ const isLoginCheck = () => {
                 };
 
                 dispatch({ type: 'ERROR', payload: errorData });
+
+                console.log('현재 유저 정보');
+                console.log(user);
             };
         });
     };

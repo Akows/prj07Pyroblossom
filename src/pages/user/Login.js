@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { logIn } from '../../redux/actions/userAction';
 
@@ -172,12 +172,10 @@ const SignupArea = styled(centerOption)`
 export const Login = () => {
 
     const dispatch = useDispatch();
-    const navigate = useNavigate();
 
     const getUserData = useSelector((state) => state.user);
 
     const [isLoading, setIsLoading] = useState(false);
-
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -194,7 +192,7 @@ export const Login = () => {
         event.preventDefault();
 
         if (!email || !password) {
-            console.log('아이디 혹은 비밀번호를 모두 입력해야합니다.');
+            alert('아이디 혹은 비밀번호를 모두 입력해야합니다.');
             return;
         };
 
@@ -209,8 +207,6 @@ export const Login = () => {
 
     const devLogin = () => {
         dispatch(logIn('admin@admin.com', '123123'));
-        alert('환영합니다.');
-        navigate('/', { replace: true });
     };
 
     return (
