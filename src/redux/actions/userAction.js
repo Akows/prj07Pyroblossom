@@ -1,29 +1,17 @@
 import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut, updateProfile } from 'firebase/auth'
-import { collection, doc, getCountFromServer, getDoc, query, setDoc } from 'firebase/firestore';
-import { useNavigate } from 'react-router-dom';
-import { appAuth, appFireStore, timeStamp } from '../../firebase/config'
+import { doc, getCountFromServer, getDoc, query, setDoc } from 'firebase/firestore';
+import { createErrorData, errorCode } from '../../configs/errorCodes';
+import { appAuth, timeStamp, userCollectionRef } from '../../configs/firebase/config'
 
-// 파이어베이스 user 컬렉션 Ref.
-const collectionRef = collection(appFireStore, 'user');
-
-// error dispatch을 위한 errordata 정리해주는 함수. 
-const createErrorData = (error) => {
-    const errorData = {
-        isError: true,
-        errorCode: error.code,
-        errorMassage: error.massage,
-    };
-    return errorData;
-};
-
+import { navigate2 } from '../../hooks/navigator';
 
 // 회원가입 기능.
-const SignUp = (userData) => {
+const SignUp = (userData, navigate) => {
     return (dispatch, getState) => {
         dispatch({ type: 'LOADING' });
 
         const checkUserDuplication = async () => {
-            const docRef = doc(collectionRef, `${userData.displayName}`);
+            const docRef = doc(userCollectionRef, `${userData.displayName}`);
             const docSnap = await getDoc(docRef);
 
             // console.log(docSnap.data());
@@ -31,27 +19,15 @@ const SignUp = (userData) => {
             // console.log(docSnap.data().email);
 
             if (userData.email === 'admin@admin.com' || userData.displayName === '관리자') {
-                const errorInfo = {
-                    code: '000',
-                    massage: '관리자 이메일 혹은 닉네임 사용',
-                };
-                throw errorInfo;
+                throw errorCode.userSignInError.DuplicationAdminAccount;
             };
 
             if (userData.email === docSnap.data().email) {
-                const errorInfo = {
-                    code: '001',
-                    massage: '이메일 중복.',
-                };
-                throw errorInfo;
+                throw errorCode.userSignInError.DuplicationEmail;
             };
 
             if (userData.displayName === docSnap.data().displayName) {
-                const errorInfo = {
-                    code: '003',
-                    massage: '닉네임 중복.',
-                };
-                throw errorInfo;
+                throw errorCode.userSignInError.DuplicationNickname;
             }
 
             // throw new Error
@@ -68,12 +44,7 @@ const SignUp = (userData) => {
                     .then((userCredential) => {
 
                         if (!userCredential.user) {
-                            const errorInfo = {
-                                code: '---',
-                                massage: '파이어베이스에서 회원가입 절차에 에러가 발생함',
-                            };
-
-                            throw errorInfo;
+                            throw errorCode.userSignInError.ThereIsNoUserCredential;
                         }
 
                         updateProfile(appAuth.currentUser, {
@@ -82,10 +53,10 @@ const SignUp = (userData) => {
                             .then(() => {
 
                                 const addData = async () => {
-                                    const querys = query(collectionRef);
+                                    const querys = query(userCollectionRef);
                                     const userId = await getCountFromServer(querys);
                                     const createdTime = timeStamp.fromDate(new Date());
-                                    const docRef = doc(collectionRef, `${userData.displayName}`);
+                                    const docRef = doc(userCollectionRef, `${userData.displayName}`);
 
                                     await setDoc(docRef,
                                         {
@@ -100,47 +71,54 @@ const SignUp = (userData) => {
                                     )
                                         .then(() => {
                                             dispatch({ type: 'SIGN_UP_SUCCESS' });
-                                            alert('가입완료.');
-                                            window.location.replace('/');
+                                            alert('회원가입이 완료되었습니다.');
+                                            navigate('/', { replace: true });
                                         })
+                                        // 계정 정보 파이어스토어 저장 - 에러 발생 catch 구문.
                                         .catch((error) => {
                                             dispatch({ type: 'ERROR', payload: createErrorData(error) });
+                                            alert('계정 정보 저장에 에러가 발생하였습니다.');
+                                            navigate('/', { replace: true });
                                         });
                                 };
                                 addData();
                             })
+                            // 파이어베이스 계정 생성 후 사용자 정보 업데이트 - 에러 발생 catch 구문.
                             .catch((error) => {
                                 dispatch({ type: 'ERROR', payload: createErrorData(error) });
+                                alert('사용자 정보 등록에 에러가 발생하였습니다.');
+                                navigate('/', { replace: true });
                             });
                     })
+                    // 파이어베이스 계정 생성 - 에러 발생 catch 구문.
                     .catch((error) => {
                         dispatch({ type: 'ERROR', payload: createErrorData(error) });
+                        alert('계정 생성에 에러가 발생하였습니다.');
+                        navigate('/', { replace: true });
                     });
             })
+            // 중복검사 - 에러 발생 catch 구문.
             .catch((error) => {
                 dispatch({ type: 'ERROR', payload: createErrorData(error) });
+                alert(error.message);
+                navigator('/user/login', { replace: true });
             });
     };
 };
 
 // 로그인 기능.
-const logIn = (email, password) => {
+const logIn = (email, password, navigate) => {
     return (dispatch, getState) => {
         dispatch({ type: 'LOADING' });
 
         signInWithEmailAndPassword(appAuth, email, password)
             .then((userCredential) => {
                 if (!userCredential.user) {
-                    throw new Error('로그인에 실패했습니다.');
+                    throw errorCode.userSignInError.LoginFailure;
                 }
                 dispatch({ type: 'LOG_IN_SUCCESS', payload: userCredential.user });
-
                 alert('환영합니다.');
-
-                const navigate = useNavigate();
                 navigate('/', { replace: true });
-
-                // window.location.replace('/');
             })
             .catch((error) => {
                 dispatch({ type: 'ERROR', payload: createErrorData(error) });
@@ -148,7 +126,7 @@ const logIn = (email, password) => {
                 if (createErrorData(error).errorCode === 'auth/user-not-found') {
                     alert('존재하지 않는 사용자입니다.');
                 };
-                window.location.replace('/login');
+                navigate('/user/login', { replace: true });
             });
     };
 };
@@ -189,7 +167,7 @@ const isLoginCheck = () => {
                 const errorData = {
                     isError: true,
                     errorCode: '00A',
-                    errorMassage: '로그인 사용자가 존재하지 않음.',
+                    errorMessage: '로그인 사용자가 존재하지 않음.',
                 };
 
                 dispatch({ type: 'ERROR', payload: errorData });

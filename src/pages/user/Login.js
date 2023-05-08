@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { logIn } from '../../redux/actions/userAction';
 
@@ -125,7 +125,7 @@ const Input = styled(centerOption)`
     }
 `;
 
-const WarningMassage = styled.div`
+const WarningMessage = styled.div`
     width: 90%;
 
     font-size: 14px;
@@ -146,7 +146,11 @@ const SignupArea = styled(centerOption)`
 
         margin-bottom: 20px;
     };
-    & > button {
+    & > a {
+        text-decoration: none;
+        color: black;
+    };
+    & > a > button {
         width: 220px;
         height: 80px;
 
@@ -156,12 +160,8 @@ const SignupArea = styled(centerOption)`
         font-family: 'GIFont';
         font-size: 20px;
     };
-    & > button:hover {
+    & > a > button:hover {
         background-color: gray;
-    };
-    & > button > a {
-        text-decoration: none;
-        color: black;
     };
 
     @media screen and (max-width: 880px) {
@@ -171,6 +171,7 @@ const SignupArea = styled(centerOption)`
 
 export const Login = () => {
 
+    const navigate = useNavigate();
     const dispatch = useDispatch();
 
     const getUserData = useSelector((state) => state.user);
@@ -196,7 +197,7 @@ export const Login = () => {
             return;
         };
 
-        dispatch(logIn(email, password));
+        dispatch(logIn(email, password, navigate));
         // eslint-disable-next-line
     };
 
@@ -206,7 +207,7 @@ export const Login = () => {
     }, [getUserData]);
 
     const devLogin = () => {
-        dispatch(logIn('admin@admin.com', '123123'));
+        dispatch(logIn('admin@admin.com', '123123', navigate));
     };
 
     return (
@@ -224,7 +225,7 @@ export const Login = () => {
                         <input type='email' id='inputEmail' onChange={onChange} value={email || ''} placeholder='이메일 주소를 입력해주세요' />
                         {!email ?
                             <>
-                                <WarningMassage>이메일 주소를 입력해주세요.</WarningMassage>
+                                <WarningMessage>이메일 주소를 입력해주세요.</WarningMessage>
                             </>
                             :
                             <>
@@ -237,7 +238,7 @@ export const Login = () => {
                         <input type='password' id='inputPassword' onChange={onChange} value={password || ''} placeholder='비밀번호를 입력해주세요' />
                         {!password ?
                             <>
-                                <WarningMassage>비밀번호를 입력해주세요.</WarningMassage>
+                                <WarningMessage>비밀번호를 입력해주세요.</WarningMessage>
                             </>
                             :
                             <>
@@ -256,7 +257,7 @@ export const Login = () => {
                         :
                         <>
                             <button>로그인</button>
-                            <WarningMassage>로딩 중입니다..</WarningMassage>
+                            <WarningMessage>로딩 중입니다..</WarningMessage>
                         </>
                     }
                 </ButtonArea>
@@ -265,11 +266,11 @@ export const Login = () => {
 
             <SignupArea>
                 <p>아직 회원이 아니신가요?</p>
-                <button>
-                    <Link to='/signup'>
+                <Link to='/user/signup'>
+                    <button>
                         회원가입
-                    </Link>
-                </button>
+                    </button>
+                </Link>
             </SignupArea>
 
 

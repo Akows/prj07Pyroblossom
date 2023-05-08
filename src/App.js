@@ -9,7 +9,8 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { Navigation } from './components/Navigation';
-import { Index } from './pages/Index';
+import { Main } from './pages/Main';
+
 import { Login } from './pages/user/Login';
 import { Signup } from './pages/user/Signup';
 
@@ -46,7 +47,17 @@ function App() {
     <AppBackGround>
       <Routes>
 
-        <Route path='/' element={<Layout />} >
+        <Route path='/' element={<Main />} />
+
+        <Route path='/user/*' element={<Layout />} >
+          <Route path='login' element={<Login />} />
+          <Route path='signup' element={<Signup />} />
+          <Route path='mypage' element={<MyPage />} />
+          <Route path='adminpage' element={<AdminPage />} />
+        </Route>
+
+
+        {/* <Route path='/' element={<Layout />} >
           <Route index element={<Index />} />
 
           <Route path='login' element={<Login />} />
@@ -55,7 +66,7 @@ function App() {
           <Route path='mypage' element={<MyPage />} />
 
           <Route path='admin' element={<AdminPage />} />
-        </Route>
+        </Route> */}
 
       </Routes>
     </AppBackGround>

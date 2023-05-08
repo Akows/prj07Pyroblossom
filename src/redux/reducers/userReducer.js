@@ -15,7 +15,7 @@ const initialState = {
     },
     errorinfo: {
         errorCode: 'None',
-        errorMassage: 'None',
+        errorMessage: 'None',
     },
 };
 
@@ -36,7 +36,7 @@ const userReducer = (prevState = initialState, action) => {
                 draft.processvalue.isError = action.payload.isError;
                 draft.processvalue.isLoading = false;
                 draft.errorinfo.errorCode = action.payload.errorCode;
-                draft.errorinfo.errorMassage = action.payload.errorMassage;
+                draft.errorinfo.errorMessage = action.payload.errorMessage;
                 break;
 
             case 'SIGN_UP_SUCCESS':

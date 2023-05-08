@@ -1,10 +1,11 @@
 import React, { useEffect, useRef } from 'react'
 // import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
+import { Navigation } from '../components/Navigation';
 
 // import { logIn, logOut } from '../redux/actions/userAction'
 
-const IndexBackGround = styled.div`
+const BackGround = styled.div`
     width: 1200px;
     height: 100%;
 
@@ -45,7 +46,7 @@ const Div = styled.div`
 `;
 
 
-export const Index = () => {
+export const Main = () => {
 
 
 
@@ -146,7 +147,9 @@ export const Index = () => {
 
     return (
         <>
-            <IndexBackGround ref={refs}>
+            <Navigation />
+
+            <BackGround ref={refs}>
                 <Div>
                     <h1>텍스트1</h1>
                 </Div>
@@ -162,7 +165,7 @@ export const Index = () => {
                 <Div>
                     <h1>텍스트5</h1>
                 </Div>
-            </IndexBackGround>
+            </BackGround>
         </>
     );
 };

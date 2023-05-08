@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore, Timestamp } from 'firebase/firestore';
+import { collection, getFirestore, Timestamp } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 
 const firebaseConfig = {
@@ -14,7 +14,9 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const appFireStore = getFirestore(app);
 const appAuth = getAuth();
-
 const timeStamp = Timestamp;
 
-export { appFireStore, appAuth, timeStamp }
+// 파이어베이스 user 컬렉션 Ref.
+const userCollectionRef = collection(appFireStore, 'user');
+
+export { appFireStore, appAuth, timeStamp, userCollectionRef }

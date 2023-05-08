@@ -283,13 +283,13 @@ export const Navigation = () => {
                             <UserMenu>
                                 {getUserData.userdata.displayName === '관리자' ?
                                     <>
-                                        <Link to='/admin'>
+                                        <Link to='user/adminpage'>
                                             <AiOutlineUser size={40} />
                                         </Link>
                                     </>
                                     :
                                     <>
-                                        <Link to='/mypage'>
+                                        <Link to='user/mypage'>
                                             <AiOutlineUser size={40} />
                                         </Link>
                                     </>
@@ -299,7 +299,7 @@ export const Navigation = () => {
                         </>
                         :
                         <>
-                            <Link to='/login'><FiLogIn size={30} /></Link>
+                            <Link to='user/login'><FiLogIn size={30} /></Link>
                         </>
                     }
                 </Menu3>

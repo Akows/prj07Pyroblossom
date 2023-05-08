@@ -8,7 +8,7 @@ export const AdminPage = () => {
 
     // const [isError, setIsError] = useState(useSelector((state) => state.isError));
     // const [isLoading, setIsLoading] = useState(useSelector((state) => state.isLoading));
-    // const [eMSG, setEMSG] = useState(useSelector((state) => state.errorMassage));
+    // const [eMSG, setEMSG] = useState(useSelector((state) => state.errorMessage));
 
     const data = useSelector((state) => state.user.errorinfo);
 
@@ -27,7 +27,7 @@ export const AdminPage = () => {
     useEffect(() => {
         console.log(data);
         console.log(data.errorCode);
-        console.log(data.errorMassage);
+        console.log(data.errorMessage);
     }, [data])
 
 
@@ -38,8 +38,8 @@ export const AdminPage = () => {
 
             <button onClick={test}>테스트버튼</button>
 
-            {data?.errorCode}
-            {data?.errorMassage}
+            {data?.errorCode} <br />
+            {data?.errorMessage}
         </>
     )
 }
