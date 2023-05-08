@@ -150,7 +150,7 @@ const DownMenuTitle = styled.div`
 `;
 const DownMenu = styled.div`
     width: 100%;
-    height: 90px;
+    height: 160px;
 
     display: none; 
     position: absolute; 
@@ -159,7 +159,7 @@ const DownMenu = styled.div`
 
     & > a { 
         width: 100%;
-        height: 30px;
+        height: 40px;
 
         display: flex;
         flex-direction: column;
@@ -167,9 +167,22 @@ const DownMenu = styled.div`
         justify-content: center;
     };
 `;
+const UserMenuSub = styled.div`
+    width: 100%;
+    height: 30px;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+`;
 
 const Menu1 = styled(Menus)`
     width: 100%;
+
+    & > a { 
+        color: green;
+    };
 `;
 const Menu2 = styled(Menus)`
     width: 150px;
@@ -233,17 +246,36 @@ export const Navigation = () => {
                             <DownMenuTitle
                                 onClick={(event) => event.stopPropagation()}
                             >
-                                서브메뉴제목
+                                Genshin Pyro Blossom
                                 <DownMenu>
                                     <Link to='/'>
-                                        서브메뉴1
+                                        메뉴1
                                     </Link>
                                     <Link to='/'>
-                                        서브메뉴2
+                                        메뉴2
                                     </Link>
                                     <Link to='/'>
-                                        서브메뉴3
+                                        메뉴3
                                     </Link>
+
+                                    {getUserData.processvalue.isLogin ?
+                                        <UserMenuSub>
+                                            {getUserData.userdata.displayName === '관리자' ?
+                                                <Link to='user/adminpage'>
+                                                    <AiOutlineUser size={40} />
+                                                </Link>
+                                                :
+                                                <Link to='user/mypage'>
+                                                    <AiOutlineUser size={40} />
+                                                </Link>
+                                            }
+                                            <FiLogOut onClick={logOuts} size={40} />
+                                        </UserMenuSub>
+                                        :
+                                        <>
+                                            <Link to='user/login'><FiLogIn size={30} /></Link>
+                                        </>
+                                    }
                                 </DownMenu>
                             </DownMenuTitle>
                         </>
