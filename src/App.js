@@ -39,9 +39,12 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    const titleElement = document.getElementsByTagName('title')[0];
+    titleElement.innerHTML = 'Genshin Fyro Blossom';
+
     dispatch(isLoginCheck());
     // eslint-disable-next-line
-  }, [])
+  }, []);
 
   return (
     <AppBackGround>

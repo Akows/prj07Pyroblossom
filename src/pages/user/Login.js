@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { logIn } from '../../redux/actions/userAction';
+import { isLoginCheck, logIn } from '../../redux/actions/userAction';
 
 const BackGround = styled.div`
     width: 800px;
@@ -88,14 +88,19 @@ const Input = styled(centerOption)`
         height: 40px;
 
         border: none;
-        border-bottom: 1px solid black;
+        border-bottom: 2px solid;
+        border-color: ${(props) => props.isEmpty ? 'red' : 'gray'};
 
         font-size: 18px;
         font-family: 'GIFont';
     };
-    & > input:focus {
-        border-bottom: 1px solid gray;
+    & > input::placeholder {
+        color: ${(props) => props.isEmpty ? 'red' : 'gray'};
     };
+
+    /* & > input:focus {
+        border-bottom: 1px solid gray;
+    }; */
     & > p {
         color: red;
     };
@@ -176,30 +181,48 @@ export const Login = () => {
 
     const getUserData = useSelector((state) => state.user);
 
-    const [isLoading, setIsLoading] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+
+    const [isLoading, setIsLoading] = useState(false);
+    const [isEmailEmpty, setIsEmailEmpty] = useState(false);
+    const [isPasswordEmpty, setIsPasswordEmpty] = useState(false);
 
     const onChange = (event) => {
         if (event.target.type === 'email') {
             setEmail(event.target.value);
+            setIsEmailEmpty(false);
         }
         else if (event.target.type === 'password') {
             setPassword(event.target.value);
+            setIsPasswordEmpty(false);
         }
     };
 
     const onSubmit = (event) => {
         event.preventDefault();
 
-        if (!email || !password) {
-            alert('아이디 혹은 비밀번호를 모두 입력해야합니다.');
+        if (!email) {
+            setIsEmailEmpty(true);
+            return;
+        }
+
+        if (!password) {
+            setIsPasswordEmpty(true);
             return;
         };
 
-        dispatch(logIn(email, password, navigate));
+        // dispatch(logIn(email, password, navigate));
         // eslint-disable-next-line
     };
+
+    useEffect(() => {
+        const titleElement = document.getElementsByTagName('title')[0];
+        titleElement.innerHTML = 'User Login';
+
+        dispatch(isLoginCheck());
+        // eslint-disable-next-line
+    }, []);
 
     useEffect(() => {
         setIsLoading(getUserData.isLoading);
@@ -221,9 +244,9 @@ export const Login = () => {
 
                 <InputArea>
 
-                    <Input>
+                    <Input isEmpty={isEmailEmpty}>
                         <input type='email' id='inputEmail' onChange={onChange} value={email || ''} placeholder='이메일 주소를 입력해주세요' />
-                        {!email ?
+                        {/* {!email ?
                             <>
                                 <WarningMessage>이메일 주소를 입력해주세요.</WarningMessage>
                             </>
@@ -231,12 +254,12 @@ export const Login = () => {
                             <>
 
                             </>
-                        }
+                        } */}
                     </Input>
 
-                    <Input>
+                    <Input isEmpty={isPasswordEmpty}>
                         <input type='password' id='inputPassword' onChange={onChange} value={password || ''} placeholder='비밀번호를 입력해주세요' />
-                        {!password ?
+                        {/* {!password ?
                             <>
                                 <WarningMessage>비밀번호를 입력해주세요.</WarningMessage>
                             </>
@@ -244,7 +267,7 @@ export const Login = () => {
                             <>
 
                             </>
-                        }
+                        } */}
                     </Input>
 
                 </InputArea>
