@@ -3,8 +3,6 @@ import { doc, getCountFromServer, getDoc, query, setDoc } from 'firebase/firesto
 import { createErrorData, errorCode } from '../../configs/errorCodes';
 import { appAuth, timeStamp, userCollectionRef } from '../../configs/firebase/config'
 
-import { navigate2 } from '../../hooks/navigator';
-
 // 회원가입 기능.
 const SignUp = (userData, navigate) => {
     return (dispatch, getState) => {
@@ -101,7 +99,7 @@ const SignUp = (userData, navigate) => {
             .catch((error) => {
                 dispatch({ type: 'ERROR', payload: createErrorData(error) });
                 alert(error.message);
-                navigator('/user/login', { replace: true });
+                navigate('/user/login', { replace: true });
             });
     };
 };
@@ -131,18 +129,20 @@ const logIn = (email, password, navigate) => {
     };
 };
 
-const logOut = () => {
+const logOut = (navigate) => {
     return (dispatch, getState) => {
         dispatch({ type: 'LOADING' });
 
         signOut(appAuth)
             .then(() => {
                 dispatch({ type: 'LOG_OUT' });
+                alert('안녕히가세요..');
+                navigate('/', { replace: true });
             })
             .catch((error) => {
                 dispatch({ type: 'ERROR', payload: createErrorData(error) });
-                alert(createErrorData(error).errorCode);
-                window.location.replace('/');
+                alert(error.message);
+                navigate('/', { replace: true });
             });
     }
 };
@@ -152,30 +152,27 @@ const isLoginCheck = () => {
         dispatch({ type: 'LOADING' });
 
         onAuthStateChanged(appAuth, (user) => {
-            if (user) {
+            if (!user) {
+                const errorData = {
+                    isError: true,
+                    errorCode: 'ULCE001',
+                    message: '사용자 인증 정보가 조회되지 않음.',
+                };
+                dispatch({ type: 'ERROR', payload: errorData });
+                console.log(errorData.message);
+            }
+            else {
                 const userData = {
                     email: user.email,
                     displayName: user.displayName,
                 };
 
                 dispatch({ type: 'LOG_IN_SUCCESS', payload: userData });
-
-                console.log('현재 유저 정보');
-                console.log(user);
             }
-            else {
-                const errorData = {
-                    isError: true,
-                    errorCode: '00A',
-                    errorMessage: '로그인 사용자가 존재하지 않음.',
-                };
 
-                dispatch({ type: 'ERROR', payload: errorData });
-
-                console.log('현재 유저 정보');
-                console.log(user);
-            };
-        });
+            console.log('현재 유저 정보');
+            console.log(user);
+        })
     };
 };
 

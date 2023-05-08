@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { RequestEmailVerify } from '../../components/user/RequestEmailVerify';
 import { RequestOtherVerify } from '../../components/user/RequestOtherVerify';
@@ -81,6 +82,7 @@ const ButtonArea = styled(centerOption)`
 
 export const Signup = () => {
 
+    const navigate = useNavigate();
     const dispatch = useDispatch();
 
     const [userData, setUserData] = useState({
@@ -102,7 +104,7 @@ export const Signup = () => {
     const onSubmit = (event) => {
         event.preventDefault();
         setIsOtherEntered(true);
-        dispatch(SignUp(userData));
+        dispatch(SignUp(userData, navigate));
     };
 
     return (

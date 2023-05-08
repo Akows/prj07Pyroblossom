@@ -195,8 +195,8 @@ const UserMenu = styled.div`
 
 export const Navigation = () => {
 
-    const dispatch = useDispatch();
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const getUserData = useSelector((state) => state.user);
 
@@ -211,7 +211,7 @@ export const Navigation = () => {
             return;
         }
         else {
-            dispatch(logOut());
+            dispatch(logOut(navigate));
             alert('로그아웃되었습니다. 방문해주셔서 감사합니다.');
             navigate('/', { replace: true });
         };

@@ -1,9 +1,11 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { SignUp } from '../../redux/actions/userAction';
 
 export const AdminPage = () => {
 
+    const navigate = useNavigate();
     const dispatch = useDispatch();
 
     // const [isError, setIsError] = useState(useSelector((state) => state.isError));
@@ -21,7 +23,7 @@ export const AdminPage = () => {
             address: '',
         };
 
-        dispatch(SignUp(userData));
+        dispatch(SignUp(userData, navigate));
     };
 
     useEffect(() => {

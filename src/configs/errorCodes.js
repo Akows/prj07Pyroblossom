@@ -44,6 +44,16 @@ const errorCode = {
     userLogOutError: {
 
     },
+
+    userLoginCheckError: {
+
+        // ThereIsNoUserData: {
+        //     code: 'ULCE001',
+        //     message: '사용자 인증 정보가 조회되지 않음.',
+        // },
+
+    },
+
 };
 
 export { createErrorData, errorCode };
