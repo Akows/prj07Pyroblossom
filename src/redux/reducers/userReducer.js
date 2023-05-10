@@ -22,10 +22,8 @@ const initialState = {
 const userReducer = (prevState = initialState, action) => {
     return produce(prevState, (draft) => {
         switch (action.type) {
-            case 'CLEANSTATE':
-                draft.processvalue = {};
-                draft.userdata = {};
-                draft.errorinfo = {};
+            case 'PROCESSINIT':
+                draft = initialState;
                 break;
 
             case 'LOADING':

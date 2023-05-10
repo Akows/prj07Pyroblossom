@@ -27,13 +27,6 @@ const SignUp = (userData, navigate) => {
             if (userData.displayName === docSnap.data().displayName) {
                 throw errorCode.userSignInError.DuplicationNickname;
             }
-
-            // throw new Error
-            // 예외처리를 위한 기본 구조 사용방법.
-
-            // if ('dd') {
-            //     throw new Error(에러메시지);
-            // }
         };
 
         checkUserDuplication()
@@ -107,6 +100,7 @@ const SignUp = (userData, navigate) => {
 // 로그인 기능.
 const logIn = (email, password, navigate) => {
     return (dispatch, getState) => {
+        dispatch({ type: 'PROCESSINIT' });
         dispatch({ type: 'LOADING' });
 
         signInWithEmailAndPassword(appAuth, email, password)
@@ -121,10 +115,10 @@ const logIn = (email, password, navigate) => {
             .catch((error) => {
                 dispatch({ type: 'ERROR', payload: createErrorData(error) });
 
-                if (createErrorData(error).errorCode === 'auth/user-not-found') {
-                    alert('존재하지 않는 사용자입니다.');
-                };
-                navigate('/user/login', { replace: true });
+                // if (createErrorData(error).errorCode === 'auth/user-not-found') {
+                //     alert('존재하지 않는 사용자입니다.');
+                // };
+                // navigate('/user/login', { replace: true });
             });
     };
 };
@@ -149,30 +143,39 @@ const logOut = (navigate) => {
 
 const isLoginCheck = () => {
     return (dispatch, getState) => {
-        dispatch({ type: 'LOADING' });
+        dispatch({ type: 'PROCESSINIT' });
 
-        onAuthStateChanged(appAuth, (user) => {
-            if (!user) {
-                const errorData = {
-                    isError: true,
-                    errorCode: 'ULCE001',
-                    message: '사용자 인증 정보가 조회되지 않음.',
-                };
-                dispatch({ type: 'ERROR', payload: errorData });
-                console.log(errorData.message);
-            }
-            else {
-                const userData = {
-                    email: user.email,
-                    displayName: user.displayName,
-                };
+        const isLoginCheck = getState().user.processvalue.isLogin;
 
-                dispatch({ type: 'LOG_IN_SUCCESS', payload: userData });
-            }
+        if (!isLoginCheck) {
+            return;
+        }
+        else {
+            dispatch({ type: 'LOADING' });
 
-            console.log('현재 유저 정보');
-            console.log(user);
-        })
+            onAuthStateChanged(appAuth, (user) => {
+                if (!user) {
+                    const errorData = {
+                        isError: true,
+                        errorCode: 'ULCE001',
+                        message: '사용자 인증 정보가 조회되지 않음.',
+                    };
+                    dispatch({ type: 'ERROR', payload: errorData });
+                    console.log(errorData.message);
+                }
+                else {
+                    const userData = {
+                        email: user.email,
+                        displayName: user.displayName,
+                    };
+
+                    dispatch({ type: 'LOG_IN_SUCCESS', payload: userData });
+                }
+
+                console.log('현재 유저 정보');
+                console.log(user);
+            })
+        }
     };
 };
 

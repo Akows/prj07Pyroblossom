@@ -174,6 +174,69 @@ const SignupArea = styled(centerOption)`
     };
 `;
 
+const ErrorArea = styled.div`
+    width: 100%;
+    height: 100%;
+
+    display:  ${(props) => props.isError ? 'flex' : 'none'};
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    position: absolute;
+
+    z-index: 999;
+
+    background-color: black;
+    background-color: rgba(0, 0, 0, 0.5);
+`;
+
+const ErrorInfo = styled.div`
+    width: 800px;
+    height: 700px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    border: 2px solid black;
+    background-color: gray;
+
+    opacity: 0.9;
+`;
+
+const ErrorTitle = styled.div`
+    width: 80%;
+    height: 20%;
+
+    color: black;
+    font-size: 42px;
+`;
+const ErrorForm = styled.div`
+    width: 80%;
+    height: 60%;
+
+    color: black;
+    font-size: 28px;
+`;
+const ErrorButton = styled.button`
+    width: 40%;
+    height: 50px;
+
+    border: none;
+    border-radius: 10px;
+
+    color: black;
+    font-family: 'GIFont';
+    font-size: 20px;
+
+    &:hover {
+        color: white;
+        background-color: black;
+    };
+`;
+
 export const Login = () => {
 
     const navigate = useNavigate();
@@ -184,6 +247,7 @@ export const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
+    const [isError, setIsError] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [isEmailEmpty, setIsEmailEmpty] = useState(false);
     const [isPasswordEmpty, setIsPasswordEmpty] = useState(false);
@@ -202,18 +266,31 @@ export const Login = () => {
     const onSubmit = (event) => {
         event.preventDefault();
 
-        if (!email) {
+        if (!email && !password) {
             setIsEmailEmpty(true);
-            return;
-        }
-
-        if (!password) {
             setIsPasswordEmpty(true);
             return;
+        }
+        else {
+            if (!email) {
+                setIsEmailEmpty(true);
+                return;
+            }
+
+            if (!password) {
+                setIsPasswordEmpty(true);
+                return;
+            };
         };
 
-        // dispatch(logIn(email, password, navigate));
+        dispatch(logIn(email, password, navigate));
         // eslint-disable-next-line
+    };
+
+    const onClickError = () => {
+        setIsError(!isError);
+        setEmail('');
+        setPassword('');
     };
 
     useEffect(() => {
@@ -225,7 +302,8 @@ export const Login = () => {
     }, []);
 
     useEffect(() => {
-        setIsLoading(getUserData.isLoading);
+        setIsLoading(getUserData.processvalue.isLoading);
+        setIsError(getUserData.processvalue.isError);
         // eslint-disable-next-line
     }, [getUserData]);
 
@@ -234,73 +312,71 @@ export const Login = () => {
     };
 
     return (
-        <BackGround>
+        <>
+            <BackGround>
 
-            <Form onSubmit={onSubmit}>
+                <Form onSubmit={onSubmit}>
 
-                <TitleArea>
-                    회원 로그인
-                </TitleArea>
+                    <TitleArea>
+                        회원 로그인
+                    </TitleArea>
 
-                <InputArea>
+                    <InputArea>
 
-                    <Input isEmpty={isEmailEmpty}>
-                        <input type='email' id='inputEmail' onChange={onChange} value={email || ''} placeholder='이메일 주소를 입력해주세요' />
-                        {/* {!email ?
+                        <Input isEmpty={isEmailEmpty}>
+                            <input type='email' id='inputEmail' onChange={onChange} value={email || ''} placeholder='이메일 주소를 입력해주세요' />
+                        </Input>
+
+                        <Input isEmpty={isPasswordEmpty}>
+                            <input type='password' id='inputPassword' onChange={onChange} value={password || ''} placeholder='비밀번호를 입력해주세요' />
+                        </Input>
+
+                    </InputArea>
+
+                    <ButtonArea>
+                        {!isLoading ?
                             <>
-                                <WarningMessage>이메일 주소를 입력해주세요.</WarningMessage>
+                                <button type='submit'>로그인</button>
                             </>
                             :
                             <>
-
+                                <button>로그인</button>
+                                <WarningMessage>로딩 중입니다..</WarningMessage>
                             </>
-                        } */}
-                    </Input>
+                        }
+                    </ButtonArea>
 
-                    <Input isEmpty={isPasswordEmpty}>
-                        <input type='password' id='inputPassword' onChange={onChange} value={password || ''} placeholder='비밀번호를 입력해주세요' />
-                        {/* {!password ?
-                            <>
-                                <WarningMessage>비밀번호를 입력해주세요.</WarningMessage>
-                            </>
-                            :
-                            <>
+                </Form>
 
-                            </>
-                        } */}
-                    </Input>
+                <SignupArea>
+                    <p>아직 회원이 아니신가요?</p>
+                    <Link to='/user/signup'>
+                        <button>
+                            회원가입
+                        </button>
+                    </Link>
+                </SignupArea>
 
-                </InputArea>
+                <br /><br /><br /><br />
+                <button onClick={devLogin}>개발용 임시로그인</button>
 
-                <ButtonArea>
-                    {!isLoading ?
-                        <>
-                            <button type='submit'>로그인</button>
-                        </>
-                        :
-                        <>
-                            <button>로그인</button>
-                            <WarningMessage>로딩 중입니다..</WarningMessage>
-                        </>
-                    }
-                </ButtonArea>
+            </BackGround>
 
-            </Form>
+            <ErrorArea isError={isError}>
+                <ErrorInfo>
+                    <ErrorTitle>에러가 발생하였습니다.</ErrorTitle>
 
-            <SignupArea>
-                <p>아직 회원이 아니신가요?</p>
-                <Link to='/user/signup'>
-                    <button>
-                        회원가입
-                    </button>
-                </Link>
-            </SignupArea>
+                    <ErrorForm>
+                        {getUserData.errorinfo.errorCode} <br /><br />
+                        {getUserData.errorinfo.errorMessage}
+                    </ErrorForm>
 
+                    <ErrorButton onClick={onClickError}>
+                        닫기
+                    </ErrorButton>
+                </ErrorInfo>
+            </ErrorArea>
 
-            <br /><br /><br /><br />
-            <button onClick={devLogin}>개발로그인</button>
-
-
-        </BackGround>
+        </>
     );
 };
