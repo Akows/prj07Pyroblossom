@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
 const VerifyForm = styled.div`
@@ -60,7 +61,7 @@ const InputTitle = styled.label`
     }
 `;
 
-const InputPassword = styled.input`
+const passwordInput = styled.input`
     width: 90%;
     height: 50px;
 
@@ -72,10 +73,17 @@ const InputPassword = styled.input`
     font-size: 18px;
     font-family: 'GIFont';
 
+    border-color: ${(props) => props.isEmpty ? 'red' : 'gray'};
+
     &:focus {
         border-bottom: 1px solid gray;
     };
+    &::placeholder {
+        color: ${(props) => props.isEmpty ? 'red' : 'gray'};
+    };
 `;
+const InputPassword = styled(passwordInput)``;
+const InputRewritePassword = styled(passwordInput)``;
 
 const WarningMassage = styled.div`
     width: 90%;
@@ -121,8 +129,19 @@ const SubmitButton = styled.button`
 
 export const RequestPasswordVerify = ({ onChange, userData, setIsPasswordEntered, setIsOtherEntered }) => {
 
-    const [isChecked, setIsChecked] = useState(false);
+    const dispatch = useDispatch();
+
     const [passwordRewrite, setPasswordRewrite] = useState('');
+
+    const [isMassageRender1, setIsMassageRender1] = useState(false);
+    const [isMassageRender2, setIsMassageRender2] = useState(false);
+
+    const [isEmpty, setIsEmpty] = useState(false);
+    const [isRewriteEmpty, setIsRewriteEmpty] = useState(false);
+    const [isValidateChecked, setIsValidateChecked] = useState(false);
+    const [isRewriteChecked, setIsRewriteChecked] = useState(false);
+
+    const validatePattern = new RegExp('[0-9]');
 
     const onChangeCheck = (event) => {
         setPasswordRewrite(event.target.value);
@@ -131,17 +150,59 @@ export const RequestPasswordVerify = ({ onChange, userData, setIsPasswordEntered
     const onSubmit = (event) => {
         event.preventDefault();
 
-        if (!isChecked) {
-            alert('비밀번호가 유효하지 않습니다.');
+        dispatch({ type: 'PROCESSINIT' });
+        dispatch({ type: 'LOADING' });
+
+        if (isEmpty && isRewriteEmpty) {
+            setIsEmpty(true);
+            setIsRewriteEmpty(true);
             return;
         }
+        else {
+            if (!userData.password) {
+                setIsEmpty(true);
+                return;
+            }
+
+            if (!passwordRewrite) {
+                setIsRewriteEmpty(true);
+                return;
+            };
+        }
+
+        if (!isValidateChecked) {
+            alert('유효한 비밀번호를 입력해주세요.');
+            return;
+        }
+
+        if (!isRewriteChecked) {
+            alert('비밀번호가 일치하지 않습니다.');
+            return;
+        }
+
+        dispatch({ type: 'CHECK_SUCCESS' });
 
         setIsPasswordEntered(true);
         setIsOtherEntered(false);
     };
 
     useEffect(() => {
-        setIsChecked(userData.password === passwordRewrite);
+        if (!userData.password) {
+            setIsMassageRender1(true);
+        }
+        else {
+            setIsMassageRender1(false);
+        }
+
+        if (!passwordRewrite) {
+            setIsMassageRender2(true);
+        }
+        else {
+            setIsMassageRender2(false);
+        }
+
+        setIsRewriteChecked(userData.password === passwordRewrite);
+        setIsValidateChecked(validatePattern.test(userData.password));
 
         // eslint-disable-next-line
     }, [userData.password, passwordRewrite]);
@@ -156,25 +217,36 @@ export const RequestPasswordVerify = ({ onChange, userData, setIsPasswordEntered
                     <p>비밀번호를 입력해주세요.</p>
                 </InputTitle>
 
-                <InputPassword type='text' id='password' onChange={onChange} value={userData.password} placeholder='비밀번호를 입력해주세요' spellcheck='false' />
+                <InputPassword type='text' id='password' isEmpty={isEmpty} onChange={onChange} value={userData.password} placeholder='비밀번호를 입력해주세요' spellcheck='false' />
 
-                <InputPassword type='text' id='passwordCheck' onChange={onChangeCheck} value={passwordRewrite} placeholder='비밀번호를 한번 더 입력해주세요' spellcheck='false' />
-
-                {!userData.password ?
+                {!isMassageRender1 ?
                     <>
-                        <WarningMassage>* 비밀번호를 입력해주세요.</WarningMassage>
+                        {!isValidateChecked ?
+                            <WarningMassage>유효하지 않은 비밀번호입니다.</WarningMassage>
+                            :
+                            <OkMassage>유효한 비밀번호입니다.</OkMassage>
+                        }
                     </>
                     :
                     <>
-                        {!isChecked ?
-                            <>
-                                <WarningMassage>* 유효하지 않은 비밀번호입니다.</WarningMassage>
-                            </>
+
+                    </>
+                }
+
+
+                <InputRewritePassword type='text' id='passwordCheck' isEmpty={isRewriteEmpty} onChange={onChangeCheck} value={passwordRewrite} placeholder='비밀번호를 한번 더 입력해주세요' spellcheck='false' />
+
+                {!isMassageRender2 ?
+                    <>
+                        {!isRewriteChecked ?
+                            <WarningMassage>비밀번호가 일치하지 않습니다.</WarningMassage>
                             :
-                            <>
-                                <OkMassage>* 사용가능한 비밀번호입니다.</OkMassage>
-                            </>
+                            <OkMassage>비밀번호가 일치합니다.</OkMassage>
                         }
+                    </>
+                    :
+                    <>
+
                     </>
                 }
 

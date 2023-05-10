@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { RequestEmailVerify } from '../../components/user/RequestEmailVerify';
 import { RequestOtherVerify } from '../../components/user/RequestOtherVerify';
 import { RequestPasswordVerify } from '../../components/user/RequestPasswordVerify';
-import { SignUp } from '../../redux/actions/userAction';
+import { isLoginCheck, SignUp } from '../../redux/actions/userAction';
 
 const BackGround = styled.div`
     width: 800px;
@@ -108,6 +108,15 @@ export const Signup = () => {
         setIsOtherEntered(true);
         dispatch(SignUp(userData, navigate));
     };
+
+    useEffect(() => {
+        const titleElement = document.getElementsByTagName('title')[0];
+        titleElement.innerHTML = 'User Signup';
+
+        dispatch(isLoginCheck());
+        dispatch({ type: 'PROCESSINIT' });
+        // eslint-disable-next-line
+    }, []);
 
     return (
         <BackGround>

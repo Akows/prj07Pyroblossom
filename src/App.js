@@ -43,6 +43,7 @@ function App() {
     titleElement.innerHTML = 'Genshin Fyro Blossom';
 
     dispatch(isLoginCheck());
+    dispatch({ type: 'PROCESSINIT' });
     // eslint-disable-next-line
   }, []);
 

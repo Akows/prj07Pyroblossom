@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components';
-import { CheckDuplication } from '../../redux/actions/userAction';
+import { CheckDuplication, isLoginCheck } from '../../redux/actions/userAction';
 
 const VerifyForm = styled.div`
     width: 500px;
@@ -203,8 +203,8 @@ export const RequestEmailVerify = ({ getUserState, onChange, dispatch, userData,
             return;
         }
 
-        // setIsEmailEntered(true);
-        // setIsPasswordEntered(false);
+        setIsEmailEntered(true);
+        setIsPasswordEntered(false);
     };
 
     const checkProcess = (event) => {
@@ -264,8 +264,6 @@ export const RequestEmailVerify = ({ getUserState, onChange, dispatch, userData,
                         }
                     </>
                 }
-
-
 
                 <Script>* 이메일 인증을 통과하지 않으면 가입할 수 없습니다.</Script>
                 <Script>* 이메일 주소는 계정 아이디로 사용됩니다.</Script>
