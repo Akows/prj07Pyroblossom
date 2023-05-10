@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { RequestEmailVerify } from '../../components/user/RequestEmailVerify';
@@ -85,8 +85,10 @@ export const Signup = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
+    const getUserState = useSelector((state) => state.user);
+
     const [userData, setUserData] = useState({
-        email: '',
+        email: ' ',
         password: '',
         name: '',
         displayName: '',
@@ -123,7 +125,7 @@ export const Signup = () => {
 
                         </>
                         :
-                        <RequestEmailVerify onChange={onChange} dispatch={dispatch} userData={userData} setIsEmailEntered={setIsEmailEntered} setIsPasswordEntered={setIsPasswordEntered} />
+                        <RequestEmailVerify getUserState={getUserState} onChange={onChange} dispatch={dispatch} userData={userData} setIsEmailEntered={setIsEmailEntered} setIsPasswordEntered={setIsPasswordEntered} />
                     }
 
                     {isPasswordEntered ?

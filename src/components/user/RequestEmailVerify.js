@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components';
+import { CheckDuplication } from '../../redux/actions/userAction';
 
 const VerifyForm = styled.div`
     width: 500px;
@@ -9,9 +10,16 @@ const VerifyForm = styled.div`
 
     transform: translate3d(0, 0, 0);
     transition: all 1s ease;
+
+    @media screen and (max-width: 500px) {
+        width: 95%;
+
+        transform: translate3d(0, 0, 0);
+        transition: all 1s ease;
+    }
 `;
 
-const Input = styled.div`
+const InputArea = styled.div`
     width: 100%;
     height: 100%;
 
@@ -21,29 +29,18 @@ const Input = styled.div`
     flex-direction: column;
     align-items: center;
 
-    @media screen and (max-width: 880px) {
-        width: 400px;
-
-        transform: translate3d(0, 0, 0);
-        transition: all 1s ease;
-    }
+    transform: translate3d(0, 0, 0);
+    transition: all 1s ease;
 
     @media screen and (max-width: 500px) {
-        width: 300px;
-
-        transform: translate3d(0, 0, 0);
-        transition: all 1s ease;
-    }
-
-    @media screen and (max-width: 400px) {
-        width: 250px;
+        padding: 20px;
 
         transform: translate3d(0, 0, 0);
         transition: all 1s ease;
     }
 `;
 
-const InputTitle = styled.label`
+const Title = styled.label`
     width: 95%;
     height: 80px;
 
@@ -53,16 +50,41 @@ const InputTitle = styled.label`
 
     & > p {
         font-size: 24px;
-
         padding: 3px;
+
+        @media screen and (max-width: 500px) {
+            font-size: 20px;
+            padding: 2px;
+        }
+    }
+`;
+
+const InputForm = styled.div`
+    width: 95%;
+    height: 50px;
+
+    margin-top: 20px;
+    margin-bottom: 10px;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    
+    @media screen and (max-width: 500px) {
+        height: 120px;
+
+        margin-top: 10px;
+        margin-bottom: 10px;
+
+        flex-direction: column;
+        align-items: flex-start;
     }
 `;
 
 const InputEmail = styled.input`
-    width: 90%;
-    height: 50px;
-
-    margin-top: 20px;
+    width: 80%;
+    height: 100%;
 
     border: none;
     border-bottom: 1px solid black;
@@ -70,34 +92,60 @@ const InputEmail = styled.input`
     font-size: 18px;
     font-family: 'GIFont';
 
+    border-color: ${(props) => props.isEmpty ? 'red' : 'gray'};
+
     &:focus {
         border-bottom: 1px solid gray;
     };
+    &::placeholder {
+        color: ${(props) => props.isEmpty ? 'red' : 'gray'};
+    };
 
-    /* &:placeholder-shown {
-        border-bottom: 2px solid red;
-    } */
+    @media screen and (max-width: 500px) {
+        width: 100%;
+        height: 50px;
 
-    /* &:valid {
-        border-bottom: 2px solid green;
+        font-size: 16px;
+        margin-bottom: 10px;
     }
-    &:invalid {
-        border-bottom: 2px solid red;
-    } */
 `;
+const DuplicationCheckButton = styled.button`
+    width: 23%;
+    height: 35px;
 
-const WarningMassage = styled.div`
-    width: 90%;
+    border: none;
+    border-radius: 10px;
 
-    font-size: 14px;
-    color: red;
+    color: black;
+    font-family: 'GIFont';
+    font-size: 15px;
+
+    &:hover {
+        background-color: gray;
+    };
+
+    @media screen and (max-width: 500px) {
+        width: 80px;
+        height: 35px;
+    }
 `;
 
 const OkMassage = styled.div`
     width: 90%;
 
+    margin-bottom: 10px;
+
     font-size: 14px;
     color: green;
+`;
+
+const WarningMassage = styled.div`
+    width: 90%;
+
+    margin-bottom: 10px;
+
+    font-size: 14px;
+    color: red;
 `;
 
 const Script = styled.div`
@@ -105,6 +153,7 @@ const Script = styled.div`
     height: 15px;
 
     margin-top: 5px;
+    margin-bottom: 5px;
 
     font-size: 11px;
     color: gray;
@@ -125,68 +174,109 @@ const SubmitButton = styled.button`
     &:hover {
         background-color: gray;
     };
+
+    @media screen and (max-width: 500px) {
+        margin-top: 30px;
+    }
 `;
 
 
-export const RequestEmailVerify = ({ onChange, userData, setIsEmailEntered, setIsPasswordEntered }) => {
+export const RequestEmailVerify = ({ getUserState, onChange, dispatch, userData, setIsEmailEntered, setIsPasswordEntered }) => {
 
-    // eslint-disable-next-line
-    const validatePattern = new RegExp('[a-z0-9]+@[a-z]+\.[a-z]{2,3}');
+    const [isFirstRender, setIsFirstRender] = useState(true);
+    const [isEmpty, setIsEmpty] = useState(true);
+    const [isValidateChecked, setIsValidateChecked] = useState(false);
+    const [isDuplicationChecked, setIsDuplicationChecked] = useState(false);
 
-    const [isChecked, setIsChecked] = useState(false);
+    const validatePattern = new RegExp('[a-z0-9]+@[a-z]+.[a-z]{2,3}');
 
     const onSubmit = (event) => {
         event.preventDefault();
 
-        if (!isChecked) {
-            alert('이메일 주소가 유효하지 않습니다.');
+        if (isEmpty) {
+            alert('이메일 주소를 입력해주세요.');
             return;
         }
 
-        setIsEmailEntered(true);
-        setIsPasswordEntered(false);
+        if (!isValidateChecked) {
+            alert('유효한 이메일 주소를 입력해주세요.');
+            return;
+        }
+
+        // setIsEmailEntered(true);
+        // setIsPasswordEntered(false);
+    };
+
+    const checkProcess = (event) => {
+        event.preventDefault();
+
+        if (!isValidateChecked) {
+            alert('이메일 주소를 입력해주세요.');
+            return;
+        }
+
+        setIsFirstRender(false);
+
+        dispatch(CheckDuplication(userData.email, 'email'));
     };
 
     useEffect(() => {
-        setIsChecked(validatePattern.test(userData.email));
+        if (!userData.email) {
+            setIsFirstRender(true);
+            setIsEmpty(true);
+        }
+        else {
+            setIsEmpty(false);
+        }
+
+        setIsValidateChecked(validatePattern.test(userData.email));
+
         // eslint-disable-next-line
     }, [userData.email]);
 
+    useEffect(() => {
+        setIsDuplicationChecked(getUserState.processvalue.isCheck);
+        // eslint-disable-next-line
+    }, [getUserState]);
+
     return (
         <VerifyForm>
-            <Input>
+            <InputArea>
 
-                <InputTitle htmlFor='email'>
+                <Title htmlFor='email'>
                     <p>계정으로 사용할</p>
                     <p>이메일 주소를 입력해주세요.</p>
-                </InputTitle>
+                </Title>
 
-                <InputEmail type='email' id='email' onChange={onChange} value={userData.email} pattern={validatePattern} placeholder='이메일 주소를 입력해주세요' spellcheck='false' />
+                <InputForm>
+                    <InputEmail type='email' id='email' isEmpty={isEmpty} onChange={onChange} value={userData.email} placeholder='이메일 주소를 입력해주세요' spellcheck='false' />
+                    <DuplicationCheckButton onClick={checkProcess}>중복검사</DuplicationCheckButton>
+                </InputForm>
 
-                {!userData.email ?
-                    <>
-                        <WarningMassage>* 이메일 주소를 입력해주세요.</WarningMassage>
-                    </>
+                {isFirstRender ?
+                    <></>
                     :
                     <>
-                        {!isChecked ?
-                            <>
-                                <WarningMassage>* 유효하지 않은 이메일 주소입니다.</WarningMassage>
-                            </>
+                        {isDuplicationChecked ?
+                            <OkMassage>사용 가능한 이메일 주소입니다.</OkMassage>
                             :
-                            <>
-                                <OkMassage>* 사용가능한 이메일 주소입니다.</OkMassage>
-                            </>
+                            <WarningMassage>사용할 수 없는 이메일 주소입니다.</WarningMassage>
                         }
                     </>
                 }
 
+
+
                 <Script>* 이메일 인증을 통과하지 않으면 가입할 수 없습니다.</Script>
                 <Script>* 이메일 주소는 계정 아이디로 사용됩니다.</Script>
 
-                <SubmitButton onClick={onSubmit}>다음</SubmitButton>
+                {isDuplicationChecked ?
+                    <SubmitButton onClick={onSubmit}>다음</SubmitButton>
+                    :
+                    <SubmitButton disabled={true}>다음</SubmitButton>
+                }
 
-            </Input>
-        </VerifyForm>
+            </InputArea>
+        </VerifyForm >
     );
 };

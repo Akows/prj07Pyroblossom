@@ -1,7 +1,6 @@
 // error dispatch을 위해서 필요한 형태로 데이터를 가공하는 함수.
 const createErrorData = (error) => {
     const errorData = {
-        isError: true,
         errorCode: error.code,
         errorMessage: error.message,
     };
@@ -9,6 +8,7 @@ const createErrorData = (error) => {
 };
 
 const errorCode = {
+
     userSignInError: {
         DuplicationAdminAccount: {
             code: 'USIE001',
