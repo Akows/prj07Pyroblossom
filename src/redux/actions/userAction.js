@@ -1,7 +1,53 @@
 import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut, updateProfile } from 'firebase/auth'
-import { doc, getCountFromServer, getDoc, query, setDoc } from 'firebase/firestore';
+import { doc, getCountFromServer, getDoc, getDocs, query, setDoc, where } from 'firebase/firestore';
 import { createErrorData, errorCode } from '../../configs/errorCodes';
 import { appAuth, timeStamp, userCollectionRef } from '../../configs/firebase/config'
+
+const CheckEmailDuplication = (inputEmail) => {
+    return (dispatch, getState) => {
+
+        console.log(inputEmail);
+
+        dispatch({ type: 'LOADING' });
+
+        const checkProcess = async () => {
+
+            const querys = query(userCollectionRef, where('email', '==', inputEmail));
+            const querySnap = await getDocs(querys);
+
+            console.log(querySnap.data());
+
+            // console.log(docSnap.data().displayName);
+            // console.log(docSnap.data().email);
+
+            // if (userData.email === 'admin@admin.com') {
+            //     throw errorCode.userSignInError.DuplicationAdminAccount;
+            // };
+
+            // if (userData.email === docSnap.data().email) {
+            //     throw errorCode.userSignInError.DuplicationEmail;
+            // };
+
+            // if (userData.displayName === docSnap.data().displayName) {
+            //     throw errorCode.userSignInError.DuplicationNickname;
+            // }
+        };
+
+        checkProcess();
+
+        // checkProcess()
+        //     .then(() => {
+        //         alert('이상없다');
+        //     })
+        //     .catch((error) => {
+        //         dispatch({ type: 'ERROR', payload: createErrorData(error) });
+        //     });
+    };
+};
+
+
+
+
 
 // 회원가입 기능.
 const SignUp = (userData, navigate) => {
@@ -47,11 +93,12 @@ const SignUp = (userData, navigate) => {
                                     const querys = query(userCollectionRef);
                                     const userId = await getCountFromServer(querys);
                                     const createdTime = timeStamp.fromDate(new Date());
-                                    const docRef = doc(userCollectionRef, `${userData.displayName}`);
+                                    const docRef = doc(userCollectionRef, `${userData.email}`);
 
                                     await setDoc(docRef,
                                         {
-                                            memberNumber: userId.data().count + 1,
+                                            userNumber: userId.data().count + 1,
+                                            userType: '일반회원',
                                             email: userData.email,
                                             password: userData.password,
                                             name: userData.name,
@@ -114,11 +161,6 @@ const logIn = (email, password, navigate) => {
             })
             .catch((error) => {
                 dispatch({ type: 'ERROR', payload: createErrorData(error) });
-
-                // if (createErrorData(error).errorCode === 'auth/user-not-found') {
-                //     alert('존재하지 않는 사용자입니다.');
-                // };
-                // navigate('/user/login', { replace: true });
             });
     };
 };
@@ -179,4 +221,4 @@ const isLoginCheck = () => {
     };
 };
 
-export { SignUp, logIn, logOut, isLoginCheck };
+export { CheckEmailDuplication, SignUp, logIn, logOut, isLoginCheck };

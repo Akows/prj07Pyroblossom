@@ -123,7 +123,7 @@ export const Signup = () => {
 
                         </>
                         :
-                        <RequestEmailVerify onChange={onChange} userData={userData} setIsEmailEntered={setIsEmailEntered} setIsPasswordEntered={setIsPasswordEntered} />
+                        <RequestEmailVerify onChange={onChange} dispatch={dispatch} userData={userData} setIsEmailEntered={setIsEmailEntered} setIsPasswordEntered={setIsPasswordEntered} />
                     }
 
                     {isPasswordEntered ?
