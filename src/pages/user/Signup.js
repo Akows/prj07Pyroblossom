@@ -82,7 +82,6 @@ const ButtonArea = styled(centerOption)`
 
 export const Signup = () => {
 
-    const navigate = useNavigate();
     const dispatch = useDispatch();
 
     const getUserState = useSelector((state) => state.user);
@@ -101,12 +100,6 @@ export const Signup = () => {
 
     const onChange = (event) => {
         setUserData({ ...userData, [event.target.id]: event.target.value });
-    };
-
-    const onSubmit = (event) => {
-        event.preventDefault();
-        setIsOtherEntered(true);
-        dispatch(SignUp(userData, navigate));
     };
 
     useEffect(() => {
@@ -150,7 +143,7 @@ export const Signup = () => {
 
                         </>
                         :
-                        <RequestOtherVerify onChange={onChange} userData={userData} onSubmit={onSubmit} />
+                        <RequestOtherVerify getUserState={getUserState} onChange={onChange} userData={userData} setIsOtherEntered={setIsOtherEntered} />
                     }
 
                 </InputArea>

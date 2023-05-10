@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components';
-import { CheckDuplication, isLoginCheck } from '../../redux/actions/userAction';
+import { CheckDuplication } from '../../redux/actions/userAction';
 
 const VerifyForm = styled.div`
     width: 500px;
@@ -179,7 +179,6 @@ const SubmitButton = styled.button`
         margin-top: 30px;
     }
 `;
-
 
 export const RequestEmailVerify = ({ getUserState, onChange, dispatch, userData, setIsEmailEntered, setIsPasswordEntered }) => {
 

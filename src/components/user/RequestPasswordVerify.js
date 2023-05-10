@@ -10,9 +10,16 @@ const VerifyForm = styled.div`
 
     transform: translate3d(0, 0, 0);
     transition: all 1s ease;
+
+    @media screen and (max-width: 500px) {
+        width: 95%;
+
+        transform: translate3d(0, 0, 0);
+        transition: all 1s ease;
+    }
 `;
 
-const Input = styled.div`
+const InputArea = styled.div`
     width: 100%;
     height: 100%;
 
@@ -22,50 +29,59 @@ const Input = styled.div`
     flex-direction: column;
     align-items: center;
 
-    @media screen and (max-width: 880px) {
-        width: 400px;
-
-        transform: translate3d(0, 0, 0);
-        transition: all 1s ease;
-    }
-
     @media screen and (max-width: 500px) {
-        width: 300px;
-
-        transform: translate3d(0, 0, 0);
-        transition: all 1s ease;
-    }
-
-    @media screen and (max-width: 400px) {
-        width: 250px;
+        padding: 20px;
 
         transform: translate3d(0, 0, 0);
         transition: all 1s ease;
     }
 `;
 
-const InputTitle = styled.label`
+const Title = styled.label`
     width: 95%;
     height: 80px;
 
     padding: 5px;
 
-    /* border: 1px solid red; */
-
     text-align: left;
 
     & > p {
         font-size: 24px;
-
         padding: 3px;
+
+        @media screen and (max-width: 500px) {
+            font-size: 20px;
+            padding: 2px;
+        }
     }
 `;
 
-const passwordInput = styled.input`
-    width: 90%;
-    height: 50px;
+const InputForm = styled.div`
+    width: 95%;
+    height: 120px;
 
-    margin-top: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    
+    @media screen and (max-width: 500px) {
+        height: 120px;
+
+        margin-top: 10px;
+        margin-bottom: 10px;
+
+        align-items: flex-start;
+    }
+`;
+
+
+const passwordInput = styled.input`
+    width: 100%;
+    height: 50%;
 
     border: none;
     border-bottom: 1px solid black;
@@ -81,19 +97,26 @@ const passwordInput = styled.input`
     &::placeholder {
         color: ${(props) => props.isEmpty ? 'red' : 'gray'};
     };
+    @media screen and (max-width: 500px) {
+        width: 100%;
+        height: 50%;
+
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
 `;
 const InputPassword = styled(passwordInput)``;
 const InputRewritePassword = styled(passwordInput)``;
 
 const WarningMassage = styled.div`
-    width: 90%;
+    width: 100%;
 
     font-size: 14px;
     color: red;
 `;
 
 const OkMassage = styled.div`
-    width: 90%;
+    width: 100%;
 
     font-size: 14px;
     color: green;
@@ -107,6 +130,10 @@ const Script = styled.div`
 
     font-size: 11px;
     color: gray;
+
+    @media screen and (max-width: 400px) {
+        margin-top: 10px;
+    }
 `;
 
 const SubmitButton = styled.button`
@@ -124,6 +151,10 @@ const SubmitButton = styled.button`
     &:hover {
         background-color: gray;
     };
+    @media screen and (max-width: 500px) {
+        width: 80%;
+        height: 35px;
+    }
 `;
 
 
@@ -210,52 +241,53 @@ export const RequestPasswordVerify = ({ onChange, userData, setIsPasswordEntered
 
     return (
         <VerifyForm>
-            <Input>
+            <InputArea>
 
-                <InputTitle htmlFor='password'>
+                <Title htmlFor='password'>
                     <p>계정을 안전하게 보호할</p>
                     <p>비밀번호를 입력해주세요.</p>
-                </InputTitle>
+                </Title>
 
-                <InputPassword type='text' id='password' isEmpty={isEmpty} onChange={onChange} value={userData.password} placeholder='비밀번호를 입력해주세요' spellcheck='false' />
+                <InputForm>
+                    <InputPassword type='text' id='password' isEmpty={isEmpty} onChange={onChange} value={userData.password} placeholder='비밀번호를 입력해주세요' spellcheck='false' />
+                    {!isMassageRender1 ?
+                        <>
+                            {!isValidateChecked ?
+                                <WarningMassage>유효하지 않은 비밀번호입니다.</WarningMassage>
+                                :
+                                <OkMassage>유효한 비밀번호입니다.</OkMassage>
+                            }
+                        </>
+                        :
+                        <>
 
-                {!isMassageRender1 ?
-                    <>
-                        {!isValidateChecked ?
-                            <WarningMassage>유효하지 않은 비밀번호입니다.</WarningMassage>
-                            :
-                            <OkMassage>유효한 비밀번호입니다.</OkMassage>
-                        }
-                    </>
-                    :
-                    <>
+                        </>
+                    }
 
-                    </>
-                }
+                    <InputRewritePassword type='text' id='passwordCheck' isEmpty={isRewriteEmpty} onChange={onChangeCheck} value={passwordRewrite} placeholder='비밀번호를 한번 더 입력해주세요' spellcheck='false' />
+                    {!isMassageRender2 ?
+                        <>
+                            {!isRewriteChecked ?
+                                <WarningMassage>비밀번호가 일치하지 않습니다.</WarningMassage>
+                                :
+                                <OkMassage>비밀번호가 일치합니다.</OkMassage>
+                            }
+                        </>
+                        :
+                        <>
+
+                        </>
+                    }
+                </InputForm>
 
 
-                <InputRewritePassword type='text' id='passwordCheck' isEmpty={isRewriteEmpty} onChange={onChangeCheck} value={passwordRewrite} placeholder='비밀번호를 한번 더 입력해주세요' spellcheck='false' />
-
-                {!isMassageRender2 ?
-                    <>
-                        {!isRewriteChecked ?
-                            <WarningMassage>비밀번호가 일치하지 않습니다.</WarningMassage>
-                            :
-                            <OkMassage>비밀번호가 일치합니다.</OkMassage>
-                        }
-                    </>
-                    :
-                    <>
-
-                    </>
-                }
 
                 <Script>* 보안을 위해서 비밀번호는 2번 입력해야합니다.</Script>
                 <Script>* 두 비밀번호는 반드시 일치하여야합니다.</Script>
 
                 <SubmitButton onClick={onSubmit}>다음</SubmitButton>
 
-            </Input>
+            </InputArea>
         </VerifyForm>
     );
 };
