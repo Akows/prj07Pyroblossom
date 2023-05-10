@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { RequestEmailVerify } from '../../components/user/RequestEmailVerify';
 import { RequestOtherVerify } from '../../components/user/RequestOtherVerify';
 import { RequestPasswordVerify } from '../../components/user/RequestPasswordVerify';
-import { isLoginCheck, SignUp } from '../../redux/actions/userAction';
+import { isLoginCheck } from '../../redux/actions/userAction';
 
 const BackGround = styled.div`
     width: 800px;
@@ -127,7 +126,7 @@ export const Signup = () => {
 
                         </>
                         :
-                        <RequestEmailVerify getUserState={getUserState} onChange={onChange} dispatch={dispatch} userData={userData} setIsEmailEntered={setIsEmailEntered} setIsPasswordEntered={setIsPasswordEntered} />
+                        <RequestEmailVerify onChange={onChange} dispatch={dispatch} userData={userData} getUserState={getUserState} setIsEmailEntered={setIsEmailEntered} setIsPasswordEntered={setIsPasswordEntered} />
                     }
 
                     {isPasswordEntered ?
@@ -135,7 +134,7 @@ export const Signup = () => {
 
                         </>
                         :
-                        <RequestPasswordVerify onChange={onChange} userData={userData} setIsPasswordEntered={setIsPasswordEntered} setIsOtherEntered={setIsOtherEntered} />
+                        <RequestPasswordVerify onChange={onChange} dispatch={dispatch} userData={userData} setIsPasswordEntered={setIsPasswordEntered} setIsOtherEntered={setIsOtherEntered} />
                     }
 
                     {isOtherEntered ?
@@ -143,7 +142,7 @@ export const Signup = () => {
 
                         </>
                         :
-                        <RequestOtherVerify getUserState={getUserState} onChange={onChange} userData={userData} setIsOtherEntered={setIsOtherEntered} />
+                        <RequestOtherVerify onChange={onChange} dispatch={dispatch} userData={userData} getUserState={getUserState} setIsOtherEntered={setIsOtherEntered} />
                     }
 
                 </InputArea>

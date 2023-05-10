@@ -180,10 +180,11 @@ const SubmitButton = styled.button`
     }
 `;
 
-export const RequestEmailVerify = ({ getUserState, onChange, dispatch, userData, setIsEmailEntered, setIsPasswordEntered }) => {
+export const RequestEmailVerify = ({ onChange, dispatch, userData, getUserState, setIsEmailEntered, setIsPasswordEntered }) => {
 
-    const [isFirstRender, setIsFirstRender] = useState(true);
+    const [isMassageRender, setIsMassageRender] = useState(false);
     const [isEmpty, setIsEmpty] = useState(true);
+    const [isLoading, setIsLoading] = useState(true);
     const [isValidateChecked, setIsValidateChecked] = useState(false);
     const [isDuplicationChecked, setIsDuplicationChecked] = useState(false);
 
@@ -214,14 +215,13 @@ export const RequestEmailVerify = ({ getUserState, onChange, dispatch, userData,
             return;
         }
 
-        setIsFirstRender(false);
-
+        setIsMassageRender(true);
         dispatch(CheckDuplication(userData.email, 'email'));
     };
 
     useEffect(() => {
         if (!userData.email) {
-            setIsFirstRender(true);
+            setIsMassageRender(false);
             setIsEmpty(true);
         }
         else {
@@ -235,6 +235,7 @@ export const RequestEmailVerify = ({ getUserState, onChange, dispatch, userData,
 
     useEffect(() => {
         setIsDuplicationChecked(getUserState.processvalue.isCheck);
+        setIsLoading(getUserState.processvalue.isLoading);
         // eslint-disable-next-line
     }, [getUserState]);
 
@@ -252,14 +253,22 @@ export const RequestEmailVerify = ({ getUserState, onChange, dispatch, userData,
                     <DuplicationCheckButton onClick={checkProcess}>중복검사</DuplicationCheckButton>
                 </InputForm>
 
-                {isFirstRender ?
+                {!isMassageRender ?
                     <></>
                     :
                     <>
                         {isDuplicationChecked ?
                             <OkMassage>사용 가능한 이메일 주소입니다.</OkMassage>
                             :
-                            <WarningMassage>사용할 수 없는 이메일 주소입니다.</WarningMassage>
+                            <>
+                                {isLoading ?
+                                    <></>
+                                    :
+                                    <>
+                                        <WarningMassage>사용할 수 없는 이메일 주소입니다.</WarningMassage>
+                                    </>
+                                }
+                            </>
                         }
                     </>
                 }

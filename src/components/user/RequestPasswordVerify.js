@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
 const VerifyForm = styled.div`
@@ -160,8 +159,6 @@ const SubmitButton = styled.button`
 
 export const RequestPasswordVerify = ({ onChange, userData, setIsPasswordEntered, setIsOtherEntered }) => {
 
-    const dispatch = useDispatch();
-
     const [passwordRewrite, setPasswordRewrite] = useState('');
 
     const [isMassageRender1, setIsMassageRender1] = useState(false);
@@ -180,9 +177,6 @@ export const RequestPasswordVerify = ({ onChange, userData, setIsPasswordEntered
 
     const onSubmit = (event) => {
         event.preventDefault();
-
-        dispatch({ type: 'PROCESSINIT' });
-        dispatch({ type: 'LOADING' });
 
         if (isEmpty && isRewriteEmpty) {
             setIsEmpty(true);
@@ -210,8 +204,6 @@ export const RequestPasswordVerify = ({ onChange, userData, setIsPasswordEntered
             alert('비밀번호가 일치하지 않습니다.');
             return;
         }
-
-        dispatch({ type: 'CHECK_SUCCESS' });
 
         setIsPasswordEntered(true);
         setIsOtherEntered(false);

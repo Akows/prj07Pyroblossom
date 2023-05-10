@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { CheckDuplication, SignUp } from '../../redux/actions/userAction';
@@ -174,16 +173,17 @@ const SubmitButton = styled.button`
 `;
 
 
-export const RequestOtherVerify = ({ getUserState, onChange, userData, setIsOtherEntered }) => {
+export const RequestOtherVerify = ({ onChange, dispatch, userData, getUserState, setIsOtherEntered }) => {
 
     const navigate = useNavigate();
-    const dispatch = useDispatch();
 
     const [isDuplicationChecked, setIsDuplicationChecked] = useState(false);
 
+    const [isLoading, setIsLoading] = useState(true);
+
     const [isMassageRender1, setIsMassageRender1] = useState(false);
-    const [isMassageRender2, setIsMassageRender2] = useState(false);
-    const [isMassageRender3, setIsMassageRender3] = useState(false);
+    // const [isMassageRender2, setIsMassageRender2] = useState(false);
+    // const [isMassageRender3, setIsMassageRender3] = useState(false);
 
     const [isNameEmpty, setIsNameEmpty] = useState(false);
     const [isDisplayName, setIsDisplayName] = useState(false);
@@ -230,6 +230,7 @@ export const RequestOtherVerify = ({ getUserState, onChange, userData, setIsOthe
 
     useEffect(() => {
         setIsDuplicationChecked(getUserState.processvalue.isCheck);
+        setIsLoading(getUserState.processvalue.isLoading);
         // eslint-disable-next-line
     }, [getUserState]);
 
@@ -254,14 +255,21 @@ export const RequestOtherVerify = ({ getUserState, onChange, userData, setIsOthe
                             {isDuplicationChecked ?
                                 <OkMassage>사용 가능한 닉네임입니다.</OkMassage>
                                 :
-                                <WarningMassage>사용할 수 없는 닉네임입니다.</WarningMassage>
+                                <>
+                                    {isLoading ?
+                                        <></>
+                                        :
+                                        <>
+                                            <WarningMassage>사용할 수 없는 닉네임입니다.</WarningMassage>
+                                        </>
+                                    }
+                                </>
+
                             }
                         </>
                     }
 
-
                     <InputOther type='text' id='name' isEmpty={isNameEmpty} onChange={onChange} value={userData.name} placeholder='사용자 이름을 입력해주세요' spellcheck='false' />
-
                     <InputOther type='text' id='address' isEmpty={isAddressEmpty} onChange={onChange} value={userData.address} placeholder='사용자 주소를 입력해주세요' spellcheck='false' />
 
                 </InputForm>
