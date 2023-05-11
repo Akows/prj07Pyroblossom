@@ -346,79 +346,94 @@ export const Login2 = () => {
 
     const getUserData = useSelector((state) => state.user);
 
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [inputUserData, setInputUserData] = useState({
+        email: '',
+        password: '',
+    });
 
-    const [isError, setIsError] = useState(true);
+    // 각종 프론트 상황 동작에 필요한 플래그 State들.
+    const [isError, setIsError] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [isEmailEmpty, setIsEmailEmpty] = useState(false);
     const [isPasswordEmpty, setIsPasswordEmpty] = useState(false);
 
-    // const onChange = (event) => {
-    //     if (event.target.type === 'email') {
-    //         setEmail(event.target.value);
-    //         setIsEmailEmpty(false);
-    //     }
-    //     else if (event.target.type === 'password') {
-    //         setPassword(event.target.value);
-    //         setIsPasswordEmpty(false);
-    //     }
-    // };
+    // input 태그에서 입력값을 감지하여 동작하는 함수.
+    const onChange = (event) => {
+        // 입력값은 받아서 set.
+        // id와 value값을 기준으로 inputUserData 객체에 적절한 값을 찾아서 갱신.
+        // 기존 객체 내부의 값은 ... 연산자를 이용하여 불변성을 유지.
+        setInputUserData({ ...inputUserData, [event.target.id]: event.target.value });
 
-    // const onSubmit = (event) => {
-    //     event.preventDefault();
+        // 또한 입력값의 id를 기준으로 값이 입력되었을 경우 Empty 변수를 false로 변환.
+        if (event.target.id === 'email') {
+            setIsEmailEmpty(false);
+        };
 
-    //     if (!email && !password) {
-    //         setIsEmailEmpty(true);
-    //         setIsPasswordEmpty(true);
-    //         return;
-    //     }
-    //     else {
-    //         if (!email) {
-    //             setIsEmailEmpty(true);
-    //             return;
-    //         }
+        if (event.target.id === 'password') {
+            setIsPasswordEmpty(false);
+        };
+    };
 
-    //         if (!password) {
-    //             setIsPasswordEmpty(true);
-    //             return;
-    //         };
-    //     };
+    // 로그인 기능을 동작하는 함수.
+    const onSubmit = (event) => {
+        // 버튼의 기본 이벤트 제거.
+        event.preventDefault();
 
-    //     dispatch(logIn(email, password, navigate));
-    //     // eslint-disable-next-line
-    // };
+        // 어느 한 쪽의 입력값이 존재하지 않으면 Empty 변수를 true로 변환하고 함수를 종료.
+        if (!inputUserData.email) {
+            setIsEmailEmpty(true);
+            return;
+        };
 
-    // const onClickError = () => {
-    //     setIsError(!isError);
-    //     setEmail('');
-    //     setPassword('');
-    // };
+        if (!inputUserData.password) {
+            setIsPasswordEmpty(true);
+            return;
+        };
 
-    // useEffect(() => {
-    //     const titleElement = document.getElementsByTagName('title')[0];
-    //     titleElement.innerHTML = 'User Login';
+        // 이상이 없으면 입력값과 페이지 이동을 위한 navigate 객체를 인자로 담아 dispatch.
+        dispatch(logIn(inputUserData, navigate));
+        // eslint-disable-next-line
+    };
 
-    //     dispatch(isLoginCheck());
-    //     // eslint-disable-next-line
-    // }, []);
+    // 에러 화면이 출력되었을 때, 화면을 종료하는 버튼.
+    const onClickError = () => {
+        // Error 변수를 false로 변환하고 입력 데이터의 값을 초기화.
+        setIsError(false);
+        setInputUserData({});
+    };
 
-    // useEffect(() => {
-    //     setIsLoading(getUserData.processvalue.isLoading);
-    //     setIsError(getUserData.processvalue.isError);
-    //     // eslint-disable-next-line
-    // }, [getUserData]);
+    // 페이지가 처음 렌더링되면 브라우저 탭의 제목을 변경하고 로그인 여부를 체크.
+    useEffect(() => {
+        const titleElement = document.getElementsByTagName('title')[0];
+        titleElement.innerHTML = 'User Login';
 
-    // const devLogin = () => {
-    //     dispatch(logIn('admin@admin.com', '123123', navigate));
-    // };
+        dispatch(isLoginCheck());
+        // eslint-disable-next-line
+    }, []);
+
+    // Redux Store에서 State가 갱신될 때마다, 당 컴포넌트의 플래그 변수도 갱신되도록.
+    useEffect(() => {
+        setIsError(getUserData.processvalue.isError);
+        setIsLoading(getUserData.processvalue.isLoading);
+        // eslint-disable-next-line
+    }, [getUserData]);
+
+
+
+
+
+    // 개발용 임시 로그인 버튼
+    const devLogin = () => {
+        dispatch(logIn('admin@admin.com', '123123', navigate));
+    };
 
     return (
         <>
+            {/* 기본 UI. */}
+            {/* 기본 UI. */}
+
             <BackGround>
-
                 <FormBorder>
-
                     <InnerContents>
 
                         <FormTitle>
@@ -426,12 +441,12 @@ export const Login2 = () => {
                         </FormTitle>
 
                         <FormInputNoButton>
-                            <Input type='email' id='email' placeholder='이메일 주소를 입력해주세요' spellcheck='false' />
+                            <Input isEmpty={isEmailEmpty} onChange={onChange} value={inputUserData.email} type='email' id='email' placeholder='이메일 주소를 입력해주세요' spellcheck='false' />
                             <OkMassageNoButton>사용 가능한 이메일 주소입니다.</OkMassageNoButton>
                         </FormInputNoButton>
 
                         <FormInputNoButton>
-                            <Input type='password' id='password' placeholder='비밀번호를 입력해주세요' spellcheck='false' />
+                            <Input isEmpty={isPasswordEmpty} onChange={onChange} value={inputUserData.password} type='password' id='password' placeholder='비밀번호를 입력해주세요' spellcheck='false' />
                             <OkMassageNoButton>사용 가능한 비밀번호입니다.</OkMassageNoButton>
                         </FormInputNoButton>
 
@@ -440,25 +455,31 @@ export const Login2 = () => {
                             <Script>* 이메일 주소는 계정 아이디로 사용됩니다.</Script>
                         </FormScript>
 
-                        <SubmitButton disabled={true}>다음</SubmitButton>
+                        {isLoading ?
+                            <>
+                                <SubmitButton disabled={true}>다음</SubmitButton>
+                            </>
+                            :
+                            <>
+                                <SubmitButton onClick={onSubmit}>다음</SubmitButton>
+                            </>
+                        }
 
                         <MoveToSignUp>
-                            <p>아직 회원이 아니신가요?</p>
+                            <p>아직 회원이 아니신가요?</p>&nbsp;
                             <Link to='/user/signup'>
                                 회원가입
                             </Link>
                         </MoveToSignUp>
 
                     </InnerContents>
-
                 </FormBorder >
-
             </BackGround>
 
-
+            {/* 에러 상황 시에만 렌더링되는 에러 모달 창. */}
+            {/* 에러 상황 시에만 렌더링되는 에러 모달 창. */}
 
             <ErrorModalBorder isError={isError}>
-
                 <ErrorDecoImageBox>
                     <ErrorDecoImage />
                 </ErrorDecoImageBox>
@@ -474,7 +495,7 @@ export const Login2 = () => {
                         {getUserData.errorinfo.errorMessage}
                     </ErrorForm>
 
-                    <ErrorButton onClick={''}>
+                    <ErrorButton onClick={onClickError}>
                         닫기
                     </ErrorButton>
 
