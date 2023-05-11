@@ -64,21 +64,36 @@ const FormTitle = styled.label`
 
 const FormInput = styled.div`
     width: 95%;
-    height: 100px;
+    height: 80px;
 
-    margin-top: 20px;
-    margin-bottom: 10px;
+    margin-top: 5px;
 
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    
+
     @media screen and (max-width: 500px) {
         margin-top: 0px;
     }
 `;
-const InputEmail = styled.input`
+const FormInputNoButton = styled.div`
+    width: 95%;
+    height: 80px;
+
+    margin-top: 5px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    @media screen and (max-width: 500px) {
+        margin-top: 0px;
+    }
+`;
+
+const Input = styled.input`
     width: 100%;
     height: 50%;
 
@@ -93,10 +108,6 @@ const InputEmail = styled.input`
     &::placeholder {
         color: ${(props) => props.isEmpty ? 'red' : 'gray'};
     };
-
-    @media screen and (max-width: 500px) {
-
-    }
 `;
 
 const CheckAndResult = styled.div`
@@ -110,7 +121,7 @@ const CheckAndResult = styled.div`
 `;
 const DuplicationCheckButton = styled.button`
     width: 30%;
-    height: 35px;
+    height: 80%;
 
     border: none;
     border-radius: 10px;
@@ -122,6 +133,10 @@ const DuplicationCheckButton = styled.button`
     &:hover {
         background-color: gray;
     };
+
+    @media screen and (max-width: 350px) {
+        font-size: 14px;
+    }
 `;
 
 const resultMassage = styled.div`
@@ -131,26 +146,50 @@ const resultMassage = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: flex-end;
 
     font-size: 14px;
+
+    @media screen and (max-width: 350px) {
+        font-size: 12.5px;
+    }
 `;
 const OkMassage = styled(resultMassage)`
+    color: green;
+`;
+const OkMassageNoButton = styled(resultMassage)`
+    width: 100%;
     color: green;
 `;
 const WarningMassage = styled(resultMassage)`
     color: red;
 `;
+const WarningMassageNoButton = styled(resultMassage)`
+    width: 100%;
+    color: red;
+`;
 
-const Script = styled.div`
+const FormScript = styled.div`
     width: 95%;
-    height: 15px;
+    height: 100%;
 
-    margin-top: 5px;
-    margin-bottom: 5px;
+    margin-top: 15px;
+`;
+
+const Script = styled.p`
+    height: 20px;
 
     font-size: 12px;
     color: gray;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+
+    @media screen and (max-width: 350px) {
+        height: 28px;
+    }
 `;
 
 const SubmitButton = styled.button`
@@ -185,7 +224,7 @@ export const RequestTermsAgreement = () => {
                     </FormTitle>
 
                     <FormInput>
-                        <InputEmail type='email' id='email' placeholder='이메일 주소를 입력해주세요' spellcheck='false' />
+                        <Input type='email' id='email' placeholder='이메일 주소를 입력해주세요' spellcheck='false' />
 
                         <CheckAndResult>
                             <DuplicationCheckButton>중복검사</DuplicationCheckButton>
@@ -194,11 +233,27 @@ export const RequestTermsAgreement = () => {
                         </CheckAndResult>
                     </FormInput>
 
-                    <Script>* 이메일 인증을 통과하지 않으면 가입할 수 없습니다.</Script>
-                    <Script>* 이메일 주소는 계정 아이디로 사용됩니다.</Script>
+                    <FormInput>
+                        <Input type='email' id='email' placeholder='이메일 주소를 입력해주세요' spellcheck='false' />
+
+                        <CheckAndResult>
+                            <DuplicationCheckButton>중복검사</DuplicationCheckButton>
+                            <OkMassage>사용 가능한 이메일 주소입니다.</OkMassage>
+                            {/* <WarningMassage>사용할 수 없는 이메일 주소입니다.</WarningMassage> */}
+                        </CheckAndResult>
+                    </FormInput>
+
+                    <FormInputNoButton>
+                        <Input type='email' id='email' placeholder='이메일 주소를 입력해주세요' spellcheck='false' />
+                        <OkMassageNoButton>사용 가능한 이메일 주소입니다.</OkMassageNoButton>
+                    </FormInputNoButton>
+
+                    <FormScript>
+                        <Script>* 이메일 인증을 통과하지 않으면 가입할 수 없습니다.</Script>
+                        <Script>* 이메일 주소는 계정 아이디로 사용됩니다.</Script>
+                    </FormScript>
 
                     <SubmitButton disabled={true}>다음</SubmitButton>
-
 
                 </InnerContents>
 
