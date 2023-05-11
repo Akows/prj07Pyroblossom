@@ -229,7 +229,7 @@ export const RequestTermsAgreement = () => {
                         <CheckAndResult>
                             <DuplicationCheckButton>중복검사</DuplicationCheckButton>
                             <OkMassage>사용 가능한 이메일 주소입니다.</OkMassage>
-                            {/* <WarningMassage>사용할 수 없는 이메일 주소입니다.</WarningMassage> */}
+                            <WarningMassage>사용할 수 없는 이메일 주소입니다.</WarningMassage>
                         </CheckAndResult>
                     </FormInput>
 
@@ -239,13 +239,14 @@ export const RequestTermsAgreement = () => {
                         <CheckAndResult>
                             <DuplicationCheckButton>중복검사</DuplicationCheckButton>
                             <OkMassage>사용 가능한 이메일 주소입니다.</OkMassage>
-                            {/* <WarningMassage>사용할 수 없는 이메일 주소입니다.</WarningMassage> */}
+                            <WarningMassage>사용할 수 없는 이메일 주소입니다.</WarningMassage>
                         </CheckAndResult>
                     </FormInput>
 
                     <FormInputNoButton>
                         <Input type='email' id='email' placeholder='이메일 주소를 입력해주세요' spellcheck='false' />
                         <OkMassageNoButton>사용 가능한 이메일 주소입니다.</OkMassageNoButton>
+                        <WarningMassageNoButton>사용 가능한 이메일 주소입니다.</WarningMassageNoButton>
                     </FormInputNoButton>
 
                     <FormScript>

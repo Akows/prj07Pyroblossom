@@ -310,10 +310,10 @@ export const Navigation = () => {
             // onMouseOut={() => setIsHovering(0)}
             >
                 <Menu3>
-                    {getUserData.processvalue.isLogin ?
+                    {getUserData.flagvalue.isLogin ?
                         <>
                             <UserMenu>
-                                {getUserData.userdata.displayName === '관리자' ?
+                                {getUserData.userdata.displayName === 'Admin' ?
                                     <>
                                         <Link to='user/adminpage'>
                                             <AiOutlineUser size={40} />

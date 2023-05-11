@@ -4,8 +4,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { isLoginCheck, logIn } from '../../redux/actions/userAction';
 
+import errordecoimage1 from '../../assets/images/emoji/Icon_Emoji_010_Amber_Save_me.webp';
+
 const BackGround = styled.div`
-    width: 800px;
+    width: 100%;
     height: 100%;
 
     margin-top: 120px;
@@ -13,187 +15,230 @@ const BackGround = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
+`;
 
+const transformAnimaiton = styled.div`
     transform: translate3d(0, 0, 0);
     transition: all 1s ease;
-
-    @media screen and (max-width: 880px) {
-        width: 90%;
-    }
 `;
-
-const centerOption = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-`;
-
-const Form = styled.form`
-    width: 700px;
-    height: 400px;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+const FormBorder = styled(transformAnimaiton)`
+    width: 450px;
+    height: 100%;
 
     border: 1px solid gray;
-
-    @media screen and (max-width: 880px) {
-        width: 90%;
-    }
-`;
-const TitleArea = styled(centerOption)`
-    width: 71%;
-    height: 80px;
-
-    font-size: 24px;
-    align-items: flex-start;
-`;
-const InputArea = styled(centerOption)`
-    width: 100%;
-    height: 200px;
-`;
-const ButtonArea = styled(centerOption)`
-    width: 100%;
-    height: 100px;
-
-    & > button {
-        width: 220px;
-        height: 60px;
-
-        border: none;
-        border-radius: 10px;
-
-        font-family: 'GIFont';
-        font-size: 20px;
-    };
-    & > button:hover {
-        background-color: gray;
-    };
-    & > p {
-        color: red;
-    };
-`;
-
-const Input = styled(centerOption)`
-    width: 500px;
-    height: 40%;
-
-    align-items: flex-start;
-
-    & > input {
-        width: 100%;
-        height: 40px;
-
-        border: none;
-        border-bottom: 2px solid;
-        border-color: ${(props) => props.isEmpty ? 'red' : 'gray'};
-
-        font-size: 18px;
-        font-family: 'GIFont';
-    };
-    & > input::placeholder {
-        color: ${(props) => props.isEmpty ? 'red' : 'gray'};
-    };
-
-    /* & > input:focus {
-        border-bottom: 1px solid gray;
-    }; */
-    & > p {
-        color: red;
-    };
-
-    transform: translate3d(0, 0, 0);
-    transition: all 1s ease;
-
-    @media screen and (max-width: 880px) {
-        width: 400px;
-
-        transform: translate3d(0, 0, 0);
-        transition: all 1s ease;
-    }
 
     @media screen and (max-width: 500px) {
-        width: 300px;
-
-        transform: translate3d(0, 0, 0);
-        transition: all 1s ease;
-    }
-
-    @media screen and (max-width: 400px) {
-        width: 250px;
-
-        transform: translate3d(0, 0, 0);
-        transition: all 1s ease;
+        width: 95%;
+        height: 100%;
     }
 `;
-
-const WarningMessage = styled.div`
-    width: 90%;
-
-    font-size: 14px;
-    color: red;
-`;
-
-const SignupArea = styled(centerOption)`
-    width: 700px;
-    height: 200px;
-
-    margin-top: 20px;
-
-    border: 1px solid gray;
-
-    & > p {
-        font-weight: 500;
-        font-size: 18px;
-
-        margin-bottom: 20px;
-    };
-    & > a {
-        text-decoration: none;
-        color: black;
-    };
-    & > a > button {
-        width: 220px;
-        height: 80px;
-
-        border: none;
-        border-radius: 10px;
-
-        font-family: 'GIFont';
-        font-size: 20px;
-    };
-    & > a > button:hover {
-        background-color: gray;
-    };
-
-    @media screen and (max-width: 880px) {
-        width: 90%;
-    };
-`;
-
-const ErrorArea = styled.div`
+const InnerContents = styled(transformAnimaiton)`
     width: 100%;
     height: 100%;
 
-    display:  ${(props) => props.isError ? 'flex' : 'none'};
+    padding: 30px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    @media screen and (max-width: 500px) {
+        padding: 20px;
+    }
+`;
+
+const FormTitle = styled.label`
+    width: 100%;
+    height: 70px;
+
+    padding: 5px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+
+    @media screen and (max-width: 500px) {
+        height: 100px;
+    }
+
+    & > p {
+        font-size: 24px;
+        padding: 3px;
+    }
+`;
+
+const FormInputNoButton = styled.div`
+    width: 95%;
+    height: 80px;
+
+    margin-top: 5px;
+
+    display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+
+    @media screen and (max-width: 500px) {
+        margin-top: 0px;
+    }
+`;
+
+const Input = styled.input`
+    width: 100%;
+    height: 50%;
+
+    border: none;
+    border-bottom: 1px solid black;
+
+    font-size: 18px;
+    font-family: 'GIFont';
+
+    border-color: ${(props) => props.isEmpty ? 'red' : 'gray'};
+
+    &::placeholder {
+        color: ${(props) => props.isEmpty ? 'red' : 'gray'};
+    };
+`;
+
+const resultMassage = styled.div`
+    width: 70%;
+    height: 50%;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+
+    font-size: 14px;
+
+    @media screen and (max-width: 350px) {
+        font-size: 12.5px;
+    }
+`;
+const OkMassageNoButton = styled(resultMassage)`
+    width: 100%;
+    color: green;
+`;
+const WarningMassageNoButton = styled(resultMassage)`
+    width: 100%;
+    color: red;
+`;
+
+const FormScript = styled.div`
+    width: 95%;
+    height: 100%;
+
+    margin-top: 15px;
+`;
+
+const Script = styled.p`
+    height: 20px;
+
+    font-size: 12px;
+    color: gray;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+
+    @media screen and (max-width: 350px) {
+        height: 28px;
+    }
+`;
+
+const SubmitButton = styled.button`
+    width: 95%;
+    height: 50px;
+
+    margin-top: 30px;
+
+    border: none;
+    border-radius: 10px;
+
+    font-family: 'GIFont';
+    font-size: 20px;
+
+    &:hover {
+        background-color: gray;
+    };
+`;
+
+const MoveToSignUp = styled.div`
+    width: 100%;
+    height: 100%;
+
+    margin-top: 50px;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    & > p {
+        font-weight: 500;
+        font-size: 15px;
+    };
+    & > a {
+        text-decoration: none;
+        color: gray;
+        font-size: 15px;
+    };
+    & > a:hover {
+        color: black;
+    };
+`;
+
+
+
+const ErrorModalBorder = styled.div`
+    width: 100%;
+    height: 100%;
+
+    display: ${(props) => props.isError ? 'flex' : 'none'};
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
 
     position: absolute;
 
     z-index: 999;
 
-    background-color: black;
     background-color: rgba(0, 0, 0, 0.5);
 `;
 
-const ErrorInfo = styled.div`
-    width: 800px;
-    height: 700px;
+const ErrorDecoImageBox = styled.div`
+    width: 500px;
+    height: 280px;
+
+    margin-top: 70px;
+
+    @media screen and (max-width: 500px) {
+        width: 95%;
+    }
+`;
+
+const ErrorDecoImage = styled.div`
+    width: 100%;
+    height: 100%;
+
+    background-image: url(${errordecoimage1});
+    background-size: 300px 300px;
+    background-position: left;
+    background-repeat: no-repeat;
+
+    @media screen and (max-width: 300px) {
+        background-size: 200px 200px;
+    }
+`;
+
+const ErrorInnerContents = styled.div`
+    width: 500px;
+    height: 500px;
+
+    margin-top: -20px;
 
     display: flex;
     flex-direction: column;
@@ -201,39 +246,58 @@ const ErrorInfo = styled.div`
     justify-content: center;
 
     border: 2px solid black;
-    background-color: gray;
+    border-radius: 20px;
+
+    background-color: #d2d2d2;
 
     opacity: 0.9;
+
+    @media screen and (max-width: 500px) {
+        width: 95%;
+    }
+    @media screen and (max-width: 300px) {
+        margin-top: -70px;
+    }
 `;
 
 const ErrorTitle = styled.div`
-    width: 80%;
+    width: 90%;
     height: 20%;
 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
     color: black;
-    font-size: 42px;
+    font-size: 32px;
 `;
-const ErrorForm = styled.div`
-    width: 80%;
-    height: 60%;
+const ErrorInfo = styled.div`
+    width: 90%;
+    height: 40%;
 
     color: black;
-    font-size: 28px;
+    font-size: 18px;
 `;
-const ErrorButton = styled.button`
-    width: 40%;
-    height: 50px;
-
-    border: none;
-    border-radius: 10px;
-
-    color: black;
-    font-family: 'GIFont';
-    font-size: 20px;
+const ErrorButton = styled.div`
+    width: 50%;
+    height: 60px;
 
     &:hover {
         color: white;
         background-color: black;
+    };
+
+    & > button {
+        width: 100%;
+        height: 100%;
+
+        border: none;
+        border-radius: 10px;
+
+        color: black;
+        font-family: 'GIFont';
+        font-size: 20px;
     };
 `;
 
@@ -244,55 +308,90 @@ export const Login = () => {
 
     const getUserData = useSelector((state) => state.user);
 
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [inputUserData, setInputUserData] = useState({
+        email: '',
+        password: '',
+    });
 
+    // 각종 프론트 상황 동작에 필요한 플래그 State들.
     const [isError, setIsError] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [isEmailEmpty, setIsEmailEmpty] = useState(false);
     const [isPasswordEmpty, setIsPasswordEmpty] = useState(false);
+    const [isEmailValidate, setIsEmailValidate] = useState(false);
+    const [isFirstRendering, setIsFirstRendering] = useState(true);
 
+    // input 태그에서 입력값을 감지하여 동작하는 함수.
     const onChange = (event) => {
-        if (event.target.type === 'email') {
-            setEmail(event.target.value);
+        // 입력값은 받아서 set.
+        // id와 value값을 기준으로 inputUserData 객체에 적절한 값을 찾아서 갱신.
+        // 기존 객체 내부의 값은 ... 연산자를 이용하여 불변성을 유지.
+        setInputUserData({ ...inputUserData, [event.target.id]: event.target.value });
+
+        // 또한 입력값의 id를 기준으로 값이 입력되었을 경우 Empty 변수를 false로 변환.
+        if (event.target.id === 'email') {
+            setIsFirstRendering(false);
             setIsEmailEmpty(false);
-        }
-        else if (event.target.type === 'password') {
-            setPassword(event.target.value);
-            setIsPasswordEmpty(false);
-        }
-    };
 
-    const onSubmit = (event) => {
-        event.preventDefault();
+            // 이메일 유효성검사.
+            // eslint-disable-next-line
+            const regExp = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
 
-        if (!email && !password) {
-            setIsEmailEmpty(true);
-            setIsPasswordEmpty(true);
-            return;
-        }
-        else {
-            if (!email) {
-                setIsEmailEmpty(true);
-                return;
+            if (regExp.test(event.target.value)) {
+                setIsEmailValidate(true);
             }
-
-            if (!password) {
-                setIsPasswordEmpty(true);
-                return;
-            };
+            else {
+                setIsEmailValidate(false);
+            }
         };
 
-        dispatch(logIn(email, password, navigate));
+        if (event.target.id === 'password') {
+            setIsPasswordEmpty(false);
+        };
+    };
+
+    // 로그인 기능을 동작하는 함수.
+    const onSubmit = (event) => {
+        // 버튼의 기본 이벤트 제거.
+        event.preventDefault();
+
+        // 어느 한 쪽의 입력값이 존재하지 않으면 Empty 변수를 true로 변환하고 함수를 종료.
+        if (!inputUserData.email) {
+            setIsEmailEmpty(true);
+            return;
+        };
+
+        if (!inputUserData.password) {
+            setIsPasswordEmpty(true);
+            return;
+        };
+
+        if (!isEmailValidate) {
+            alert('이메일 주소를 입력해주세요.');
+            return;
+        }
+
+        // 이상이 없으면 입력값과 페이지 이동을 위한 navigate 객체를 인자로 담아 dispatch.
+        if (!isError) {
+            dispatch(logIn(inputUserData, navigate));
+        }
+
         // eslint-disable-next-line
     };
 
+    // 에러 화면이 출력되었을 때, 화면을 종료하는 버튼.
     const onClickError = () => {
-        setIsError(!isError);
-        setEmail('');
-        setPassword('');
+        // Error 변수를 false로 변환하고 입력 데이터의 값을 초기화.
+        // 또한 isFirstRendering 변수를 초기화하여 결과 메시지를 숨기기.
+        setIsError(false);
+        setInputUserData({
+            email: '',
+            password: '',
+        });
+        setIsFirstRendering(true);
     };
 
+    // 페이지가 처음 렌더링되면 브라우저 탭의 제목을 변경하고 로그인 여부를 체크.
     useEffect(() => {
         const titleElement = document.getElementsByTagName('title')[0];
         titleElement.innerHTML = 'User Login';
@@ -301,81 +400,113 @@ export const Login = () => {
         // eslint-disable-next-line
     }, []);
 
+    // Redux Store에서 State가 갱신될 때마다, 당 컴포넌트의 플래그 변수도 갱신되도록.
     useEffect(() => {
-        setIsLoading(getUserData.processvalue.isLoading);
-        setIsError(getUserData.processvalue.isError);
+        setIsError(getUserData.flagvalue.isError);
+        setIsLoading(getUserData.flagvalue.isLoading);
         // eslint-disable-next-line
     }, [getUserData]);
 
+
+
+
+
+    // 개발용 임시 로그인 버튼
     const devLogin = () => {
         dispatch(logIn('admin@admin.com', '123123', navigate));
     };
 
     return (
         <>
+            {/* 기본 UI. */}
+            {/* 기본 UI. */}
+
             <BackGround>
+                <FormBorder>
+                    <InnerContents>
 
-                <Form onSubmit={onSubmit}>
+                        <FormTitle>
+                            <p>회원 로그인</p>
+                        </FormTitle>
 
-                    <TitleArea>
-                        회원 로그인
-                    </TitleArea>
+                        <FormInputNoButton>
+                            <Input isEmpty={isEmailEmpty} onChange={onChange} value={inputUserData.email} type='email' id='email' placeholder='이메일 주소를 입력해주세요' spellcheck='false' />
+                            {!isFirstRendering ?
+                                <>
+                                    {isEmailValidate ?
+                                        <>
+                                            <OkMassageNoButton>유효한 이메일 주소입니다.</OkMassageNoButton>
+                                        </>
+                                        :
+                                        <>
+                                            <WarningMassageNoButton>유효하지 않은 이메일 주소입니다.</WarningMassageNoButton>
+                                        </>
+                                    }
+                                </>
+                                :
+                                <>
 
-                    <InputArea>
+                                </>
+                            }
+                        </FormInputNoButton>
 
-                        <Input isEmpty={isEmailEmpty}>
-                            <input type='email' id='inputEmail' onChange={onChange} value={email || ''} placeholder='이메일 주소를 입력해주세요' />
-                        </Input>
+                        <FormInputNoButton>
+                            <Input isEmpty={isPasswordEmpty} onChange={onChange} value={inputUserData.password} type='password' id='password' placeholder='비밀번호를 입력해주세요' spellcheck='false' />
+                        </FormInputNoButton>
 
-                        <Input isEmpty={isPasswordEmpty}>
-                            <input type='password' id='inputPassword' onChange={onChange} value={password || ''} placeholder='비밀번호를 입력해주세요' />
-                        </Input>
+                        <FormScript>
+                            <Script>* 이메일 인증을 통과하지 않으면 가입할 수 없습니다.</Script>
+                            <Script>* 이메일 주소는 계정 아이디로 사용됩니다.</Script>
+                        </FormScript>
 
-                    </InputArea>
-
-                    <ButtonArea>
-                        {!isLoading ?
+                        {isLoading ?
                             <>
-                                <button type='submit'>로그인</button>
+                                <SubmitButton disabled={true}>다음</SubmitButton>
                             </>
                             :
                             <>
-                                <button>로그인</button>
-                                <WarningMessage>로딩 중입니다..</WarningMessage>
+                                <SubmitButton onClick={onSubmit}>다음</SubmitButton>
                             </>
                         }
-                    </ButtonArea>
 
-                </Form>
+                        <MoveToSignUp>
+                            <p>아직 회원이 아니신가요?</p>&nbsp;
+                            <Link to='/user/signup'>
+                                회원가입
+                            </Link>
+                        </MoveToSignUp>
 
-                <SignupArea>
-                    <p>아직 회원이 아니신가요?</p>
-                    <Link to='/user/signup'>
-                        <button>
-                            회원가입
-                        </button>
-                    </Link>
-                </SignupArea>
-
-                <br /><br /><br /><br />
-                <button onClick={devLogin}>개발용 임시로그인</button>
-
+                    </InnerContents>
+                </FormBorder >
             </BackGround>
 
-            <ErrorArea isError={isError}>
-                <ErrorInfo>
-                    <ErrorTitle>에러가 발생하였습니다.</ErrorTitle>
+            <button onClick={devLogin}>개발용 임시로그인버튼</button>
 
-                    <ErrorForm>
-                        {getUserData.errorinfo.errorCode} <br /><br />
-                        {getUserData.errorinfo.errorMessage}
-                    </ErrorForm>
+            {/* 에러 상황 시에만 렌더링되는 에러 모달 창. */}
+            {/* 에러 상황 시에만 렌더링되는 에러 모달 창. */}
 
-                    <ErrorButton onClick={onClickError}>
-                        닫기
+            <ErrorModalBorder isError={isError}>
+                <ErrorDecoImageBox>
+                    <ErrorDecoImage />
+                </ErrorDecoImageBox>
+
+                <ErrorInnerContents>
+
+                    <ErrorTitle>
+                        에러가 발생하였습니다...
+                    </ErrorTitle>
+
+                    <ErrorInfo>
+                        <h3>에러코드 : {getUserData.errorinfo.errorCode}</h3> <br />
+                        <p>{getUserData.errorinfo.errorMessage}</p>
+                    </ErrorInfo>
+
+                    <ErrorButton>
+                        <button onClick={onClickError}>확인</button>
                     </ErrorButton>
-                </ErrorInfo>
-            </ErrorArea>
+
+                </ErrorInnerContents>
+            </ErrorModalBorder>
 
         </>
     );

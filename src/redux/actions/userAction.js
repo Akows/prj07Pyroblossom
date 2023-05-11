@@ -1,82 +1,7 @@
 import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut, updateProfile } from 'firebase/auth'
-import { doc, getCountFromServer, getDocs, query, setDoc, where } from 'firebase/firestore';
+import { doc, getCountFromServer, query, setDoc } from 'firebase/firestore';
 import { createErrorData, errorCode } from '../../configs/errorCodes';
 import { appAuth, timeStamp, userCollectionRef } from '../../configs/firebase/config'
-
-// 유효성 검사.
-const CheckValidate = (inputdata, checktype) => {
-    return (dispatch, getState) => {
-        dispatch({ type: 'PROCESSINIT' });
-        dispatch({ type: 'LOADING' });
-
-        const checkProcess = async () => {
-            let validatePattern = '';
-
-            if (checktype === 'email') {
-                validatePattern = new RegExp('[a-z0-9]+@[a-z]+.[a-z]{2,3}');
-            };
-
-            if (!validatePattern.test(inputdata)) {
-                throw errorCode.userSignInError.InvalidEmail;
-            };
-        };
-
-        checkProcess()
-            .then(() => {
-                dispatch({ type: 'CHECK_SUCCESS' });
-            })
-            .catch((error) => {
-                dispatch({ type: 'ERROR', payload: createErrorData(error) });
-            });
-
-    };
-};
-
-// 중복 검사.
-const CheckDuplication = (inputdata, checktype) => {
-    return (dispatch, getState) => {
-        dispatch({ type: 'PROCESSINIT' });
-        dispatch({ type: 'LOADING' });
-
-        const checkProcess = async () => {
-            const prohibitionList = ['admin@admin.com', 'admin', 'Admin', 'administrator', 'Administrator', 'manager', 'Manager', '관리자'];
-            const prohibitionCheck = !prohibitionList.includes(inputdata);
-
-            if (!prohibitionCheck) {
-                throw errorCode.userSignInError.DuplicationAdminAccount;
-            }
-
-            const querys = query(userCollectionRef, where(checktype, '==', inputdata));
-            const querySnap = await getDocs(querys);
-
-            querySnap.forEach((doc) => {
-
-                if (doc.data().email === inputdata) {
-                    throw errorCode.userSignInError.DuplicationEmail;
-                }
-
-                if (doc.data().displayName === inputdata) {
-                    throw errorCode.userSignInError.DuplicationNickname;
-                }
-
-                // console.log(doc.id, " => ", doc.data());
-            });
-        };
-
-        checkProcess()
-            .then(() => {
-                dispatch({ type: 'CHECK_SUCCESS' });
-            })
-            .catch((error) => {
-                dispatch({ type: 'ERROR', payload: createErrorData(error) });
-            });
-
-    };
-};
-
-
-
-
 
 // 회원가입 기능.
 const SignUp = (userData, navigate) => {
@@ -172,17 +97,18 @@ const SignUp = (userData, navigate) => {
 };
 
 // 로그인 기능.
-const logIn = (email, password, navigate) => {
+const logIn = (inputUserData, navigate) => {
     return (dispatch, getState) => {
         dispatch({ type: 'PROCESSINIT' });
         dispatch({ type: 'LOADING' });
 
-        signInWithEmailAndPassword(appAuth, email, password)
+        signInWithEmailAndPassword(appAuth, inputUserData.email, inputUserData.password)
             .then((userCredential) => {
                 if (!userCredential.user) {
                     throw errorCode.userSignInError.LoginFailure;
                 }
                 dispatch({ type: 'LOG_IN_SUCCESS', payload: userCredential.user });
+                dispatch({ type: 'COMPLETE' });
                 alert('환영합니다.');
                 navigate('/', { replace: true });
             })
@@ -213,7 +139,7 @@ const logOut = (navigate) => {
 
 const isLoginCheck = () => {
     return (dispatch, getState) => {
-        const isLoginCheck = getState().user.processvalue.isLogin;
+        const isLoginCheck = getState().user.flagvalue.isLogin;
 
         if (!isLoginCheck) {
             return;
@@ -248,4 +174,4 @@ const isLoginCheck = () => {
     };
 };
 
-export { CheckValidate, CheckDuplication, SignUp, logIn, logOut, isLoginCheck };
+export { SignUp, logIn, logOut, isLoginCheck };

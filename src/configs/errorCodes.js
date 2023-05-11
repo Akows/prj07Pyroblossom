@@ -1,13 +1,38 @@
-// error dispatch을 위해서 필요한 형태로 데이터를 가공하는 함수.
 const createErrorData = (error) => {
     const errorData = {
         errorCode: error.code,
         errorMessage: error.message,
     };
+
+    if (error.code === 'auth/user-not-found') {
+        errorData.errorCode = errorCode.userLogInError.ThereIsNoUserData.code;
+        errorData.errorMessage = errorCode.userLogInError.ThereIsNoUserData.message;
+    }
+
     return errorData;
 };
 
 const errorCode = {
+    checkProcessError: {
+        EmailValidateCheckError: {
+            code: 'CPE001-InvalidEmailError',
+            message: '이메일 유효성 검사를 통과하지 못함.',
+        },
+        PasswordValidateCheckError: {
+            code: 'CPE002-InvalidPasswordError',
+            message: '비밀번호 유효성 검사를 통과하지 못함.',
+        },
+        EmailDuplicationCheckError: {
+            code: 'CPE002-EmailDuplicationCheckError',
+            message: '이메일 중복성 검사를 통과하지 못함.',
+        },
+        PasswordDuplicationCheckError: {
+            code: 'CPE002-PasswordDuplicationCheckError',
+            message: '비밀번호 중복성 검사를 통과하지 못함.',
+        },
+    },
+
+
 
     userSignInError: {
         DuplicationAdminAccount: {
@@ -40,6 +65,11 @@ const errorCode = {
             code: 'ULIE001',
             message: '로그인 유저의 인증 정보 생성에 에러가 발생.',
         },
+        ThereIsNoUserData: {
+            code: 'ULIE002',
+            message: '해당 유저의 정보가 존재하지 않음.',
+        },
+
     },
     userLogOutError: {
 

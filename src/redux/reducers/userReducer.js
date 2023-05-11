@@ -1,54 +1,82 @@
 import { produce } from 'immer'
 
 const initialState = {
-    userdata: {
+    flagvalue: {
+        isLogin: false,
+        isError: false,
+        isLoading: false,
+    },
+    logindata: {
         email: '',
         password: '',
         name: '',
         displayName: '',
         address: '',
     },
-    processvalue: {
-        isLogin: false,
-        isError: false,
-        isLoading: false,
-        isCheck: false,
-    },
     errorinfo: {
-        errorCode: 'None',
-        errorMessage: 'None',
+        errorCode: '',
+        errorMessage: '',
+    },
+    processinfo: {
+        processMessage: '',
     },
 };
 
 const userReducer = (prevState = initialState, action) => {
     return produce(prevState, (draft) => {
         switch (action.type) {
-            case 'PROCESSINIT':
-                draft.userdata = {};
-                draft.processvalue = {};
-                draft.errorinfo = {};
+
+            // State 초기화.
+            case 'STATE_INIT':
+                draft.flagvalue = {
+                    isLogin: false,
+                    isError: false,
+                    isLoading: false,
+                };
+                draft.logindata = {
+                    email: '',
+                    password: '',
+                    name: '',
+                    displayName: '',
+                    address: '',
+                };
+                draft.errorinfo = {
+                    errorCode: '',
+                    errorMessage: '',
+                };
+                draft.processinfo = {
+                    processMessage: '',
+                };
                 break;
 
+            // 작업 시작.
             case 'LOADING':
-                draft.processvalue.isError = false;
-                draft.processvalue.isLoading = true;
+                draft.flagvalue.isLoading = true;
                 break;
 
+            // 작업 완료.
+            case 'COMPLETE':
+                draft.flagvalue.isLoading = false;
+                break;
+
+            // 에러 발생.
             case 'ERROR':
-                draft.processvalue.isError = true;
-                draft.processvalue.isLoading = false;
-                draft.processvalue.isCheck = false;
+                draft.flagvalue.isError = true;
+                draft.flagvalue.isLoading = false;
                 draft.errorinfo.errorCode = action.payload.errorCode;
                 draft.errorinfo.errorMessage = action.payload.errorMessage;
                 break;
 
 
+
+            // 유효성, 중복성 검사 완료.
             case 'CHECK_SUCCESS':
-                draft.processvalue.isError = false;
-                draft.processvalue.isLoading = false;
-                draft.processvalue.isCheck = true;
-                draft.errorinfo = {};
+                draft.flagvalue.isError = false;
+                draft.flagvalue.isLoading = false;
+                draft.processinfo.processMessage = action.payload;
                 break;
+
+
 
 
 
