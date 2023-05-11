@@ -273,7 +273,7 @@ export const Navigation = () => {
                                         </UserMenuSub>
                                         :
                                         <>
-                                            <Link to='user/login'><FiLogIn size={30} /></Link>
+                                            <Link to='/user/login'><FiLogIn size={30} /></Link>
                                         </>
                                     }
                                 </DownMenu>
@@ -315,13 +315,13 @@ export const Navigation = () => {
                             <UserMenu>
                                 {getUserData.userdata.displayName === 'Admin' ?
                                     <>
-                                        <Link to='user/adminpage'>
+                                        <Link to='/user/adminpage'>
                                             <AiOutlineUser size={40} />
                                         </Link>
                                     </>
                                     :
                                     <>
-                                        <Link to='user/mypage'>
+                                        <Link to='/user/mypage'>
                                             <AiOutlineUser size={40} />
                                         </Link>
                                     </>
