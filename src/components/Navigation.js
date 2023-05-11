@@ -258,9 +258,9 @@ export const Navigation = () => {
                                         메뉴3
                                     </Link>
 
-                                    {getUserData.processvalue.isLogin ?
+                                    {getUserData.flagvalue.isLogin ?
                                         <UserMenuSub>
-                                            {getUserData.userdata.displayName === '관리자' ?
+                                            {getUserData.logindata.displayName === '관리자' ?
                                                 <Link to='user/adminpage'>
                                                     <AiOutlineUser size={40} />
                                                 </Link>
@@ -331,7 +331,7 @@ export const Navigation = () => {
                         </>
                         :
                         <>
-                            <Link to='user/login'><FiLogIn size={30} /></Link>
+                            <Link to='/user/login'><FiLogIn size={30} /></Link>
                         </>
                     }
                 </Menu3>

@@ -53,7 +53,7 @@ function App() {
 
         <Route path='/' element={<Main />} />
 
-        <Route path='/user/*' element={<Layout />} >
+        <Route path='user/*' element={<Layout />} >
           <Route path='login' element={<Login />} />
           <Route path='signup' element={<Signup />} />
           <Route path='mypage' element={<MyPage />} />

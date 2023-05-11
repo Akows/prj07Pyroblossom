@@ -520,8 +520,7 @@ export const Login = () => {
                         </FormInputSmall>
 
                         <FormScript>
-                            <Script>* 이메일 인증을 통과하지 않으면 가입할 수 없습니다.</Script>
-                            <Script>* 이메일 주소는 계정 아이디로 사용됩니다.</Script>
+                            <Script>* 개인정보 보호를 위해 개인 기기에서만 사용해 주세요.</Script>
                         </FormScript>
 
                         {isLoading ?

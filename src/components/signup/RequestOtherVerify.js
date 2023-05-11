@@ -1,15 +1,5 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components';
-
-const BackGround = styled.div`
-    width: 100%;
-    height: 100%;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-`;
 
 const transformAnimaiton = styled.div`
     transform: translate3d(0, 0, 0);
@@ -20,6 +10,8 @@ const FormBorder = styled(transformAnimaiton)`
     height: 100%;
 
     border: 1px solid gray;
+
+    margin-top: 120px;
 
     @media screen and (max-width: 500px) {
         width: 95%;
@@ -64,7 +56,7 @@ const FormTitle = styled.label`
 
 const FormInput = styled.div`
     width: 95%;
-    height: 80px;
+    height: 100px;
 
     margin-top: 5px;
 
@@ -79,7 +71,7 @@ const FormInput = styled.div`
 `;
 const FormInputNoButton = styled.div`
     width: 95%;
-    height: 80px;
+    height: 60px;
 
     margin-top: 5px;
 
@@ -138,6 +130,36 @@ const DuplicationCheckButton = styled.button`
         font-size: 14px;
     }
 `;
+
+const InputButton = styled.div`
+    width: 100%;
+    height: 50%;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+`;
+const Button = styled.button`
+    width: 30%;
+    height: 80%;
+
+    border: none;
+    border-radius: 10px;
+
+    color: black;
+    font-family: 'GIFont';
+    font-size: 15px;
+
+    &:hover {
+        background-color: gray;
+    };
+
+    @media screen and (max-width: 350px) {
+        font-size: 14px;
+    }
+`;
+
 
 const resultMassage = styled.div`
     width: 70%;
@@ -209,60 +231,56 @@ const SubmitButton = styled.button`
     };
 `;
 
-export const RequestTermsAgreement = () => {
+export const RequestOtherVerify = ({ setIsOtherEntered, setIsSignupComplete }) => {
+
+    const onSubmit = (event) => {
+        event.preventDefault();
+
+        setIsOtherEntered(true);
+        setIsSignupComplete(false);
+    };
+
     return (
+        <FormBorder>
 
-        <BackGround>
+            <InnerContents>
 
-            <FormBorder>
+                <FormTitle>
+                    <p>회원가입 - 기타정보 입력</p>
+                </FormTitle>
 
-                <InnerContents>
+                <FormInput>
+                    <Input type='text' id='displayname' placeholder='닉네임을 입력해주세요' spellcheck='false' />
 
-                    <FormTitle htmlFor='email'>
-                        <p>계정으로 사용할</p>
-                        <p>이메일 주소를 입력해주세요.</p>
-                    </FormTitle>
+                    <CheckAndResult>
+                        <DuplicationCheckButton>중복검사</DuplicationCheckButton>
+                        <OkMassage>사용 가능한 닉네임입니다.</OkMassage>
+                        <WarningMassage>사용할 수 없는 닉네임입니다.</WarningMassage>
+                    </CheckAndResult>
+                </FormInput>
 
-                    <FormInput>
-                        <Input type='email' id='email' placeholder='이메일 주소를 입력해주세요' spellcheck='false' />
+                <FormInputNoButton>
+                    <Input type='text' id='name' placeholder='성명을 입력해주세요' spellcheck='false' />
+                </FormInputNoButton>
 
-                        <CheckAndResult>
-                            <DuplicationCheckButton>중복검사</DuplicationCheckButton>
-                            <OkMassage>사용 가능한 이메일 주소입니다.</OkMassage>
-                            <WarningMassage>사용할 수 없는 이메일 주소입니다.</WarningMassage>
-                        </CheckAndResult>
-                    </FormInput>
+                <FormInput>
+                    <Input type='text' id='address' placeholder='자택 주소를 입력해주세요' spellcheck='false' />
+                    <Input type='text' id='address2' placeholder='상세 주소를 입력해주세요' spellcheck='false' />
 
-                    <FormInput>
-                        <Input type='email' id='email' placeholder='이메일 주소를 입력해주세요' spellcheck='false' />
+                    <InputButton>
+                        <Button>주소입력</Button>
+                    </InputButton>
+                </FormInput>
 
-                        <CheckAndResult>
-                            <DuplicationCheckButton>중복검사</DuplicationCheckButton>
-                            <OkMassage>사용 가능한 이메일 주소입니다.</OkMassage>
-                            <WarningMassage>사용할 수 없는 이메일 주소입니다.</WarningMassage>
-                        </CheckAndResult>
-                    </FormInput>
+                <FormScript>
+                    <Script>* 성명과 자택 주소는 팝업 스토어 물건 구매시 이용됩니다.</Script>
+                    <Script>* 입력한 개인정보는 가입 이후 마이 페이지에서 조회/수정 가능합니다.</Script>
+                </FormScript>
 
-                    <FormInputNoButton>
-                        <Input type='email' id='email' placeholder='이메일 주소를 입력해주세요' spellcheck='false' />
-                        <OkMassageNoButton>사용 가능한 이메일 주소입니다.</OkMassageNoButton>
-                        <WarningMassageNoButton>사용 가능한 이메일 주소입니다.</WarningMassageNoButton>
-                    </FormInputNoButton>
+                <SubmitButton onClick={onSubmit}>다음</SubmitButton>
 
-                    <FormScript>
-                        <Script>* 이메일 인증을 통과하지 않으면 가입할 수 없습니다.</Script>
-                        <Script>* 이메일 주소는 계정 아이디로 사용됩니다.</Script>
-                    </FormScript>
+            </InnerContents>
 
-                    <SubmitButton disabled={true}>다음</SubmitButton>
-
-                </InnerContents>
-
-
-            </FormBorder >
-
-        </BackGround>
-
-
+        </FormBorder>
     );
 };
