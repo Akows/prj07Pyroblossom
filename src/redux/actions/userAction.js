@@ -102,19 +102,21 @@ const logIn = (inputUserData, navigate) => {
         dispatch({ type: 'PROCESSINIT' });
         dispatch({ type: 'LOADING' });
 
-        signInWithEmailAndPassword(appAuth, inputUserData.email, inputUserData.password)
-            .then((userCredential) => {
-                if (!userCredential.user) {
-                    throw errorCode.userSignInError.LoginFailure;
-                }
-                dispatch({ type: 'LOG_IN_SUCCESS', payload: userCredential.user });
-                dispatch({ type: 'COMPLETE' });
-                alert('환영합니다.');
-                navigate('/', { replace: true });
-            })
-            .catch((error) => {
-                dispatch({ type: 'ERROR', payload: createErrorData(error) });
-            });
+        console.log(inputUserData);
+
+        // signInWithEmailAndPassword(appAuth, inputUserData.email, inputUserData.password)
+        //     .then((userCredential) => {
+        //         if (!userCredential.user) {
+        //             throw errorCode.userSignInError.LoginFailure;
+        //         }
+        //         dispatch({ type: 'LOG_IN_SUCCESS', payload: userCredential.user });
+        //         dispatch({ type: 'COMPLETE' });
+        //         alert('환영합니다.');
+        //         navigate('/', { replace: true });
+        //     })
+        //     .catch((error) => {
+        //         dispatch({ type: 'ERROR', payload: createErrorData(error) });
+        //     });
     };
 };
 

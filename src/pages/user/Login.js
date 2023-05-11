@@ -71,7 +71,7 @@ const FormTitle = styled.label`
 
 const FormInputNoButton = styled.div`
     width: 95%;
-    height: 80px;
+    height: 60px;
 
     margin-top: 5px;
 
@@ -79,6 +79,21 @@ const FormInputNoButton = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
+
+    @media screen and (max-width: 500px) {
+        margin-top: 0px;
+    }
+`;
+const FormInputSmall = styled.div`
+    width: 95%;
+    height: 25px;
+
+    margin-top: 5px;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
 
     @media screen and (max-width: 500px) {
         margin-top: 0px;
@@ -100,6 +115,13 @@ const Input = styled.input`
     &::placeholder {
         color: ${(props) => props.isEmpty ? 'red' : 'gray'};
     };
+`;
+const InputCheckbox = styled.input`
+    width: 10%;
+    height: 90%;
+
+    font-size: 18px;
+    font-family: 'GIFont';
 `;
 
 const resultMassage = styled.div`
@@ -166,11 +188,40 @@ const SubmitButton = styled.button`
     };
 `;
 
+const UtilButton = styled.div`
+    width: 95%;
+    height: 50px;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+
+    font-size: 12px;
+
+    & > button {
+        width: 90px;
+        height: 20px;
+
+        margin: 0px;
+
+        border: none;
+        border-radius: 5px;
+
+        background-color: white;
+
+        color: black;
+        font-family: 'GIFont';
+        font-size: 12px;
+    }
+`;
+
+
 const MoveToSignUp = styled.div`
     width: 100%;
     height: 100%;
 
-    margin-top: 50px;
+    margin-top: 30px;
 
     display: flex;
     flex-direction: row;
@@ -311,6 +362,7 @@ export const Login = () => {
     const [inputUserData, setInputUserData] = useState({
         email: '',
         password: '',
+        isAutoLogin: false,
     });
 
     // 각종 프론트 상황 동작에 필요한 플래그 State들.
@@ -348,6 +400,15 @@ export const Login = () => {
         if (event.target.id === 'password') {
             setIsPasswordEmpty(false);
         };
+    };
+
+    const onCheck = (event) => {
+        if (event.target.checked) {
+            setInputUserData({ ...inputUserData, isAutoLogin: true });
+        }
+        else {
+            setInputUserData({ ...inputUserData, isAutoLogin: false });
+        }
     };
 
     // 로그인 기능을 동작하는 함수.
@@ -454,6 +515,10 @@ export const Login = () => {
                             <Input isEmpty={isPasswordEmpty} onChange={onChange} value={inputUserData.password} type='password' id='password' placeholder='비밀번호를 입력해주세요' spellcheck='false' />
                         </FormInputNoButton>
 
+                        <FormInputSmall>
+                            <InputCheckbox value={inputUserData.isAutoLogin} onChange={onCheck} type='checkbox' id='isAutoLogin' /> 자동 로그인
+                        </FormInputSmall>
+
                         <FormScript>
                             <Script>* 이메일 인증을 통과하지 않으면 가입할 수 없습니다.</Script>
                             <Script>* 이메일 주소는 계정 아이디로 사용됩니다.</Script>
@@ -469,6 +534,11 @@ export const Login = () => {
                             </>
                         }
 
+                        <UtilButton>
+                            <button>아이디 찾기</button>
+                            <button>비밀번호 찾기</button>
+                        </UtilButton>
+
                         <MoveToSignUp>
                             <p>아직 회원이 아니신가요?</p>&nbsp;
                             <Link to='/user/signup'>
@@ -480,6 +550,7 @@ export const Login = () => {
                 </FormBorder >
             </BackGround>
 
+            <br /><br /><br /><br /><br /><br /><br /><br /><br />
             <button onClick={devLogin}>개발용 임시로그인버튼</button>
 
             {/* 에러 상황 시에만 렌더링되는 에러 모달 창. */}
