@@ -16,7 +16,7 @@ import { Signup } from './pages/user/Signup';
 
 import { MyPage } from './pages/user/MyPage';
 import { AdminPage } from './pages/admins/AdminPage';
-import { RequestTermsAgreement } from './components/user/RequestTermsAgreement';
+import { Login2 } from './components/userV2/Login2';
 
 const AppBackGround = styled.div`
   display: flex;
@@ -61,7 +61,7 @@ function App() {
           <Route path='adminpage' element={<AdminPage />} />
         </Route>
 
-        <Route path='/test' element={<RequestTermsAgreement />} />
+        <Route path='/test' element={<Login2 />} />
 
 
         {/* <Route path='/' element={<Layout />} >
