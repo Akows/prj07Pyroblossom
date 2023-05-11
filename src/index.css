@@ -34,9 +34,8 @@ code {
 
   /* flex-direction : flex 컨테이너 내의 아이템을 배치할 때 사용할 주축 및 방향지정. */
   /* row -> 가로, column -> 세로. */
-  flex-direction: column;
   flex-direction: row;
-
+  flex-direction: column;
 
 
   /* align-items : flex 요소의 수직 방향 정렬 방식을 설정. */
