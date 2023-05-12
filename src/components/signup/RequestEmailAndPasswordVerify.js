@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components';
+import { checkDuplication, checkValidate } from '../../redux/actions/userFunction';
 
 const transformAnimaiton = styled.div`
     transform: translate3d(0, 0, 0);
@@ -56,7 +57,7 @@ const FormTitle = styled.label`
 
 const FormInput = styled.div`
     width: 95%;
-    height: 90px;
+    height: 100px;
 
     margin-top: 5px;
 
@@ -87,7 +88,7 @@ const FormInputNoButton = styled.div`
 
 const Input = styled.input`
     width: 100%;
-    height: 50%;
+    height: 40px;
 
     border: none;
     border-bottom: 1px solid black;
@@ -109,11 +110,11 @@ const CheckAndResult = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
 `;
 const DuplicationCheckButton = styled.button`
-    width: 30%;
-    height: 80%;
+    width: 20%;
+    height: 50px;
 
     border: none;
     border-radius: 10px;
@@ -129,6 +130,15 @@ const DuplicationCheckButton = styled.button`
     @media screen and (max-width: 350px) {
         font-size: 14px;
     }
+`;
+
+const ResultMassage = styled.div`
+    width: 80%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
 `;
 
 const resultMassage = styled.div`
@@ -222,45 +232,33 @@ export const RequestEmailAndPasswordVerify = ({ userData, setUserData, dispatch,
     const [isEmailValidate, setIsEmailValidate] = useState(false);
     const [isPasswordValidate, setIsPasswordValidate] = useState(false);
 
+    // 이메일 중복성 여부를 제어하는 State
+    const [isEmailDuplication, setIsEmailDuplication] = useState(true);
+
     // 비밀번호를 2번 입력시키고, 입력한 값들이 일치하는지 여부를 제어하는 State.
     const [isPasswordSame, setIsPasswordSame] = useState(false);
 
+    // 이메일 주소, 비밀번호 Input 태그의 입력값을 감지하는 onChange 함수.
     const onChange = (event) => {
         setUserData({ ...userData, [event.target.id]: event.target.value });
 
         if (event.target.id === 'email') {
+            setIsEmailDuplication(true);
             setIsFirstRenderingEmail(false);
             setIsEmailEmpty(false);
 
-            // 이메일 유효성검사.
-            // eslint-disable-next-line
-            const regExp = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
-
-            if (regExp.test(event.target.value)) {
-                setIsEmailValidate(true);
-            }
-            else {
-                setIsEmailValidate(false);
-            }
+            setIsEmailValidate(checkValidate(event.target.value, 'email'));
         };
 
         if (event.target.id === 'password') {
             setIsFirstRenderingPassword(false);
             setIsPasswordEmpty(false);
 
-            // 비밀번호 유효성검사. (숫자 + 영문자 + 특수문자 조합으로 8 ~ 25 제한.)
-            // eslint-disable-next-line
-            const regExp = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/;
-
-            if (regExp.test(event.target.value)) {
-                setIsPasswordValidate(true);
-            }
-            else {
-                setIsPasswordValidate(false);
-            }
+            setIsPasswordValidate(checkValidate(event.target.value, 'password'));
         };
     };
 
+    // 비밀번호 2차 입력 Input 태그의 입력값을 감지하는 onChange 함수.
     const onChangeRewrite = (event) => {
         setPasswordRewrite(event.target.value);
 
@@ -268,6 +266,22 @@ export const RequestEmailAndPasswordVerify = ({ userData, setUserData, dispatch,
         setIsPasswordRewriteEmpty(false);
     };
 
+    // 중복검사 함수.
+    const onCheckDuplication = () => {
+        checkDuplication(userData.email, 'email')
+            .then((result) => {
+                setIsEmailDuplication(result);
+
+                if (result) {
+                    alert('사용할 수 없는 이메일 주소 입니다.');
+                }
+                else {
+                    alert('사용가능한 이메일 주소 입니다.');
+                }
+            });
+    };
+
+    // onSubmit 함수.
     const onSubmit = (event) => {
         event.preventDefault();
 
@@ -286,6 +300,11 @@ export const RequestEmailAndPasswordVerify = ({ userData, setUserData, dispatch,
             return;
         };
 
+        if (isEmailDuplication) {
+            alert('이메일 중복 검사가 이루어지지 않았습니다.');
+            return;
+        }
+
         if (!isEmailValidate) {
             alert('유효한 이메일 주소를 입력해주세요.');
             return;
@@ -301,12 +320,13 @@ export const RequestEmailAndPasswordVerify = ({ userData, setUserData, dispatch,
             return;
         }
 
-        alert('완료!.');
+        alert('이상없네요');
 
         // setIsEmailAndPasswordEntered(true);
         // setIsOtherEntered(false);
     };
 
+    // 비밀번호 일치 여부를 매 입력마다 감지하는 useEffect.
     useEffect(() => {
         if (passwordRewrite === '' || userData.password === '') {
             setIsPasswordSame(false);
@@ -329,42 +349,56 @@ export const RequestEmailAndPasswordVerify = ({ userData, setUserData, dispatch,
                     <Input type='text' id='email' placeholder='이메일 주소를 입력해주세요' spellcheck='false' value={userData.email} onChange={onChange} isEmpty={isEmailEmpty} />
 
                     <CheckAndResult>
-                        <DuplicationCheckButton>중복검사</DuplicationCheckButton>
-                        {isFirstRenderingEmail ?
-                            <>
-                                <OkMassage></OkMassage>
-                            </>
-                            :
-                            <>
-                                {isEmailValidate ?
-                                    <>
-                                        <OkMassageNoButton>유효한 이메일 주소입니다.</OkMassageNoButton>
-                                    </>
-                                    :
-                                    <>
-                                        <WarningMassageNoButton>유효하지 않은 이메일 주소입니다.</WarningMassageNoButton>
-                                    </>
-                                }
-                            </>
-                        }
+                        <DuplicationCheckButton onClick={onCheckDuplication}>중복검사</DuplicationCheckButton>
+                        <ResultMassage>
+                            {isFirstRenderingEmail ? <></> :
+                                <>
+                                    {!isEmailDuplication ?
+                                        <>
+                                            <OkMassage>사용 가능한 이메일 주소입니다.</OkMassage>
+                                        </>
+                                        :
+                                        <>
+                                            <WarningMassage>사용 불가능한 이메일 주소입니다.</WarningMassage>
+                                        </>
+                                    }
+                                </>
+                            }
+                            {isFirstRenderingEmail ? <></> :
+                                <>
+                                    {isEmailValidate ?
+                                        <>
+                                            <OkMassageNoButton>유효한 이메일 주소입니다.</OkMassageNoButton>
+                                        </>
+                                        :
+                                        <>
+                                            <WarningMassageNoButton>유효하지 않은 이메일 주소입니다.</WarningMassageNoButton>
+                                        </>
+                                    }
+
+
+                                </>
+                            }
+                        </ResultMassage>
+
+
+
+
                     </CheckAndResult>
+
                 </FormInput>
 
                 <FormInputNoButton>
                     <Input type='password' id='password' placeholder='비밀번호를 입력해주세요' spellcheck='false' value={userData.password} onChange={onChange} isEmpty={isPasswordEmpty} />
-                    {isFirstRenderingPassword ?
-                        <>
-                            <OkMassage></OkMassage>
-                        </>
-                        :
+                    {isFirstRenderingPassword ? <></> :
                         <>
                             {isPasswordValidate ?
                                 <>
-                                    <OkMassageNoButton>사용 가능한 비밀번호입니다.</OkMassageNoButton>
+                                    <OkMassageNoButton>유효한 비밀번호입니다.</OkMassageNoButton>
                                 </>
                                 :
                                 <>
-                                    <WarningMassageNoButton>사용 불가능한 비밀번호입니다.</WarningMassageNoButton>
+                                    <WarningMassageNoButton>유효하지 않은 비밀번호입니다.</WarningMassageNoButton>
                                 </>
                             }
                         </>
@@ -373,11 +407,7 @@ export const RequestEmailAndPasswordVerify = ({ userData, setUserData, dispatch,
 
                 <FormInputNoButton>
                     <Input type='password' id='passwordrewrite' placeholder='비밀번호를 다시 입력해주세요' spellcheck='false' value={passwordRewrite} onChange={onChangeRewrite} isEmpty={isPasswordRewriteEmpty} />
-                    {isFirstRenderingPasswordRewrite ?
-                        <>
-                            <OkMassage></OkMassage>
-                        </>
-                        :
+                    {isFirstRenderingPasswordRewrite ? <></> :
                         <>
                             {isPasswordSame ?
                                 <OkMassageNoButton>비밀번호가 일치합니다.</OkMassageNoButton>
