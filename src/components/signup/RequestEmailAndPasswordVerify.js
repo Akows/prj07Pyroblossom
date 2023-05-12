@@ -537,24 +537,36 @@ export const RequestEmailAndPasswordVerify = ({ userData, setUserData, navigate,
         setIsEmailVerifiedFormRender(true);
     };
 
+
+    let setTimer = '';
+
     // 이메일 인증 메시지를 발송하는 함수.
     const onSendVerifyedMail = () => {
         dispatch(SignUp(userData.email, userData.password, navigate));
 
-        const setTimer = setInterval(() => {
+        setTimer = setInterval(() => {
             onAuthStateChanged(appAuth, (user) => {
                 console.log(user);
 
                 if (user.emailVerified) {
+                    console.log('이메일 인증이 완료될 경우..');
+
                     setIsEmailVerified(true);
                     clearInterval(setTimer);
                 }
+                else {
+                    console.log('이메일 인증 대기 중..');
+                    setIsEmailVerified(true);
+                    clearInterval(setTimer);
+                }
+
+                // if (user) {
+                //     setIsEmailVerified(true);
+                //     clearInterval(setTimer);
+                // }
             })
         }, 3000);
-
-        setTimer();
     };
-
 
     // 모든 과정을 마치고 다음 과정으로 넘어가는 onSubmit 함수.
     const onSubmit = (event) => {
