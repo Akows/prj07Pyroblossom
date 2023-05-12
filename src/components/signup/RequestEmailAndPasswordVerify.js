@@ -268,6 +268,16 @@ export const RequestEmailAndPasswordVerify = ({ userData, setUserData, dispatch,
 
     // 중복검사 함수.
     const onCheckDuplication = () => {
+        if (!userData.email) {
+            alert('이메일 주소를 입력해주세요.');
+            return;
+        };
+
+        if (!isEmailValidate) {
+            alert('유효한 이메일 주소를 입력해주세요.');
+            return;
+        };
+
         checkDuplication(userData.email, 'email')
             .then((result) => {
                 setIsEmailDuplication(result);
@@ -375,15 +385,9 @@ export const RequestEmailAndPasswordVerify = ({ userData, setUserData, dispatch,
                                             <WarningMassageNoButton>유효하지 않은 이메일 주소입니다.</WarningMassageNoButton>
                                         </>
                                     }
-
-
                                 </>
                             }
                         </ResultMassage>
-
-
-
-
                     </CheckAndResult>
 
                 </FormInput>
