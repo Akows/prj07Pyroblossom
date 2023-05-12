@@ -24,7 +24,6 @@ const BackGround = styled.div`
 export const Signup = () => {
 
     const dispatch = useDispatch();
-
     const getUserState = useSelector((state) => state.user);
 
     const [userData, setUserData] = useState({
@@ -39,10 +38,6 @@ export const Signup = () => {
     const [isEmailAndPasswordEntered, setIsEmailAndPasswordEntered] = useState(true);
     const [isOtherEntered, setIsOtherEntered] = useState(true);
     const [isSignupComplete, setIsSignupComplete] = useState(true);
-
-    const onChange = (event) => {
-        setUserData({ ...userData, [event.target.id]: event.target.value });
-    };
 
     useEffect(() => {
         const titleElement = document.getElementsByTagName('title')[0];
@@ -65,7 +60,7 @@ export const Signup = () => {
             {isEmailAndPasswordEntered ?
                 <></>
                 :
-                <RequestEmailAndPasswordVerify setIsEmailAndPasswordEntered={setIsEmailAndPasswordEntered} setIsOtherEntered={setIsOtherEntered} />
+                <RequestEmailAndPasswordVerify userData={userData} setUserData={setUserData} dispatch={dispatch} getUserState={getUserState} setIsEmailAndPasswordEntered={setIsEmailAndPasswordEntered} setIsOtherEntered={setIsOtherEntered} />
             }
 
             {isOtherEntered ?
