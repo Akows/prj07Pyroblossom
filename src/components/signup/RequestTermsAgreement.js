@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components';
 
 const transformAnimaiton = styled.div`
@@ -114,22 +114,6 @@ const InputCheckbox = styled.input`
     font-family: 'GIFont';
 `;
 
-const resultMassage = styled.div`
-    width: 70%;
-    height: 50%;
-
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-end;
-
-    font-size: 14px;
-
-    @media screen and (max-width: 350px) {
-        font-size: 12.5px;
-    }
-`;
-
 const FormScript = styled.div`
     width: 95%;
     height: 100%;
@@ -186,6 +170,11 @@ export const RequestTermsAgreement = ({ setIsTermsAgreement, setIsEmailAndPasswo
     const onSubmit = (event) => {
         event.preventDefault();
 
+        if (!isAgreement) {
+            alert('약관 동의가 필요합니다.');
+            return;
+        }
+
         setIsTermsAgreement(true);
         setIsEmailAndPasswordEntered(false);
     };
@@ -221,7 +210,7 @@ export const RequestTermsAgreement = ({ setIsTermsAgreement, setIsEmailAndPasswo
                     <Script>* 약관 동의</Script>
                 </FormScript>
 
-                <SubmitButton onClick={onSubmit}>다음</SubmitButton>
+                <SubmitButton onClick={onSubmit}>다음으로</SubmitButton>
 
             </InnerContents>
 

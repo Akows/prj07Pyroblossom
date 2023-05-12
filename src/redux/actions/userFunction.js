@@ -2,7 +2,9 @@ import { getDocs, query, where } from "firebase/firestore";
 import { createErrorData, errorCode } from "../../configs/errorCodes";
 import { userCollectionRef } from "../../configs/firebase/config";
 
-// 유효성 검사.
+// 유효성 검사. 사용보류.
+// -> 유효성 검사 정도는 프론트단에서 해도 된다고 판단함.
+// -> 굳이 에러까지 발생시킬 일은 아니고..
 const checkValidate = async (inputdata, checktype) => {
 
     const emailValidatePattern = new RegExp('[0-9]');
