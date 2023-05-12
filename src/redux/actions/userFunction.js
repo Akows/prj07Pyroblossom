@@ -1,6 +1,7 @@
+import { onAuthStateChanged } from "firebase/auth";
 import { getDocs, query, where } from "firebase/firestore";
 import { createErrorData, errorCode } from "../../configs/errorCodes";
-import { userCollectionRef } from "../../configs/firebase/config";
+import { appAuth, userCollectionRef } from "../../configs/firebase/config";
 
 // 유효성 검사.
 const checkValidate = (inputdata, checktype) => {
@@ -24,9 +25,6 @@ const checkValidate = (inputdata, checktype) => {
         }
     }
     else if (checktype === 'password') {
-        console.log(inputdata, checktype);
-        console.log(passwordValidatePattern.test(inputdata));
-
         if (passwordValidatePattern.test(inputdata)) {
             return true;
         }
@@ -76,4 +74,34 @@ const checkDuplication = async (inputdata, checktype) => {
     return result;
 };
 
-export { checkValidate, checkDuplication };
+const checkUserEmailVerified = () => {
+
+    // const resultData = {
+    //     currentUserEmailVerified: false,
+
+    // };
+
+    // const checkCurrentUserEmailVerified = () => {
+    //     onAuthStateChanged(appAuth, (user) => {
+    //         console.log(user);
+    //     })
+    // };
+
+
+    // const setTimer = setInterval(function () {
+    //     alert('');
+    // }, 3000);
+
+
+    onAuthStateChanged(appAuth, (user) => {
+        console.log(user);
+    })
+
+};
+
+
+
+
+
+
+export { checkValidate, checkDuplication, checkUserEmailVerified };

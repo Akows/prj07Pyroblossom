@@ -313,7 +313,7 @@ export const Navigation = () => {
                     {getUserData.flagvalue.isLogin ?
                         <>
                             <UserMenu>
-                                {getUserData.userdata.displayName === 'Admin' ?
+                                {getUserData.logindata.displayName === 'Admin' ?
                                     <>
                                         <Link to='/user/adminpage'>
                                             <AiOutlineUser size={40} />

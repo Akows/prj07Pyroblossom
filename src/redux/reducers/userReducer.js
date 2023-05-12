@@ -69,13 +69,29 @@ const userReducer = (prevState = initialState, action) => {
 
 
 
-            // 유효성, 중복성 검사 완료.
+            // 유효성, 중복성 검사 및 이메일 인증 완료.
             case 'CHECK_SUCCESS':
                 draft.flagvalue.isError = false;
                 draft.flagvalue.isLoading = false;
                 draft.processinfo.processMessage = action.payload;
                 break;
 
+            // 로그인 완료.
+            case 'LOG_IN_SUCCESS':
+                draft.flagvalue.isLogin = true;
+                draft.flagvalue.isError = false;
+                draft.flagvalue.isLoading = false;
+                draft.logindata = action.payload;
+                break;
+
+            // 로그아웃 완료.
+            case 'LOG_OUT':
+                draft.flagvalue.isLogin = false;
+                draft.flagvalue.isError = false;
+                draft.flagvalue.isLoading = false;
+                draft.userdata = {};
+                draft.errorinfo = {};
+                break;
 
 
 
@@ -87,21 +103,8 @@ const userReducer = (prevState = initialState, action) => {
                 draft.errorinfo = {};
                 break;
 
-            case 'LOG_IN_SUCCESS':
-                draft.processvalue.isLogin = true;
-                draft.processvalue.isError = false;
-                draft.processvalue.isLoading = false;
-                draft.userdata = action.payload;
-                draft.errorinfo = {};
-                break;
 
-            case 'LOG_OUT':
-                draft.processvalue.isLogin = false;
-                draft.processvalue.isError = false;
-                draft.processvalue.isLoading = false;
-                draft.userdata = {};
-                draft.errorinfo = {};
-                break;
+
 
             default:
                 break;

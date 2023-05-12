@@ -348,6 +348,7 @@ export const Login = () => {
         titleElement.innerHTML = 'User Login';
 
         dispatch(isLoginCheck());
+        dispatch({ type: 'STATE_INIT' });
         // eslint-disable-next-line
     }, []);
 
@@ -364,7 +365,12 @@ export const Login = () => {
 
     // 개발용 임시 로그인 버튼
     const devLogin = () => {
-        dispatch(logIn('admin@admin.com', '123123', navigate));
+        const userData = {
+            email: 'admin@admin.com',
+            password: '123123'
+        };
+
+        dispatch(logIn(userData, navigate));
     };
 
     return (

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { RequestTermsAgreement } from '../../components/signup/RequestTermsAgreement';
@@ -17,11 +18,14 @@ const BackGround = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
+
 `;
 
 
 
 export const Signup = () => {
+
+    const navigate = useNavigate();
 
     const dispatch = useDispatch();
     const getUserState = useSelector((state) => state.user);
@@ -44,7 +48,7 @@ export const Signup = () => {
         titleElement.innerHTML = 'User Signup';
 
         dispatch(isLoginCheck());
-        dispatch({ type: 'PROCESSINIT' });
+        dispatch({ type: 'STATE_INIT' });
         // eslint-disable-next-line
     }, []);
 
@@ -60,7 +64,7 @@ export const Signup = () => {
             {isEmailAndPasswordEntered ?
                 <></>
                 :
-                <RequestEmailAndPasswordVerify userData={userData} setUserData={setUserData} dispatch={dispatch} getUserState={getUserState} setIsEmailAndPasswordEntered={setIsEmailAndPasswordEntered} setIsOtherEntered={setIsOtherEntered} />
+                <RequestEmailAndPasswordVerify userData={userData} setUserData={setUserData} navigate={navigate} dispatch={dispatch} getUserState={getUserState} setIsEmailAndPasswordEntered={setIsEmailAndPasswordEntered} setIsOtherEntered={setIsOtherEntered} />
             }
 
             {isOtherEntered ?
