@@ -168,12 +168,8 @@ const isLoginCheck = () => {
 
         onAuthStateChanged(appAuth, (user) => {
             if (!user) {
-                const errorData = {
-                    isError: true,
-                    errorCode: 'ULCE001',
-                    message: '사용자 인증 정보가 조회되지 않음.',
-                };
-                dispatch({ type: 'ERROR', payload: errorData });
+                console.log('사용자 인증 정보가 존재하지 않음.');
+                dispatch({ type: 'COMPLETE' });
             }
             else {
                 const userData = {
@@ -228,6 +224,7 @@ const GetUserData = () => {
 
                 getUserData(userEmail)
                     .then((result) => {
+                        dispatch({ type: 'COMPLETE' });
                         dispatch({ type: 'LOG_IN_SUCCESS', payload: userData });
                     })
                     .catch((error) => {

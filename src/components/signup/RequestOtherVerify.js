@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components';
 import { SignUp } from '../../redux/actions/userAction';
 import { checkDuplication } from '../../redux/actions/userFunction';
+import { AddressInputModal } from '../AddressInput';
 import { ErrorModal } from '../ErrorModal';
 
 const transformAnimaiton = styled.div`
@@ -239,6 +240,8 @@ export const RequestOtherVerify = ({ userData, setUserData, navigate, dispatch, 
     const [isError, setIsError] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
+    const [isAddressInput, setIsAddressInput] = useState(false);
+
     const [isdisplayNameEmpty, setIsdisplayNameEmpty] = useState(false);
     const [isNameEmpty, setIsNameEmpty] = useState(false);
     const [isAddressEmpty, setIsAddressEmpty] = useState(false);
@@ -286,17 +289,22 @@ export const RequestOtherVerify = ({ userData, setUserData, navigate, dispatch, 
 
     const onSubmit = (event) => {
         event.preventDefault();
+        // dispatch(SignUp(userData, navigate));
 
-        console.log(userData);
+        // setIsOtherEntered(true);
+        // setIsSignupComplete(false);
 
-        dispatch(SignUp(userData, navigate));
-
-        setIsOtherEntered(true);
-        setIsSignupComplete(false);
+        setIsAddressInput(true);
     };
 
     const onClickError = () => {
         setIsError(false);
+    };
+
+    const handleComplete = () => {
+        setIsAddressInput(false);
+
+
     };
 
     useEffect(() => {
@@ -307,8 +315,8 @@ export const RequestOtherVerify = ({ userData, setUserData, navigate, dispatch, 
 
     return (
         <>
-            <FormBorder>
 
+            <FormBorder>
                 <InnerContents>
 
                     <FormTitle>
@@ -368,6 +376,9 @@ export const RequestOtherVerify = ({ userData, setUserData, navigate, dispatch, 
             </FormBorder>
 
             <ErrorModal isError={isError} getUserState={getUserState} onClickError={onClickError} />
+
+            <AddressInputModal isAddressInput={isAddressInput} handleComplete={handleComplete} />
+
         </>
     );
 };
