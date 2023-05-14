@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components';
+import { SignUp } from '../../redux/actions/userAction';
+import { checkDuplication } from '../../redux/actions/userFunction';
+import { ErrorModal } from '../ErrorModal';
 
 const transformAnimaiton = styled.div`
     transform: translate3d(0, 0, 0);
@@ -160,6 +163,14 @@ const Button = styled.button`
     }
 `;
 
+const ResultMassage = styled.div`
+    width: 80%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+`;
 
 const resultMassage = styled.div`
     width: 70%;
@@ -179,15 +190,7 @@ const resultMassage = styled.div`
 const OkMassage = styled(resultMassage)`
     color: green;
 `;
-const OkMassageNoButton = styled(resultMassage)`
-    width: 100%;
-    color: green;
-`;
 const WarningMassage = styled(resultMassage)`
-    color: red;
-`;
-const WarningMassageNoButton = styled(resultMassage)`
-    width: 100%;
     color: red;
 `;
 
@@ -231,56 +234,140 @@ const SubmitButton = styled.button`
     };
 `;
 
-export const RequestOtherVerify = ({ setIsOtherEntered, setIsSignupComplete }) => {
+export const RequestOtherVerify = ({ userData, setUserData, navigate, dispatch, getUserState, setIsOtherEntered, setIsSignupComplete }) => {
+
+    const [isError, setIsError] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+
+    const [isdisplayNameEmpty, setIsdisplayNameEmpty] = useState(false);
+    const [isNameEmpty, setIsNameEmpty] = useState(false);
+    const [isAddressEmpty, setIsAddressEmpty] = useState(false);
+
+    const [isFirstRenderingDisplayName, setIsFirstRenderingDisplayName] = useState(true);
+
+    const [isDisplayNameDuplication, setIsDisplayNameDuplication] = useState(true);
+
+    const onChange = (event) => {
+        setUserData({ ...userData, [event.target.id]: event.target.value });
+
+        if (event.target.id === 'displayname') {
+            setIsDisplayNameDuplication(true);
+            setIsFirstRenderingDisplayName(false);
+            setIsdisplayNameEmpty(false);
+        };
+
+        if (event.target.id === 'name') {
+            setIsNameEmpty(false);
+        };
+
+        if (event.target.id === 'address') {
+            setIsAddressEmpty(false);
+        };
+    };
+
+    const onCheckDuplication = () => {
+        if (!userData.displayname) {
+            alert('닉네임을 입력해주세요.');
+            return;
+        };
+
+        checkDuplication(userData.email, 'displayname', dispatch)
+            .then((result) => {
+                setIsDisplayNameDuplication(result);
+
+                if (result) {
+                    alert('사용할 수 없는 닉네임 입니다.');
+                }
+                else {
+                    alert('사용가능한 닉네임 입니다.');
+                }
+            });
+    };
 
     const onSubmit = (event) => {
         event.preventDefault();
+
+        console.log(userData);
+
+        dispatch(SignUp(userData, navigate));
 
         setIsOtherEntered(true);
         setIsSignupComplete(false);
     };
 
+    const onClickError = () => {
+        setIsError(false);
+    };
+
+    useEffect(() => {
+        setIsError(getUserState.flagvalue.isError);
+        setIsLoading(getUserState.flagvalue.isLoading);
+        // eslint-disable-next-line
+    }, [getUserState]);
+
     return (
-        <FormBorder>
+        <>
+            <FormBorder>
 
-            <InnerContents>
+                <InnerContents>
 
-                <FormTitle>
-                    <p>회원가입 - 기타정보 입력</p>
-                </FormTitle>
+                    <FormTitle>
+                        <p>회원가입 - 기타정보 입력</p>
+                    </FormTitle>
 
-                <FormInput>
-                    <Input type='text' id='displayname' placeholder='닉네임을 입력해주세요' spellcheck='false' />
+                    <FormInput>
+                        <Input type='text' id='displayname' placeholder='닉네임을 입력해주세요' spellcheck='false' value={userData.displayname} onChange={onChange} isEmpty={isdisplayNameEmpty} />
 
-                    <CheckAndResult>
-                        <DuplicationCheckButton>중복검사</DuplicationCheckButton>
-                        <OkMassage>사용 가능한 닉네임입니다.</OkMassage>
-                        <WarningMassage>사용할 수 없는 닉네임입니다.</WarningMassage>
-                    </CheckAndResult>
-                </FormInput>
+                        <CheckAndResult>
+                            <DuplicationCheckButton onClick={onCheckDuplication}>중복검사</DuplicationCheckButton>
+                            <ResultMassage>
+                                {isFirstRenderingDisplayName ? <></> :
+                                    <>
+                                        {!isDisplayNameDuplication ?
+                                            <>
+                                                <OkMassage>사용 가능한 닉네임입니다.</OkMassage>
+                                            </>
+                                            :
+                                            <>
+                                                <WarningMassage>사용 불가능한 닉네임입니다.</WarningMassage>
+                                            </>
+                                        }
+                                    </>
+                                }
 
-                <FormInputNoButton>
-                    <Input type='text' id='name' placeholder='성명을 입력해주세요' spellcheck='false' />
-                </FormInputNoButton>
+                            </ResultMassage>
+                        </CheckAndResult>
+                    </FormInput>
 
-                <FormInput>
-                    <Input type='text' id='address' placeholder='자택 주소를 입력해주세요' spellcheck='false' />
-                    <Input type='text' id='address2' placeholder='상세 주소를 입력해주세요' spellcheck='false' />
+                    <FormInputNoButton>
+                        <Input type='text' id='name' placeholder='성명을 입력해주세요' spellcheck='false' value={userData.name} onChange={onChange} isEmpty={isNameEmpty} />
+                    </FormInputNoButton>
 
-                    <InputButton>
-                        <Button>주소입력</Button>
-                    </InputButton>
-                </FormInput>
+                    <FormInput>
+                        <Input type='text' id='address' placeholder='자택 주소를 입력해주세요' spellcheck='false' value={userData.address} onChange={onChange} isEmpty={isAddressEmpty} />
+                        <Input type='text' id='address2' placeholder='상세 주소를 입력해주세요' spellcheck='false' value={userData.address2} />
 
-                <FormScript>
-                    <Script>* 성명과 자택 주소는 팝업 스토어 물건 구매시 이용됩니다.</Script>
-                    <Script>* 입력한 개인정보는 가입 이후 마이 페이지에서 조회/수정 가능합니다.</Script>
-                </FormScript>
+                        <InputButton>
+                            <Button>주소입력</Button>
+                        </InputButton>
+                    </FormInput>
 
-                <SubmitButton onClick={onSubmit}>다음</SubmitButton>
+                    <FormScript>
+                        <Script>* 성명과 자택 주소는 팝업 스토어 물건 구매시 이용됩니다.</Script>
+                        <Script>* 입력한 개인정보는 가입 이후 마이 페이지에서 조회/수정 가능합니다.</Script>
+                    </FormScript>
 
-            </InnerContents>
+                    {isLoading ?
+                        <SubmitButton disabled={true}>대기 중..</SubmitButton>
+                        :
+                        <SubmitButton onClick={onSubmit}>다음</SubmitButton>
+                    }
 
-        </FormBorder>
+                </InnerContents>
+
+            </FormBorder>
+
+            <ErrorModal isError={isError} getUserState={getUserState} onClickError={onClickError} />
+        </>
     );
 };

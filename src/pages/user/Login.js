@@ -247,7 +247,7 @@ export const Login = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const getUserData = useSelector((state) => state.user);
+    const getUserState = useSelector((state) => state.user);
 
     const [inputUserData, setInputUserData] = useState({
         email: '',
@@ -354,10 +354,10 @@ export const Login = () => {
 
     // Redux Store에서 State가 갱신될 때마다, 당 컴포넌트의 플래그 변수도 갱신되도록.
     useEffect(() => {
-        setIsError(getUserData.flagvalue.isError);
-        setIsLoading(getUserData.flagvalue.isLoading);
+        setIsError(getUserState.flagvalue.isError);
+        setIsLoading(getUserState.flagvalue.isLoading);
         // eslint-disable-next-line
-    }, [getUserData]);
+    }, [getUserState]);
 
 
 
@@ -451,7 +451,7 @@ export const Login = () => {
             {/* 에러 상황 시에만 렌더링되는 에러 모달 창. */}
             {/* 에러 상황 시에만 렌더링되는 에러 모달 창. */}
 
-            <ErrorModal isError={isError} getUserData={getUserData} onClickError={onClickError} />
+            <ErrorModal isError={isError} getUserState={getUserState} onClickError={onClickError} />
         </>
     );
 };

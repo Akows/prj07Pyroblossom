@@ -4,7 +4,7 @@ import { createErrorData, errorCode } from '../../configs/errorCodes';
 import { appAuth, timeStamp, userCollectionRef } from '../../configs/firebase/config'
 
 // 회원가입 기능.
-const SignUp = (inputEmail, inputPassword, navigate) => {
+const SignUp = (userData, navigate) => {
     return (dispatch, getState) => {
         dispatch({ type: 'PROCESSINIT' });
         dispatch({ type: 'LOADING' });
@@ -19,13 +19,69 @@ const SignUp = (inputEmail, inputPassword, navigate) => {
             await sendEmailVerification(currentUser);
         };
 
-        createUserWithEmailAndPassword(appAuth, inputEmail, inputPassword)
+        createUserWithEmailAndPassword(appAuth, userData.email, userData.password)
             .then((userCredential) => {
 
                 // 과정이 정상적으로 진행되었는데, userCredential 값이 존재하지 않으면 과정을 중단하고 에러.
                 if (!userCredential.user) {
                     throw errorCode.userSignInError.ThereIsNoUserCredential;
                 }
+
+                // 계정 생성이 완료되고, userCredential 값이 정상적으로 존재하면 displayName 정보를 업데이트 해준다.
+                updateProfile(appAuth.currentUser, {
+                    displayName: userData.displayname,
+                })
+                    .then(() => {
+                        // displayName 업데이트가 정상적으로 완료되면 DB에 유저 정보를 저장한다.
+                        const addData = async () => {
+                            const querys = query(userCollectionRef);
+
+                            // DB에 저장된 유저 정보의 갯수가 총 몇 개인지 계산.
+                            const allUserCount = await getCountFromServer(querys);
+
+                            // User DB에 저장, ID값은 입력한 email값이 되도록.
+                            const docRef = doc(userCollectionRef, `${userData.email}`);
+
+                            // 생성 시간을 기록하기 위해 timeStamp 객체를 사용.
+                            const createdTime = timeStamp.fromDate(new Date());
+
+                            // DB 정보 저장. userNumber는 allUserCount 값의 1을 더한다.
+                            await setDoc(docRef,
+                                {
+                                    userNumber: allUserCount.data().count + 1,
+                                    userType: '일반회원',
+                                    email: userData.email,
+                                    password: userData.password,
+                                    name: userData.name,
+                                    displayName: userData.displayname,
+                                    address: userData.address,
+                                    address2: userData.address2,
+                                    signupDate: createdTime
+                                }
+                            )
+                                // 작업이 정상 완료되면 SIGN_UP_SUCCESS Action을 실행하고 완료 메시지 출력, 이후 메인 페이지로 이동.
+                                .then(() => {
+                                    dispatch({ type: 'SIGN_UP_SUCCESS' });
+                                    alert('회원가입이 완료되었습니다.');
+                                    navigate('/', { replace: true });
+                                })
+                                // 계정 정보 파이어스토어 저장 - 에러 발생 catch 구문.
+                                .catch((error) => {
+                                    console.log(error);
+                                    dispatch({ type: 'ERROR', payload: createErrorData(error) });
+                                    alert('계정 정보 저장에 에러가 발생하였습니다.');
+                                    navigate('/', { replace: true });
+                                });
+                        };
+                        addData();
+                    })
+                    // 파이어베이스 계정 생성 후 사용자 정보 업데이트 - 에러 발생 catch 구문.
+                    .catch((error) => {
+                        dispatch({ type: 'ERROR', payload: createErrorData(error) });
+                        alert('사용자 정보 등록에 에러가 발생하였습니다.');
+                        navigate('/', { replace: true });
+                    });
+
 
                 emailVerifiedProcess(appAuth.currentUser)
                     .then(() => {
@@ -47,68 +103,6 @@ const SignUp = (inputEmail, inputPassword, navigate) => {
             });
     };
 };
-
-const UserDataUpdate = (userData, navigate) => {
-    return (dispatch, getState) => {
-
-
-
-        updateProfile(appAuth.currentUser, {
-            displayName: userData.displayName,
-        })
-            .then(() => {
-
-                const addData = async () => {
-                    const querys = query(userCollectionRef);
-                    const userId = await getCountFromServer(querys);
-                    const createdTime = timeStamp.fromDate(new Date());
-                    const docRef = doc(userCollectionRef, `${userData.email}`);
-
-                    await setDoc(docRef,
-                        {
-                            userNumber: userId.data().count + 1,
-                            userType: '일반회원',
-                            email: userData.email,
-                            password: userData.password,
-                            name: userData.name,
-                            displayName: userData.displayName,
-                            address: userData.address,
-                            signupDate: createdTime
-                        }
-                    )
-                        .then(() => {
-                            dispatch({ type: 'SIGN_UP_SUCCESS' });
-                            alert('회원가입이 완료되었습니다.');
-                            navigate('/', { replace: true });
-                        })
-                        // 계정 정보 파이어스토어 저장 - 에러 발생 catch 구문.
-                        .catch((error) => {
-                            dispatch({ type: 'ERROR', payload: createErrorData(error) });
-                            alert('계정 정보 저장에 에러가 발생하였습니다.');
-                            navigate('/', { replace: true });
-                        });
-                };
-                addData();
-            })
-            // 파이어베이스 계정 생성 후 사용자 정보 업데이트 - 에러 발생 catch 구문.
-            .catch((error) => {
-                dispatch({ type: 'ERROR', payload: createErrorData(error) });
-                alert('사용자 정보 등록에 에러가 발생하였습니다.');
-                navigate('/', { replace: true });
-            });
-
-
-
-    };
-};
-
-
-
-
-
-
-
-
 
 // 로그인 기능.
 const logIn = (inputUserData, navigate) => {
@@ -132,6 +126,7 @@ const logIn = (inputUserData, navigate) => {
     };
 };
 
+// 로그아웃 기능.
 const logOut = (navigate) => {
     return (dispatch, getState) => {
         dispatch({ type: 'PROCESSINIT' });
@@ -175,7 +170,7 @@ const isLoginCheck = () => {
                 else {
                     const userData = {
                         email: user.email,
-                        displayName: user.displayName,
+                        displayName: user.displayname,
                     };
 
                     dispatch({ type: 'LOG_IN_SUCCESS', payload: userData });

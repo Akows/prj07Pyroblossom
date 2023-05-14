@@ -1,6 +1,6 @@
 import { onAuthStateChanged } from "firebase/auth";
 import { getDocs, query, where } from "firebase/firestore";
-import { createErrorData, errorCode } from "../../configs/errorCodes";
+// import { createErrorData, errorCode } from "../../configs/errorCodes";
 import { appAuth, userCollectionRef } from "../../configs/firebase/config";
 
 // 유효성 검사.
@@ -32,12 +32,12 @@ const checkValidate = (inputdata, checktype) => {
             return false;
         }
     };
-
-
 };
 
 // 중복 검사.
-const checkDuplication = async (inputdata, checktype) => {
+const checkDuplication = async (inputdata, checktype, dispatch) => {
+    dispatch({ type: 'PROCESSINIT' });
+    dispatch({ type: 'LOADING' });
 
     // 반환되는 결과값을 미리 선언.
     let result = false;
@@ -71,6 +71,8 @@ const checkDuplication = async (inputdata, checktype) => {
     });
 
     // 작업을 마치고 결과값을 반환.
+    dispatch({ type: 'COMPLETE' });
+    dispatch({ type: 'CHECK_SUCCESS' });
     return result;
 };
 

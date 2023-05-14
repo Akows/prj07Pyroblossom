@@ -18,10 +18,7 @@ const BackGround = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-
 `;
-
-
 
 export const Signup = () => {
 
@@ -34,8 +31,9 @@ export const Signup = () => {
         email: '',
         password: '',
         name: '',
-        displayName: '',
+        displayname: '',
         address: '',
+        address2: '',
     });
 
     const [isTermsAgreement, setIsTermsAgreement] = useState(false);
@@ -64,19 +62,19 @@ export const Signup = () => {
             {isEmailAndPasswordEntered ?
                 <></>
                 :
-                <RequestEmailAndPasswordVerify userData={userData} setUserData={setUserData} navigate={navigate} dispatch={dispatch} getUserState={getUserState} setIsEmailAndPasswordEntered={setIsEmailAndPasswordEntered} setIsOtherEntered={setIsOtherEntered} />
+                <RequestEmailAndPasswordVerify userData={userData} setUserData={setUserData} getUserState={getUserState} dispatch={dispatch} setIsEmailAndPasswordEntered={setIsEmailAndPasswordEntered} setIsOtherEntered={setIsOtherEntered} />
             }
 
             {isOtherEntered ?
                 <></>
                 :
-                <RequestOtherVerify setIsOtherEntered={setIsOtherEntered} setIsSignupComplete={setIsSignupComplete} />
+                <RequestOtherVerify userData={userData} setUserData={setUserData} navigate={navigate} dispatch={dispatch} getUserState={getUserState} setIsOtherEntered={setIsOtherEntered} setIsSignupComplete={setIsSignupComplete} />
             }
 
             {isSignupComplete ?
                 <></>
                 :
-                <SignupComplete setIsSignupComplete={setIsSignupComplete} />
+                <SignupComplete userData={userData} getUserState={getUserState} />
             }
 
 

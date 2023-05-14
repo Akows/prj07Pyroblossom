@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components';
 import { checkDuplication, checkValidate } from '../../redux/actions/userFunction';
+import { ErrorModal } from '../ErrorModal';
 
-import emailverifieddecoimage from '../../assets/images/emoji/Icon_Emoji_066_Hu_Tao_Reciting_poetry.webp';
-import { SignUp } from '../../redux/actions/userAction';
-import { onAuthStateChanged } from 'firebase/auth';
-import { appAuth } from '../../configs/firebase/config';
+// import emailverifieddecoimage from '../../assets/images/emoji/Icon_Emoji_066_Hu_Tao_Reciting_poetry.webp';
+// import { SignUp } from '../../redux/actions/userAction';
+// import { onAuthStateChanged } from 'firebase/auth';
+// import { appAuth } from '../../configs/firebase/config';
 
 const BackGround = styled.div`
     width: 100%;
@@ -227,180 +228,177 @@ const SubmitButton = styled.button`
     };
 `;
 
+// 이메일 모달창 styled CSS.
+// 이메일 인증 방식 변경으로 사용하지 않음.
+// const EmailVerifiedModalBorder = styled.div`
+//     width: 100%;
+//     height: 100%;
+
+//     top: 0px;
+//     left: 0px;
+
+//     border: 2px solid red;
+
+//     display: ${(props) => props.isRender ? 'flex' : 'none'};
+//     flex-direction: column;
+//     align-items: center;
+//     justify-content: center;
+
+//     position: absolute;
+
+//     z-index: 999;
+
+//     background-color: rgba(0, 0, 0, 0.5);
+// `;
+
+// const EmailVerifiedImageBox = styled.div`
+//     width: 500px;
+//     height: 320px;
+
+//     margin-top: -180px;
+
+//     @media screen and (max-width: 500px) {
+//         width: 95%;
+//     }
+// `;
+
+// const EmailVerifiedImage = styled.div`
+//     width: 100%;
+//     height: 100%;
+
+//     background-image: url(${emailverifieddecoimage});
+//     background-size: 300px 300px;
+//     background-position: left;
+//     background-repeat: no-repeat;
+
+//     @media screen and (max-width: 300px) {
+//         background-size: 200px 200px;
+//     }
+// `;
+
+// const EmailVerifiedInnerContents = styled.div`
+//     width: 500px;
+//     height: 500px;
+
+//     margin-top: -35px;
+
+//     display: flex;
+//     flex-direction: column;
+//     align-items: center;
+//     justify-content: center;
+
+//     border: 2px solid black;
+//     border-radius: 20px;
+
+//     background-color: #d2d2d2;
+
+//     opacity: 0.9;
+
+//     @media screen and (max-width: 500px) {
+//         width: 95%;
+//     }
+//     @media screen and (max-width: 300px) {
+//         margin-top: -70px;
+//     }
+// `;
+
+// const EmailVerifiedTitle = styled.div`
+//     width: 95%;
+//     height: 30px;
+
+//     display: flex;
+//     flex-direction: column;
+//     align-items: center;
+//     justify-content: center;
+
+//     color: black;
+//     font-size: 32px;
+// `;
+// const EmailVerifiedInfo = styled.div`
+//     width: 90%;
+//     height: 350px;
+
+//     display: flex;
+//     flex-direction: column;
+//     align-items: center;
+//     justify-content: center;
+
+//     color: black;
+//     font-size: 16px;
+// `;
+
+// const EmailVerifiedInfoAddress = styled.div`
+//     width: 100%;
+//     height: 20%;
+
+//     display: flex;
+//     flex-direction: column;
+//     align-items: center;
+//     justify-content: center;
+
+//     & > p {
+//         font-size: 20px;
+//         margin-top: 10px;
+//     }
+// `;
+// const EmailVerifiedInfoSendMail = styled.div`
+//     width: 100%;
+//     height: 30%;
+
+//     display: flex;
+//     flex-direction: column;
+//     align-items: center;
+//     justify-content: center;
+
+//     & > button {
+//         width: 200px;
+//         height: 40px;
+
+//         border: none;
+//         border-radius: 10px;
+
+//         color: black;
+//         font-family: 'GIFont';
+//         font-size: 20px;
+//     };
+//     & > button:hover {
+//         background-color: gray;
+//     };
+// `;
+// const EmailVerifiedInfoResult = styled.div`
+//     width: 100%;
+//     height: 50%;
+
+//     font-size: 25px;
+
+//     display: flex;
+//     flex-direction: column;
+//     align-items: center;
+//     justify-content: center;
+// `;
 
 
+// const EmailVerifiedButton = styled.div`
+//     width: 50%;
+//     height: 50px;
 
+//     &:hover {
+//         color: white;
+//         background-color: black;
+//     };
 
+//     & > button {
+//         width: 100%;
+//         height: 100%;
 
-const EmailVerifiedModalBorder = styled.div`
-    width: 100%;
-    height: 100%;
+//         border: none;
+//         border-radius: 10px;
 
-    top: 0px;
-    left: 0px;
-
-    border: 2px solid red;
-
-    display: ${(props) => props.isRender ? 'flex' : 'none'};
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-
-    position: absolute;
-
-    z-index: 999;
-
-    background-color: rgba(0, 0, 0, 0.5);
-`;
-
-const EmailVerifiedImageBox = styled.div`
-    width: 500px;
-    height: 320px;
-
-    margin-top: -180px;
-
-    @media screen and (max-width: 500px) {
-        width: 95%;
-    }
-`;
-
-const EmailVerifiedImage = styled.div`
-    width: 100%;
-    height: 100%;
-
-    background-image: url(${emailverifieddecoimage});
-    background-size: 300px 300px;
-    background-position: left;
-    background-repeat: no-repeat;
-
-    @media screen and (max-width: 300px) {
-        background-size: 200px 200px;
-    }
-`;
-
-const EmailVerifiedInnerContents = styled.div`
-    width: 500px;
-    height: 500px;
-
-    margin-top: -35px;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-
-    border: 2px solid black;
-    border-radius: 20px;
-
-    background-color: #d2d2d2;
-
-    opacity: 0.9;
-
-    @media screen and (max-width: 500px) {
-        width: 95%;
-    }
-    @media screen and (max-width: 300px) {
-        margin-top: -70px;
-    }
-`;
-
-const EmailVerifiedTitle = styled.div`
-    width: 95%;
-    height: 30px;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-
-    color: black;
-    font-size: 32px;
-`;
-const EmailVerifiedInfo = styled.div`
-    width: 90%;
-    height: 350px;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-
-    color: black;
-    font-size: 16px;
-`;
-
-const EmailVerifiedInfoAddress = styled.div`
-    width: 100%;
-    height: 20%;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-
-    & > p {
-        font-size: 20px;
-        margin-top: 10px;
-    }
-`;
-const EmailVerifiedInfoSendMail = styled.div`
-    width: 100%;
-    height: 30%;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-
-    & > button {
-        width: 200px;
-        height: 40px;
-
-        border: none;
-        border-radius: 10px;
-
-        color: black;
-        font-family: 'GIFont';
-        font-size: 20px;
-    };
-    & > button:hover {
-        background-color: gray;
-    };
-`;
-const EmailVerifiedInfoResult = styled.div`
-    width: 100%;
-    height: 50%;
-
-    font-size: 25px;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-`;
-
-
-const EmailVerifiedButton = styled.div`
-    width: 50%;
-    height: 50px;
-
-    &:hover {
-        color: white;
-        background-color: black;
-    };
-
-    & > button {
-        width: 100%;
-        height: 100%;
-
-        border: none;
-        border-radius: 10px;
-
-        color: black;
-        font-family: 'GIFont';
-        font-size: 20px;
-    };
-`;
+//         color: black;
+//         font-family: 'GIFont';
+//         font-size: 20px;
+//     };
+// `;
 
 
 
@@ -408,11 +406,11 @@ const EmailVerifiedButton = styled.div`
 
 
 
-export const RequestEmailAndPasswordVerify = ({ userData, setUserData, navigate, dispatch, getUserState, setIsEmailAndPasswordEntered, setIsOtherEntered }) => {
+export const RequestEmailAndPasswordVerify = ({ userData, setUserData, getUserState, dispatch, setIsEmailAndPasswordEntered, setIsOtherEntered }) => {
 
     const [passwordRewrite, setPasswordRewrite] = useState('');
 
-    // const [isError, setIsError] = useState(false);
+    const [isError, setIsError] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
     // 각 Input 태그의 빈 값을 체크하는 State.
@@ -433,16 +431,15 @@ export const RequestEmailAndPasswordVerify = ({ userData, setUserData, navigate,
     const [isEmailDuplication, setIsEmailDuplication] = useState(true);
 
     // 이메일 인증 확인 여부를 제어하는 State
-    const [isEmailVerified, setIsEmailVerified] = useState(false);
+    // 이메일 인증 방식 변경으로 사용하지 않음.
+    // const [isEmailVerified, setIsEmailVerified] = useState(false);
 
     // 이메일 인증창의 렌더링 여부를 제어하는 State.
-    const [isEmailVerifiedFormRender, setIsEmailVerifiedFormRender] = useState(false);
+    // 이메일 인증 방식 변경으로 사용하지 않음.
+    // const [isEmailVerifiedFormRender, setIsEmailVerifiedFormRender] = useState(false);
 
     // 비밀번호를 2번 입력시키고, 입력한 값들이 일치하는지 여부를 제어하는 State.
     const [isPasswordSame, setIsPasswordSame] = useState(false);
-
-
-
 
     // 이메일 주소, 비밀번호 Input 태그의 입력값을 감지하는 onChange 함수.
     const onChange = (event) => {
@@ -484,7 +481,7 @@ export const RequestEmailAndPasswordVerify = ({ userData, setUserData, navigate,
             return;
         };
 
-        checkDuplication(userData.email, 'email')
+        checkDuplication(userData.email, 'email', dispatch)
             .then((result) => {
                 setIsEmailDuplication(result);
 
@@ -498,84 +495,90 @@ export const RequestEmailAndPasswordVerify = ({ userData, setUserData, navigate,
     };
 
     // 이메일 주소, 비밀번호 입력을 정상적으로 마치고 이메일 인증 모달창으로 넘어가는 버튼 함수.
-    const onEmailVerifiedForm = () => {
-        // if (!userData.email) {
-        //     setIsEmailEmpty(true);
-        //     return;
-        // };
+    const onSubmit = () => {
+        if (!userData.email) {
+            setIsEmailEmpty(true);
+            return;
+        };
 
-        // if (!userData.password) {
-        //     setIsPasswordEmpty(true);
-        //     return;
-        // };
+        if (!userData.password) {
+            setIsPasswordEmpty(true);
+            return;
+        };
 
-        // if (!passwordRewrite) {
-        //     setIsPasswordRewriteEmpty(true);
-        //     return;
-        // };
+        if (!passwordRewrite) {
+            setIsPasswordRewriteEmpty(true);
+            return;
+        };
 
-        // if (isEmailDuplication) {
-        //     alert('이메일 중복 검사가 이루어지지 않았습니다.');
-        //     return;
-        // }
+        if (isEmailDuplication) {
+            alert('이메일 중복 검사가 이루어지지 않았습니다.');
+            return;
+        }
 
-        // if (!isEmailValidate) {
-        //     alert('유효한 이메일 주소를 입력해주세요.');
-        //     return;
-        // };
+        if (!isEmailValidate) {
+            alert('유효한 이메일 주소를 입력해주세요.');
+            return;
+        };
 
-        // if (!isPasswordValidate) {
-        //     alert('유효한 비밀번호를 입력해주세요.');
-        //     return;
-        // };
+        if (!isPasswordValidate) {
+            alert('유효한 비밀번호를 입력해주세요.');
+            return;
+        };
 
-        // if (!isPasswordSame) {
-        //     alert('비밀번호가 일치하지 않습니다.');
-        //     return;
-        // }
+        if (!isPasswordSame) {
+            alert('비밀번호가 일치하지 않습니다.');
+            return;
+        }
 
-        setIsEmailVerifiedFormRender(true);
+        setIsEmailAndPasswordEntered(true);
+        setIsOtherEntered(false);
     };
 
-
-    let setTimer = '';
+    const onClickError = () => {
+        setIsError(false);
+    };
 
     // 이메일 인증 메시지를 발송하는 함수.
-    const onSendVerifyedMail = () => {
-        dispatch(SignUp(userData.email, userData.password, navigate));
+    // 이메일 인증 방식 변경으로 사용하지 않음.
+    // let setTimer = '';
 
-        setTimer = setInterval(() => {
-            onAuthStateChanged(appAuth, (user) => {
-                console.log(user);
+    // const onSendVerifyedMail = () => {
+    //     dispatch(SignUp(userData.email, userData.password, navigate));
 
-                if (user.emailVerified) {
-                    console.log('이메일 인증이 완료될 경우..');
+    //     setTimer = setInterval(() => {
+    //         onAuthStateChanged(appAuth, (user) => {
+    //             console.log(user);
 
-                    setIsEmailVerified(true);
-                    clearInterval(setTimer);
-                }
-                else {
-                    console.log('이메일 인증 대기 중..');
-                    setIsEmailVerified(true);
-                    clearInterval(setTimer);
-                }
+    //             if (user.emailVerified) {
+    //                 console.log('이메일 인증이 완료될 경우..');
 
-                // if (user) {
-                //     setIsEmailVerified(true);
-                //     clearInterval(setTimer);
-                // }
-            })
-        }, 3000);
-    };
+    //                 setIsEmailVerified(true);
+    //                 clearInterval(setTimer);
+    //             }
+    //             else {
+    //                 console.log('이메일 인증 대기 중..');
+    //                 setIsEmailVerified(true);
+    //                 clearInterval(setTimer);
+    //             }
+
+    //             // if (user) {
+    //             //     setIsEmailVerified(true);
+    //             //     clearInterval(setTimer);
+    //             // }
+    //         })
+    //     }, 3000);
+    // };
 
     // 모든 과정을 마치고 다음 과정으로 넘어가는 onSubmit 함수.
-    const onSubmit = (event) => {
-        event.preventDefault();
+    // 이메일 인증 방식 변경으로 사용하지 않음.
+    // const onEmailVerifiedForm = (event) => {
+    //     event.preventDefault();
 
-        setIsEmailVerifiedFormRender(false);
-        // setIsEmailAndPasswordEntered(true);
-        // setIsOtherEntered(false);
-    };
+    //     setIsEmailVerifiedFormRender(false);
+    //     // setIsEmailAndPasswordEntered(true);
+    //     // setIsOtherEntered(false);
+    // };
 
     // 비밀번호 일치 여부를 매 입력마다 감지하는 useEffect.
     useEffect(() => {
@@ -586,6 +589,13 @@ export const RequestEmailAndPasswordVerify = ({ userData, setUserData, navigate,
 
         setIsPasswordSame(passwordRewrite === userData.password);
     }, [userData.password, passwordRewrite]);
+
+    // Redux Store에서 flagvalue State의 변화를 감지하여 프론트 플래그 변수를 제어.
+    useEffect(() => {
+        setIsError(getUserState.flagvalue.isError);
+        setIsLoading(getUserState.flagvalue.isLoading);
+        // eslint-disable-next-line
+    }, [getUserState]);
 
     return (
         <BackGround>
@@ -668,13 +678,18 @@ export const RequestEmailAndPasswordVerify = ({ userData, setUserData, navigate,
                         <Script>* 비밀번호는 8에서 25 사이의, 숫자/영어/특수문자가 조합되어야 합니다.</Script>
                     </FormScript>
 
-                    <SubmitButton onClick={onEmailVerifiedForm}>다음으로</SubmitButton>
+                    {isLoading ?
+                        <SubmitButton disabled={true}>대기 중..</SubmitButton>
+                        :
+                        <SubmitButton onClick={onSubmit}>다음으로</SubmitButton>
+                    }
 
                 </InnerContents>
             </FormBorder>
 
+            <ErrorModal isError={isError} getUserState={getUserState} onClickError={onClickError} />
 
-            <EmailVerifiedModalBorder isRender={isEmailVerifiedFormRender}>
+            {/* <EmailVerifiedModalBorder isRender={isEmailVerifiedFormRender}>
                 <EmailVerifiedImageBox>
                     <EmailVerifiedImage />
                 </EmailVerifiedImageBox>
@@ -723,7 +738,7 @@ export const RequestEmailAndPasswordVerify = ({ userData, setUserData, navigate,
                     </EmailVerifiedButton>
 
                 </EmailVerifiedInnerContents>
-            </EmailVerifiedModalBorder>
+            </EmailVerifiedModalBorder> */}
 
         </BackGround>
     );
