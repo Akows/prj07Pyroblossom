@@ -45,8 +45,8 @@ export const Signup = () => {
         const titleElement = document.getElementsByTagName('title')[0];
         titleElement.innerHTML = 'User Signup';
 
-        dispatch(isLoginCheck());
         dispatch({ type: 'STATE_INIT' });
+        dispatch(isLoginCheck());
         // eslint-disable-next-line
     }, []);
 

@@ -347,8 +347,8 @@ export const Login = () => {
         const titleElement = document.getElementsByTagName('title')[0];
         titleElement.innerHTML = 'User Login';
 
-        dispatch(isLoginCheck());
         dispatch({ type: 'STATE_INIT' });
+        dispatch(isLoginCheck());
         // eslint-disable-next-line
     }, []);
 

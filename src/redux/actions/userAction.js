@@ -160,6 +160,7 @@ const logOut = (navigate) => {
     }
 };
 
+// 유저 로그인 여부 확인.
 const isLoginCheck = () => {
     return (dispatch, getState) => {
         dispatch({ type: 'PROCESSINIT' });
@@ -173,7 +174,6 @@ const isLoginCheck = () => {
                     message: '사용자 인증 정보가 조회되지 않음.',
                 };
                 dispatch({ type: 'ERROR', payload: errorData });
-                console.log(errorData.message);
             }
             else {
                 const userData = {
@@ -184,8 +184,8 @@ const isLoginCheck = () => {
                 dispatch({ type: 'LOG_IN_SUCCESS', payload: userData });
             }
 
-            console.log('현재 유저 정보');
-            console.log(user);
+            // console.log('현재 유저 정보');
+            // console.log(user);
         })
     };
 };
@@ -195,57 +195,48 @@ const GetUserData = () => {
         dispatch({ type: 'PROCESSINIT' });
         dispatch({ type: 'LOADING' });
 
-        const isLoginCheck = getState().user.flagvalue.isLogin;
-
-        if (!isLoginCheck) {
-            return;
-        }
+        let userEmail = '';
+        let userData = {};
 
         const checkUserAuth = async () => {
             onAuthStateChanged(appAuth, (user) => {
                 if (!user) {
-                    const errorData = {
-                        errorCode: 'ULCE001',
-                        message: '사용자 인증 정보가 조회되지 않음.',
-                    };
-
-                    throw errorData;
+                    throw errorCode.userLoginCheckError.ThereIsNoUserData;
                 }
-
-                const result = {
-                    email: user.email,
-                    displayName: user.displayName,
-                };
-
-                return result;
-
+                userEmail = user.email;
             });
         };
 
         checkUserAuth()
-            .then((result) => {
-                console.log(result);
+            .then(() => {
+                const getUserData = async (userEmail) => {
+                    const docRef = doc(userCollectionRef, userEmail);
+                    const docSnap = await getDoc(docRef);
+
+                    userData = {
+                        userNumber: docSnap.data().userNumber,
+                        userType: docSnap.data().userType,
+                        email: docSnap.data().email,
+                        password: docSnap.data().password,
+                        name: docSnap.data().name,
+                        displayName: docSnap.data().displayName,
+                        address: docSnap.data().address,
+                        address2: docSnap.data().address2,
+                        signupDate: docSnap.data().signupDate.toDate().toLocaleString(),
+                    };
+                };
+
+                getUserData(userEmail)
+                    .then((result) => {
+                        dispatch({ type: 'LOG_IN_SUCCESS', payload: userData });
+                    })
+                    .catch((error) => {
+                        dispatch({ type: 'ERROR', payload: createErrorData(error) });
+                    });
             })
             .catch((error) => {
                 dispatch({ type: 'ERROR', payload: createErrorData(error) });
             });
-
-
-        // const getUserData = async (userEmail) => {
-        //     const docRef = doc(userCollectionRef, userEmail);
-        //     const docSnap = await getDoc(docRef);
-
-        //     return docSnap;
-        // };
-
-        // getUserData(userEmail)
-        //     .then((result) => {
-        //         dispatch({ type: 'LOG_IN_SUCCESS', payload: result.data() });
-        //     })
-        //     .catch((error) => {
-        //         dispatch({ type: 'ERROR', payload: createErrorData(error) });
-        //     });
-
     };
 };
 

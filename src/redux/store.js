@@ -5,9 +5,9 @@ import reducerIndex from "./reducers/reducerIndex";
 const initialState = {};
 
 const logMiddleware = (store) => (next) => (action) => {
-    console.log('Log Record.');
-    console.log(action);
-    console.log('===');
+    // console.log('Log Record.');
+    // console.log(action);
+    // console.log('===');
     next(action);
 };
 
