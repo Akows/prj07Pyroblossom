@@ -260,7 +260,7 @@ export const Navigation = () => {
 
                                     {getUserData.flagvalue.isLogin ?
                                         <UserMenuSub>
-                                            {getUserData.logindata.displayName === '관리자' ?
+                                            {getUserData.userdata.displayName === '관리자' ?
                                                 <Link to='user/adminpage'>
                                                     <AiOutlineUser size={40} />
                                                 </Link>
@@ -313,7 +313,7 @@ export const Navigation = () => {
                     {getUserData.flagvalue.isLogin ?
                         <>
                             <UserMenu>
-                                {getUserData.logindata.displayName === 'Admin' ?
+                                {getUserData.userdata.displayName === 'Admin' ?
                                     <>
                                         <Link to='/user/adminpage'>
                                             <AiOutlineUser size={40} />

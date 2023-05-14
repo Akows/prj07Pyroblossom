@@ -6,12 +6,16 @@ const initialState = {
         isError: false,
         isLoading: false,
     },
-    logindata: {
+    userdata: {
+        userNumber: '',
+        userType: '',
         email: '',
         password: '',
         name: '',
         displayName: '',
         address: '',
+        address2: '',
+        signupDate: '',
     },
     errorinfo: {
         errorCode: '',
@@ -33,7 +37,7 @@ const userReducer = (prevState = initialState, action) => {
                     isError: false,
                     isLoading: false,
                 };
-                draft.logindata = {
+                draft.userdata = {
                     email: '',
                     password: '',
                     name: '',
@@ -48,6 +52,8 @@ const userReducer = (prevState = initialState, action) => {
                     processMessage: '',
                 };
                 break;
+
+
 
             // 작업 시작.
             case 'LOADING':
@@ -76,12 +82,19 @@ const userReducer = (prevState = initialState, action) => {
                 draft.processinfo.processMessage = action.payload;
                 break;
 
+            // 회원가입 완료.
+            case 'SIGN_UP_SUCCESS':
+                draft.processvalue.isError = false;
+                draft.processvalue.isLoading = false;
+                draft.errorinfo = {};
+                break;
+
             // 로그인 완료.
             case 'LOG_IN_SUCCESS':
                 draft.flagvalue.isLogin = true;
                 draft.flagvalue.isError = false;
                 draft.flagvalue.isLoading = false;
-                draft.logindata = action.payload;
+                draft.userdata = action.payload;
                 break;
 
             // 로그아웃 완료.
@@ -97,11 +110,7 @@ const userReducer = (prevState = initialState, action) => {
 
 
 
-            case 'SIGN_UP_SUCCESS':
-                draft.processvalue.isError = false;
-                draft.processvalue.isLoading = false;
-                draft.errorinfo = {};
-                break;
+
 
 
 

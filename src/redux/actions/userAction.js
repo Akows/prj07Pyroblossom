@@ -1,5 +1,5 @@
-import { createUserWithEmailAndPassword, onAuthStateChanged, sendEmailVerification, signInWithEmailAndPassword, signOut, updateProfile } from 'firebase/auth'
-import { doc, getCountFromServer, query, setDoc } from 'firebase/firestore';
+import { browserLocalPersistence, browserSessionPersistence, createUserWithEmailAndPassword, onAuthStateChanged, sendEmailVerification, setPersistence, signInWithEmailAndPassword, signOut, updateProfile } from 'firebase/auth'
+import { doc, getCountFromServer, getDoc, query, setDoc } from 'firebase/firestore';
 import { createErrorData, errorCode } from '../../configs/errorCodes';
 import { appAuth, timeStamp, userCollectionRef } from '../../configs/firebase/config'
 
@@ -110,15 +110,29 @@ const logIn = (inputUserData, navigate) => {
         dispatch({ type: 'PROCESSINIT' });
         dispatch({ type: 'LOADING' });
 
-        signInWithEmailAndPassword(appAuth, inputUserData.email, inputUserData.password)
-            .then((userCredential) => {
-                if (!userCredential.user) {
-                    throw errorCode.userSignInError.LoginFailure;
+        let persistenceChoice = '';
+
+        if (inputUserData.isAutoLogin) {
+            persistenceChoice = browserLocalPersistence;
+        }
+        else {
+            persistenceChoice = browserSessionPersistence;
+        };
+
+        setPersistence(appAuth, persistenceChoice)
+            .then(async () => {
+                try {
+                    const userCredential = await signInWithEmailAndPassword(appAuth, inputUserData.email, inputUserData.password);
+                    if (!userCredential.user) {
+                        throw errorCode.userSignInError.LoginFailure;
+                    }
+                    dispatch({ type: 'LOG_IN_SUCCESS', payload: userCredential.user });
+                    dispatch({ type: 'COMPLETE' });
+                    alert('환영합니다.');
+                    navigate('/', { replace: true });
+                } catch (error) {
+                    dispatch({ type: 'ERROR', payload: createErrorData(error) });
                 }
-                dispatch({ type: 'LOG_IN_SUCCESS', payload: userCredential.user });
-                dispatch({ type: 'COMPLETE' });
-                alert('환영합니다.');
-                navigate('/', { replace: true });
             })
             .catch((error) => {
                 dispatch({ type: 'ERROR', payload: createErrorData(error) });
@@ -148,39 +162,91 @@ const logOut = (navigate) => {
 
 const isLoginCheck = () => {
     return (dispatch, getState) => {
+        dispatch({ type: 'PROCESSINIT' });
+        dispatch({ type: 'LOADING' });
+
+        onAuthStateChanged(appAuth, (user) => {
+            if (!user) {
+                const errorData = {
+                    isError: true,
+                    errorCode: 'ULCE001',
+                    message: '사용자 인증 정보가 조회되지 않음.',
+                };
+                dispatch({ type: 'ERROR', payload: errorData });
+                console.log(errorData.message);
+            }
+            else {
+                const userData = {
+                    email: user.email,
+                    displayName: user.displayName,
+                };
+
+                dispatch({ type: 'LOG_IN_SUCCESS', payload: userData });
+            }
+
+            console.log('현재 유저 정보');
+            console.log(user);
+        })
+    };
+};
+
+const GetUserData = () => {
+    return (dispatch, getState) => {
+        dispatch({ type: 'PROCESSINIT' });
+        dispatch({ type: 'LOADING' });
+
         const isLoginCheck = getState().user.flagvalue.isLogin;
 
         if (!isLoginCheck) {
             return;
         }
-        else {
-            dispatch({ type: 'PROCESSINIT' });
-            dispatch({ type: 'LOADING' });
 
+        const checkUserAuth = async () => {
             onAuthStateChanged(appAuth, (user) => {
                 if (!user) {
                     const errorData = {
-                        isError: true,
                         errorCode: 'ULCE001',
                         message: '사용자 인증 정보가 조회되지 않음.',
                     };
-                    dispatch({ type: 'ERROR', payload: errorData });
-                    console.log(errorData.message);
-                }
-                else {
-                    const userData = {
-                        email: user.email,
-                        displayName: user.displayname,
-                    };
 
-                    dispatch({ type: 'LOG_IN_SUCCESS', payload: userData });
+                    throw errorData;
                 }
 
-                console.log('현재 유저 정보');
-                console.log(user);
+                const result = {
+                    email: user.email,
+                    displayName: user.displayName,
+                };
+
+                return result;
+
+            });
+        };
+
+        checkUserAuth()
+            .then((result) => {
+                console.log(result);
             })
-        }
+            .catch((error) => {
+                dispatch({ type: 'ERROR', payload: createErrorData(error) });
+            });
+
+
+        // const getUserData = async (userEmail) => {
+        //     const docRef = doc(userCollectionRef, userEmail);
+        //     const docSnap = await getDoc(docRef);
+
+        //     return docSnap;
+        // };
+
+        // getUserData(userEmail)
+        //     .then((result) => {
+        //         dispatch({ type: 'LOG_IN_SUCCESS', payload: result.data() });
+        //     })
+        //     .catch((error) => {
+        //         dispatch({ type: 'ERROR', payload: createErrorData(error) });
+        //     });
+
     };
 };
 
-export { SignUp, logIn, logOut, isLoginCheck };
+export { SignUp, logIn, logOut, isLoginCheck, GetUserData };
