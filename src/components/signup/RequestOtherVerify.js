@@ -263,7 +263,7 @@ export const RequestOtherVerify = ({ userData, setUserData, navigate, dispatch, 
             setIsNameEmpty(false);
         };
 
-        if (event.target.id === 'address') {
+        if (event.target.id === 'address2') {
             setIsAddressEmpty(false);
         };
     };
@@ -288,14 +288,25 @@ export const RequestOtherVerify = ({ userData, setUserData, navigate, dispatch, 
     };
 
     const onAddressInput = () => {
-        // console.log(userData);
-
         setIsAddressInput(true);
     }
     const onSubmit = (event) => {
         event.preventDefault();
 
-        console.log(userData);
+        if (!isdisplayNameEmpty) {
+            alert('닉네임을 입력해주세요.');
+            return;
+        };
+
+        if (!isNameEmpty) {
+            alert('성명을 입력해주세요.');
+            return;
+        };
+
+        if (!isAddressEmpty) {
+            alert('주소를 입력해주세요.');
+            return;
+        };
 
         dispatch(SignUp(userData, navigate));
 
@@ -307,29 +318,16 @@ export const RequestOtherVerify = ({ userData, setUserData, navigate, dispatch, 
         setIsError(false);
     };
 
-    const handleAddressInputComplete = (data) => {
-        let fullAddress = data.address;
-        let extraAddress = '';
-
-        if (data.addressType === 'R') {
-            if (data.bname !== '') {
-                extraAddress += data.bname;
-            }
-            if (data.buildingName !== '') {
-                extraAddress += extraAddress !== '' ? `, ${data.buildingName}` : data.buildingName;
-            }
-            fullAddress += extraAddress !== '' ? ` (${extraAddress})` : '';
-        }
-
-        setUserData({ ...userData, address: fullAddress });
-        setIsAddressInput(false);
-    };
-
     useEffect(() => {
         setIsError(getUserState.flagvalue.isError);
         setIsLoading(getUserState.flagvalue.isLoading);
         // eslint-disable-next-line
     }, [getUserState]);
+
+    useEffect(() => {
+        console.log(userData);
+        // eslint-disable-next-line
+    }, [userData]);
 
     return (
         <>
@@ -395,7 +393,7 @@ export const RequestOtherVerify = ({ userData, setUserData, navigate, dispatch, 
 
             <ErrorModal isError={isError} getUserState={getUserState} onClickError={onClickError} />
 
-            <AddressInputModal isAddressInput={isAddressInput} handleAddressInputComplete={handleAddressInputComplete} />
+            <AddressInputModal isAddressInput={isAddressInput} userData={userData} setUserData={setUserData} setIsAddressInput={setIsAddressInput} />
 
         </>
     );

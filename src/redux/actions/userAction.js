@@ -68,7 +68,6 @@ const SignUp = (userData, navigate) => {
                                             dispatch({ type: 'COMPLETE' });
                                             dispatch({ type: 'SIGN_UP_SUCCESS' });
                                             alert('인증 메일이 발송되었습니다. 이메일 함을 확인해주세요.');
-                                            navigate('/', { replace: true });
                                         })
 
                                         // 이메일 인증 메일 발송에 문제가 생겼을 경우.

@@ -213,7 +213,7 @@ export const SignupComplete = ({ userData, getUserState }) => {
     const onSubmit = (event) => {
         event.preventDefault();
 
-        alert('회원가입을 환영합니다!');
+        alert('모든 과정이 완료되었습니다. 회원가입을 환영합니다!');
         navigate('/', { replace: true });
     };
 

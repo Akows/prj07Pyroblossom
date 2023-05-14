@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import DaumPostcodeEmbed from 'react-daum-postcode';
 import styled from 'styled-components';
 
@@ -94,7 +94,35 @@ const AddressInputInfo = styled.div`
     font-size: 18px;
 `;
 
-export const AddressInputModal = ({ isAddressInput, handleAddressInputComplete }) => {
+export const AddressInputModal = ({ isAddressInput, userData, setUserData, setIsAddressInput }) => {
+
+    const [address, setAddress] = useState('');
+
+    const handleAddressInputComplete = (data) => {
+        let fullAddress = data.address;
+        let extraAddress = '';
+
+        if (data.addressType === 'R') {
+            if (data.bname !== '') {
+                extraAddress += data.bname;
+            }
+            if (data.buildingName !== '') {
+                extraAddress += extraAddress !== '' ? `, ${data.buildingName}` : data.buildingName;
+            }
+            fullAddress += extraAddress !== '' ? ` (${extraAddress})` : '';
+        }
+        setAddress(fullAddress);
+        setIsAddressInput(false);
+    };
+
+    const handleClose = () => {
+        console.log(address);
+        setUserData({ ...userData, address: address });
+    };
+
+    const handleSearch = (data) => {
+        console.log(data);
+    };
 
     return (
         <AddressInputModalBorder isAddressInput={isAddressInput}>
@@ -109,7 +137,7 @@ export const AddressInputModal = ({ isAddressInput, handleAddressInputComplete }
                 </AddressInputTitle>
 
                 <AddressInputInfo>
-                    <DaumPostcodeEmbed onComplete={handleAddressInputComplete} />
+                    <DaumPostcodeEmbed onClose={handleClose} onSearch={handleSearch} onComplete={handleAddressInputComplete} autoClose={true} />
                 </AddressInputInfo>
 
             </AddressInputInnerContents>
