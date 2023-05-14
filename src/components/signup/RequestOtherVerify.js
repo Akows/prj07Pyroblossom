@@ -287,24 +287,42 @@ export const RequestOtherVerify = ({ userData, setUserData, navigate, dispatch, 
             });
     };
 
-    const onSubmit = (event) => {
-        event.preventDefault();
-        // dispatch(SignUp(userData, navigate));
-
-        // setIsOtherEntered(true);
-        // setIsSignupComplete(false);
+    const onAddressInput = () => {
+        // console.log(userData);
 
         setIsAddressInput(true);
+    }
+    const onSubmit = (event) => {
+        event.preventDefault();
+
+        console.log(userData);
+
+        dispatch(SignUp(userData, navigate));
+
+        setIsOtherEntered(true);
+        setIsSignupComplete(false);
     };
 
     const onClickError = () => {
         setIsError(false);
     };
 
-    const handleComplete = () => {
+    const handleAddressInputComplete = (data) => {
+        let fullAddress = data.address;
+        let extraAddress = '';
+
+        if (data.addressType === 'R') {
+            if (data.bname !== '') {
+                extraAddress += data.bname;
+            }
+            if (data.buildingName !== '') {
+                extraAddress += extraAddress !== '' ? `, ${data.buildingName}` : data.buildingName;
+            }
+            fullAddress += extraAddress !== '' ? ` (${extraAddress})` : '';
+        }
+
+        setUserData({ ...userData, address: fullAddress });
         setIsAddressInput(false);
-
-
     };
 
     useEffect(() => {
@@ -352,11 +370,11 @@ export const RequestOtherVerify = ({ userData, setUserData, navigate, dispatch, 
                     </FormInputNoButton>
 
                     <FormInput>
-                        <Input type='text' id='address' placeholder='자택 주소를 입력해주세요' spellcheck='false' value={userData.address} onChange={onChange} isEmpty={isAddressEmpty} />
-                        <Input type='text' id='address2' placeholder='상세 주소를 입력해주세요' spellcheck='false' value={userData.address2} />
+                        <Input type='text' id='address' placeholder='자택 주소를 입력해주세요' spellcheck='false' value={userData.address} isEmpty={isAddressEmpty} />
+                        <Input type='text' id='address2' placeholder='상세 주소를 입력해주세요' spellcheck='false' value={userData.address2} onChange={onChange} isEmpty={isAddressEmpty} />
 
                         <InputButton>
-                            <Button>주소입력</Button>
+                            <Button onClick={onAddressInput}>주소입력</Button>
                         </InputButton>
                     </FormInput>
 
@@ -377,7 +395,7 @@ export const RequestOtherVerify = ({ userData, setUserData, navigate, dispatch, 
 
             <ErrorModal isError={isError} getUserState={getUserState} onClickError={onClickError} />
 
-            <AddressInputModal isAddressInput={isAddressInput} handleComplete={handleComplete} />
+            <AddressInputModal isAddressInput={isAddressInput} handleAddressInputComplete={handleAddressInputComplete} />
 
         </>
     );

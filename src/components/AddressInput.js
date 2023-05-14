@@ -94,27 +94,7 @@ const AddressInputInfo = styled.div`
     font-size: 18px;
 `;
 
-export const AddressInputModal = ({ isAddressInput, handleComplete }) => {
-
-    // 검색 API에서 주소 검색을 완료할 경우 발동될 함수.
-    // const handleComplete = (data) => {
-    //     let fullAddress = data.address;
-    //     let extraAddress = '';
-
-    //     if (data.addressType === 'R') {
-    //         if (data.bname !== '') {
-    //             extraAddress += data.bname;
-    //         }
-    //         if (data.buildingName !== '') {
-    //             extraAddress += extraAddress !== '' ? `, ${data.buildingName}` : data.buildingName;
-    //         }
-    //         fullAddress += extraAddress !== '' ? ` (${extraAddress})` : '';
-    //     }
-
-
-    //     console.log(fullAddress); // e.g. '서울 성동구 왕십리로2길 20 (성수동1가)'
-    // };
-
+export const AddressInputModal = ({ isAddressInput, handleAddressInputComplete }) => {
 
     return (
         <AddressInputModalBorder isAddressInput={isAddressInput}>
@@ -129,7 +109,7 @@ export const AddressInputModal = ({ isAddressInput, handleComplete }) => {
                 </AddressInputTitle>
 
                 <AddressInputInfo>
-                    <DaumPostcodeEmbed onComplete={handleComplete} />
+                    <DaumPostcodeEmbed onComplete={handleAddressInputComplete} />
                 </AddressInputInfo>
 
             </AddressInputInnerContents>

@@ -84,8 +84,8 @@ const userReducer = (prevState = initialState, action) => {
 
             // 회원가입 완료.
             case 'SIGN_UP_SUCCESS':
-                draft.processvalue.isError = false;
-                draft.processvalue.isLoading = false;
+                draft.flagvalue.isError = false;
+                draft.flagvalue.isLoading = false;
                 draft.errorinfo = {};
                 break;
 

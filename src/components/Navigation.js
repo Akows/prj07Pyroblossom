@@ -225,8 +225,6 @@ export const Navigation = () => {
         }
         else {
             dispatch(logOut(navigate));
-            alert('로그아웃되었습니다. 방문해주셔서 감사합니다.');
-            navigate('/', { replace: true });
         };
     };
 

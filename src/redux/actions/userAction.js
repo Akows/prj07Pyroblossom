@@ -61,9 +61,21 @@ const SignUp = (userData, navigate) => {
                             )
                                 // 작업이 정상 완료되면 SIGN_UP_SUCCESS Action을 실행하고 완료 메시지 출력, 이후 메인 페이지로 이동.
                                 .then(() => {
-                                    dispatch({ type: 'SIGN_UP_SUCCESS' });
-                                    alert('회원가입이 완료되었습니다.');
-                                    navigate('/', { replace: true });
+                                    dispatch({ type: 'CHECK_SUCCESS' });
+
+                                    emailVerifiedProcess(appAuth.currentUser)
+                                        .then(() => {
+                                            dispatch({ type: 'COMPLETE' });
+                                            dispatch({ type: 'SIGN_UP_SUCCESS' });
+                                            alert('인증 메일이 발송되었습니다. 이메일 함을 확인해주세요.');
+                                            navigate('/', { replace: true });
+                                        })
+
+                                        // 이메일 인증 메일 발송에 문제가 생겼을 경우.
+                                        .catch((error) => {
+                                            dispatch({ type: 'ERROR', payload: createErrorData(error) });
+                                            alert('인증메일 발송에 에러가 발생했습니다.');
+                                        });
                                 })
                                 // 계정 정보 파이어스토어 저장 - 에러 발생 catch 구문.
                                 .catch((error) => {
@@ -81,19 +93,6 @@ const SignUp = (userData, navigate) => {
                         alert('사용자 정보 등록에 에러가 발생하였습니다.');
                         navigate('/', { replace: true });
                     });
-
-
-                emailVerifiedProcess(appAuth.currentUser)
-                    .then(() => {
-                        dispatch({ type: 'COMPLETE' });
-                        dispatch({ type: 'CHECK_SUCCESS' });
-                        alert('인증 메일이 발송되었습니다. 이메일 함을 확인해주세요.');
-                    })
-                    .catch((error) => {
-                        dispatch({ type: 'ERROR', payload: createErrorData(error) });
-                        alert('인증메일 발송에 에러가 발생했습니다.');
-                    });
-
             })
             // 파이어베이스 계정 생성 - 에러 발생 catch 구문.
             .catch((error) => {
@@ -149,6 +148,7 @@ const logOut = (navigate) => {
         signOut(appAuth)
             .then(() => {
                 dispatch({ type: 'LOG_OUT' });
+                dispatch({ type: 'COMPLETE' });
                 alert('안녕히가세요..');
                 navigate('/', { replace: true });
             })
