@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import DaumPostcodeEmbed from 'react-daum-postcode';
 import styled from 'styled-components';
 
@@ -94,9 +94,7 @@ const AddressInputInfo = styled.div`
     font-size: 18px;
 `;
 
-export const AddressInputModal = ({ isAddressInput, userData, setUserData, setIsAddressInput }) => {
-
-    const [address, setAddress] = useState('');
+export const AddressInputModal = ({ setAddress, isAddressInput, setIsAddressInput }) => {
 
     const handleAddressInputComplete = (data) => {
         let fullAddress = data.address;
@@ -115,15 +113,6 @@ export const AddressInputModal = ({ isAddressInput, userData, setUserData, setIs
         setIsAddressInput(false);
     };
 
-    const handleClose = () => {
-        console.log(address);
-        setUserData({ ...userData, address: address });
-    };
-
-    const handleSearch = (data) => {
-        console.log(data);
-    };
-
     return (
         <AddressInputModalBorder isAddressInput={isAddressInput}>
             <AddressInputDecoImageBox>
@@ -133,11 +122,11 @@ export const AddressInputModal = ({ isAddressInput, userData, setUserData, setIs
             <AddressInputInnerContents>
 
                 <AddressInputTitle>
-                    주소입력
+
                 </AddressInputTitle>
 
                 <AddressInputInfo>
-                    <DaumPostcodeEmbed onClose={handleClose} onSearch={handleSearch} onComplete={handleAddressInputComplete} autoClose={true} />
+                    <DaumPostcodeEmbed onComplete={handleAddressInputComplete} autoClose={false} />
                 </AddressInputInfo>
 
             </AddressInputInnerContents>

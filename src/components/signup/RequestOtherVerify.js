@@ -237,6 +237,8 @@ const SubmitButton = styled.button`
 
 export const RequestOtherVerify = ({ userData, setUserData, navigate, dispatch, getUserState, setIsOtherEntered, setIsSignupComplete }) => {
 
+    const [address, setAddress] = useState('');
+
     const [isError, setIsError] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
@@ -293,25 +295,27 @@ export const RequestOtherVerify = ({ userData, setUserData, navigate, dispatch, 
     const onSubmit = (event) => {
         event.preventDefault();
 
-        if (!isdisplayNameEmpty) {
-            alert('닉네임을 입력해주세요.');
-            return;
-        };
+        console.log(userData);
 
-        if (!isNameEmpty) {
-            alert('성명을 입력해주세요.');
-            return;
-        };
+        // if (!isdisplayNameEmpty) {
+        //     alert('닉네임을 입력해주세요.');
+        //     return;
+        // };
 
-        if (!isAddressEmpty) {
-            alert('주소를 입력해주세요.');
-            return;
-        };
+        // if (!isNameEmpty) {
+        //     alert('성명을 입력해주세요.');
+        //     return;
+        // };
 
-        dispatch(SignUp(userData, navigate));
+        // if (!isAddressEmpty) {
+        //     alert('주소를 입력해주세요.');
+        //     return;
+        // };
 
-        setIsOtherEntered(true);
-        setIsSignupComplete(false);
+        // dispatch(SignUp(userData, navigate));
+
+        // setIsOtherEntered(true);
+        // setIsSignupComplete(false);
     };
 
     const onClickError = () => {
@@ -325,9 +329,9 @@ export const RequestOtherVerify = ({ userData, setUserData, navigate, dispatch, 
     }, [getUserState]);
 
     useEffect(() => {
-        console.log(userData);
+        setUserData({ ...userData, address: address });
         // eslint-disable-next-line
-    }, [userData]);
+    }, [address]);
 
     return (
         <>
@@ -393,7 +397,7 @@ export const RequestOtherVerify = ({ userData, setUserData, navigate, dispatch, 
 
             <ErrorModal isError={isError} getUserState={getUserState} onClickError={onClickError} />
 
-            <AddressInputModal isAddressInput={isAddressInput} userData={userData} setUserData={setUserData} setIsAddressInput={setIsAddressInput} />
+            <AddressInputModal setAddress={setAddress} isAddressInput={isAddressInput} setIsAddressInput={setIsAddressInput} />
 
         </>
     );
