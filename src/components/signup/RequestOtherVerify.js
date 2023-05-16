@@ -276,7 +276,7 @@ export const RequestOtherVerify = ({ userData, setUserData, navigate, dispatch, 
             return;
         };
 
-        checkDuplication(userData.email, 'displayname', dispatch)
+        checkDuplication(userData.displayname, 'displayname', dispatch)
             .then((result) => {
                 setIsDisplayNameDuplication(result);
 
@@ -289,33 +289,32 @@ export const RequestOtherVerify = ({ userData, setUserData, navigate, dispatch, 
             });
     };
 
+    // 주소입력 모달을 출력하는 버튼.
     const onAddressInput = () => {
         setIsAddressInput(true);
     }
     const onSubmit = (event) => {
         event.preventDefault();
 
-        console.log(userData);
+        if (!userData.displayname) {
+            setIsdisplayNameEmpty(true);
+            return;
+        };
 
-        // if (!isdisplayNameEmpty) {
-        //     alert('닉네임을 입력해주세요.');
-        //     return;
-        // };
+        if (!userData.name) {
+            setIsNameEmpty(true);
+            return;
+        };
 
-        // if (!isNameEmpty) {
-        //     alert('성명을 입력해주세요.');
-        //     return;
-        // };
+        if (!userData.address || !userData.address2) {
+            setIsAddressEmpty(true);
+            return;
+        };
 
-        // if (!isAddressEmpty) {
-        //     alert('주소를 입력해주세요.');
-        //     return;
-        // };
+        dispatch(SignUp(userData, navigate));
 
-        // dispatch(SignUp(userData, navigate));
-
-        // setIsOtherEntered(true);
-        // setIsSignupComplete(false);
+        setIsOtherEntered(true);
+        setIsSignupComplete(false);
     };
 
     const onClickError = () => {

@@ -179,8 +179,8 @@ const isLoginCheck = () => {
                 dispatch({ type: 'LOG_IN_SUCCESS', payload: userData });
             }
 
-            // console.log('현재 유저 정보');
-            // console.log(user);
+            console.log('현재 유저 정보');
+            console.log(user);
         })
     };
 };
