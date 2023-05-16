@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { AddressInputModal } from '../../components/AddressInput';
-import { isLoginCheck, UpdateUserData } from '../../redux/actions/userAction';
+import { DeleteUser, isLoginCheck, UpdateUserData } from '../../redux/actions/userAction';
 import { checkDuplication, GetUserData } from '../../functions/userFunction';
 
 const BackGround = styled.div`
@@ -349,13 +349,14 @@ export const MyPage = () => {
             });
     };
 
-    const ok = () => {
-        const choice = window.confirm('탈퇴하시겠어요?');
+    const onDeleteUser = () => {
+        const choice = window.confirm('정말 탈퇴하시겠어요?..');
 
         if (!choice) {
             return;
         }
         else {
+            dispatch(DeleteUser(userData.email, navigate));
             alert('탈퇴 완료되었습니다.');
         };
     };
@@ -499,7 +500,7 @@ export const MyPage = () => {
                     </FormScript>
 
                     {isUpdate ? <></> :
-                        <SubmitButton onClick={ok}>회원탈퇴</SubmitButton>
+                        <SubmitButton onClick={onDeleteUser}>회원탈퇴</SubmitButton>
                     }
 
                 </InnerContents>
