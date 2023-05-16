@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { isLoginCheck, logIn } from '../../redux/actions/userAction';
 
 import { ErrorModal } from '../../components/ErrorModal';
+import { IDAndPasswordSearch } from '../../components/login/IDAndPasswordSearch';
 
 const BackGround = styled.div`
     width: 100%;
@@ -263,6 +264,8 @@ export const Login = () => {
     const [isEmailValidate, setIsEmailValidate] = useState(false);
     const [isFirstRendering, setIsFirstRendering] = useState(true);
 
+    const [isOnSearchModal, setIsOnSearchModal] = useState(false);
+
     // input 태그에서 입력값을 감지하여 동작하는 함수.
     const onChange = (event) => {
         // 입력값은 받아서 set.
@@ -361,7 +364,12 @@ export const Login = () => {
         // eslint-disable-next-line
     }, [getUserState]);
 
-
+    const onSearch = () => {
+        setIsOnSearchModal(true);
+    };
+    const offSearch = () => {
+        setIsOnSearchModal(false);
+    };
 
 
 
@@ -432,8 +440,7 @@ export const Login = () => {
                         }
 
                         <UtilButton>
-                            <button>아이디 찾기</button>
-                            <button>비밀번호 찾기</button>
+                            <button onClick={onSearch}>아이디 / 비밀번호 찾기</button>
                         </UtilButton>
 
                         <MoveToSignUp>
@@ -454,6 +461,8 @@ export const Login = () => {
             {/* 에러 상황 시에만 렌더링되는 에러 모달 창. */}
 
             <ErrorModal isError={isError} getUserState={getUserState} onClickError={onClickError} />
+
+            <IDAndPasswordSearch isOnSearchModal={isOnSearchModal} offSearch={offSearch} />
         </>
     );
 };
