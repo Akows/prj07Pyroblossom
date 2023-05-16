@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components';
 import { SignUp } from '../../redux/actions/userAction';
-import { checkDuplication } from '../../redux/actions/userFunction';
+import { checkDuplication } from '../../functions/userFunction';
 import { AddressInputModal } from '../AddressInput';
 import { ErrorModal } from '../ErrorModal';
 
@@ -310,6 +310,11 @@ export const RequestOtherVerify = ({ userData, setUserData, navigate, dispatch, 
             setIsAddressEmpty(true);
             return;
         };
+
+        if (isDisplayNameDuplication) {
+            alert('닉네임 중복 검사가 이루어지지 않았습니다.');
+            return;
+        }
 
         dispatch(SignUp(userData, navigate));
 

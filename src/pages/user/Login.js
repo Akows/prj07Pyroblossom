@@ -342,11 +342,13 @@ export const Login = () => {
         setIsFirstRendering(true);
     };
 
-    // 페이지가 처음 렌더링되면 브라우저 탭의 제목을 변경하고 로그인 여부를 체크.
     useEffect(() => {
         const titleElement = document.getElementsByTagName('title')[0];
         titleElement.innerHTML = 'User Login';
+    });
 
+    // 페이지가 처음 렌더링되면 로그인 여부를 체크.
+    useEffect(() => {
         dispatch({ type: 'STATE_INIT' });
         dispatch(isLoginCheck());
         // eslint-disable-next-line

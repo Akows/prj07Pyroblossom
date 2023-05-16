@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { GetUserData, isLoginCheck } from '../../redux/actions/userAction';
+import { AddressInputModal } from '../../components/AddressInput';
+import { isLoginCheck, UpdateUserData } from '../../redux/actions/userAction';
+import { checkDuplication, GetUserData } from '../../functions/userFunction';
 
 const BackGround = styled.div`
     width: 100%;
@@ -25,7 +28,7 @@ const FormBorder = styled(transformAnimaiton)`
 
     border: 1px solid gray;
 
-    @media screen and (max-width: 500px) {
+    @media screen and (max-width: 700px) {
         width: 95%;
         height: 100%;
     }
@@ -118,6 +121,36 @@ const FormInfo = styled.div`
     }
 `;
 
+const InputButton = styled.div`
+    width: 100%;
+    height: 50%;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+`;
+const Button = styled.button`
+    width: 30%;
+    height: 80%;
+
+    border: none;
+    border-radius: 10px;
+
+    color: black;
+    font-family: 'GIFont';
+    font-size: 15px;
+
+    &:hover {
+        background-color: gray;
+    };
+
+    @media screen and (max-width: 350px) {
+        font-size: 14px;
+    }
+`;
+
+
 
 const Input = styled.input`
     width: 100%;
@@ -164,6 +197,14 @@ const DuplicationCheckButton = styled.button`
         font-size: 14px;
     }
 `;
+const ResultMassage = styled.div`
+    width: 80%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+`;
 
 const resultMassage = styled.div`
     width: 70%;
@@ -183,15 +224,7 @@ const resultMassage = styled.div`
 const OkMassage = styled(resultMassage)`
     color: green;
 `;
-const OkMassageNoButton = styled(resultMassage)`
-    width: 100%;
-    color: green;
-`;
 const WarningMassage = styled(resultMassage)`
-    color: red;
-`;
-const WarningMassageNoButton = styled(resultMassage)`
-    width: 100%;
     color: red;
 `;
 
@@ -237,6 +270,7 @@ const SubmitButton = styled.button`
 
 export const MyPage = () => {
 
+    const navigate = useNavigate();
     const dispatch = useDispatch();
     const getUserState = useSelector((state) => state.user);
 
@@ -251,14 +285,37 @@ export const MyPage = () => {
         address2: '',
         signupDate: '',
     });
+    const [address, setAddress] = useState('');
 
     const [isUpdate, setIsUpdate] = useState(false);
+    const [isAddressInput, setIsAddressInput] = useState(false);
+
+    const [isDisplayNameDuplication, setIsDisplayNameDuplication] = useState(true);
+    const [isFirstRenderingDisplayName, setIsFirstRenderingDisplayName] = useState(true);
+
+    const onChange = (event) => {
+        setUserData({ ...userData, [event.target.id]: event.target.value });
+
+        if (event.target.id === 'displayName') {
+            setIsDisplayNameDuplication(true);
+            setIsFirstRenderingDisplayName(false);
+        };
+    };
 
     const onUpdateForm = () => {
         setIsUpdate(!isUpdate);
     };
+    const onAddressInput = () => {
+        setIsAddressInput(true);
+    }
 
     const onUpdateSubmit = () => {
+
+        if (isDisplayNameDuplication) {
+            alert('닉네임 중복 검사가 이루어지지 않았습니다.');
+            return;
+        }
+
         const choice = window.confirm('수정 하시겠어요?');
 
         if (!choice) {
@@ -267,33 +324,72 @@ export const MyPage = () => {
         }
         else {
             setIsUpdate(!isUpdate);
-            alert('수정되었습니다.');
+            dispatch(UpdateUserData(userData, navigate));
         };
     };
 
-    const ok = () => {
-        console.log(getUserState);
-        console.log(userData);
+    const onCheckDuplication = (event) => {
+        event.preventDefault();
 
+        if (!userData.displayName) {
+            alert('닉네임을 입력해주세요.');
+            return;
+        };
+
+        checkDuplication(userData.displayName, 'displayname', dispatch)
+            .then((result) => {
+                setIsDisplayNameDuplication(result);
+
+                if (result) {
+                    alert('사용할 수 없는 닉네임 입니다.');
+                }
+                else {
+                    alert('사용가능한 닉네임 입니다.');
+                }
+            });
+    };
+
+    const ok = () => {
+        const choice = window.confirm('탈퇴하시겠어요?');
+
+        if (!choice) {
+            return;
+        }
+        else {
+            alert('탈퇴 완료되었습니다.');
+        };
     };
 
     useEffect(() => {
         const titleElement = document.getElementsByTagName('title')[0];
         titleElement.innerHTML = 'My Page';
+    });
 
+    useEffect(() => {
         dispatch({ type: 'STATE_INIT' });
         dispatch(isLoginCheck());
-        dispatch(GetUserData());
         // eslint-disable-next-line
     }, []);
 
     useEffect(() => {
-        setUserData(getUserState.userdata);
+
+        if (!getUserState.userdata.email) {
+            return;
+        };
+
+        GetUserData(getUserState.userdata.email, dispatch)
+            .then((result) => {
+                setUserData(result)
+            })
         // eslint-disable-next-line
     }, [getUserState]);
 
-    return (
+    useEffect(() => {
+        setUserData({ ...userData, address: address });
+        // eslint-disable-next-line
+    }, [address]);
 
+    return (
         <BackGround>
 
             <FormBorder>
@@ -304,7 +400,7 @@ export const MyPage = () => {
                         <p>마이페이지</p>
                         {isUpdate ?
                             <div>
-                                <UpdateButton onClick={onUpdateSubmit}>수정완료</UpdateButton>
+                                <UpdateButton onClick={onUpdateSubmit}>수정하기</UpdateButton>
                                 <UpdateButton onClick={onUpdateForm}>취소</UpdateButton>
                             </div>
                             :
@@ -326,30 +422,32 @@ export const MyPage = () => {
 
                     <FormInfo>
                         <p>사용자 이메일 :</p>
-
-                        {isUpdate ?
-                            <>
-                                <Input type='text' id='email' placeholder='변경할 이메일 주소를 입력해주세요' spellcheck='false' />
-                                <CheckAndResult>
-                                    <DuplicationCheckButton>중복검사</DuplicationCheckButton>
-                                    <OkMassage>사용 가능한 이메일 주소입니다.</OkMassage>
-                                    <WarningMassage>사용할 수 없는 이메일 주소입니다.</WarningMassage>
-                                </CheckAndResult>
-                            </>
-                            :
-                            <>{userData.email}</>
-                        }
+                        {userData.email}
                     </FormInfo>
 
                     <FormInfo>
                         <p>사용자 닉네임 :</p>
                         {isUpdate ?
                             <>
-                                <Input type='text' id='displayname' placeholder='변경할 닉네임을 입력해주세요' spellcheck='false' />
+                                <Input type='text' id='displayName' placeholder='변경할 닉네임을 입력해주세요' spellcheck='false' onChange={onChange} value={userData.displayName} />
                                 <CheckAndResult>
-                                    <DuplicationCheckButton>중복검사</DuplicationCheckButton>
-                                    <OkMassage>사용 가능한 이메일 주소입니다.</OkMassage>
-                                    <WarningMassage>사용할 수 없는 이메일 주소입니다.</WarningMassage>
+                                    <DuplicationCheckButton onClick={onCheckDuplication}>중복검사</DuplicationCheckButton>
+                                    <ResultMassage>
+                                        {isFirstRenderingDisplayName ? <></> :
+                                            <>
+                                                {!isDisplayNameDuplication ?
+                                                    <>
+                                                        <OkMassage>사용 가능한 닉네임입니다.</OkMassage>
+                                                    </>
+                                                    :
+                                                    <>
+                                                        <WarningMassage>사용 불가능한 닉네임입니다.</WarningMassage>
+                                                    </>
+                                                }
+                                            </>
+                                        }
+
+                                    </ResultMassage>
                                 </CheckAndResult>
                             </>
 
@@ -361,7 +459,7 @@ export const MyPage = () => {
                     <FormInfo>
                         <p>사용자 성명 :</p>
                         {isUpdate ?
-                            <Input type='text' id='name' placeholder='변경할 이름을 입력해주세요' spellcheck='false' />
+                            <Input type='text' id='name' placeholder='변경할 이름을 입력해주세요' spellcheck='false' onChange={onChange} value={userData.name} />
                             :
                             <>{userData.name}</>
                         }
@@ -370,7 +468,12 @@ export const MyPage = () => {
                     <FormInfo>
                         <p>사용자 주소 :</p>
                         {isUpdate ?
-                            <Input type='text' id='address' placeholder='변경할 주소를 입력해주세요' spellcheck='false' />
+                            <>
+                                <Input type='text' id='address' placeholder='변경할 주소를 입력해주세요' spellcheck='false' value={userData.address} />
+                                <InputButton>
+                                    <Button onClick={onAddressInput}>주소입력</Button>
+                                </InputButton>
+                            </>
                             :
                             <>{userData.address}</>
                         }
@@ -379,7 +482,7 @@ export const MyPage = () => {
                     <FormInfo>
                         <p>사용자 상세주소 :</p>
                         {isUpdate ?
-                            <Input type='text' id='address2' placeholder='변경할 상세주소를 입력해주세요' spellcheck='false' />
+                            <Input type='text' id='address2' placeholder='변경할 상세주소를 입력해주세요' spellcheck='false' onChange={onChange} value={userData.address2} />
                             :
                             <>{userData.address2}</>
                         }
@@ -390,23 +493,22 @@ export const MyPage = () => {
                         {userData.signupDate}
                     </FormInfo>
 
-
-
-
                     <FormScript>
                         <Script>* 1</Script>
                         <Script>* 2</Script>
                     </FormScript>
 
-                    <SubmitButton onClick={ok}>다음</SubmitButton>
+                    {isUpdate ? <></> :
+                        <SubmitButton onClick={ok}>회원탈퇴</SubmitButton>
+                    }
 
                 </InnerContents>
 
 
             </FormBorder >
 
+            <AddressInputModal setAddress={setAddress} isAddressInput={isAddressInput} setIsAddressInput={setIsAddressInput} />
+
         </BackGround>
-
-
     );
 };

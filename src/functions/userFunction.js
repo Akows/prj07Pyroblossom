@@ -1,7 +1,7 @@
-import { onAuthStateChanged } from "firebase/auth";
-import { getDocs, query, where } from "firebase/firestore";
+
+import { doc, getDoc, getDocs, query, where } from "firebase/firestore";
 // import { createErrorData, errorCode } from "../../configs/errorCodes";
-import { appAuth, userCollectionRef } from "../../configs/firebase/config";
+import { userCollectionRef } from "../configs/firebase/config";
 
 // 유효성 검사.
 const checkValidate = (inputdata, checktype) => {
@@ -36,7 +36,7 @@ const checkValidate = (inputdata, checktype) => {
 
 // 중복 검사.
 const checkDuplication = async (inputdata, checktype, dispatch) => {
-    dispatch({ type: 'PROCESSINIT' });
+    dispatch({ type: 'STATE_INIT' });
     dispatch({ type: 'LOADING' });
 
     // 반환되는 결과값을 미리 선언.
@@ -76,34 +76,28 @@ const checkDuplication = async (inputdata, checktype, dispatch) => {
     return result;
 };
 
-const checkUserEmailVerified = () => {
+// 회원 정보를 조회.
+const GetUserData = async (userEmail, dispatch) => {
+    dispatch({ type: 'STATE_INIT' });
+    dispatch({ type: 'LOADING' });
 
-    // const resultData = {
-    //     currentUserEmailVerified: false,
+    const docRef = doc(userCollectionRef, userEmail);
+    const docSnap = await getDoc(docRef);
 
-    // };
+    const userData = {
+        userNumber: docSnap.data().userNumber,
+        userType: docSnap.data().userType,
+        email: docSnap.data().email,
+        password: docSnap.data().password,
+        name: docSnap.data().name,
+        displayName: docSnap.data().displayName,
+        address: docSnap.data().address,
+        address2: docSnap.data().address2,
+        signupDate: docSnap.data().signupDate.toDate().toLocaleString(),
+    };
 
-    // const checkCurrentUserEmailVerified = () => {
-    //     onAuthStateChanged(appAuth, (user) => {
-    //         console.log(user);
-    //     })
-    // };
-
-
-    // const setTimer = setInterval(function () {
-    //     alert('');
-    // }, 3000);
-
-
-    onAuthStateChanged(appAuth, (user) => {
-        console.log(user);
-    })
-
+    dispatch({ type: 'COMPLETE' });
+    return userData;
 };
 
-
-
-
-
-
-export { checkValidate, checkDuplication, checkUserEmailVerified };
+export { checkValidate, checkDuplication, GetUserData };

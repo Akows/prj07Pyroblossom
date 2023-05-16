@@ -1,5 +1,5 @@
 import { browserLocalPersistence, browserSessionPersistence, createUserWithEmailAndPassword, onAuthStateChanged, sendEmailVerification, setPersistence, signInWithEmailAndPassword, signOut, updateProfile } from 'firebase/auth'
-import { doc, getCountFromServer, getDoc, query, setDoc } from 'firebase/firestore';
+import { doc, getCountFromServer, query, setDoc } from 'firebase/firestore';
 import { createErrorData, errorCode } from '../../configs/errorCodes';
 import { appAuth, timeStamp, userCollectionRef } from '../../configs/firebase/config'
 
@@ -185,55 +185,86 @@ const isLoginCheck = () => {
     };
 };
 
-const GetUserData = () => {
+// 회원정보 수정.
+const UpdateUserData = (userData, navigate) => {
     return (dispatch, getState) => {
         dispatch({ type: 'PROCESSINIT' });
         dispatch({ type: 'LOADING' });
 
-        let userEmail = '';
-        let userData = {};
+        const updataProcess = async () => {
+            const docRef = doc(userCollectionRef, userData.email);
 
-        const checkUserAuth = async () => {
-            onAuthStateChanged(appAuth, (user) => {
-                if (!user) {
-                    throw errorCode.userLoginCheckError.ThereIsNoUserData;
-                }
-                userEmail = user.email;
-            });
+            await setDoc(docRef, {
+                name: userData.name,
+                displayName: userData.displayName,
+                address: userData.address,
+                address2: userData.address2,
+            }, { merge: true });
         };
 
-        checkUserAuth()
+        updataProcess()
             .then(() => {
-                const getUserData = async (userEmail) => {
-                    const docRef = doc(userCollectionRef, userEmail);
-                    const docSnap = await getDoc(docRef);
-
-                    userData = {
-                        userNumber: docSnap.data().userNumber,
-                        userType: docSnap.data().userType,
-                        email: docSnap.data().email,
-                        password: docSnap.data().password,
-                        name: docSnap.data().name,
-                        displayName: docSnap.data().displayName,
-                        address: docSnap.data().address,
-                        address2: docSnap.data().address2,
-                        signupDate: docSnap.data().signupDate.toDate().toLocaleString(),
-                    };
-                };
-
-                getUserData(userEmail)
-                    .then((result) => {
-                        dispatch({ type: 'COMPLETE' });
-                        dispatch({ type: 'LOG_IN_SUCCESS', payload: userData });
-                    })
-                    .catch((error) => {
-                        dispatch({ type: 'ERROR', payload: createErrorData(error) });
-                    });
+                dispatch({ type: 'COMPLETE' });
+                alert('수정이 완료되었습니다.');
+                navigate('/user/mypage', { replace: true });
             })
             .catch((error) => {
                 dispatch({ type: 'ERROR', payload: createErrorData(error) });
+                navigate('/user/mypage', { replace: true });
             });
     };
 };
 
-export { SignUp, logIn, logOut, isLoginCheck, GetUserData };
+
+
+
+
+
+
+
+
+
+
+
+const GetUserData = (userEmail) => {
+
+    // 로직 변경으로 사용 보류.
+
+    // console.log(userEmail);
+
+    // return (dispatch, getState) => {
+    //     dispatch({ type: 'STATE_INIT' });
+    //     dispatch({ type: 'LOADING' });
+
+    //     let userData = {};
+
+    //     const getUserData = async (userEmail) => {
+    //         const docRef = doc(userCollectionRef, userEmail);
+    //         const docSnap = await getDoc(docRef);
+
+    //         userData = {
+    //             userNumber: docSnap.data().userNumber,
+    //             userType: docSnap.data().userType,
+    //             email: docSnap.data().email,
+    //             password: docSnap.data().password,
+    //             name: docSnap.data().name,
+    //             displayName: docSnap.data().displayName,
+    //             address: docSnap.data().address,
+    //             address2: docSnap.data().address2,
+    //             signupDate: docSnap.data().signupDate.toDate().toLocaleString(),
+    //         };
+    //     };
+
+    //     getUserData(userEmail)
+    //         .then(() => {
+    //             dispatch({ type: 'COMPLETE' });
+    //             dispatch({ type: 'LOG_IN_SUCCESS', payload: userData });
+    //         })
+    //         .catch((error) => {
+    //             dispatch({ type: 'ERROR', payload: createErrorData(error) });
+    //         });
+
+    // };
+};
+
+export { SignUp, logIn, logOut, isLoginCheck, UpdateUserData, GetUserData };

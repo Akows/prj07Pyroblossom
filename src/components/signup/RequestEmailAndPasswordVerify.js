@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components';
-import { checkDuplication, checkValidate } from '../../redux/actions/userFunction';
+import { checkDuplication, checkValidate } from '../../functions/userFunction';
 import { ErrorModal } from '../ErrorModal';
 
 // import emailverifieddecoimage from '../../assets/images/emoji/Icon_Emoji_066_Hu_Tao_Reciting_poetry.webp';
