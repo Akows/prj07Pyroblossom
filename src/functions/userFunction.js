@@ -1,5 +1,5 @@
 
-import { doc, getDoc, getDocs, query, where } from "firebase/firestore";
+import { getDocs, query, where } from "firebase/firestore";
 // import { createErrorData, errorCode } from "../../configs/errorCodes";
 import { userCollectionRef } from "../configs/firebase/config";
 
@@ -72,32 +72,7 @@ const checkDuplication = async (inputdata, checktype, dispatch) => {
 
     // 작업을 마치고 결과값을 반환.
     dispatch({ type: 'COMPLETE' });
-    dispatch({ type: 'CHECK_SUCCESS' });
     return result;
 };
 
-// 회원 정보를 조회.
-const GetUserData = async (userEmail, dispatch) => {
-    dispatch({ type: 'STATE_INIT' });
-    dispatch({ type: 'LOADING' });
-
-    const docRef = doc(userCollectionRef, userEmail);
-    const docSnap = await getDoc(docRef);
-
-    const userData = {
-        userNumber: docSnap.data().userNumber,
-        userType: docSnap.data().userType,
-        email: docSnap.data().email,
-        password: docSnap.data().password,
-        name: docSnap.data().name,
-        displayName: docSnap.data().displayName,
-        address: docSnap.data().address,
-        address2: docSnap.data().address2,
-        signupDate: docSnap.data().signupDate.toDate().toLocaleString(),
-    };
-
-    dispatch({ type: 'COMPLETE' });
-    return userData;
-};
-
-export { checkValidate, checkDuplication, GetUserData };
+export { checkValidate, checkDuplication };

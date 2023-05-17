@@ -6,9 +6,7 @@ import styled from 'styled-components';
 import { RequestTermsAgreement } from '../../components/signup/RequestTermsAgreement';
 import { RequestEmailAndPasswordVerify } from '../../components/signup/RequestEmailAndPasswordVerify';
 import { RequestOtherVerify } from '../../components/signup/RequestOtherVerify';
-import { SignupComplete } from '../../components/signup/SignupComplete';
-
-import { isLoginCheck } from '../../redux/actions/userAction';
+// import { SignupComplete } from '../../components/signup/SignupComplete';
 
 const BackGround = styled.div`
     width: 100%;
@@ -39,16 +37,12 @@ export const Signup = () => {
     const [isTermsAgreement, setIsTermsAgreement] = useState(false);
     const [isEmailAndPasswordEntered, setIsEmailAndPasswordEntered] = useState(true);
     const [isOtherEntered, setIsOtherEntered] = useState(true);
-    const [isSignupComplete, setIsSignupComplete] = useState(true);
+    // const [isSignupComplete, setIsSignupComplete] = useState(true);
 
     useEffect(() => {
         const titleElement = document.getElementsByTagName('title')[0];
-        titleElement.innerHTML = 'User Signup';
-
-        dispatch({ type: 'STATE_INIT' });
-        dispatch(isLoginCheck());
-        // eslint-disable-next-line
-    }, []);
+        titleElement.innerText = 'User Signup';
+    });
 
     return (
         <BackGround>
@@ -68,14 +62,14 @@ export const Signup = () => {
             {isOtherEntered ?
                 <></>
                 :
-                <RequestOtherVerify userData={userData} setUserData={setUserData} navigate={navigate} dispatch={dispatch} getUserState={getUserState} setIsOtherEntered={setIsOtherEntered} setIsSignupComplete={setIsSignupComplete} />
+                <RequestOtherVerify userData={userData} setUserData={setUserData} navigate={navigate} dispatch={dispatch} getUserState={getUserState} setIsOtherEntered={setIsOtherEntered} />
             }
 
-            {isSignupComplete ?
+            {/* {isSignupComplete ?
                 <></>
                 :
                 <SignupComplete userData={userData} getUserState={getUserState} />
-            }
+            } */}
 
 
         </BackGround>

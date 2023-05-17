@@ -1,12 +1,40 @@
-import { browserLocalPersistence, browserSessionPersistence, createUserWithEmailAndPassword, deleteUser, onAuthStateChanged, sendEmailVerification, setPersistence, signInWithEmailAndPassword, signOut, updateProfile } from 'firebase/auth'
-import { deleteDoc, doc, getCountFromServer, query, setDoc } from 'firebase/firestore';
+import { browserLocalPersistence, browserSessionPersistence, createUserWithEmailAndPassword, deleteUser, EmailAuthProvider, onAuthStateChanged, sendEmailVerification, setPersistence, signInWithEmailAndPassword, signOut, updateProfile } from 'firebase/auth'
+import { deleteDoc, doc, getCountFromServer, getDoc, query, setDoc } from 'firebase/firestore';
 import { createErrorData, errorCode } from '../../configs/errorCodes';
 import { appAuth, timeStamp, userCollectionRef } from '../../configs/firebase/config'
+
+// 유저 로그인 여부 확인.
+const isLoginCheck = () => {
+    return (dispatch, getState) => {
+        dispatch({ type: 'STATE_INIT' });
+        dispatch({ type: 'LOADING' });
+
+        onAuthStateChanged(appAuth, (user) => {
+            if (!user) {
+                console.log('사용자 인증 정보가 존재하지 않음.');
+                dispatch({ type: 'COMPLETE' });
+            }
+            else {
+                const loginUserData = {
+                    email: user.email,
+                    displayName: user.displayName,
+                    emailVerified: user.emailVerified,
+                    isAnonymous: user.isAnonymous,
+                };
+                dispatch({ type: 'COMPLETE' });
+                dispatch({ type: 'LOG_IN_SUCCESS', payload: loginUserData });
+            }
+
+            // console.log('현재 유저 정보');
+            // console.log(user);
+        })
+    };
+};
 
 // 회원가입 기능.
 const SignUp = (userData, navigate) => {
     return (dispatch, getState) => {
-        dispatch({ type: 'PROCESSINIT' });
+        dispatch({ type: 'STATE_INIT' });
         dispatch({ type: 'LOADING' });
 
         const emailVerifiedProcess = async (currentUser) => {
@@ -65,13 +93,12 @@ const SignUp = (userData, navigate) => {
                         addData()
                             // 작업이 정상 완료되면 SIGN_UP_SUCCESS Action을 실행하고 완료 메시지 출력, 이후 메인 페이지로 이동.
                             .then(() => {
-                                dispatch({ type: 'CHECK_SUCCESS' });
-
                                 emailVerifiedProcess(appAuth.currentUser)
                                     .then(() => {
                                         dispatch({ type: 'COMPLETE' });
                                         dispatch({ type: 'SIGN_UP_SUCCESS' });
                                         alert('인증 메일이 발송되었습니다. 이메일 함을 확인해주세요.');
+                                        alert('모든 과정이 완료되었습니다. 회원가입을 환영합니다!');
                                     })
                                     // 이메일 인증 메일 발송에 문제가 생겼을 경우.
                                     .catch((error) => {
@@ -81,7 +108,6 @@ const SignUp = (userData, navigate) => {
                             })
                             // 계정 정보 파이어스토어 저장 - 에러 발생 catch 구문.
                             .catch((error) => {
-                                console.log(error);
                                 dispatch({ type: 'ERROR', payload: createErrorData(error) });
                                 alert('계정 정보 저장에 에러가 발생하였습니다.');
                                 navigate('/', { replace: true });
@@ -106,7 +132,7 @@ const SignUp = (userData, navigate) => {
 // 로그인 기능.
 const logIn = (inputUserData, navigate) => {
     return (dispatch, getState) => {
-        dispatch({ type: 'PROCESSINIT' });
+        dispatch({ type: 'STATE_INIT' });
         dispatch({ type: 'LOADING' });
 
         let persistenceChoice = '';
@@ -142,7 +168,7 @@ const logIn = (inputUserData, navigate) => {
 // 로그아웃 기능.
 const logOut = (navigate) => {
     return (dispatch, getState) => {
-        dispatch({ type: 'PROCESSINIT' });
+        dispatch({ type: 'STATE_INIT' });
         dispatch({ type: 'LOADING' });
 
         signOut(appAuth)
@@ -160,39 +186,15 @@ const logOut = (navigate) => {
     }
 };
 
-// 유저 로그인 여부 확인.
-const isLoginCheck = () => {
-    return (dispatch, getState) => {
-        dispatch({ type: 'PROCESSINIT' });
-        dispatch({ type: 'LOADING' });
 
-        onAuthStateChanged(appAuth, (user) => {
-            if (!user) {
-                console.log('사용자 인증 정보가 존재하지 않음.');
-                dispatch({ type: 'COMPLETE' });
-            }
-            else {
-                const userData = {
-                    email: user.email,
-                    displayName: user.displayName,
-                };
-
-                dispatch({ type: 'LOG_IN_SUCCESS', payload: userData });
-            }
-
-            // console.log('현재 유저 정보');
-            // console.log(user);
-        })
-    };
-};
 
 // 회원정보 수정.
-const UpdateUserData = (userData, navigate) => {
+const UserUpdate = (userData, navigate) => {
     return (dispatch, getState) => {
-        dispatch({ type: 'PROCESSINIT' });
+        dispatch({ type: 'STATE_INIT' });
         dispatch({ type: 'LOADING' });
 
-        const updataProcess = async () => {
+        const updataUserInfo = async () => {
             const docRef = doc(userCollectionRef, userData.email);
 
             await setDoc(docRef, {
@@ -203,62 +205,115 @@ const UpdateUserData = (userData, navigate) => {
             }, { merge: true });
         };
 
-        updataProcess()
+        updateProfile(appAuth.currentUser, {
+            displayName: userData.displayName,
+        })
             .then(() => {
-                dispatch({ type: 'COMPLETE' });
-                alert('수정이 완료되었습니다.');
-                navigate('/user/mypage', { replace: true });
-            })
-            .catch((error) => {
-                dispatch({ type: 'ERROR', payload: createErrorData(error) });
-                navigate('/user/mypage', { replace: true });
-            });
-    };
-};
-
-const DeleteUser = (userEmail, navigate) => {
-    return (dispatch, getState) => {
-
-        dispatch({ type: 'PROCESSINIT' });
-        dispatch({ type: 'LOADING' });
-
-        const deleteProcess1 = async () => {
-            await deleteDoc(doc(userCollectionRef, userEmail));
-        };
-
-        const deleteProcess2 = async () => {
-            await deleteUser(appAuth.currentUser);
-        };
-
-        deleteProcess1()
-            .then(() => {
-                deleteProcess2()
+                updataUserInfo()
                     .then(() => {
-                        signOut(appAuth)
-                            .then(() => {
-                                dispatch({ type: 'COMPLETE' });
-                                alert('탈퇴가 완료되었습니다.');
-                                navigate('/', { replace: true });
-                            })
-                            .catch((error) => {
-                                dispatch({ type: 'ERROR', payload: createErrorData(error) });
-                                alert('에러가 발생하였습니다.');
-                                navigate('/', { replace: true });
-                            });
+                        dispatch({ type: 'COMPLETE' });
+                        alert('수정이 완료되었습니다.');
+                        navigate('/user/mypage', { replace: true });
                     })
                     .catch((error) => {
                         dispatch({ type: 'ERROR', payload: createErrorData(error) });
-                        alert('에러가 발생하였습니다.');
-                        navigate('/', { replace: true });
+                        navigate('/user/mypage', { replace: true });
                     });
             })
             .catch((error) => {
                 dispatch({ type: 'ERROR', payload: createErrorData(error) });
-                alert('에러가 발생하였습니다.');
-                navigate('/', { replace: true });
+                navigate('/user/mypage', { replace: true });
+            });
+    };
+};
+
+// 회원탈퇴 기능.
+const UserDelete = (userEmail, navigate) => {
+    return (dispatch, getState) => {
+
+        dispatch({ type: 'STATE_INIT' });
+        dispatch({ type: 'LOADING' });
+
+        const deleteUserInfo = async () => {
+            await deleteDoc(doc(userCollectionRef, userEmail));
+        };
+
+        // 사용자 재인증 (비밀번호 변경, 사용자 삭제 등의 기능에 필수적)
+        // const credential = EmailAuthProvider.credential(
+        //     appAuth.currentUser.email,
+        //     userProvidedPassword
+        //   );
+
+        // const result = await reauthenticateWithCredential(
+        //     auth.currentUser, 
+        //     credential
+        // )
+
+
+
+        deleteUser(appAuth.currentUser)
+            .then(() => {
+                deleteUserInfo()
+                    .then(() => {
+                        dispatch({ type: 'COMPLETE' });
+                        alert('탈퇴가 완료되었습니다.');
+                        navigate('/', { replace: true });
+                    })
+                    .catch((error) => {
+                        dispatch({ type: 'ERROR', payload: createErrorData(error) });
+                    });
+            })
+            .catch((error) => {
+                dispatch({ type: 'ERROR', payload: createErrorData(error) });
+            });
+    };
+};
+
+const GetUserData = (userEmail) => {
+    return (dispatch, getState) => {
+        dispatch({ type: 'STATE_INIT' });
+        dispatch({ type: 'LOADING' });
+
+        const process = async () => {
+            const docRef = doc(userCollectionRef, userEmail);
+            const docSnap = await getDoc(docRef);
+
+            const userData = {
+                userNumber: docSnap.data().userNumber,
+                userType: docSnap.data().userType,
+                email: docSnap.data().email,
+                password: docSnap.data().password,
+                name: docSnap.data().name,
+                displayName: docSnap.data().displayName,
+                address: docSnap.data().address,
+                address2: docSnap.data().address2,
+                signupDate: docSnap.data().signupDate.toDate().toLocaleString(),
+            };
+
+            return userData;
+        };
+
+        process()
+            .then((result) => {
+                dispatch({ type: 'COMPLETE' });
+                dispatch({ type: 'LOG_IN_SUCCESS', payload: result });
+
+            })
+            .catch((error) => {
+                dispatch({ type: 'ERROR', payload: createErrorData(error) });
             });
 
     };
 };
 
-export { SignUp, logIn, logOut, isLoginCheck, UpdateUserData, DeleteUser };
+
+
+
+
+
+
+
+
+
+
+export { isLoginCheck, SignUp, logIn, logOut, UserUpdate, UserDelete, GetUserData };

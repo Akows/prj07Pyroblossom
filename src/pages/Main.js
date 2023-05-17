@@ -1,8 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import { Navigation } from '../components/Navigation';
-import { isLoginCheck } from '../redux/actions/userAction';
 
 // import { logIn, logOut } from '../redux/actions/userAction'
 
@@ -48,16 +46,13 @@ const Div = styled.div`
 
 
 export const Main = () => {
-
+    // eslint-disable-next-line
     const dispatch = useDispatch();
 
     useEffect(() => {
         const titleElement = document.getElementsByTagName('title')[0];
         titleElement.innerHTML = 'Genshin Fyro Blossom';
-
-        dispatch(isLoginCheck());
-        // eslint-disable-next-line
-    }, []);
+    });
 
 
 
@@ -157,8 +152,6 @@ export const Main = () => {
 
     return (
         <>
-            <Navigation />
-
             <BackGround ref={refs}>
                 <Div>
                     <h1>텍스트1</h1>

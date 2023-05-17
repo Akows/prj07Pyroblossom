@@ -210,8 +210,7 @@ export const Navigation = () => {
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
-
-    const getUserData = useSelector((state) => state.user);
+    const getUserState = useSelector((state) => state.user);
 
     // eslint-disable-next-line
     const [isHovering, setIsHovering] = useState(0);
@@ -256,9 +255,9 @@ export const Navigation = () => {
                                         메뉴3
                                     </Link>
 
-                                    {getUserData.flagvalue.isLogin ?
+                                    {getUserState.flagvalue.isLogin ?
                                         <UserMenuSub>
-                                            {getUserData.userdata.displayName === '관리자' ?
+                                            {getUserState.userdata.displayName === '관리자' ?
                                                 <Link to='user/adminpage'>
                                                     <AiOutlineUser size={40} />
                                                 </Link>
@@ -308,10 +307,10 @@ export const Navigation = () => {
             // onMouseOut={() => setIsHovering(0)}
             >
                 <Menu3>
-                    {getUserData.flagvalue.isLogin ?
+                    {getUserState.flagvalue.isLogin ?
                         <>
                             <UserMenu>
-                                {getUserData.userdata.displayName === 'Admin' ?
+                                {getUserState.userdata.displayName === 'Admin' ?
                                     <>
                                         <Link to='/user/adminpage'>
                                             <AiOutlineUser size={40} />

@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { AddressInputModal } from '../../components/AddressInput';
-import { DeleteUser, isLoginCheck, UpdateUserData } from '../../redux/actions/userAction';
-import { checkDuplication, GetUserData } from '../../functions/userFunction';
+import { GetUserData, UserDelete, UserUpdate } from '../../redux/actions/userAction';
+import { checkDuplication } from '../../functions/userFunction';
 
 const BackGround = styled.div`
     width: 100%;
@@ -289,7 +289,6 @@ export const MyPage = () => {
 
     const [isUpdate, setIsUpdate] = useState(false);
     const [isAddressInput, setIsAddressInput] = useState(false);
-
     const [isDisplayNameDuplication, setIsDisplayNameDuplication] = useState(true);
     const [isFirstRenderingDisplayName, setIsFirstRenderingDisplayName] = useState(true);
 
@@ -310,7 +309,6 @@ export const MyPage = () => {
     }
 
     const onUpdateSubmit = () => {
-
         if (isDisplayNameDuplication) {
             alert('닉네임 중복 검사가 이루어지지 않았습니다.');
             return;
@@ -324,7 +322,7 @@ export const MyPage = () => {
         }
         else {
             setIsUpdate(!isUpdate);
-            dispatch(UpdateUserData(userData, navigate));
+            dispatch(UserUpdate(userData, navigate));
         };
     };
 
@@ -356,8 +354,7 @@ export const MyPage = () => {
             return;
         }
         else {
-            dispatch(DeleteUser(userData.email, navigate));
-            alert('탈퇴 완료되었습니다.');
+            dispatch(UserDelete(userData.email, navigate));
         };
     };
 
@@ -367,23 +364,12 @@ export const MyPage = () => {
     });
 
     useEffect(() => {
-        dispatch({ type: 'STATE_INIT' });
-        dispatch(isLoginCheck());
+        if (!userData.email) {
+            dispatch(GetUserData(getUserState.userdata.email));
+        }
+        setUserData(getUserState.userdata);
         // eslint-disable-next-line
-    }, []);
-
-    useEffect(() => {
-
-        if (!getUserState.userdata.email) {
-            return;
-        };
-
-        GetUserData(getUserState.userdata.email, dispatch)
-            .then((result) => {
-                setUserData(result)
-            })
-        // eslint-disable-next-line
-    }, [getUserState]);
+    }, [getUserState.userdata]);
 
     useEffect(() => {
         setUserData({ ...userData, address: address });

@@ -6,54 +6,28 @@ const initialState = {
         isError: false,
         isLoading: false,
     },
-    userdata: {
-        userNumber: '',
-        userType: '',
-        email: '',
-        password: '',
-        name: '',
-        displayName: '',
-        address: '',
-        address2: '',
-        signupDate: '',
-    },
     errorinfo: {
         errorCode: '',
         errorMessage: '',
     },
-    processinfo: {
-        processMessage: '',
-    },
+    userdata: {},
 };
 
 const userReducer = (prevState = initialState, action) => {
     return produce(prevState, (draft) => {
         switch (action.type) {
 
-            // State 초기화.
+            // 새로운 작업이 시작될 때 State 초기화.
             case 'STATE_INIT':
                 draft.flagvalue = {
-                    isLogin: false,
                     isError: false,
                     isLoading: false,
-                };
-                draft.userdata = {
-                    email: '',
-                    password: '',
-                    name: '',
-                    displayName: '',
-                    address: '',
                 };
                 draft.errorinfo = {
                     errorCode: '',
                     errorMessage: '',
                 };
-                draft.processinfo = {
-                    processMessage: '',
-                };
                 break;
-
-
 
             // 작업 시작.
             case 'LOADING':
@@ -74,13 +48,6 @@ const userReducer = (prevState = initialState, action) => {
                 break;
 
 
-
-            // 유효성, 중복성 검사 및 이메일 인증 완료.
-            case 'CHECK_SUCCESS':
-                draft.flagvalue.isError = false;
-                draft.flagvalue.isLoading = false;
-                draft.processinfo.processMessage = action.payload;
-                break;
 
             // 회원가입 완료.
             case 'SIGN_UP_SUCCESS':

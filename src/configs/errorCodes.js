@@ -1,4 +1,7 @@
 const createErrorData = (error) => {
+
+    console.log(error);
+
     const errorData = {
         errorCode: error.code,
         errorMessage: error.message,

@@ -235,7 +235,7 @@ const SubmitButton = styled.button`
     };
 `;
 
-export const RequestOtherVerify = ({ userData, setUserData, navigate, dispatch, getUserState, setIsOtherEntered, setIsSignupComplete }) => {
+export const RequestOtherVerify = ({ userData, setUserData, navigate, dispatch, getUserState, setIsOtherEntered }) => {
 
     const [address, setAddress] = useState('');
 
@@ -319,7 +319,7 @@ export const RequestOtherVerify = ({ userData, setUserData, navigate, dispatch, 
         dispatch(SignUp(userData, navigate));
 
         setIsOtherEntered(true);
-        setIsSignupComplete(false);
+        // setIsSignupComplete(false);
     };
 
     const onClickError = () => {

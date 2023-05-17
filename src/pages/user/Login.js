@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { isLoginCheck, logIn } from '../../redux/actions/userAction';
+import { logIn } from '../../redux/actions/userAction';
 
 import { ErrorModal } from '../../components/ErrorModal';
 import { IDAndPasswordSearch } from '../../components/login/IDAndPasswordSearch';
@@ -350,37 +350,18 @@ export const Login = () => {
         titleElement.innerHTML = 'User Login';
     });
 
-    // 페이지가 처음 렌더링되면 로그인 여부를 체크.
-    useEffect(() => {
-        dispatch({ type: 'STATE_INIT' });
-        dispatch(isLoginCheck());
-        // eslint-disable-next-line
-    }, []);
-
     // Redux Store에서 State가 갱신될 때마다, 당 컴포넌트의 플래그 변수도 갱신되도록.
     useEffect(() => {
         setIsError(getUserState.flagvalue.isError);
         setIsLoading(getUserState.flagvalue.isLoading);
         // eslint-disable-next-line
-    }, [getUserState]);
+    }, [getUserState.flagvalue]);
 
     const onSearch = () => {
         setIsOnSearchModal(true);
     };
     const offSearch = () => {
         setIsOnSearchModal(false);
-    };
-
-
-
-    // 개발용 임시 로그인 버튼
-    const devLogin = () => {
-        const userData = {
-            email: 'admin@admin.com',
-            password: '123123'
-        };
-
-        dispatch(logIn(userData, navigate));
     };
 
     return (
@@ -453,9 +434,6 @@ export const Login = () => {
                     </InnerContents>
                 </FormBorder >
             </BackGround>
-
-            <br /><br /><br /><br /><br /><br /><br /><br /><br />
-            <button onClick={devLogin}>개발용 임시로그인버튼</button>
 
             {/* 에러 상황 시에만 렌더링되는 에러 모달 창. */}
             {/* 에러 상황 시에만 렌더링되는 에러 모달 창. */}
