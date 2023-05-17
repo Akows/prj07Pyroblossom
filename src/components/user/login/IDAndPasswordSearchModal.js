@@ -1,9 +1,10 @@
-import { doc, getDoc } from 'firebase/firestore';
 import React, { useState } from 'react'
 import styled from 'styled-components';
 
+import { appAuth } from '../../../configs/firebase/config';
+import { sendPasswordResetEmail } from 'firebase/auth';
+
 import IDAndPasswordSearchdecoimage1 from '../../../assets/images/emoji/Icon_Emoji_010_Amber_Save_me.webp';
-import { userCollectionRef } from '../../../configs/firebase/config';
 
 const IDAndPasswordSearchModalBorder = styled.div`
     width: 100%;
@@ -169,68 +170,42 @@ const CloseButton = styled.button`
 
 export const IDAndPasswordSearchModal = ({ isOnSearchModal, setIsOnSearchModal }) => {
 
-    const [inputUserDisplayName, setInputUserDisplayName] = useState('');
     const [inputUserEmail, setInputUserEmail] = useState('');
-    const [resultEmail, setResultEmail] = useState('결과없음');
-
-    const [isEmailResultRender, setIsEmailResultRender] = useState(false);
-    const [isPasswordResultRender, setIsPasswordResultRender] = useState(false);
+    const [inputUserDisplayName, setInputUserDisplayName] = useState('');
 
     const onChange = (event) => {
+        if (event.target.id === 'email') {
+            setInputUserEmail(event.target.value);
+        };
+
         if (event.target.id === 'displayname') {
             setInputUserDisplayName(event.target.value);
         };
-
-        if (event.target.id === 'inputemail') {
-            setInputUserEmail(event.target.value);
-        };
-    };
-
-    const searchEmail = () => {
-
-        if (!inputUserDisplayName) {
-            alert('값을 입력해주세요.');
-            return;
-        };
-
-        const process = async () => {
-            const docRef = doc(userCollectionRef, inputUserDisplayName);
-            const docSnap = await getDoc(docRef);
-
-            return docSnap.data().email;
-        };
-
-        process()
-            .then((result) => {
-                if (result) {
-                    setIsEmailResultRender(true);
-                    setResultEmail(result);
-                };
-            })
-            .catch(() => {
-                setIsEmailResultRender(true);
-            });
     };
 
     const searchPassword = () => {
-        const process = async () => {
-            const docRef = doc(userCollectionRef, inputUserDisplayName);
-            const docSnap = await getDoc(docRef);
-            const userEmail = docSnap.data().email;
-
+        if (!inputUserEmail || !inputUserDisplayName) {
+            alert('모든 값을 입력해주세요.');
         };
 
-
-        console.log(inputUserEmail);
-    };
-
-    const reSearch = () => {
-        setIsEmailResultRender(false);
-        setInputUserDisplayName('');
-        setResultEmail('결과없음');
+        sendPasswordResetEmail(appAuth, inputUserEmail)
+            .then(() => {
+                alert('비밀번호 재설정 이메일이 발송되었습니다.');
+                setInputUserEmail('');
+                setInputUserDisplayName('');
+                setIsOnSearchModal(false);
+            })
+            .catch((error) => {
+                alert('에러가 발생했습니다.');
+                setInputUserEmail('');
+                setInputUserDisplayName('');
+                setIsOnSearchModal(false);
+            });
     };
 
     const onClose = () => {
+        setInputUserEmail('');
+        setInputUserDisplayName('');
         setIsOnSearchModal(false);
     };
 
@@ -250,30 +225,15 @@ export const IDAndPasswordSearchModal = ({ isOnSearchModal, setIsOnSearchModal }
 
                     <IDSearch>
 
-                        {isEmailResultRender ?
-                            <>
-                                {inputUserDisplayName}님, 귀하의 아이디는 {resultEmail} 입니다.
+                        <p>아이디 찾기</p>
 
-                                <CloseButton onClick={reSearch}>다시 찾기</CloseButton>
-                            </>
-                            :
-                            <>
-                                <p>아이디 찾기</p>
-
-                                <Input type='text' id='displayname' placeholder='사용자 닉네임을 입력해주세요' spellcheck='false' onChange={onChange} value={inputUserDisplayName} />
-
-                                <IDAndPasswordSearchButton>
-                                    <button onClick={searchEmail}>아이디 찾기</button>
-                                </IDAndPasswordSearchButton>
-                            </>
-                        }
                     </IDSearch>
 
                     <PWDSearch>
                         <p>비밀번호 찾기</p>
 
+                        <Input type='text' id='email' placeholder='사용자 이메일을 입력해주세요' spellcheck='false' onChange={onChange} value={inputUserEmail} />
                         <Input type='text' id='displayname' placeholder='사용자 닉네임을 입력해주세요' spellcheck='false' onChange={onChange} value={inputUserDisplayName} />
-                        <Input type='text' id='inputemail' placeholder='사용자 이메일을 입력해주세요' spellcheck='false' onChange={onChange} value={inputUserEmail} />
 
                         <IDAndPasswordSearchButton>
                             <button onClick={searchPassword}>비밀번호 재설정</button>
@@ -284,8 +244,6 @@ export const IDAndPasswordSearchModal = ({ isOnSearchModal, setIsOnSearchModal }
                     <IDAndPasswordSearchButton>
                         <button onClick={onClose}>닫기</button>
                     </IDAndPasswordSearchButton>
-
-
 
                 </IDAndPasswordSearchInfo>
 
