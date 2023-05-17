@@ -361,7 +361,7 @@ export const MyPage = () => {
 
     useEffect(() => {
         if (!userData.email) {
-            dispatch(GetUserData(getUserState.userdata.displayName));
+            dispatch(GetUserData(getUserState.userdata.email));
         }
         setUserData(getUserState.userdata);
         // eslint-disable-next-line

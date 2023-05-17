@@ -247,6 +247,7 @@ export const RequestOtherVerify = ({ userData, setUserData, navigate, dispatch, 
 
     const [isdisplayNameEmpty, setIsdisplayNameEmpty] = useState(false);
     const [isNameEmpty, setIsNameEmpty] = useState(false);
+    const [isPhoneNumberEmpty, setIsPhoneNumberEmpty] = useState(false);
     const [isAddressEmpty, setIsAddressEmpty] = useState(false);
 
     const [isFirstRenderingDisplayName, setIsFirstRenderingDisplayName] = useState(true);
@@ -264,6 +265,10 @@ export const RequestOtherVerify = ({ userData, setUserData, navigate, dispatch, 
 
         if (event.target.id === 'name') {
             setIsNameEmpty(false);
+        };
+
+        if (event.target.id === 'phonenumber') {
+            setIsPhoneNumberEmpty(false);
         };
 
         if (event.target.id === 'address2') {
@@ -304,6 +309,11 @@ export const RequestOtherVerify = ({ userData, setUserData, navigate, dispatch, 
 
         if (!userData.name) {
             setIsNameEmpty(true);
+            return;
+        };
+
+        if (!userData.phonenumber) {
+            setIsPhoneNumberEmpty(true);
             return;
         };
 
@@ -374,6 +384,10 @@ export const RequestOtherVerify = ({ userData, setUserData, navigate, dispatch, 
 
                     <FormInputNoButton>
                         <Input type='text' id='name' placeholder='성명을 입력해주세요' spellcheck='false' value={userData.name} onChange={onChange} isEmpty={isNameEmpty} />
+                    </FormInputNoButton>
+
+                    <FormInputNoButton>
+                        <Input type='text' id='phonenumber' placeholder='전화번호를 입력해주세요' spellcheck='false' value={userData.phonenumber} onChange={onChange} isEmpty={isPhoneNumberEmpty} />
                     </FormInputNoButton>
 
                     <FormInput>

@@ -28,6 +28,7 @@ export const Signup = () => {
         email: '',
         password: '',
         name: '',
+        phonenumber: '',
         displayname: '',
         address: '',
         address2: '',
