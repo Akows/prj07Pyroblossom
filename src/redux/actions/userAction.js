@@ -1,4 +1,4 @@
-import { browserLocalPersistence, browserSessionPersistence, createUserWithEmailAndPassword, deleteUser, EmailAuthProvider, onAuthStateChanged, sendEmailVerification, setPersistence, signInWithEmailAndPassword, signOut, updateProfile } from 'firebase/auth'
+import { browserLocalPersistence, browserSessionPersistence, createUserWithEmailAndPassword, deleteUser, EmailAuthProvider, onAuthStateChanged, reauthenticateWithCredential, sendEmailVerification, setPersistence, signInWithEmailAndPassword, signOut, updateProfile } from 'firebase/auth'
 import { deleteDoc, doc, getCountFromServer, getDoc, query, setDoc } from 'firebase/firestore';
 import { createErrorData, errorCode } from '../../configs/errorCodes';
 import { appAuth, timeStamp, userCollectionRef } from '../../configs/firebase/config'
@@ -228,44 +228,50 @@ const UserUpdate = (userData, navigate) => {
 };
 
 // 회원탈퇴 기능.
-const UserDelete = (userEmail, navigate) => {
+const UserDelete = (userEmail, inputPassword, navigate) => {
     return (dispatch, getState) => {
 
         dispatch({ type: 'STATE_INIT' });
         dispatch({ type: 'LOADING' });
 
+        // 사용자 재인증 (비밀번호 변경, 사용자 삭제 등의 기능에 필수적)
+        const credential = EmailAuthProvider.credential(
+            appAuth.currentUser.email,
+            inputPassword
+        );
+
         const deleteUserInfo = async () => {
             await deleteDoc(doc(userCollectionRef, userEmail));
         };
 
-        // 사용자 재인증 (비밀번호 변경, 사용자 삭제 등의 기능에 필수적)
-        // const credential = EmailAuthProvider.credential(
-        //     appAuth.currentUser.email,
-        //     userProvidedPassword
-        //   );
+        const process = async () => {
+            await reauthenticateWithCredential(
+                appAuth.currentUser,
+                credential
+            )
+                .then(() => {
+                    deleteUser(appAuth.currentUser)
+                        .then(() => {
+                            deleteUserInfo()
+                                .then(() => {
+                                    dispatch({ type: 'COMPLETE' });
+                                    alert('탈퇴가 완료되었습니다.');
+                                    navigate('/', { replace: true });
+                                })
+                                .catch((error) => {
+                                    dispatch({ type: 'ERROR', payload: createErrorData(error) });
+                                });
+                        })
+                        .catch((error) => {
+                            dispatch({ type: 'ERROR', payload: createErrorData(error) });
+                        });
+                })
+                .catch((error) => {
+                    dispatch({ type: 'ERROR', payload: createErrorData(error) });
+                });
+        };
 
-        // const result = await reauthenticateWithCredential(
-        //     auth.currentUser, 
-        //     credential
-        // )
-
-
-
-        deleteUser(appAuth.currentUser)
-            .then(() => {
-                deleteUserInfo()
-                    .then(() => {
-                        dispatch({ type: 'COMPLETE' });
-                        alert('탈퇴가 완료되었습니다.');
-                        navigate('/', { replace: true });
-                    })
-                    .catch((error) => {
-                        dispatch({ type: 'ERROR', payload: createErrorData(error) });
-                    });
-            })
-            .catch((error) => {
-                dispatch({ type: 'ERROR', payload: createErrorData(error) });
-            });
+        process();
     };
 };
 

@@ -3,8 +3,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { AddressInputModal } from '../../components/AddressInput';
-import { GetUserData, UserDelete, UserUpdate } from '../../redux/actions/userAction';
+import { GetUserData, UserUpdate } from '../../redux/actions/userAction';
 import { checkDuplication } from '../../functions/userFunction';
+import { DeleteAccountModal } from '../../components/DeleteAccountModal';
 
 const BackGround = styled.div`
     width: 100%;
@@ -288,9 +289,11 @@ export const MyPage = () => {
     const [address, setAddress] = useState('');
 
     const [isUpdate, setIsUpdate] = useState(false);
-    const [isAddressInput, setIsAddressInput] = useState(false);
     const [isDisplayNameDuplication, setIsDisplayNameDuplication] = useState(true);
     const [isFirstRenderingDisplayName, setIsFirstRenderingDisplayName] = useState(true);
+
+    const [isAddressInput, setIsAddressInput] = useState(false);
+    const [isDeleteAccount, setIsDeleteAccount] = useState(false);
 
     const onChange = (event) => {
         setUserData({ ...userData, [event.target.id]: event.target.value });
@@ -348,14 +351,7 @@ export const MyPage = () => {
     };
 
     const onDeleteUser = () => {
-        const choice = window.confirm('정말 탈퇴하시겠어요?..');
-
-        if (!choice) {
-            return;
-        }
-        else {
-            dispatch(UserDelete(userData.email, navigate));
-        };
+        setIsDeleteAccount(true);
     };
 
     useEffect(() => {
@@ -494,7 +490,9 @@ export const MyPage = () => {
 
             </FormBorder >
 
-            <AddressInputModal setAddress={setAddress} isAddressInput={isAddressInput} setIsAddressInput={setIsAddressInput} />
+            <AddressInputModal isAddressInput={isAddressInput} setAddress={setAddress} setIsAddressInput={setIsAddressInput} />
+
+            <DeleteAccountModal isDeleteAccount={isDeleteAccount} navigate={navigate} dispatch={dispatch} userData={userData} />
 
         </BackGround>
     );
