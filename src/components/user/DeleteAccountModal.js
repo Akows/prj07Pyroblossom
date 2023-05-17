@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import styled from 'styled-components';
 
-import DeleteAccountdecoimage from '../assets/images/emoji/Icon_Emoji_Kamisato_Ayato_3.webp';
-import { UserDelete } from '../redux/actions/userAction';
+import DeleteAccountdecoimage from '../../assets/images/emoji/Icon_Emoji_Kamisato_Ayato_3.webp';
+import { UserDelete } from '../../redux/actions/userAction';
 
 const DeleteAccountModalBorder = styled.div`
     width: 100%;

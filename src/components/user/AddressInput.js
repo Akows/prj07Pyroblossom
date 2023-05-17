@@ -2,7 +2,7 @@ import React from 'react'
 import DaumPostcodeEmbed from 'react-daum-postcode';
 import styled from 'styled-components';
 
-import addressInputdecoimage from '../assets/images/emoji/Icon_Emoji_Kamisato_Ayato_3.webp';
+import addressInputdecoimage from '../../assets/images/emoji/Icon_Emoji_Kamisato_Ayato_3.webp';
 
 const AddressInputModalBorder = styled.div`
     width: 100%;

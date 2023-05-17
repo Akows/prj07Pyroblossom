@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
-
 // import { logIn, logOut } from '../redux/actions/userAction'
 
 const BackGround = styled.div`

@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { AddressInputModal } from '../../components/AddressInput';
+import { AddressInputModal } from '../../components/user/AddressInput';
 import { GetUserData, UserUpdate } from '../../redux/actions/userAction';
 import { checkDuplication } from '../../functions/userFunction';
-import { DeleteAccountModal } from '../../components/DeleteAccountModal';
+import { DeleteAccountModal } from '../../components/user/DeleteAccountModal';
 
 const BackGround = styled.div`
     width: 100%;
@@ -361,7 +361,7 @@ export const MyPage = () => {
 
     useEffect(() => {
         if (!userData.email) {
-            dispatch(GetUserData(getUserState.userdata.email));
+            dispatch(GetUserData(getUserState.userdata.displayName));
         }
         setUserData(getUserState.userdata);
         // eslint-disable-next-line

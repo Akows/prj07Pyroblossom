@@ -3,10 +3,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { RequestTermsAgreement } from '../../components/signup/RequestTermsAgreement';
-import { RequestEmailAndPasswordVerify } from '../../components/signup/RequestEmailAndPasswordVerify';
-import { RequestOtherVerify } from '../../components/signup/RequestOtherVerify';
-// import { SignupComplete } from '../../components/signup/SignupComplete';
+import { RequestTermsAgreement } from '../../components/user/signup/RequestTermsAgreement';
+import { RequestEmailAndPasswordVerify } from '../../components/user/signup/RequestEmailAndPasswordVerify';
+import { RequestOtherVerify } from '../../components/user/signup/RequestOtherVerify';
 
 const BackGround = styled.div`
     width: 100%;

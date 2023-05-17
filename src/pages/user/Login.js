@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { logIn } from '../../redux/actions/userAction';
 
 import { ErrorModal } from '../../components/ErrorModal';
-import { IDAndPasswordSearch } from '../../components/login/IDAndPasswordSearch';
+import { IDAndPasswordSearchModal } from '../../components/user/login/IDAndPasswordSearchModal';
 
 const BackGround = styled.div`
     width: 100%;
@@ -440,7 +440,7 @@ export const Login = () => {
 
             <ErrorModal isError={isError} getUserState={getUserState} onClickError={onClickError} />
 
-            <IDAndPasswordSearch isOnSearchModal={isOnSearchModal} offSearch={offSearch} />
+            <IDAndPasswordSearchModal isOnSearchModal={isOnSearchModal} setIsOnSearchModal={setIsOnSearchModal} />
         </>
     );
 };

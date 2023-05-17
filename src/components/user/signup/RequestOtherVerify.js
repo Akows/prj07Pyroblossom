@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components';
-import { SignUp } from '../../redux/actions/userAction';
-import { checkDuplication } from '../../functions/userFunction';
-import { AddressInputModal } from '../AddressInput';
-import { ErrorModal } from '../ErrorModal';
+
+import { SignUp } from '../../../redux/actions/userAction';
+import { checkDuplication } from '../../../functions/userFunction';
+import { AddressInputModal } from '../../user/AddressInput';
+import { ErrorModal } from '../../ErrorModal';
 
 const transformAnimaiton = styled.div`
     transform: translate3d(0, 0, 0);

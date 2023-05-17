@@ -54,7 +54,7 @@ const SignUp = (userData, navigate) => {
             const allUserCount = await getCountFromServer(querys);
 
             // User DB에 저장, ID값은 입력한 email값이 되도록.
-            const docRef = doc(userCollectionRef, `${userData.email}`);
+            const docRef = doc(userCollectionRef, `${userData.displayname}`);
 
             // 생성 시간을 기록하기 위해 timeStamp 객체를 사용.
             const createdTime = timeStamp.fromDate(new Date());
@@ -195,7 +195,7 @@ const UserUpdate = (userData, navigate) => {
         dispatch({ type: 'LOADING' });
 
         const updataUserInfo = async () => {
-            const docRef = doc(userCollectionRef, userData.email);
+            const docRef = doc(userCollectionRef, userData.displayName);
 
             await setDoc(docRef, {
                 name: userData.name,
@@ -275,13 +275,13 @@ const UserDelete = (userEmail, inputPassword, navigate) => {
     };
 };
 
-const GetUserData = (userEmail) => {
+const GetUserData = (displayName) => {
     return (dispatch, getState) => {
         dispatch({ type: 'STATE_INIT' });
         dispatch({ type: 'LOADING' });
 
         const process = async () => {
-            const docRef = doc(userCollectionRef, userEmail);
+            const docRef = doc(userCollectionRef, displayName);
             const docSnap = await getDoc(docRef);
 
             const userData = {
@@ -311,12 +311,6 @@ const GetUserData = (userEmail) => {
 
     };
 };
-
-
-
-
-
-
 
 
 

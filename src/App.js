@@ -16,7 +16,6 @@ import { Signup } from './pages/user/Signup';
 import { MyPage } from './pages/user/MyPage';
 
 import { AdminPage } from './pages/admins/AdminPage';
-// import { Test } from './pages/Test';
 
 const AppBackGround = styled.div`
   width: 100%;
