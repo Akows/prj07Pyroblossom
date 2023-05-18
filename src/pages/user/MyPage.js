@@ -288,6 +288,8 @@ export const MyPage = () => {
     });
     const [address, setAddress] = useState('');
 
+
+    const [isLoading, setIsLoading] = useState(false);
     const [isUpdate, setIsUpdate] = useState(false);
     const [isDisplayNameDuplication, setIsDisplayNameDuplication] = useState(false);
     const [isFirstRenderingDisplayName, setIsFirstRenderingDisplayName] = useState(true);
@@ -368,6 +370,11 @@ export const MyPage = () => {
     }, [getUserState.userdata]);
 
     useEffect(() => {
+        setIsLoading(getUserState.flagvalue.isLoading);
+        // eslint-disable-next-line
+    }, [getUserState.flagvalue]);
+
+    useEffect(() => {
         setUserData({ ...userData, address: address });
         // eslint-disable-next-line
     }, [address]);
@@ -383,8 +390,17 @@ export const MyPage = () => {
                         <p>마이페이지</p>
                         {isUpdate ?
                             <div>
-                                <UpdateButton onClick={onUpdateSubmit}>수정하기</UpdateButton>
-                                <UpdateButton onClick={onUpdateForm}>취소</UpdateButton>
+                                {isLoading ?
+                                    <>
+                                        <UpdateButton disabled={true}>수정하기</UpdateButton>
+                                        <UpdateButton disabled={true}>취소</UpdateButton>
+                                    </>
+                                    :
+                                    <>
+                                        <UpdateButton onClick={onUpdateSubmit}>수정하기</UpdateButton>
+                                        <UpdateButton onClick={onUpdateForm}>취소</UpdateButton>
+                                    </>
+                                }
                             </div>
                             :
                             <div>
@@ -482,11 +498,20 @@ export const MyPage = () => {
                     </FormScript>
 
                     {isUpdate ? <></> :
-                        <SubmitButton onClick={onDeleteUser}>회원탈퇴</SubmitButton>
+                        <>
+                            {isLoading ?
+                                <>
+                                    <SubmitButton disabled={true}>회원탈퇴</SubmitButton>
+                                </>
+                                :
+                                <>
+                                    <SubmitButton onClick={onDeleteUser}>회원탈퇴</SubmitButton>
+                                </>
+                            }
+                        </>
                     }
 
                 </InnerContents>
-
 
             </FormBorder >
 
