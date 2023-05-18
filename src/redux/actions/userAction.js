@@ -277,7 +277,7 @@ const UserDelete = (userEmail, inputPassword, navigate) => {
 };
 
 const GetUserData = (email) => {
-    return (dispatch, getState) => {
+    return async (dispatch, getState) => {
         dispatch({ type: 'STATE_INIT' });
         dispatch({ type: 'LOADING' });
 

@@ -289,7 +289,7 @@ export const MyPage = () => {
     const [address, setAddress] = useState('');
 
     const [isUpdate, setIsUpdate] = useState(false);
-    const [isDisplayNameDuplication, setIsDisplayNameDuplication] = useState(true);
+    const [isDisplayNameDuplication, setIsDisplayNameDuplication] = useState(false);
     const [isFirstRenderingDisplayName, setIsFirstRenderingDisplayName] = useState(true);
 
     const [isAddressInput, setIsAddressInput] = useState(false);

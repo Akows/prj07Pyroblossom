@@ -156,18 +156,6 @@ const IDAndPasswordSearchButton = styled.div`
     };
 `;
 
-const CloseButton = styled.button`
-    width: 30%;
-
-    margin-top: 30px;
-
-    border: none;
-    border-radius: 5px;
-
-    font-family: 'GIFont';
-    font-size: 20px;
-`;
-
 export const IDAndPasswordSearchModal = ({ isOnSearchModal, setIsOnSearchModal }) => {
 
     const [inputUserEmail, setInputUserEmail] = useState('');

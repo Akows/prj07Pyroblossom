@@ -360,9 +360,6 @@ export const Login = () => {
     const onSearch = () => {
         setIsOnSearchModal(true);
     };
-    const offSearch = () => {
-        setIsOnSearchModal(false);
-    };
 
     return (
         <>
