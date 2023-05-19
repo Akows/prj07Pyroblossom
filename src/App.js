@@ -15,7 +15,8 @@ import { Login } from './pages/user/Login';
 import { Signup } from './pages/user/Signup';
 import { MyPage } from './pages/user/MyPage';
 
-import { AdminPage } from './pages/admins/AdminPage';
+import { AdminPage } from './pages/admin/AdminPage';
+import { StoreMain } from './pages/store/StoreMain';
 
 const AppBackGround = styled.div`
   width: 100%;
@@ -76,6 +77,10 @@ function App() {
           <Route path='signup' element={!getUserState.flagvalue.isLogin ? <Signup /> : <Navigate to='/' replace={true} />} />
           <Route path='mypage' element={<MyPage />} />
           <Route path='adminpage' element={<AdminPage />} />
+        </Route>
+
+        <Route path='store/*' element={<Layout />} >
+          <Route index element={<StoreMain />} />
         </Route>
 
       </Routes>

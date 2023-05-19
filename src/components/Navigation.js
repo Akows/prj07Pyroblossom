@@ -292,13 +292,13 @@ export const Navigation = () => {
 
             <MenuArea>
                 <Menu2>
-                    <Link to='/'>기능1</Link>
+                    <Link to='/store'>굿즈스토어</Link>
                 </Menu2>
                 <Menu2>
-                    <Link to='/'>기능2</Link>
+                    <Link to='/'>메뉴2</Link>
                 </Menu2>
                 <Menu2>
-                    <Link to='/'>기능3</Link>
+                    <Link to='/'>메뉴3</Link>
                 </Menu2>
             </MenuArea>
 

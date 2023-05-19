@@ -15,6 +15,7 @@ const initialState = {
 
 const userReducer = (prevState = initialState, action) => {
     return produce(prevState, (draft) => {
+
         switch (action.type) {
 
             // 새로운 작업이 시작될 때 State 초기화.
@@ -47,8 +48,6 @@ const userReducer = (prevState = initialState, action) => {
                 draft.errorinfo.errorMessage = action.payload.errorMessage;
                 break;
 
-
-
             // 회원가입 완료.
             case 'SIGN_UP_SUCCESS':
                 draft.flagvalue.isError = false;
@@ -73,18 +72,9 @@ const userReducer = (prevState = initialState, action) => {
                 draft.errorinfo = {};
                 break;
 
-
-
-
-
-
-
-
-
-
             default:
                 break;
-        }
+        };
     });
 };
 
