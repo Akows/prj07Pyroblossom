@@ -17,6 +17,7 @@ import { MyPage } from './pages/user/MyPage';
 
 import { AdminPage } from './pages/admin/AdminPage';
 import { StoreMain } from './pages/store/StoreMain';
+import { StoreNavigation } from './components/StoreNavigation';
 
 const AppBackGround = styled.div`
   width: 100%;
@@ -35,34 +36,28 @@ const Layout = () => {
       <Navigation />
       <Outlet />
     </>
-  )
-}
+  );
+};
+
+const StoreLayout = () => {
+  return (
+    <>
+      <StoreNavigation />
+      <Outlet />
+    </>
+  );
+};
 
 function App() {
 
   const dispatch = useDispatch();
   const getUserState = useSelector((state) => state.user);
 
-  // useEffect의 상황별 사용 방법.
-  // 1. 페이지가 렌더링 될 때마다 실행.
-  useEffect(() => {
-
-  });
-
-  // 2. 페이지가 최초 렌더링 될 때만 1번 실행.
   useEffect(() => {
     console.log('로그인 상태 확인.');
     dispatch(IsLoginCheck());
     // eslint-disable-next-line
   }, []);
-
-  // 3. 페이지가 렌더링 될 때마다, 그리고 배열인자 내부의 값이 변화할 때마다 실행.
-  useEffect(() => {
-    if (getUserState.flagvalue.isLogin) {
-      console.log(getUserState);
-    };
-    // eslint-disable-next-line
-  }, [getUserState.userdata]);
 
   return (
     <AppBackGround>
@@ -79,7 +74,7 @@ function App() {
           <Route path='adminpage' element={<AdminPage />} />
         </Route>
 
-        <Route path='store/*' element={<Layout />} >
+        <Route path='store/*' element={<StoreLayout />} >
           <Route index element={<StoreMain />} />
         </Route>
 
