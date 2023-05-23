@@ -18,6 +18,10 @@ import { MyPage } from './pages/user/MyPage';
 import { AdminPage } from './pages/admin/AdminPage';
 import { StoreMain } from './pages/store/StoreMain';
 import { StoreNavigation } from './components/StoreNavigation';
+import { ProductList } from './pages/store/ProductList';
+import { ProductDetail } from './pages/store/ProductDetail';
+import { StoreMyPage } from './pages/store/StoreMyPage';
+import { PaymentPage } from './pages/store/PaymentPage';
 
 const AppBackGround = styled.div`
   width: 100%;
@@ -76,6 +80,13 @@ function App() {
 
         <Route path='store/*' element={<StoreLayout />} >
           <Route index element={<StoreMain />} />
+
+          <Route path='productlist' element={<ProductList />} />
+          <Route path='productdetail' element={<ProductDetail />} />
+
+          <Route path='mypage' element={<StoreMyPage />} />
+
+          <Route path='payment' element={<PaymentPage />} />
         </Route>
 
       </Routes>
