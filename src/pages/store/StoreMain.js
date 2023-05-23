@@ -43,6 +43,11 @@ const StoreListArea = styled.div`
     border: 2px solid black;
 `;
 
+const TitleImage = styled.div`
+
+`;
+
+
 export const StoreMain = () => {
 
     // const navigate = useNavigate();
@@ -70,6 +75,8 @@ export const StoreMain = () => {
         <BackGround>
 
             <StoreTitleArea>
+                <TitleImage></TitleImage>
+
                 굿즈스토어 제목
             </StoreTitleArea>
             <StoreSlideShowArea>

@@ -11,6 +11,8 @@ import { AiOutlineMenu } from 'react-icons/ai';
 import { AiOutlinePicCenter } from 'react-icons/ai';
 import { FiLogIn, FiLogOut } from "react-icons/fi";
 
+import TitleIMGsrc from '../assets/images/Genshin-Impact-Logo.webp';
+
 const BackGround = styled.div`
     width: 1200px;
     height: 100px;
@@ -25,8 +27,6 @@ const BackGround = styled.div`
     align-items: center;
     justify-content: center;
 
-    opacity: 0.9;
-
     transform: translate3d(0, 0, 0);
     transition: all 1s ease;
 
@@ -36,7 +36,6 @@ const BackGround = styled.div`
 
     @media screen and (max-width: 700px) {
         height: 120px;
-        opacity: 1;
     }
 
 `;
@@ -48,7 +47,7 @@ const MainNav = styled.div`
     flex-direction: row;
     align-items: center;
 
-    background-color: gray;
+    background-color: #dcdcdc;
 `;
 const SearchNav = styled.div`
     width: 100%;
@@ -199,6 +198,11 @@ const DownMenuTitle = styled.div`
     width: 100%;
     height: 50px;
 
+    background-image: url(${TitleIMGsrc});
+    background-size: 60px 60px;
+    background-position: center;
+    background-repeat: no-repeat;
+
     padding: 5px 5px;
     
     display: flex;
@@ -208,7 +212,8 @@ const DownMenuTitle = styled.div`
 
     position: relative;
 
-    background-color: gray;
+    background-color: #dcdcdc;
+    opacity: 1;
 
     animation: dropdown30 0.7s ease;
 
@@ -224,7 +229,7 @@ const DownMenu = styled.div`
     display: none; 
     position: absolute; 
 
-    background-color: gray;
+    background-color: #dcdcdc;
 
     & > a { 
         width: 100%;
@@ -246,12 +251,21 @@ const UserMenuSub = styled.div`
     justify-content: space-around;
 `;
 
-const Menu1 = styled(Menus)`
+const TitleImage = styled(Menus)`
     width: 100%;
 
-    & > a { 
-        color: green;
-    };
+    background-image: url(${TitleIMGsrc});
+    background-size: 60px 60px;
+    background-position: center;
+    background-repeat: no-repeat;
+`;
+const TitleImageSmall = styled(Menus)`
+    width: 100%;
+
+    background-image: url(${TitleIMGsrc});
+    background-size: 50px 50px;
+    background-position: center;
+    background-repeat: no-repeat;
 `;
 const Menu2 = styled(Menus)`
     width: 150px;
@@ -313,7 +327,9 @@ export const StoreNavigation = () => {
                                 <DownMenuTitle
                                     onClick={(event) => event.stopPropagation()}
                                 >
-                                    Genshin Pyro Blossom
+                                    <TitleImage>
+                                        <Link to='/'></Link>
+                                    </TitleImage>
                                     <DownMenu>
                                         <Link to='/'>
                                             메뉴1
@@ -355,9 +371,9 @@ export const StoreNavigation = () => {
                 </TitleAndMenuArea>
 
                 <TitleArea>
-                    <Menu1>
-                        <Link to='/'>로고</Link>
-                    </Menu1>
+                    <TitleImageSmall>
+                        <Link to='/'></Link>
+                    </TitleImageSmall>
                 </TitleArea>
 
                 <MenuArea>
@@ -365,10 +381,10 @@ export const StoreNavigation = () => {
                         <Link to='/store'>굿즈스토어</Link>
                     </Menu2>
                     <Menu2>
-                        <Link to='/'>메뉴2</Link>
+                        <Link to='/'>원신 DB</Link>
                     </Menu2>
                     <Menu2>
-                        <Link to='/'>메뉴3</Link>
+                        <Link to='/'>자유게시판</Link>
                     </Menu2>
                 </MenuArea>
 
