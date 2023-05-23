@@ -1,6 +1,5 @@
 
 import { getDocs, query, where } from "firebase/firestore";
-// import { createErrorData, errorCode } from "../../configs/errorCodes";
 import { userCollectionRef } from "../configs/firebase/config";
 
 // 유효성 검사.
@@ -35,10 +34,7 @@ const checkValidate = (inputdata, checktype) => {
 };
 
 // 중복 검사.
-const checkDuplication = async (inputdata, checktype, dispatch) => {
-    dispatch({ type: 'STATE_INIT' });
-    dispatch({ type: 'LOADING' });
-
+const checkDuplication = async (inputdata, checktype) => {
     // 반환되는 결과값을 미리 선언.
     let result = false;
 
@@ -71,7 +67,6 @@ const checkDuplication = async (inputdata, checktype, dispatch) => {
     });
 
     // 작업을 마치고 결과값을 반환.
-    dispatch({ type: 'COMPLETE' });
     return result;
 };
 

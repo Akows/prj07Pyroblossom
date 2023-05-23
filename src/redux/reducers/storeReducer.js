@@ -26,10 +26,6 @@ const storeReducer = (prevState = initialState, action) => {
                     processMessage: '',
                 };
                 break;
-            case 'STORE_STATE_DELETE':
-                draft.flagValue = {};
-                draft.processInfo = {};
-                break;
 
             case 'STORE_LOADING':
                 draft.flagValue.isLoading = true;

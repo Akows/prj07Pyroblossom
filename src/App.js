@@ -4,7 +4,7 @@ import './App.css';
 import { Navigate, Outlet, Route, Routes } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { isLoginCheck } from './redux/actions/userAction';
+import { IsLoginCheck } from './redux/actions/userAction';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -52,7 +52,7 @@ function App() {
   // 2. 페이지가 최초 렌더링 될 때만 1번 실행.
   useEffect(() => {
     console.log('로그인 상태 확인.');
-    dispatch(isLoginCheck());
+    dispatch(IsLoginCheck());
     // eslint-disable-next-line
   }, []);
 

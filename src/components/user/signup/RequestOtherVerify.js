@@ -277,6 +277,8 @@ export const RequestOtherVerify = ({ userData, setUserData, navigate, dispatch, 
     };
 
     const onCheckDuplication = () => {
+        setIsLoading(true);
+
         if (!userData.displayname) {
             alert('닉네임을 입력해주세요.');
             return;
@@ -288,9 +290,11 @@ export const RequestOtherVerify = ({ userData, setUserData, navigate, dispatch, 
 
                 if (result) {
                     alert('사용할 수 없는 닉네임 입니다.');
+                    setIsLoading(false);
                 }
                 else {
                     alert('사용가능한 닉네임 입니다.');
+                    setIsLoading(false);
                 }
             });
     };

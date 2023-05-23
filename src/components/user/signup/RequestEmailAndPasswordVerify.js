@@ -277,6 +277,8 @@ export const RequestEmailAndPasswordVerify = ({ userData, setUserData, getUserSt
 
     // 중복검사 함수.
     const onCheckDuplication = () => {
+        setIsLoading(true);
+
         if (!userData.email) {
             alert('이메일 주소를 입력해주세요.');
             return;
@@ -293,9 +295,11 @@ export const RequestEmailAndPasswordVerify = ({ userData, setUserData, getUserSt
 
                 if (result) {
                     alert('사용할 수 없는 이메일 주소 입니다.');
+                    setIsLoading(false);
                 }
                 else {
                     alert('사용가능한 이메일 주소 입니다.');
+                    setIsLoading(false);
                 }
             });
     };

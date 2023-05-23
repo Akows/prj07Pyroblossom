@@ -4,7 +4,7 @@ import { createErrorData, errorCode } from '../../configs/errorCodes';
 import { appAuth, timeStamp, userCollectionRef } from '../../configs/firebase/config'
 
 // 유저 로그인 여부 확인.
-const isLoginCheck = () => {
+const IsLoginCheck = () => {
     return (dispatch, getState) => {
         dispatch({ type: 'STATE_INIT' });
         dispatch({ type: 'LOADING' });
@@ -277,7 +277,7 @@ const UserDelete = (userEmail, inputPassword, navigate) => {
 };
 
 const GetUserData = (email) => {
-    return async (dispatch, getState) => {
+    return (dispatch, getState) => {
         dispatch({ type: 'STATE_INIT' });
         dispatch({ type: 'LOADING' });
 
@@ -317,4 +317,4 @@ const GetUserData = (email) => {
 
 
 
-export { isLoginCheck, SignUp, logIn, logOut, UserUpdate, UserDelete, GetUserData };
+export { IsLoginCheck, SignUp, logIn, logOut, UserUpdate, UserDelete, GetUserData };

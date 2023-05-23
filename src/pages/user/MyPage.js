@@ -288,7 +288,6 @@ export const MyPage = () => {
     });
     const [address, setAddress] = useState('');
 
-
     const [isLoading, setIsLoading] = useState(false);
     const [isUpdate, setIsUpdate] = useState(false);
     const [isDisplayNameDuplication, setIsDisplayNameDuplication] = useState(false);
@@ -333,6 +332,7 @@ export const MyPage = () => {
 
     const onCheckDuplication = (event) => {
         event.preventDefault();
+        setIsLoading(true);
 
         if (!userData.displayName) {
             alert('닉네임을 입력해주세요.');
@@ -345,9 +345,11 @@ export const MyPage = () => {
 
                 if (result) {
                     alert('사용할 수 없는 닉네임 입니다.');
+                    setIsLoading(false);
                 }
                 else {
                     alert('사용가능한 닉네임 입니다.');
+                    setIsLoading(false);
                 }
             });
     };
