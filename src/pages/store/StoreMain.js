@@ -8,22 +8,43 @@ import styled from 'styled-components';
 
 // import { Test1, Test2 } from '../../redux/actions/storeAction';
 
+import MainImagesrc from '../../assets/images/System_Shop.webp';
+import Sub1Imagesrc from '../../assets/images/character_eula_portrait.png';
+import Sub2Imagesrc from '../../assets/images/Character_Klee_Full_Wish.webp';
+
 const BackGround = styled.div`
     width: 100%;
     height: 100%;
+
+    position: absolute;
+    z-index: -100;
+
+    background-color: rgba( 65, 71, 89, 0.3 );
+    background-attachment: fixed;
+`;
+
+const InnerContents = styled.div`
+    width: 100%;
+    height: 100%;
+
+    z-index: 100;
 
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-
-    margin-top: 120px;
 `;
+
 const StoreTitleArea = styled.div`
     width: 90%;
     height: 300px;
 
-    border: 2px solid black;
+    margin-top: 120px;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
 `;
 const StoreSlideShowArea = styled.div`
     width: 90%;
@@ -43,8 +64,50 @@ const StoreListArea = styled.div`
     border: 2px solid black;
 `;
 
-const TitleImage = styled.div`
+const TitleSub1Image = styled.div`
+    width: 35%;
+    height: 100%;
 
+    overflow: visible;
+
+    & > img {
+        width: 600px;
+        height: 900px;
+
+        margin-top: -120px;
+        margin-left: -90px;
+
+        -webkit-user-select:none;
+        -moz-user-select:none;
+        -ms-user-select:none;
+        user-select:none
+    }
+`;
+const TitleMainImage = styled.div`
+    width: 20%;
+    height: 100%;
+
+    background-image: url(${MainImagesrc});
+    background-size: 300px 300px;
+    background-position: center;
+    background-repeat: no-repeat;
+`;
+const TitleSub2mage = styled.div`
+    width: 35%;
+    height: 100%;
+
+    & > img {
+        width: 700px;
+        height: 900px;
+
+        margin-top: -120px;
+        margin-left: -50px;
+
+        -webkit-user-select:none;
+        -moz-user-select:none;
+        -ms-user-select:none;
+        user-select:none
+    }
 `;
 
 
@@ -72,20 +135,32 @@ export const StoreMain = () => {
     // }, [getStoreState.flagValue]);
 
     return (
-        <BackGround>
+        <>
+            <BackGround />
 
-            <StoreTitleArea>
-                <TitleImage></TitleImage>
+            <InnerContents>
 
-                굿즈스토어 제목
-            </StoreTitleArea>
-            <StoreSlideShowArea>
-                스토어 이미지 슬라이스 쇼
-            </StoreSlideShowArea>
-            <StoreListArea>
-                물건 리스트들
-            </StoreListArea>
+                <StoreTitleArea>
+                    <TitleSub1Image>
+                        <img src={Sub1Imagesrc} alt=''></img>
+                    </TitleSub1Image>
+                    <TitleMainImage>
 
-        </BackGround>
+                    </TitleMainImage>
+                    <TitleSub2mage>
+                        <img src={Sub2Imagesrc} alt=''></img>
+                    </TitleSub2mage>
+
+                </StoreTitleArea>
+                <StoreSlideShowArea>
+                    스토어 이미지 슬라이스 쇼
+                </StoreSlideShowArea>
+                <StoreListArea>
+                    물건 리스트들
+                </StoreListArea>
+
+
+            </InnerContents>
+        </>
     );
 };

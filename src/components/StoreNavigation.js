@@ -47,6 +47,8 @@ const MainNav = styled.div`
     flex-direction: row;
     align-items: center;
 
+    border-radius: 10px 10px 0px 0px;
+
     background-color: #2A2732;
 `;
 const SearchNav = styled.div`
@@ -56,6 +58,8 @@ const SearchNav = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
+
+    border-radius: 0px 0px 10px 10px;
 
     background-color: #2A2732;
 `;
@@ -104,6 +108,10 @@ const SearchInput = styled.input`
     font-family: 'GIFont';
     font-size: 16px;
     color: black;
+
+    background-color: #aaaaaa;
+
+    border-radius: 5px;
 
     border: none;
 `;
