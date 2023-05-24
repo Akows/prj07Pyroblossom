@@ -11,7 +11,7 @@ import { AiOutlineMenu } from 'react-icons/ai';
 import { AiOutlinePicCenter } from 'react-icons/ai';
 import { FiLogIn, FiLogOut } from "react-icons/fi";
 
-import TitleIMGsrc from '../assets/images/Genshin-Impact-Logo.webp';
+import TitleIMGsrc from '../assets/images/Genshin-Impact-LogoW.png';
 
 const BackGround = styled.div`
     width: 1200px;
@@ -47,7 +47,7 @@ const MainNav = styled.div`
     flex-direction: row;
     align-items: center;
 
-    background-color: #dcdcdc;
+    background-color: #2A2732;
 `;
 const SearchNav = styled.div`
     width: 100%;
@@ -57,7 +57,7 @@ const SearchNav = styled.div`
     flex-direction: row;
     align-items: center;
 
-    background-color: blue;
+    background-color: #2A2732;
 `;
 
 const SearchBarArea = styled.div`
@@ -68,13 +68,16 @@ const SearchBarArea = styled.div`
     flex-direction: row;
     align-items: center;
 
-    color: wheat;
+    color: #D3BC8E;
 `;
 const MyShoppingArea = styled.div`
     width: 15%;
     height: 100%;
 
-    color: wheat;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
 `;
 
 const CategoryButton = styled.div`
@@ -95,20 +98,61 @@ const SearchBar = styled.div`
     align-items: center;
 `;
 const SearchInput = styled.input`
-    width: 90%;
+    width: 50%;
     height: 100%;
+
+    font-family: 'GIFont';
+    font-size: 16px;
+    color: black;
+
+    border: none;
 `;
 const SearchButton = styled.button`
     width: 10%;
-    height: 100%;
+    height: 80%;
+
+    margin-left: 10px;
+
+    border: 2px solid #535B6C;
+    border-radius: 25px;
+    background-color: #50596B;
+
+    & > a {
+        font-family: 'GIFont';
+        font-size: 16px;
+        color: #ECE5D8;
+    }
 `;
 
 const MyShoppingButton = styled.button`
-    width: 100%;
-    height: 100%;
+    width: 80%;
+    height: 80%;
+
+    border: 2px solid #535B6C;
+    border-radius: 25px;
+    background-color: #50596B;
+
+    & > a {
+        font-family: 'GIFont';
+        font-size: 16px;
+        color: #ECE5D8;
+    }
 `;
 
+const CategoryList = styled.div`
+    width: 100%;
+    height: 100%;
 
+    top: 100px;
+    left: 0;
+
+    position: absolute;
+
+    display: ${(props) => props.isCategoryShow ? 'block' : 'none'};
+
+    background-color: red;
+    animation: dropdown30 0.7s ease;
+`;
 
 
 
@@ -178,6 +222,8 @@ const Menus = styled.div`
         flex-direction: row;
         align-items: center;
         justify-content: center;
+
+        color: #D3BC8E;
     }
 
     transform: translate3d(0, 0, 0);
@@ -199,7 +245,7 @@ const DownMenuTitle = styled.div`
     height: 50px;
 
     background-image: url(${TitleIMGsrc});
-    background-size: 60px 60px;
+    background-size: 90px 60px;
     background-position: center;
     background-repeat: no-repeat;
 
@@ -253,9 +299,9 @@ const UserMenuSub = styled.div`
 
 const TitleImage = styled(Menus)`
     width: 100%;
-
+    
     background-image: url(${TitleIMGsrc});
-    background-size: 60px 60px;
+    background-size: 90px 60px;
     background-position: center;
     background-repeat: no-repeat;
 `;
@@ -263,7 +309,7 @@ const TitleImageSmall = styled(Menus)`
     width: 100%;
 
     background-image: url(${TitleIMGsrc});
-    background-size: 50px 50px;
+    background-size: 90px 55px;
     background-position: center;
     background-repeat: no-repeat;
 `;
@@ -297,6 +343,7 @@ export const StoreNavigation = () => {
     const getUserState = useSelector((state) => state.user);
 
     const [isClick, setIsClick] = useState(false);
+    const [isCategoryShow, setIsCategoryShow] = useState(false);
 
     const logOuts = () => {
         const logOutChoice = window.confirm('로그아웃 하시겠어요?');
@@ -307,6 +354,10 @@ export const StoreNavigation = () => {
         else {
             dispatch(logOut(navigate));
         };
+    };
+
+    const onShowCategoryList = () => {
+        setIsCategoryShow(!isCategoryShow);
     };
 
 
@@ -422,18 +473,24 @@ export const StoreNavigation = () => {
 
             <SearchNav>
                 <SearchBarArea>
-                    <CategoryButton>
+                    <CategoryButton onClick={onShowCategoryList}>
                         <AiOutlineMenu size={30} />
                     </CategoryButton>
 
+                    <CategoryList isCategoryShow={isCategoryShow}></CategoryList>
+
                     <SearchBar>
                         <SearchInput />
-                        <SearchButton />
+                        <SearchButton>
+                            <Link to='/store/productlist'>검색</Link>
+                        </SearchButton>
                     </SearchBar>
                 </SearchBarArea>
 
                 <MyShoppingArea>
-                    <MyShoppingButton />
+                    <MyShoppingButton>
+                        <Link to='/store/mypage'>마이페이지</Link>
+                    </MyShoppingButton>
                 </MyShoppingArea>
 
             </SearchNav>
