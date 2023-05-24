@@ -8,6 +8,8 @@ import styled from 'styled-components';
 
 // import { Test1, Test2 } from '../../redux/actions/storeAction';
 
+import BackgroundImagesrc from '../../assets/images/background/upLiyueport2.jpg';
+
 import MainImagesrc from '../../assets/images/System_Shop.webp';
 import Sub1Imagesrc from '../../assets/images/character_eula_portrait.png';
 import Sub2Imagesrc from '../../assets/images/Character_Klee_Full_Wish.webp';
@@ -16,12 +18,25 @@ const BackGround = styled.div`
     width: 100%;
     height: 100%;
 
+    position: relative;
+    z-index: 0;
+
+    background-color: rgba( 65, 71, 89, 1 );
+    background-attachment: fixed;
+`;
+
+const BackGroundImage = styled.div`
+    width: 100%;
+    height: 500px;
+
     position: absolute;
     z-index: -100;
 
-    background-color: rgba( 65, 71, 89, 0.3 );
-    background-attachment: fixed;
-`;
+    background-image: url(${BackgroundImagesrc});
+    background-size: 100% 100%;
+    background-position: 0px 0px;
+    background-repeat: no-repeat;
+`
 
 const InnerContents = styled.div`
     width: 100%;
@@ -84,7 +99,7 @@ const TitleSub1Image = styled.div`
     }
 `;
 const TitleMainImage = styled.div`
-    width: 20%;
+    width: 25%;
     height: 100%;
 
     background-image: url(${MainImagesrc});
@@ -135,20 +150,20 @@ export const StoreMain = () => {
     // }, [getStoreState.flagValue]);
 
     return (
-        <>
-            <BackGround />
+        <BackGround>
+            <BackGroundImage />
 
             <InnerContents>
 
                 <StoreTitleArea>
                     <TitleSub1Image>
-                        <img src={Sub1Imagesrc} alt=''></img>
+                        {/* <img src={Sub1Imagesrc} alt=''></img> */}
                     </TitleSub1Image>
                     <TitleMainImage>
 
                     </TitleMainImage>
                     <TitleSub2mage>
-                        <img src={Sub2Imagesrc} alt=''></img>
+                        {/* <img src={Sub2Imagesrc} alt=''></img> */}
                     </TitleSub2mage>
 
                 </StoreTitleArea>
@@ -161,6 +176,6 @@ export const StoreMain = () => {
 
 
             </InnerContents>
-        </>
+        </BackGround>
     );
 };

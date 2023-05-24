@@ -7,12 +7,11 @@
     };
 };
 
-
-@keyframes dropdown10 {
+@keyframes opacity0to1 {
   0% {
-    transform: translateY(-30%);
+    opacity: 0;
   }
   100% {
-    transform: translateY(0);
+    opacity: 1;
   };
 };

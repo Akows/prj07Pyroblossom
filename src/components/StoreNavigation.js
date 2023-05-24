@@ -156,10 +156,21 @@ const CategoryList = styled.div`
 
     position: absolute;
 
+    border-radius: 5px 5px 10px 10px;
+
     display: ${(props) => props.isCategoryShow ? 'block' : 'none'};
 
-    background-color: red;
-    animation: dropdown30 0.7s ease;
+    background-color: #dcdcdc;
+    animation: opacity0to1 0.6s ease-in;
+
+    @keyframes opacity0to1 {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    };
+    };
 `;
 
 
