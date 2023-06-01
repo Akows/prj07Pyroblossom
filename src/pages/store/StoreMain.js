@@ -15,6 +15,7 @@ import MainImagesrc from '../../assets/images/System_Shop.webp';
 // import Sub1Imagesrc from '../../assets/images/character_eula_portrait.png';
 import Sub2Imagesrc from '../../assets/images/Character_Klee_Full_Wish.webp';
 import Sildeshow from '../../components/SlideShow';
+import { useNavigate } from 'react-router-dom';
 
 const BackGround = styled.div`
     width: 100%;
@@ -73,11 +74,17 @@ const StoreSlideShowArea = styled.div`
     z-index: 3;
 `;
 const StoreListArea = styled.div`
-    width: 90%;
-    height: 800px;
+    width: 80%;
+    height: 100%;
 
     margin-top: 30px;
     margin-bottom: 30px;
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
 
     z-index: 3;
 
@@ -140,10 +147,29 @@ const TitleSub2Image = styled.div`
     }
 `;
 
+const Product = styled.div`
+    width: 300px;
+    height: 330px;
+
+    margin: 3px;
+
+    border: 1px solid wheat;
+`;
+const ProductImg = styled.div`
+    width: 100%;
+    height: 80%;
+`;
+const ProductTitle = styled.div`
+    width: 100%;
+    height: 20%;
+
+    font-size: 24px;
+    color: #D3BC8E;
+`;
 
 export const StoreMain = () => {
 
-    // const navigate = useNavigate();
+    const navigate = useNavigate();
 
     // const dispatch = useDispatch();
     // const getUserState = useSelector((state) => state.user);
@@ -163,6 +189,33 @@ export const StoreMain = () => {
     //     setIsStoreError(getStoreState.flagValue.isError);
     //     setIsStoreLoading(getStoreState.flagValue.isLoading);
     // }, [getStoreState.flagValue]);
+
+    const testDatas = [
+        {
+            id: '01',
+            name: '1번 제품',
+        },
+        {
+            id: '02',
+            name: '2번 제품',
+        },
+        {
+            id: '03',
+            name: '3번 제품',
+        },
+        {
+            id: '04',
+            name: '4번 제품',
+        },
+        {
+            id: '05',
+            name: '5번 제품',
+        },
+        {
+            id: '06',
+            name: '6번 제품',
+        },
+    ];
 
     return (
         <BackGround>
@@ -186,7 +239,19 @@ export const StoreMain = () => {
                     <Sildeshow />
                 </StoreSlideShowArea>
                 <StoreListArea>
-                    물건 리스트들
+
+                    {testDatas.map(item => (
+                        <Product key={item.id} onClick={() => navigate(`/store/productdetail/${item.id}`)}>
+                            <ProductImg>
+
+                            </ProductImg>
+
+                            <ProductTitle>
+                                {item.name}
+                            </ProductTitle>
+                        </Product>
+                    ))}
+
                 </StoreListArea>
 
 
