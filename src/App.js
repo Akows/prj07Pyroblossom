@@ -22,6 +22,7 @@ import { ProductList } from './pages/store/ProductList';
 import { ProductDetail } from './pages/store/ProductDetail';
 import { StoreMyPage } from './pages/store/StoreMyPage';
 import { PaymentPage } from './pages/store/PaymentPage';
+import { Footer } from './components/Footer';
 
 const AppBackGround = styled.div`
   width: 100%;
@@ -39,6 +40,16 @@ const Layout = () => {
     <>
       <Navigation />
       <Outlet />
+      <Footer />
+    </>
+  );
+};
+
+const UserLayout = () => {
+  return (
+    <>
+      <Navigation />
+      <Outlet />
     </>
   );
 };
@@ -48,6 +59,7 @@ const StoreLayout = () => {
     <>
       <StoreNavigation />
       <Outlet />
+      <Footer />
     </>
   );
 };
@@ -71,7 +83,7 @@ function App() {
           <Route index element={<Main />} />
         </Route>
 
-        <Route path='user/*' element={<Layout />} >
+        <Route path='user/*' element={<UserLayout />} >
           <Route path='login' element={!getUserState.flagvalue.isLogin ? <Login /> : <Navigate to='/' replace={true} />} />
           <Route path='signup' element={!getUserState.flagvalue.isLogin ? <Signup /> : <Navigate to='/' replace={true} />} />
           <Route path='mypage' element={<MyPage />} />

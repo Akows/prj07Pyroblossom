@@ -91,20 +91,13 @@ export const Main = () => {
             });
         }, { threshold: 0.8 });
 
-
+        // console.log(observer.current);
 
         for (let index = 0; index < refs.current.children.length; index++) {
             observer.current.observe(refs.current.children[index]);
         }
 
-        // console.log(observer.current);
-
-        return () => {
-
-        }
     }, []);
-
-
 
 
     // const ref = useCallback(node => {
