@@ -12,8 +12,9 @@ import '../../assets/animation.css';
 import BackgroundImagesrc from '../../assets/images/background/upLiyueport2.jpg';
 
 import MainImagesrc from '../../assets/images/System_Shop.webp';
-import Sub1Imagesrc from '../../assets/images/character_eula_portrait.png';
+// import Sub1Imagesrc from '../../assets/images/character_eula_portrait.png';
 import Sub2Imagesrc from '../../assets/images/Character_Klee_Full_Wish.webp';
+import Sildeshow from '../../components/SlideShow';
 
 const BackGround = styled.div`
     width: 100%;
@@ -67,11 +68,9 @@ const StoreSlideShowArea = styled.div`
     width: 90%;
     height: 400px;
 
-    margin-top: 30px;
+    margin-top: 80px;
 
     z-index: 3;
-
-    border: 2px solid black;
 `;
 const StoreListArea = styled.div`
     width: 90%;
@@ -184,7 +183,7 @@ export const StoreMain = () => {
 
                 </StoreTitleArea>
                 <StoreSlideShowArea>
-                    스토어 이미지 슬라이스 쇼
+                    <Sildeshow />
                 </StoreSlideShowArea>
                 <StoreListArea>
                     물건 리스트들
