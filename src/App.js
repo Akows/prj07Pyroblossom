@@ -94,7 +94,7 @@ function App() {
           <Route index element={<StoreMain />} />
 
           <Route path='productlist/:keyword' element={<ProductList />} />
-          <Route path='productdetail' element={<ProductDetail />} />
+          <Route path='productdetail/:id' element={<ProductDetail />} />
 
           <Route path='mypage' element={<StoreMyPage />} />
 

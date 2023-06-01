@@ -1,5 +1,11 @@
 import React from 'react'
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
+
+const SpecialCharacter = styled.p`
+    margin-left: 2px;
+    margin-right: 2px;
+`;
 
 const BackGround = styled.div`
     width: 100%;
@@ -9,14 +15,17 @@ const BackGround = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-
-    margin-top: 120px;
+    
+    background-color: rgba( 65, 71, 89, 1 );
 `;
 const ProductTypeShowArea = styled.div`
     width: 90%;
-    height: 80px;
+    height: 20px;
 
-    border: 2px solid black;
+    margin-top: 120px;
+
+    font-size: 18px;
+    color: #D3BC8E;
 `;
 const ProductInfoArea = styled.div`
     width: 90%;
@@ -28,9 +37,23 @@ const ProductInfoArea = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
+`;
+
+const ReviewInfoArea = styled.div`
+    width: 90%;
+    height: 300px;
+
+    margin-top: 30px;
+    margin-bottom: 30px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 
     border: 2px solid black;
 `;
+
 const OtherInfoArea = styled.div`
     width: 90%;
     height: 800px;
@@ -46,8 +69,57 @@ const OtherInfoArea = styled.div`
     border: 2px solid black;
 `;
 
-const A = styled.div`
-    width: 90%;
+const ProductInfo = styled.div`
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: center;
+
+    border: 1px solid #D3BC8E;
+`;
+
+const ProductImg = styled.div`
+    width: 50%;
+    height: 500px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+`;
+
+const ProductPayInfo = styled.div`
+    width: 50%;
+    height: 100%;
+`;
+
+const ProductName = styled.div`
+    width: 100%;
+    height: 100%;
+
+    font-size: 32px;
+    color: #D3BC8E;
+
+    margin-top: 10px;
+    margin-bottom: 20px;
+`;
+const ProductPrice = styled.div`
+    width: 100%;
+    height: 40px;
+
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    margin-top: 10px;
+    margin-bottom: 10px;
+`;
+const SalePer = styled.div`
+    width: 10%;
     height: 100%;
 
     display: flex;
@@ -55,53 +127,279 @@ const A = styled.div`
     align-items: center;
     justify-content: center;
 
-    border: 2px solid black;
+    font-size: 24px;
+    color: #D3BC8E;
 `;
 
-const A1 = styled.div`
-    width: 50%;
+const Price = styled.div`
+    width: 90%;
     height: 100%;
 
-    border: 2px solid black;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
 `;
-
-const A2 = styled.div`
-    width: 50%;
+const ListPrice = styled.div`
+    width: 80px;
     height: 100%;
 
-    border: 2px solid black;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+
+    font-size: 18px;
+    color: #D3BC8E;
+
+    text-decoration: line-through;
+    opacity: 0.3;
+`;
+const LastPrice = styled.div`
+    width: 100px;
+    height: 100%;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+
+    font-size: 26px;
+    color: #D3BC8E;
+
+    margin-right: 5px;
+    margin-left: 10px;
 `;
 
-const A21 = styled.div`
-    width: 100%;
-    height: 120px;
+const EventInfo = styled.div`
+    width: 95%;
+    height: 100%;
 
-    border: 2px solid black;
-`;
-const A22 = styled.div`
-    width: 100%;
-    height: 80px;
+    font-size: 18px;
+    color: #D3BC8E;
 
-    border: 2px solid black;
-`;
-const A23 = styled.div`
-    width: 100%;
-    height: 180px;
+    padding: 10px;
+    margin-top: 20px;
+    margin-bottom: 10px;
 
-    border: 2px solid black;
-`;
-const A24 = styled.div`
-    width: 100%;
-    height: 240px;
+    border: 1px solid black;
 
-    border: 2px solid black;
+    & > p {
+        margin: 5px;
+    };
 `;
 
-const A25 = styled.div`
+const PurchaseInfo = styled.div`
     width: 100%;
-    height: 120px;
+    height: 100%;
 
-    border: 2px solid black;
+    font-size: 16px;
+    color: #D3BC8E;
+
+    & > p {
+        margin: 3px;
+    };
+`;
+
+const PurchaseSelect = styled.select`
+    width: 100%;
+    height: 40px;
+
+    font-family: 'GIFont';
+    font-size: 16px;
+
+    border-radius: 10px;
+
+    margin-top: 10px;
+    margin-bottom: 15px;
+`;
+
+const PurchasePrice = styled.div`
+    width: 100%;
+    height: 100%;
+
+    font-size: 16px;
+    color: #D3BC8E;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+
+    margin-top: 10px;
+    margin-bottom: 10px;
+`;
+const PurchasePrice1 = styled.div`
+    width: 20%;
+    height: 100%;
+
+    font-size: 18px;
+`;
+const PurchasePrice2 = styled.div`
+    width: 80%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+
+    & > p:nth-child(1) {
+        font-size: 18px;
+        opacity: 0.8;
+    };
+    & > p:nth-child(3) {
+        font-size: 24px;
+    };
+`;
+
+const PurchaseOption = styled.div`
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+
+    font-size: 22px;
+    color: #D3BC8E;
+
+    margin-top: 20px;
+    margin-bottom: 20px;
+
+    & > p {
+        width: 100%;
+    }
+`;
+
+const PurchaseOption1 = styled.div`
+    width: 100%;
+    height: 30px;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    & > button {
+        width: 30px;
+        height: 30px;
+
+        border: none;
+        background-color: rgba( 65, 71, 89, 1 );
+        color: #D3BC8E;
+
+        font-family: 'GIFont';
+        font-size: 22px;
+    };
+`;
+
+const PurchaseOption2 = styled.div`
+    width: 100%;
+    height: 30px;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+    & > div {
+        width: 100%;
+        height: 100%;
+
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    };
+    & > div:nth-child(1) {
+        width: 90px;
+
+        justify-content: flex-start;
+    };
+    & > div:nth-child(1) > button {
+        width: 30px;
+        height: 30px;
+
+        text-align: center;
+
+        font-family: 'GIFont';
+        font-size: 22px;
+    };
+    & > div:nth-child(1) > p {
+        width: 30px;
+        height: 30px;
+
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+
+        border-top: 1px solid gray;
+        border-bottom: 1px solid gray;
+    };
+
+    & > div:nth-child(2) {
+        justify-content: flex-end;
+    };
+`;
+
+
+const PurchaseUtil = styled.div`
+    width: 100%;
+    height: 60px;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+
+    margin-top: 10px;
+    margin-bottom: 15px;
+
+    & > button {
+        width: 45%;
+        height: 100%;
+
+        border: none;
+        border-radius: 5px;
+
+        font-family: 'GIFont';
+        font-size: 16px;
+    };
+    & > button:hover {
+        background-color: gray;
+    };
+`;
+
+
+const PurchaseButton = styled.div`
+    width: 100%;
+    height: 70px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 15px;
+
+    & > button {
+        width: 95%;
+        height: 100%;
+
+        border: none;
+        border-radius: 5px;
+
+        font-family: 'GIFont';
+        font-size: 16px;
+    };
+    & > button:hover {
+        background-color: gray;
+    };
 `;
 
 const B = styled.div`
@@ -130,41 +428,122 @@ const B2 = styled.div`
 `;
 
 export const ProductDetail = () => {
+
+    const { id } = useParams();
+
     return (
         <BackGround>
 
             <ProductTypeShowArea>
-                물건종류 보여주는 곳, 적당한 그림과 '인형 = 통통 폭탄 인형'와 같이 경로 표시
+                1차 카테고리 {'>'} 2차 카테고리 {'>'} {id}
             </ProductTypeShowArea>
 
             <ProductInfoArea>
-                <A>
-                    <A1>
+                <ProductInfo>
+                    <ProductImg>
                         제품사진
-                    </A1>
-                    <A2>
-                        <A21>
-                            제품명
-                        </A21>
-                        <A22>
-                            제품가격
-                        </A22>
-                        <A23>
-                            배송정보
-                        </A23>
-                        <A24>
-                            제품수량입력과 총금액
-                        </A24>
-                        <A25>
-                            구매버튼
-                        </A25>
-                    </A2>
-                </A>
+                    </ProductImg>
+                    <ProductPayInfo>
+                        <ProductName>
+                            통통폭탄인형
+                        </ProductName>
+                        <ProductPrice>
+                            <SalePer>
+                                10%
+                            </SalePer>
+
+                            <Price>
+                                <ListPrice>
+                                    5000원
+                                </ListPrice>
+                                <LastPrice>
+                                    4500원
+                                </LastPrice>
+                            </Price>
+                        </ProductPrice>
+
+
+
+                        <EventInfo>
+                            <p>회원님을 위한 해택</p>
+                            <hr />
+
+                            <p>적립포인트 : 0.1%, 45p</p>
+                            <p>이벤트 : 텍스트 리뷰 100p</p>
+                            <p>사은품 : </p>
+                        </EventInfo>
+
+
+
+
+
+                        <PurchaseInfo>
+                            <p>택배배송 : 무료, 우체국택배</p>
+                            <p>도서산간지역 3,000원</p>
+                            <hr />
+
+                            <PurchaseSelect>
+                                <option>통통폭탄인형</option>
+                            </PurchaseSelect>
+
+                        </PurchaseInfo>
+
+                        <PurchaseOption>
+                            <PurchaseOption1>
+                                <p>통통폭탄인형</p>
+
+                                <button>X</button>
+                            </PurchaseOption1>
+
+
+
+
+                            <PurchaseOption2>
+
+                                <div>
+                                    <button>-</button>
+                                    <p>0</p>
+                                    <button>+</button>
+                                </div>
+
+                                <div>
+                                    <p>0원</p>
+                                </div>
+
+                            </PurchaseOption2>
+                        </PurchaseOption>
+
+                        <PurchasePrice>
+                            <PurchasePrice1>
+                                전체 금액
+                            </PurchasePrice1>
+                            <PurchasePrice2>
+                                <p>전체 수량 : 0개</p>
+
+                                <SpecialCharacter>&#124;</SpecialCharacter>
+
+                                <p>0원</p>
+                            </PurchasePrice2>
+                        </PurchasePrice>
+
+                        <PurchaseUtil>
+                            <button>찜하기</button>
+                            <button>장바구니</button>
+                        </PurchaseUtil>
+
+                        <PurchaseButton>
+                            <button>구매하기</button>
+                        </PurchaseButton>
+                    </ProductPayInfo>
+                </ProductInfo>
 
 
             </ProductInfoArea>
 
+            <ReviewInfoArea>
+                리뷰즈
 
+            </ReviewInfoArea>
 
 
             <OtherInfoArea>

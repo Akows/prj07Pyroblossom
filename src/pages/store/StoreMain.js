@@ -77,8 +77,8 @@ const StoreListArea = styled.div`
     width: 80%;
     height: 100%;
 
-    margin-top: 30px;
-    margin-bottom: 30px;
+    margin-top: 80px;
+    margin-bottom: 150px;
 
     display: flex;
     flex-direction: row;
@@ -87,8 +87,6 @@ const StoreListArea = styled.div`
     align-items: center;
 
     z-index: 3;
-
-    border: 2px solid black;
 `;
 
 const TitleMainImage = styled.div`
@@ -192,7 +190,7 @@ export const StoreMain = () => {
 
     const testDatas = [
         {
-            id: '01',
+            id: 'zEqgm2E3in0iMejvOqho',
             name: '1번 제품',
         },
         {
@@ -243,7 +241,7 @@ export const StoreMain = () => {
                     {testDatas.map(item => (
                         <Product key={item.id} onClick={() => navigate(`/store/productdetail/${item.id}`)}>
                             <ProductImg>
-
+                                제품사진
                             </ProductImg>
 
                             <ProductTitle>
