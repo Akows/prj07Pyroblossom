@@ -1,4 +1,5 @@
 import React from 'react'
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 const BackGround = styled.div`
@@ -27,8 +28,10 @@ const ProductListArea = styled.div`
     border: 2px solid black;
 `;
 
-
 export const ProductList = () => {
+
+    const { keyword } = useParams();
+
     return (
         <BackGround>
 
@@ -36,7 +39,7 @@ export const ProductList = () => {
                 검색조건 버튼
             </ProductListButtonArea>
             <ProductListArea>
-                물건 리스트들이 주루룩 나오는 공간
+                {keyword}에 대한 검색 결과입니다.
             </ProductListArea>
 
         </BackGround>

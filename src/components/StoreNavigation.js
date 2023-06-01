@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import styled from 'styled-components';
+import '../assets/animation.css';
 
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -37,7 +38,6 @@ const BackGround = styled.div`
     @media screen and (max-width: 700px) {
         height: 120px;
     }
-
 `;
 const MainNav = styled.div`
     width: 100%;
@@ -65,7 +65,7 @@ const SearchNav = styled.div`
 `;
 
 const SearchBarArea = styled.div`
-    width: 85%;
+    width: 100%;
     height: 100%;
 
     display: flex;
@@ -74,35 +74,35 @@ const SearchBarArea = styled.div`
 
     color: #D3BC8E;
 `;
-const MyShoppingArea = styled.div`
-    width: 15%;
-    height: 100%;
 
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-`;
 
 const CategoryButton = styled.div`
-    width: 5%;
+    width: 100px;
     height: 100%;
 
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
+
+    @media screen and (max-width: 700px) {
+        width: 10%;
+    }
 `;
 const SearchBar = styled.div`
-    width: 95%;
+    width: 500px;
     height: 100%;
 
     display: flex;
     flex-direction: row;
     align-items: center;
+
+    @media screen and (max-width: 700px) {
+        width: 90%;
+    }
 `;
 const SearchInput = styled.input`
-    width: 50%;
+    width: 80%;
     height: 100%;
 
     font-family: 'GIFont';
@@ -116,65 +116,107 @@ const SearchInput = styled.input`
     border: none;
 `;
 const SearchButton = styled.button`
-    width: 10%;
+    width: 20%;
     height: 80%;
 
-    margin-left: 10px;
+    margin: 5px;
 
     border: 2px solid #535B6C;
     border-radius: 25px;
     background-color: #50596B;
 
-    & > a {
-        font-family: 'GIFont';
-        font-size: 16px;
-        color: #ECE5D8;
-    }
-`;
-
-const MyShoppingButton = styled.button`
-    width: 80%;
-    height: 80%;
-
-    border: 2px solid #535B6C;
-    border-radius: 25px;
-    background-color: #50596B;
-
-    & > a {
-        font-family: 'GIFont';
-        font-size: 16px;
-        color: #ECE5D8;
-    }
+    font-family: 'GIFont';
+    font-size: 16px;
+    color: #D3BC8E;
 `;
 
 const CategoryList = styled.div`
     width: 100%;
-    height: 100%;
+    height: 120px;
 
-    top: 100px;
+    top: 105px;
     left: 0;
 
     position: absolute;
 
     border-radius: 5px 5px 10px 10px;
 
-    display: ${(props) => props.isCategoryShow ? 'block' : 'none'};
+    display: ${(props) => props.isCategoryShow ? 'flex' : 'none'};
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 
     background-color: #dcdcdc;
-    animation: opacity0to1 0.6s ease-in;
+    animation: anime 0.6s ease-in;
 
-    @keyframes opacity0to1 {
-    0% {
-        opacity: 0;
+    @keyframes anime {
+        0% {
+            opacity: 0;
+            transform: translateY(-25%);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        };
+    };
+
+    @media screen and (max-width: 700px) {
+        top: 115px;
     }
-    100% {
-        opacity: 1;
-    };
-    };
 `;
 
+const KeywordButtonArea = styled.div`
+    width: 100%;
+    height: 50%;
 
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+`;
+const MyPageButtonArea = styled.div`
+    width: 100%;
+    height: 50%;
 
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+`;
+
+const KeywordButton = styled.button`
+    width: 100px;
+    height: 50px;
+
+    margin: 2px;
+
+    border: 2px solid #535B6C;
+    border-radius: 15px;
+    background-color: #50596B;
+    font-family: 'GIFont';
+    font-size: 16px;
+    color: #D3BC8E;
+
+    @media screen and (max-width: 420px) {
+        font-size: 12px;
+    }
+`;
+const MyShoppingButton = styled.button`
+    width: 100px;
+    height: 85%;
+
+    margin-right: 5px;
+
+    border: 2px solid #535B6C;
+    border-radius: 15px;
+    background-color: #50596B;
+
+    & > a {
+        font-family: 'GIFont';
+        font-size: 16px;
+        color: #D3BC8E;
+    }
+`;
 
 
 
@@ -250,6 +292,8 @@ const Menus = styled.div`
 `;
 const DropDownMenu = styled(Menus)`
     width: 100%;
+
+    color: #D3BC8E;
 `;
 const DownMenuIcon = styled.div`
     height: 100%;
@@ -263,12 +307,14 @@ const DownMenuTitle = styled.div`
     width: 100%;
     height: 50px;
 
-    background-image: url(${TitleIMGsrc});
+    background-color: #2A2732;
+
+    /* background-image: url(${TitleIMGsrc});
     background-size: 90px 60px;
     background-position: center;
-    background-repeat: no-repeat;
+    background-repeat: no-repeat; */
 
-    padding: 5px 5px;
+    /* padding: 5px 5px; */
     
     display: flex;
     flex-direction: column;
@@ -277,10 +323,10 @@ const DownMenuTitle = styled.div`
 
     position: relative;
 
-    background-color: #dcdcdc;
+    /* background-color: #dcdcdc; */
     opacity: 1;
 
-    animation: dropdown30 0.7s ease;
+    animation: shortNavDropDownAni 0.7s ease-in;
 
     & > div {
         display: block; 
@@ -294,11 +340,13 @@ const DownMenu = styled.div`
     display: none; 
     position: absolute; 
 
-    background-color: #dcdcdc;
+    background-color: #2A2732;
 
     & > a { 
         width: 100%;
         height: 40px;
+
+        color: #D3BC8E;
 
         display: flex;
         flex-direction: column;
@@ -318,7 +366,9 @@ const UserMenuSub = styled.div`
 
 const TitleImage = styled(Menus)`
     width: 100%;
-    
+
+    background-color: #2A2732;
+
     background-image: url(${TitleIMGsrc});
     background-size: 90px 60px;
     background-position: center;
@@ -326,6 +376,8 @@ const TitleImage = styled(Menus)`
 `;
 const TitleImageSmall = styled(Menus)`
     width: 100%;
+
+    background-color: #2A2732;
 
     background-image: url(${TitleIMGsrc});
     background-size: 90px 55px;
@@ -364,6 +416,8 @@ export const StoreNavigation = () => {
     const [isClick, setIsClick] = useState(false);
     const [isCategoryShow, setIsCategoryShow] = useState(false);
 
+    const [searchKeyword, setSearchKeyword] = useState('');
+
     const logOuts = () => {
         const logOutChoice = window.confirm('로그아웃 하시겠어요?');
 
@@ -379,6 +433,27 @@ export const StoreNavigation = () => {
         setIsCategoryShow(!isCategoryShow);
     };
 
+    const onChangeSearchKeyword = (event) => {
+        setSearchKeyword(event.target.value);
+    };
+
+    const onSearch = (keyword) => {
+        if (!searchKeyword) {
+            alert('검색어를 입력해주세요.');
+            return;
+        };
+
+        navigate(`/store/productlist/${searchKeyword}`);
+        setSearchKeyword('');
+        setIsCategoryShow(false);
+    };
+
+    const onCategorySearch = (keyword) => {
+
+        navigate(`/store/productlist/${keyword}`);
+        setSearchKeyword('');
+        setIsCategoryShow(false);
+    };
 
     return (
         <BackGround>
@@ -401,15 +476,9 @@ export const StoreNavigation = () => {
                                         <Link to='/'></Link>
                                     </TitleImage>
                                     <DownMenu>
-                                        <Link to='/'>
-                                            메뉴1
-                                        </Link>
-                                        <Link to='/'>
-                                            메뉴2
-                                        </Link>
-                                        <Link to='/'>
-                                            메뉴3
-                                        </Link>
+                                        <Link to='/store'>굿즈스토어</Link>
+                                        <Link to='/'>원신 DB</Link>
+                                        <Link to='/'>자유게시판</Link>
 
                                         {getUserState.flagvalue.isLogin ?
                                             <UserMenuSub>
@@ -496,21 +565,32 @@ export const StoreNavigation = () => {
                         <AiOutlineMenu size={30} />
                     </CategoryButton>
 
-                    <CategoryList isCategoryShow={isCategoryShow}></CategoryList>
+                    <CategoryList isCategoryShow={isCategoryShow}>
+                        <MyPageButtonArea>
+                            <MyShoppingButton>
+                                <Link to='/store/mypage'>마이페이지</Link>
+                            </MyShoppingButton>
+                        </MyPageButtonArea>
+
+                        <KeywordButtonArea>
+                            <KeywordButton onClick={() => onCategorySearch('케이스')}>케이스</KeywordButton>
+                            <KeywordButton onClick={() => onCategorySearch('패드')}>패드</KeywordButton>
+                            <KeywordButton onClick={() => onCategorySearch('문구')}>문구</KeywordButton>
+                            <KeywordButton onClick={() => onCategorySearch('서적')}>서적</KeywordButton>
+                            <KeywordButton onClick={() => onCategorySearch('침구')}>침구</KeywordButton>
+                            <KeywordButton onClick={() => onCategorySearch('피규어')}>피규어</KeywordButton>
+                            <KeywordButton onClick={() => onCategorySearch('인형')}>인형</KeywordButton>
+                        </KeywordButtonArea>
+                    </CategoryList>
 
                     <SearchBar>
-                        <SearchInput />
-                        <SearchButton>
-                            <Link to='/store/productlist'>검색</Link>
+                        <SearchInput type='text' value={searchKeyword} onChange={onChangeSearchKeyword} />
+                        <SearchButton onClick={onSearch}>
+                            검색
                         </SearchButton>
                     </SearchBar>
-                </SearchBarArea>
 
-                <MyShoppingArea>
-                    <MyShoppingButton>
-                        <Link to='/store/mypage'>마이페이지</Link>
-                    </MyShoppingButton>
-                </MyShoppingArea>
+                </SearchBarArea>
 
             </SearchNav>
 

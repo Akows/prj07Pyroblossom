@@ -93,7 +93,7 @@ function App() {
         <Route path='store/*' element={<StoreLayout />} >
           <Route index element={<StoreMain />} />
 
-          <Route path='productlist' element={<ProductList />} />
+          <Route path='productlist/:keyword' element={<ProductList />} />
           <Route path='productdetail' element={<ProductDetail />} />
 
           <Route path='mypage' element={<StoreMyPage />} />

@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components';
+import '../../assets/animation.css';
 
 // import React, { useEffect, useState } from 'react'
 
@@ -51,7 +52,7 @@ const InnerContents = styled.div`
 `;
 
 const StoreTitleArea = styled.div`
-    width: 90%;
+    width: 100%;
     height: 300px;
 
     margin-top: 120px;
@@ -60,12 +61,15 @@ const StoreTitleArea = styled.div`
     flex-direction: row;
     align-items: center;
     justify-content: center;
+
 `;
 const StoreSlideShowArea = styled.div`
     width: 90%;
     height: 400px;
 
     margin-top: 30px;
+
+    z-index: 3;
 
     border: 2px solid black;
 `;
@@ -76,52 +80,64 @@ const StoreListArea = styled.div`
     margin-top: 30px;
     margin-bottom: 30px;
 
+    z-index: 3;
+
     border: 2px solid black;
 `;
 
-const TitleSub1Image = styled.div`
-    width: 35%;
-    height: 100%;
-
-    overflow: visible;
-
-    & > img {
-        width: 600px;
-        height: 900px;
-
-        margin-top: -120px;
-        margin-left: -90px;
-
-        -webkit-user-select:none;
-        -moz-user-select:none;
-        -ms-user-select:none;
-        user-select:none
-    }
-`;
 const TitleMainImage = styled.div`
-    width: 25%;
+    width: 30%;
     height: 100%;
+
+    z-index: 2;
 
     background-image: url(${MainImagesrc});
     background-size: 300px 300px;
     background-position: center;
     background-repeat: no-repeat;
+
+    @media screen and (max-width: 1000px) {
+        width: 100%;
+    }
 `;
-const TitleSub2mage = styled.div`
+const TitleSub1Image = styled.div`
     width: 35%;
     height: 100%;
 
-    & > img {
-        width: 700px;
-        height: 900px;
+    @media screen and (max-width: 1000px) {
+        width: 0%;
+    }
+`;
+const TitleSub2Image = styled.div`
+    width: 35%;
+    height: 100%;
 
-        margin-top: -120px;
-        margin-left: -50px;
+    margin-top: 360px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    z-index: 1;
+
+    & > img {
+        width: 630px;
+        height: 850px;
+
+        opacity: 0.7;
 
         -webkit-user-select:none;
         -moz-user-select:none;
         -ms-user-select:none;
-        user-select:none
+        user-select:none;
+
+        animation: storeSubImageAni 1s ease-in;
+    }
+
+    @media screen and (max-width: 1000px) {
+        width: 0%;
+        display: none;
     }
 `;
 
@@ -162,9 +178,9 @@ export const StoreMain = () => {
                     <TitleMainImage>
 
                     </TitleMainImage>
-                    <TitleSub2mage>
-                        {/* <img src={Sub2Imagesrc} alt=''></img> */}
-                    </TitleSub2mage>
+                    <TitleSub2Image>
+                        <img src={Sub2Imagesrc} alt=''></img>
+                    </TitleSub2Image>
 
                 </StoreTitleArea>
                 <StoreSlideShowArea>
