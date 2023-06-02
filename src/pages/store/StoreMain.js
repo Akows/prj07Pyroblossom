@@ -17,8 +17,6 @@ import BackgroundImagesrc from '../../assets/images/background/upLiyueport2.jpg'
 import MainImagesrc from '../../assets/images/System_Shop.webp';
 // import Sub1Imagesrc from '../../assets/images/character_eula_portrait.png';
 import Sub2Imagesrc from '../../assets/images/Character_Klee_Full_Wish.webp';
-import { Loading } from '../../components/Loading';
-
 
 const BackGround = styled.div`
     width: 100%;
@@ -220,8 +218,6 @@ export const StoreMain = () => {
 
     return (
         <BackGround>
-
-            <Loading />
 
             <BackGroundImage />
 

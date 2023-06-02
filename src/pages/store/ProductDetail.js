@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { Reviews } from './DetailComponents/Reviews';
@@ -475,10 +475,10 @@ export const ProductDetail = () => {
 
     const OtherInfoScrollMovePoint = useRef();
 
-    useEffect(() => {
+    const setWhatComponentsRender = (name) => {
+        setWhatCompoIsShow(name);
         OtherInfoScrollMovePoint.current?.scrollIntoView({ behavior: 'smooth' });
-    }, [whatCompoIsShow])
-
+    };
 
     return (
         <BackGround>
@@ -587,13 +587,13 @@ export const ProductDetail = () => {
             <OtherInfoArea>
                 <OtherInfo>
                     <OtherInfoButtons>
-                        <button onClick={() => setWhatCompoIsShow('review')}>
+                        <button onClick={() => setWhatComponentsRender('review')}>
                             리뷰
                         </button>
-                        <button onClick={() => setWhatCompoIsShow('info')}>
+                        <button onClick={() => setWhatComponentsRender('info')}>
                             제품정보
                         </button>
-                        <button onClick={() => setWhatCompoIsShow('qna')}>
+                        <button onClick={() => setWhatComponentsRender('qna')}>
                             QnA
                         </button>
                     </OtherInfoButtons>
