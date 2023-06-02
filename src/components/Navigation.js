@@ -312,7 +312,7 @@ export const Navigation = () => {
                     <Link to='/'>원신 DB</Link>
                 </Menu2>
                 <Menu2>
-                    <Link to='/'>자유게시판</Link>
+                    <Link to='/freeboard'>자유게시판</Link>
                 </Menu2>
             </MenuArea>
 

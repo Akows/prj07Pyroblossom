@@ -23,6 +23,8 @@ import { ProductDetail } from './pages/store/ProductDetail';
 import { StoreMyPage } from './pages/store/StoreMyPage';
 import { PaymentPage } from './pages/store/PaymentPage';
 import { Footer } from './components/Footer';
+import { Loading } from './components/Loading';
+
 
 const AppBackGround = styled.div`
   width: 100%;
@@ -99,6 +101,10 @@ function App() {
           <Route path='mypage' element={<StoreMyPage />} />
 
           <Route path='payment' element={<PaymentPage />} />
+        </Route>
+
+        <Route path='freeboard/*' element={<Layout />} >
+          <Route index element={<Loading />} />
         </Route>
 
       </Routes>

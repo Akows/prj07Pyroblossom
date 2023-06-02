@@ -1,12 +1,12 @@
 import React, { useRef, useState } from 'react'
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { Reviews } from './DetailComponents/Reviews';
+
+import { Reviews } from '../../components/store/productDetail/Reviews';
+import { QnA } from '../../components/store/productDetail/QnA';
+import { ProductInfomation } from '../../components/store/productDetail/ProductInfomation';
 
 import productimg from '../../assets/images/testImg/testproductimg.jpg';
-
-import { QnA } from './DetailComponents/QnA';
-import { ProductInfomation } from './DetailComponents/ProductInfomation';
 
 const SpecialCharacter = styled.p`
     margin-left: 2px;
@@ -470,6 +470,7 @@ const OtherInfoComponentArea = styled.div`
 export const ProductDetail = () => {
 
     const { id } = useParams();
+    const navigate = useNavigate();
 
     const [whatCompoIsShow, setWhatCompoIsShow] = useState('review');
 
@@ -578,7 +579,7 @@ export const ProductDetail = () => {
                         </PurchaseUtil>
 
                         <PurchaseButton ref={OtherInfoScrollMovePoint}>
-                            <button>구매하기</button>
+                            <button onClick={() => navigate('/store/payment')}>구매하기</button>
                         </PurchaseButton>
                     </ProductPayInfo>
                 </ProductInfo>

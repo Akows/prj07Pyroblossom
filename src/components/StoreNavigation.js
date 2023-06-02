@@ -211,11 +211,9 @@ const MyShoppingButton = styled.button`
     border-radius: 15px;
     background-color: #50596B;
 
-    & > a {
-        font-family: 'GIFont';
-        font-size: 16px;
-        color: #D3BC8E;
-    }
+    font-family: 'GIFont';
+    font-size: 16px;
+    color: #D3BC8E;
 `;
 
 
@@ -437,6 +435,11 @@ export const StoreNavigation = () => {
         setSearchKeyword(event.target.value);
     };
 
+    const onLinkMyPage = () => {
+        navigate('/store/mypage');
+        setIsCategoryShow(false);
+    };
+
     const onSearch = (keyword) => {
         if (!searchKeyword) {
             alert('검색어를 입력해주세요.');
@@ -567,8 +570,8 @@ export const StoreNavigation = () => {
 
                     <CategoryList isCategoryShow={isCategoryShow}>
                         <MyPageButtonArea>
-                            <MyShoppingButton>
-                                <Link to='/store/mypage'>마이페이지</Link>
+                            <MyShoppingButton onClick={onLinkMyPage}>
+                                마이페이지
                             </MyShoppingButton>
                         </MyPageButtonArea>
 
