@@ -5,6 +5,7 @@ import { appAuth } from '../../../configs/firebase/config';
 import { sendPasswordResetEmail } from 'firebase/auth';
 
 import IDAndPasswordSearchdecoimage1 from '../../../assets/images/emoji/Icon_Emoji_010_Amber_Save_me.webp';
+import { searchUserEmail } from '../../../functions/userFunction';
 
 const IDAndPasswordSearchModalBorder = styled.div`
     width: 100%;
@@ -158,10 +159,20 @@ const IDAndPasswordSearchButton = styled.div`
 
 export const IDAndPasswordSearchModal = ({ isOnSearchModal, setIsOnSearchModal }) => {
 
+    const [inputUserPhoneNumber, setInputUserPhoneNumber] = useState('');
     const [inputUserEmail, setInputUserEmail] = useState('');
     const [inputUserDisplayName, setInputUserDisplayName] = useState('');
 
+    const [isSearchMethodRuning, setIsSearchMethodRuning] = useState(false);
+    const [isUserEmailExist, setIsUserEmailExist] = useState(false);
+
+    const [userEmailSearchResult, setUserEmailSearchResult] = useState('');
+
     const onChange = (event) => {
+        if (event.target.id === 'phonenumber') {
+            setInputUserPhoneNumber(event.target.value);
+        };
+
         if (event.target.id === 'email') {
             setInputUserEmail(event.target.value);
         };
@@ -169,6 +180,25 @@ export const IDAndPasswordSearchModal = ({ isOnSearchModal, setIsOnSearchModal }
         if (event.target.id === 'displayname') {
             setInputUserDisplayName(event.target.value);
         };
+    };
+
+    const searchEmail = () => {
+        if (!inputUserPhoneNumber) {
+            alert('사용자 전화번호를 입력해주세요');
+            return;
+        };
+        setIsSearchMethodRuning(true);
+
+        searchUserEmail(inputUserPhoneNumber)
+            .then((result) => {
+                if (result) {
+                    setIsUserEmailExist(true);
+                    setUserEmailSearchResult(result);
+                }
+                else {
+                    setIsUserEmailExist(false);
+                };
+            });
     };
 
     const searchPassword = () => {
@@ -214,6 +244,38 @@ export const IDAndPasswordSearchModal = ({ isOnSearchModal, setIsOnSearchModal }
                     <IDSearch>
 
                         <p>아이디 찾기</p>
+
+                        {isSearchMethodRuning ?
+                            <>
+                                {isUserEmailExist ?
+                                    <>
+                                        <br /><br />
+                                        <p>귀하의 이메일은 {userEmailSearchResult} 입니다.</p>
+
+                                        <IDAndPasswordSearchButton>
+                                            <button onClick={() => setIsSearchMethodRuning(false)}>확인</button>
+                                        </IDAndPasswordSearchButton>
+                                    </>
+                                    :
+                                    <>
+                                        <br /><br />
+                                        <p>존재하지 않는 유저입니다.</p>
+
+                                        <IDAndPasswordSearchButton>
+                                            <button onClick={() => setIsSearchMethodRuning(false)}>확인</button>
+                                        </IDAndPasswordSearchButton>
+                                    </>
+                                }
+                            </>
+                            :
+                            <>
+                                <Input type='text' id='phonenumber' placeholder='사용자 전화번호를 입력해주세요' spellcheck='false' onChange={onChange} value={inputUserPhoneNumber} />
+
+                                <IDAndPasswordSearchButton>
+                                    <button onClick={searchEmail}>아이디 찾기</button>
+                                </IDAndPasswordSearchButton>
+                            </>
+                        }
 
                     </IDSearch>
 

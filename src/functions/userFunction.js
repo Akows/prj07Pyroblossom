@@ -70,4 +70,21 @@ const checkDuplication = async (inputdata, checktype) => {
     return result;
 };
 
-export { checkValidate, checkDuplication };
+const searchUserEmail = async (inputdata) => {
+
+    const q = query(userCollectionRef);
+    const querySnapshot = await getDocs(q);
+
+    let result = '';
+
+    querySnapshot.forEach((doc) => {
+        if (doc.data().phonenumber === inputdata) {
+            result = doc.data().email;
+        };
+        console.log(doc.id, " => ", doc.data());
+    });
+
+    return result;
+};
+
+export { checkValidate, checkDuplication, searchUserEmail };
