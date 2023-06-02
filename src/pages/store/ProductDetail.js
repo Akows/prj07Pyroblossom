@@ -1,7 +1,12 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { Reviews } from './DetailComponents/Reviews';
+
+import productimg from '../../assets/images/testImg/testproductimg.jpg';
+
+import { QnA } from './DetailComponents/QnA';
+import { ProductInfomation } from './DetailComponents/ProductInfomation';
 
 const SpecialCharacter = styled.p`
     margin-left: 2px;
@@ -70,12 +75,17 @@ const ProductInfo = styled.div`
 
 const ProductImg = styled.div`
     width: 50%;
-    height: 500px;
+    height: 100%;
 
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
+
+    & > img {
+        width: 100%;
+        height: 100%;
+    };
 
     @media screen and (max-width: 1000px) {
         width: 90%;
@@ -85,6 +95,8 @@ const ProductImg = styled.div`
 const ProductPayInfo = styled.div`
     width: 50%;
     height: 100%;
+
+    margin-left: 10px;
 
     @media screen and (max-width: 1000px) {
         width: 90%;
@@ -459,6 +471,8 @@ export const ProductDetail = () => {
 
     const { id } = useParams();
 
+    const [whatCompoIsShow, setWhatCompoIsShow] = useState('review');
+
     return (
         <BackGround>
 
@@ -469,7 +483,7 @@ export const ProductDetail = () => {
             <ProductInfoArea>
                 <ProductInfo>
                     <ProductImg>
-                        제품사진
+                        <img src={productimg} alt=''></img>
                     </ProductImg>
                     <ProductPayInfo>
                         <ProductName>
@@ -566,19 +580,23 @@ export const ProductDetail = () => {
             <OtherInfoArea>
                 <OtherInfo>
                     <OtherInfoButtons>
-                        <button>
+                        <button onClick={() => setWhatCompoIsShow('review')}>
                             리뷰
                         </button>
-                        <button>
+                        <button onClick={() => setWhatCompoIsShow('info')}>
                             제품정보
                         </button>
-                        <button>
+                        <button onClick={() => setWhatCompoIsShow('qna')}>
                             QnA
                         </button>
                     </OtherInfoButtons>
 
                     <OtherInfoComponentArea>
-                        <Reviews />
+
+                        {whatCompoIsShow === 'review' && <Reviews />}
+                        {whatCompoIsShow === 'info' && <ProductInfomation />}
+                        {whatCompoIsShow === 'qna' && <QnA />}
+
                     </OtherInfoComponentArea>
                 </OtherInfo>
 

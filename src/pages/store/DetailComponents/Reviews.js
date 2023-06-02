@@ -1,9 +1,9 @@
 import React from 'react'
 import styled from 'styled-components';
 
-import star1img from '../../../assets/images/stars/Icon_1_Star.webp';
-import star2img from '../../../assets/images/stars/Icon_2_Stars.webp';
-import star3img from '../../../assets/images/stars/Icon_3_Stars.webp';
+// import star1img from '../../../assets/images/stars/Icon_1_Star.webp';
+// import star2img from '../../../assets/images/stars/Icon_2_Stars.webp';
+// import star3img from '../../../assets/images/stars/Icon_3_Stars.webp';
 import star4img from '../../../assets/images/stars/Icon_4_Stars.webp';
 import star5img from '../../../assets/images/stars/Icon_5_Stars.webp';
 
@@ -221,7 +221,7 @@ export const Reviews = () => {
 
                     <UserReviewInfo>
                         <UserScore>
-                            <img src={star5img}></img>
+                            <img src={star5img} alt=''></img>
                         </UserScore>
                         <UserInfo>
                             김철수 | 23.01.31
@@ -246,7 +246,7 @@ export const Reviews = () => {
 
                     <UserReviewInfo>
                         <UserScore>
-                            <img src={star4img}></img>
+                            <img src={star4img} alt=''></img>
                         </UserScore>
                         <UserInfo>
                             박영희 | 23.02.03
@@ -270,7 +270,7 @@ export const Reviews = () => {
 
                     <UserReviewInfo>
                         <UserScore>
-                            <img src={star4img}></img>
+                            <img src={star4img} alt=''></img>
                         </UserScore>
                         <UserInfo>
                             박영희 | 23.02.03
