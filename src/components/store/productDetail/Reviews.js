@@ -134,6 +134,8 @@ const Review = styled.div`
     width: 80%;
     height: 150px;
 
+    color: #D3BC8E;
+
     display: flex;
     flex-direction: row;
     align-items: center;

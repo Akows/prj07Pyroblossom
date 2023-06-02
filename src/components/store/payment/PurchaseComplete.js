@@ -230,6 +230,8 @@ const PaymentSubmit = styled.div`
     width: 100%;
     height: 100%;
 
+    margin-bottom: 30px;
+
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -237,7 +239,7 @@ const PaymentSubmit = styled.div`
 
     border: 1px solid gray;
 
-    border-radius: 15px 15px 15px 15px;
+    border-radius: 15px 15px 0px 0px;
 
     & > p {
         margin-top: 10px;

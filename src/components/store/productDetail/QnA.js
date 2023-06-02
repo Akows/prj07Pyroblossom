@@ -111,6 +111,8 @@ const QnAInfo = styled.div`
 
     margin-top: 10px;
 
+    color: #D3BC8E;
+
     display: flex;
     flex-direction: row;
     align-items: center;
