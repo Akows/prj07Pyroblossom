@@ -443,14 +443,14 @@ export const StoreNavigation = () => {
             return;
         };
 
-        navigate(`/store/productlist/${searchKeyword}`);
+        navigate(`/store/productlist/normal/${searchKeyword}`);
         setSearchKeyword('');
         setIsCategoryShow(false);
     };
 
     const onCategorySearch = (keyword) => {
 
-        navigate(`/store/productlist/${keyword}`);
+        navigate(`/store/productlist/category/${keyword}`);
         setSearchKeyword('');
         setIsCategoryShow(false);
     };
