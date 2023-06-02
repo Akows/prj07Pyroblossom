@@ -142,6 +142,7 @@ const ShippingAddress = styled.div`
     & > fieldset {
         margin-top: 20px;
         margin-bottom: 20px;
+        margin-left: 5px;
 
         display: flex;
         flex-direction: row;
@@ -150,6 +151,7 @@ const ShippingAddress = styled.div`
     };
 
     & > fieldset > legend {
+        margin-left: 10px;
         margin-top: 20px;
         margin-bottom: 20px;
     };
@@ -195,24 +197,186 @@ const BuyerBenefit = styled.div`
     width: 100%;
     height: 100%;
 
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+
     border: 1px solid gray;
 
     border-radius: 15px 15px 15px 15px;
+
+    & > p {
+        margin-top: 10px;
+        margin-left: 15px;
+    };
 `;
 
+const PointInfo = styled.div`
+    width: 90%;
+    height: 100%;
 
+    margin-top: 10px;
+    margin-left: 15px;
 
+    border-bottom: 1px solid gray;
 
-
-
-const A4 = styled.div`
-    width: 100%;
-    height: 100px;
+    & > p:nth-child(1) {
+        font-size: 16px;
+    };
 `;
 
-const A5 = styled.div`
+const PointUse = styled.div`
     width: 100%;
-    height: 100px;
+    height: 100%;
+
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+
+    & > p {
+        font-size: 16px;
+    };
+    & > input {
+        width: 120px;
+        height: 25px;
+
+        margin-left: 10px;
+        margin-right: 10px;
+
+        font-family: 'GIFont';
+        font-size: 16px;
+        color: black;
+
+        background-color: #aaaaaa;
+
+        border-radius: 5px;
+
+        border: none;
+    };
+    & > button {
+        border: 2px solid #535B6C;
+        border-radius: 25px;
+        background-color: #50596B;
+
+        font-family: 'GIFont';
+        font-size: 16px;
+        color: #D3BC8E;
+    };
+`;
+const PriceInfo = styled.div`
+    width: 90%;
+    height: 100%;
+
+    margin-top: 10px;
+    margin-left: 15px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+
+    font-size: 18px;
+    opacity: 1;
+
+    & > p {
+        margin-top: 5px;
+    };
+
+    & > p:nth-child(1) {
+        opacity: 0.6;
+    };
+    & > p:nth-child(2) {
+        opacity: 0.6;
+    };
+    & > p:nth-child(3) {
+        opacity: 0.6;
+    };
+    & > p:nth-child(4) {
+        margin-top: 10px;
+        margin-bottom: 15px;
+        padding-top: 5px;
+
+        border-top: 1px solid gray;
+        font-size: 24px;
+    };
+`;
+
+const PaymentMethod = styled.div`
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+
+    border: 1px solid gray;
+
+    border-radius: 15px 15px 15px 15px;
+
+    & > p {
+        margin-top: 10px;
+        margin-left: 15px;
+    };
+`;
+const PaymentWay = styled.div`
+    width: 100%;
+    height: 100%;
+
+    margin-top: 10px;
+    margin-left: 15px;
+    margin-bottom: 20px;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+
+    font-size: 18px;
+
+    & > input {
+        width: 20px;
+        height: 20px;
+    };
+`;
+
+const PaymentSubmit = styled.div`
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid gray;
+
+    border-radius: 15px 15px 15px 15px;
+
+    & > p {
+        margin-top: 10px;
+        margin-left: 15px;
+    };
+    & > button {
+        width: 200px;
+        height: 45px;
+
+        margin-top: 20px;
+        margin-bottom: 20px;
+
+        border: 2px solid #535B6C;
+        border-radius: 25px;
+        background-color: #50596B;
+
+        font-family: 'GIFont';
+        font-size: 32px;
+        color: #D3BC8E;
+    };
 `;
 
 
@@ -220,7 +384,14 @@ const A5 = styled.div`
 export const OrderPurchase = ({ setWhatComponentIsShow }) => {
 
     const onSubmit = () => {
-        setWhatComponentIsShow('purchasecomplete');
+        const submitCheck = window.confirm('결제하시겠습니까?');
+
+        if (!submitCheck) {
+            return;
+        }
+        else {
+            setWhatComponentIsShow('purchasecomplete');
+        };
     };
 
     return (
@@ -285,18 +456,42 @@ export const OrderPurchase = ({ setWhatComponentIsShow }) => {
 
 
                 <BuyerBenefit>
-                    할인 및 최종결제 내용
+                    <p>할인 및 최종결제 내용</p>
+
+                    <PointInfo>
+                        <p>보유 포인트 : 3000p</p>
+
+                        <PointUse>
+                            <p>사용 :</p> <input /> <button>전액사용</button>
+                        </PointUse>
+
+                    </PointInfo>
+
+                    <p>결제상세</p>
+
+                    <PriceInfo>
+                        <p>주문금액 : 30,000원</p>
+                        <p>배송비 : 0원</p>
+                        <p>할인 : 5,000원</p>
+                        <p>결제금액 : 25,000원</p>
+                    </PriceInfo>
+
                 </BuyerBenefit>
 
+                <PaymentMethod>
+                    <p>결제수단</p>
+
+                    <PaymentWay>
+                        <input type='checkbox' checked /> <p>포인트 결제</p>
+                    </PaymentWay>
+                </PaymentMethod>
 
 
+                <PaymentSubmit>
+                    <p>주문 내용을 확인하였으며, 구매에 필요한 개인정보 제공에 동의합니다.</p>
 
-                <A4>
-                    결제수단 정보
-                </A4>
-                <A5 onClick={onSubmit}>
-                    결제버튼
-                </A5>
+                    <button onClick={onSubmit}>결제하기</button>
+                </PaymentSubmit>
 
             </ProductListArea>
         </>
