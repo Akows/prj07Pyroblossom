@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { Reviews } from './DetailComponents/Reviews';
@@ -473,6 +473,13 @@ export const ProductDetail = () => {
 
     const [whatCompoIsShow, setWhatCompoIsShow] = useState('review');
 
+    const OtherInfoScrollMovePoint = useRef();
+
+    useEffect(() => {
+        OtherInfoScrollMovePoint.current?.scrollIntoView({ behavior: 'smooth' });
+    }, [whatCompoIsShow])
+
+
     return (
         <BackGround>
 
@@ -570,7 +577,7 @@ export const ProductDetail = () => {
                             <button>장바구니</button>
                         </PurchaseUtil>
 
-                        <PurchaseButton>
+                        <PurchaseButton ref={OtherInfoScrollMovePoint}>
                             <button>구매하기</button>
                         </PurchaseButton>
                     </ProductPayInfo>
