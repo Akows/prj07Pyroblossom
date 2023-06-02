@@ -480,8 +480,8 @@ export const StoreNavigation = () => {
                                     </TitleImage>
                                     <DownMenu>
                                         <Link to='/store'>굿즈스토어</Link>
-                                        <Link to='/'>원신 DB</Link>
-                                        <Link to='/'>자유게시판</Link>
+                                        <Link to='/'>미구현</Link>
+                                        <Link to='/freeboard'>로딩화면테스트</Link>
 
                                         {getUserState.flagvalue.isLogin ?
                                             <UserMenuSub>
@@ -523,10 +523,10 @@ export const StoreNavigation = () => {
                         <Link to='/store'>굿즈스토어</Link>
                     </Menu2>
                     <Menu2>
-                        <Link to='/'>원신 DB</Link>
+                        <Link to='/'>미구현</Link>
                     </Menu2>
                     <Menu2>
-                        <Link to='/'>자유게시판</Link>
+                        <Link to='/freeboard'>로딩화면테스트</Link>
                     </Menu2>
                 </MenuArea>
 
