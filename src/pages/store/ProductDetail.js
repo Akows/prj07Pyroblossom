@@ -1,6 +1,7 @@
 import React from 'react'
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
+import { Reviews } from './DetailComponents/Reviews';
 
 const SpecialCharacter = styled.p`
     margin-left: 2px;
@@ -39,24 +40,9 @@ const ProductInfoArea = styled.div`
     justify-content: center;
 `;
 
-const ReviewInfoArea = styled.div`
-    width: 90%;
-    height: 300px;
-
-    margin-top: 30px;
-    margin-bottom: 30px;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-
-    border: 2px solid black;
-`;
-
 const OtherInfoArea = styled.div`
     width: 90%;
-    height: 800px;
+    height: 100%;
 
     margin-top: 30px;
     margin-bottom: 30px;
@@ -65,8 +51,6 @@ const OtherInfoArea = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-
-    border: 2px solid black;
 `;
 
 const ProductInfo = styled.div`
@@ -78,7 +62,10 @@ const ProductInfo = styled.div`
     align-items: flex-start;
     justify-content: center;
 
-    border: 1px solid #D3BC8E;
+    @media screen and (max-width: 1000px) {
+        flex-direction: column;
+        align-items: center;
+    }
 `;
 
 const ProductImg = styled.div`
@@ -89,11 +76,19 @@ const ProductImg = styled.div`
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
+
+    @media screen and (max-width: 1000px) {
+        width: 90%;
+    }
 `;
 
 const ProductPayInfo = styled.div`
     width: 50%;
     height: 100%;
+
+    @media screen and (max-width: 1000px) {
+        width: 90%;
+    }
 `;
 
 const ProductName = styled.div`
@@ -402,29 +397,62 @@ const PurchaseButton = styled.div`
     };
 `;
 
-const B = styled.div`
-    width: 90%;
+
+
+
+
+
+const OtherInfo = styled.div`
+    width: 100%;
     height: 100%;
 
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-
-    border: 2px solid black;
 `;
-const B1 = styled.div`
+const OtherInfoButtons = styled.div`
     width: 100%;
-    height: 60px;
+    height: 55px;
 
-    border: 2px solid black;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    & > button {
+        width: 30%;
+        height: 100%;
+
+        margin: 3px;
+
+        border: none;
+        border-radius: 2px;
+
+        font-family: 'GIFont';
+        font-size: 16px;
+
+        @media screen and (max-width: 1000px) {
+            width: 100%;
+            height: 33.3%;
+        };
+    };
+    & > button:hover {
+        border: 3px solid gray;
+    };
+
+    @media screen and (max-width: 1000px) {
+        flex-direction: column;
+        height: 150px;
+    };
 `;
 
-const B2 = styled.div`
+const OtherInfoComponentArea = styled.div`
     width: 100%;
     height: 100%;
 
-    border: 2px solid black;
+    margin-top: 20px;
+
 `;
 
 export const ProductDetail = () => {
@@ -495,9 +523,6 @@ export const ProductDetail = () => {
                                 <button>X</button>
                             </PurchaseOption1>
 
-
-
-
                             <PurchaseOption2>
 
                                 <div>
@@ -536,21 +561,26 @@ export const ProductDetail = () => {
                         </PurchaseButton>
                     </ProductPayInfo>
                 </ProductInfo>
-
-
             </ProductInfoArea>
 
-            <ReviewInfoArea>
-                리뷰즈
-
-            </ReviewInfoArea>
-
-
             <OtherInfoArea>
-                <B>
-                    <B1>버튼들</B1>
-                    <B2>컴포넌트 구역</B2>
-                </B>
+                <OtherInfo>
+                    <OtherInfoButtons>
+                        <button>
+                            리뷰
+                        </button>
+                        <button>
+                            제품정보
+                        </button>
+                        <button>
+                            QnA
+                        </button>
+                    </OtherInfoButtons>
+
+                    <OtherInfoComponentArea>
+                        <Reviews />
+                    </OtherInfoComponentArea>
+                </OtherInfo>
 
 
             </OtherInfoArea>

@@ -1,6 +1,9 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import '../../assets/animation.css';
+
+import Sildeshow from '../../components/SlideShow';
 
 // import React, { useEffect, useState } from 'react'
 
@@ -14,8 +17,7 @@ import BackgroundImagesrc from '../../assets/images/background/upLiyueport2.jpg'
 import MainImagesrc from '../../assets/images/System_Shop.webp';
 // import Sub1Imagesrc from '../../assets/images/character_eula_portrait.png';
 import Sub2Imagesrc from '../../assets/images/Character_Klee_Full_Wish.webp';
-import Sildeshow from '../../components/SlideShow';
-import { useNavigate } from 'react-router-dom';
+
 
 const BackGround = styled.div`
     width: 100%;
