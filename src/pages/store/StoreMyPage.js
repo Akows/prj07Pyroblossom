@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { AdminProductUpload } from '../../components/store/myPage/AdminProductUpload';
+import { MyPageNavigation } from '../../components/store/myPage/MyPageNavigation';
 
-import Imagesrc1 from '../../assets/images/Genshin-Impact-Logo.webp';
-import Imagesrc2 from '../../assets/images/System_Shop.webp';
 import { PurchaseHistory } from '../../components/store/myPage/PurchaseHistory';
 import { ShoppingBasket } from '../../components/store/myPage/ShoppingBasket';
 
@@ -20,89 +19,6 @@ const BackGround = styled.div`
 
     color: #D3BC8E;
 `;
-
-const MyPageNavigation = styled.div`
-    width: 1200px;
-    height: 80px;
-
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-
-    background-color: #D3BC8E;
-    border-radius: 5px;
-
-    color: #414147;
-
-    @media screen and (max-width: 1200px) {
-        width: 95%;
-    }
-`;
-
-const LogoAndCompoButton = styled.div`
-    width: 70%;
-    height: 100%;
-
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-start;
-
-    & > a > img {
-        width: 80px;
-        height: 95%;
-
-        margin-left: 10px;
-    };
-`;
-const NavUtilButton = styled.div`
-    width: 30%;
-    height: 100%;
-
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-end;
-
-    & > a > img {
-        width: 80px;
-        height: 95%;
-
-        margin-left: 10px;
-    };
-`;
-
-const NavText = styled.div`
-    width: 150px;
-    height: 50px;
-
-    margin: 5px;
-
-    font-size: 22px;
-
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-
-    border: 1px solid gray;
-    border-radius: 15px;
-
-    &:hover {
-        border: 3px solid gray;
-    };
-`;
-
-
-
-
-
-
-
-
-
-
 
 const InnerContents = styled.div`
     width: 1200px;
@@ -184,7 +100,6 @@ const CompoButton = styled.div`
     };
 `;
 
-
 const UserInfoArea = styled.div`
     width: 30%;
     height: 100%;
@@ -201,9 +116,6 @@ const UserInfoArea = styled.div`
         width: 95%;
     };
 `;
-
-
-
 
 const UserProfile = styled.div`
     width: 100%;
@@ -295,7 +207,46 @@ const UserPointRecharge = styled.div`
     };
 `;
 
+const AdminInnerContents = styled.div`
+    width: 1200px;
+    height: 100%;
+
+    margin-top: 20px;
+    margin-bottom: 50px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+`;
+
+const AdminCompoButton = styled.div`
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid gray;
+    border-radius: 15px;
+`;
+
+
+
+
+
+
+
+
+
+
+
+
 export const StoreMyPage = () => {
+
+    const [isAdminLogin, setIsAdminLogin] = useState(false);
 
     const [whatCompoIsShow, setWhatCompoIsShow] = useState('history');
 
@@ -303,84 +254,82 @@ export const StoreMyPage = () => {
         setWhatCompoIsShow(name);
     };
 
+    const setAdmin = () => {
+        setIsAdminLogin(!isAdminLogin);
+    };
+
     return (
         <BackGround>
 
-            <MyPageNavigation>
+            <MyPageNavigation setAdmin={setAdmin} />
 
-                <LogoAndCompoButton>
-                    <Link to='/'>
-                        <img src={Imagesrc1} alt='' />
-                    </Link>
+            {!isAdminLogin &&
+                <InnerContents>
+                    <UserInfoArea>
+                        <UserProfile>
 
-                    <NavText>
-                        마이페이지
-                    </NavText>
-                </LogoAndCompoButton>
+                            <UserInfo>
+                                <p>Member01님!</p>
+                                <p>Member01@Member01.com</p>
+                            </UserInfo>
+                            <UserPoint>
+                                <p>귀하의 포인트는</p>
+                                <p>34,090p입니다.</p>
+                            </UserPoint>
+                            <UserPointRecharge>
+                                <button>포인트 충전하기</button>
+                            </UserPointRecharge>
 
-                <NavUtilButton>
+                        </UserProfile>
 
-                    <Link to='/store'>
-                        <img src={Imagesrc2} alt='' />
-                    </Link>
+                    </UserInfoArea>
 
-                    <NavText>
-                        스토어
-                    </NavText>
-                </NavUtilButton>
+                    <ComponentArea>
 
-            </MyPageNavigation>
+                        <UserMyPage>
 
-            <InnerContents>
-                <UserInfoArea>
-                    <UserProfile>
+                            <UserCompoButton>
+                                <CompoButton onClick={() => setWhatComponentsRender('history')}>
+                                    결제내역
+                                </CompoButton>
+                                <CompoButton onClick={() => setWhatComponentsRender('basket')}>
+                                    장바구니
+                                </CompoButton>
+                            </UserCompoButton>
 
-                        <UserInfo>
-                            <p>Member01님!</p>
-                            <p>Member01@Member01.com</p>
-                        </UserInfo>
-                        <UserPoint>
-                            <p>귀하의 포인트는</p>
-                            <p>34,090p입니다.</p>
-                        </UserPoint>
-                        <UserPointRecharge>
-                            <button>포인트 충전하기</button>
-                        </UserPointRecharge>
+                            {whatCompoIsShow === 'history' && <PurchaseHistory />}
 
-                    </UserProfile>
+                            {whatCompoIsShow === 'basket' && <ShoppingBasket />}
 
-                </UserInfoArea>
+                        </UserMyPage>
 
 
+                    </ComponentArea>
+                </InnerContents>
+            }
 
-                <ComponentArea>
+            {isAdminLogin &&
+                <AdminInnerContents>
 
-                    <UserMyPage>
+                    <AdminCompoButton>
+                        <CompoButton onClick={() => setWhatComponentsRender('productupload')}>
+                            제품 등록/수정
+                        </CompoButton>
+                        <CompoButton onClick={() => setWhatComponentsRender('productmanage')}>
+                            제품 조회/삭제
+                        </CompoButton>
+                    </AdminCompoButton>
 
-                        <UserCompoButton>
-                            <CompoButton onClick={() => setWhatComponentsRender('history')}>
-                                결제내역
-                            </CompoButton>
-                            <CompoButton onClick={() => setWhatComponentsRender('basket')}>
-                                장바구니
-                            </CompoButton>
-                        </UserCompoButton>
+                    <ComponentArea>
 
-                        {whatCompoIsShow === 'history' && <PurchaseHistory />}
+                        {whatCompoIsShow === 'productupload' && <AdminProductUpload />}
 
-                        {whatCompoIsShow === 'basket' && <ShoppingBasket />}
+                        {whatCompoIsShow === 'productmanage' && <>제품 조회/삭제</>}
 
-                    </UserMyPage>
+                    </ComponentArea>
+                </AdminInnerContents>
+            }
 
-
-                </ComponentArea>
-
-            </InnerContents>
-
-
-
-
-
-        </BackGround>
+        </BackGround >
     );
 };
