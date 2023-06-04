@@ -66,6 +66,15 @@ const StoreLayout = () => {
   );
 };
 
+const NoNavLayout = () => {
+  return (
+    <>
+      <Outlet />
+      <Footer />
+    </>
+  );
+};
+
 function App() {
 
   const dispatch = useDispatch();
@@ -94,14 +103,23 @@ function App() {
 
         <Route path='store/*' element={<StoreLayout />} >
           <Route index element={<StoreMain />} />
-
           <Route path='productlist/:searchtype/:keyword' element={<ProductList />} />
           <Route path='productdetail/:id' element={<ProductDetail />} />
-
-          <Route path='mypage' element={<StoreMyPage />} />
-
           <Route path='payment' element={<PaymentPage />} />
         </Route>
+
+        <Route path='store/mypage' element={<NoNavLayout />} >
+          <Route index element={<StoreMyPage />} />
+        </Route>
+
+
+
+
+
+
+
+
+
 
         <Route path='freeboard/*' element={<Layout />} >
           <Route index element={<Loading />} />
