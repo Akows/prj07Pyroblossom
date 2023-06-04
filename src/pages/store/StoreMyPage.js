@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import styled from 'styled-components';
+import { AdminProductManagement } from '../../components/store/myPage/AdminProductManagement';
 import { AdminProductUpload } from '../../components/store/myPage/AdminProductUpload';
 import { MyPageNavigation } from '../../components/store/myPage/MyPageNavigation';
 
@@ -218,6 +219,10 @@ const AdminInnerContents = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
+
+    @media screen and (max-width: 1200px) {
+        width: 95%;
+    };
 `;
 
 const AdminCompoButton = styled.div`
@@ -256,6 +261,7 @@ export const StoreMyPage = () => {
 
     const setAdmin = () => {
         setIsAdminLogin(!isAdminLogin);
+        setWhatCompoIsShow('productmanage');
     };
 
     return (
@@ -312,11 +318,11 @@ export const StoreMyPage = () => {
                 <AdminInnerContents>
 
                     <AdminCompoButton>
-                        <CompoButton onClick={() => setWhatComponentsRender('productupload')}>
-                            제품 등록/수정
-                        </CompoButton>
                         <CompoButton onClick={() => setWhatComponentsRender('productmanage')}>
                             제품 조회/삭제
+                        </CompoButton>
+                        <CompoButton onClick={() => setWhatComponentsRender('productupload')}>
+                            제품 등록/수정
                         </CompoButton>
                     </AdminCompoButton>
 
@@ -324,7 +330,7 @@ export const StoreMyPage = () => {
 
                         {whatCompoIsShow === 'productupload' && <AdminProductUpload />}
 
-                        {whatCompoIsShow === 'productmanage' && <>제품 조회/삭제</>}
+                        {whatCompoIsShow === 'productmanage' && <AdminProductManagement />}
 
                     </ComponentArea>
                 </AdminInnerContents>

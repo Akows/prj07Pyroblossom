@@ -15,6 +15,19 @@ const UploadIMG = styled.div`
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
+
+    & > input {
+        width: 350px;
+        height: 30px;
+
+        font-family: 'GIFont';
+        font-size: 16px;
+        color: black;
+
+        background-color: #aaaaaa;
+        border-radius: 5px;
+        border: none;
+    };
 `;
 
 const UploadInfo = styled.div`
@@ -31,6 +44,27 @@ const UploadInfo = styled.div`
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
+
+    & > input {
+        width: 350px;
+        height: 30px;
+
+        font-family: 'GIFont';
+        font-size: 16px;
+        color: black;
+
+        background-color: #aaaaaa;
+        border-radius: 5px;
+        border: none;
+
+        @media screen and (max-width: 410px) {
+            width: 100%;
+        };
+    };
+
+    & > input:nth-child(2) {
+        margin-top: 10px;
+    };
 `;
 
 const UploadSaleInfo = styled.div`
@@ -47,17 +81,30 @@ const UploadSaleInfo = styled.div`
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
+
+    & > input {
+        width: 350px;
+        height: 30px;
+
+        font-family: 'GIFont';
+        font-size: 16px;
+        color: black;
+
+        background-color: #aaaaaa;
+        border-radius: 5px;
+        border: none;
+
+        @media screen and (max-width: 410px) {
+            width: 100%;
+        };
+    };
+
+    & > input:nth-child(2){
+        margin-top: 10px;
+    };
 `;
 
-
-
-
-
-
-
-
-
-const PurchaseInfo = styled.div`
+const InputCheck = styled.div`
     width: 100%;
     height: 100%;
 
@@ -68,12 +115,61 @@ const PurchaseInfo = styled.div`
     border-radius: 15px;
 
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+
+    & > input {
+        width: 350px;
+        height: 30px;
+
+        font-family: 'GIFont';
+        font-size: 16px;
+        color: black;
+
+        background-color: #aaaaaa;
+        border-radius: 5px;
+        border: none;
+
+        @media screen and (max-width: 410px) {
+            width: 100%;
+        };
+    };
+
+    & > input:nth-child(2){
+        margin-top: 10px;
+    };
+    & > input:nth-child(3){
+        margin-top: 10px;
+    };
+    & > input:nth-child(4){
+        margin-top: 10px;
+    };
+    & > input:nth-child(5){
+        margin-top: 10px;
+    }
+    & > input:nth-child(6){
+        margin-top: 10px;
+    }
+`;
+
+const UploadButtonArea = styled.div`
+    width: 100%;
+    height: 100%;
+
+    margin-top: 10px;
+    padding: 10px;
+
+    border: 1px solid gray;
+    border-radius: 15px;
+
+    display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: space-between;
 `;
 
-const PurchaseInfoButton = styled.div`
+const UploadButton = styled.div`
     width: 100%;
     height: 50px;
 
@@ -140,33 +236,28 @@ export const AdminProductUpload = () => {
             <br />
 
             <p>입력 정보 확인</p>
-            <UploadSaleInfo>
+            <InputCheck>
 
                 <img src='' alt='None' />
 
-                <input type='text' placeholder='제품명 입력' />
+                <input type='text' placeholder='제품번호' />
 
-                <input type='text' placeholder='제품가격 입력' />
+                <input type='text' placeholder='제품명' />
 
-                <input type='text' placeholder='기본 할인률 입력' />
+                <input type='text' placeholder='제품가격' />
 
-                <input type='text' placeholder='포인트 적입률 입력' />
+                <input type='text' placeholder='기본 할인률' />
 
-            </UploadSaleInfo>
+                <input type='text' placeholder='포인트 적입률' />
 
-
-
-
+            </InputCheck>
 
 
-            <PurchaseInfo>
-
-                <PurchaseInfoButton onClick={onUpload}>
+            <UploadButtonArea >
+                <UploadButton onClick={onUpload}>
                     제품 등록하기
-                </PurchaseInfoButton>
-
-            </PurchaseInfo>
-
+                </UploadButton>
+            </UploadButtonArea>
 
         </>
     );
