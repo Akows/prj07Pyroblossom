@@ -120,17 +120,6 @@ const HistoryInfo = styled.div`
     justify-content: flex-start;
 `;
 
-const PointTypeColor = css`
-    ${(props) => props.type === 'income' && css`
-        color: #F77154;
-    `}
-
-    ${(props) => props.type === 'outcome' &&
-        css`
-        color: #1F70B4;
-    `}
-`;
-
 const PointInfo = styled.div`
     width: 80%;
     height: 95%;

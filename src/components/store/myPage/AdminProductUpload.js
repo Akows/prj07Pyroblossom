@@ -17,7 +17,7 @@ const UploadIMG = styled.div`
     justify-content: space-between;
 
     & > input {
-        width: 350px;
+        width: 100%;
         height: 30px;
 
         font-family: 'GIFont';
@@ -46,7 +46,7 @@ const UploadInfo = styled.div`
     justify-content: center;
 
     & > input {
-        width: 350px;
+        width: 100%;
         height: 30px;
 
         font-family: 'GIFont';
@@ -56,14 +56,58 @@ const UploadInfo = styled.div`
         background-color: #aaaaaa;
         border-radius: 5px;
         border: none;
-
-        @media screen and (max-width: 410px) {
-            width: 100%;
-        };
     };
 
     & > input:nth-child(2) {
         margin-top: 10px;
+    };
+    & > input:nth-child(3) {
+        margin-top: 10px;
+    };
+    & > input:nth-child(5) {
+        margin-top: 10px;
+    };
+
+    & > p {
+        font-size: 14px;
+        margin-top: 3px;
+    };
+`;
+
+const UploadProductOptionInfo = styled.div`
+    width: 100%;
+    height: 100%;
+
+    margin-top: 10px;
+    padding: 10px;
+
+    border: 1px solid gray;
+    border-radius: 15px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+
+    & > input {
+        width: 100%;
+        height: 30px;
+
+        font-family: 'GIFont';
+        font-size: 16px;
+        color: black;
+
+        background-color: #aaaaaa;
+        border-radius: 5px;
+        border: none;
+    };
+
+    & > input {
+        margin-top: 10px;
+    };
+    & > p {
+        font-size: 15px;
+        margin-top: 5px;
     };
 `;
 
@@ -83,7 +127,7 @@ const UploadSaleInfo = styled.div`
     justify-content: center;
 
     & > input {
-        width: 350px;
+        width: 100%;
         height: 30px;
 
         font-family: 'GIFont';
@@ -93,10 +137,6 @@ const UploadSaleInfo = styled.div`
         background-color: #aaaaaa;
         border-radius: 5px;
         border: none;
-
-        @media screen and (max-width: 410px) {
-            width: 100%;
-        };
     };
 
     & > input:nth-child(2){
@@ -120,7 +160,7 @@ const InputCheck = styled.div`
     justify-content: center;
 
     & > input {
-        width: 350px;
+        width: 100%;
         height: 30px;
 
         font-family: 'GIFont';
@@ -130,27 +170,11 @@ const InputCheck = styled.div`
         background-color: #aaaaaa;
         border-radius: 5px;
         border: none;
-
-        @media screen and (max-width: 410px) {
-            width: 100%;
-        };
     };
 
-    & > input:nth-child(2){
+    & > input{
         margin-top: 10px;
     };
-    & > input:nth-child(3){
-        margin-top: 10px;
-    };
-    & > input:nth-child(4){
-        margin-top: 10px;
-    };
-    & > input:nth-child(5){
-        margin-top: 10px;
-    }
-    & > input:nth-child(6){
-        margin-top: 10px;
-    }
 `;
 
 const UploadButtonArea = styled.div`
@@ -220,7 +244,34 @@ export const AdminProductUpload = () => {
 
                 <input type='text' placeholder='제품가격 입력' />
 
+                <input type='text' placeholder='배송료 입력' />
+                <p>* 미입력시 무료배송.</p>
+
+                <input type='text' placeholder='인당 구매제한 수량 입력' />
+
             </UploadInfo>
+
+            <br />
+
+            <p>제품 옵션 입력</p>
+            <UploadProductOptionInfo>
+
+                <p>1번 옵션 입력</p>
+                <input type='text' placeholder='1번 옵션 입력' />
+
+                <p>2번 옵션 입력</p>
+                <input type='text' placeholder='2번 옵션 입력' />
+
+                <p>3번 옵션 입력</p>
+                <input type='text' placeholder='3번 옵션 입력' />
+
+                <p>4번 옵션 입력</p>
+                <input type='text' placeholder='4번 옵션 입력' />
+
+                <p>5번 옵션 입력</p>
+                <input type='text' placeholder='5번 옵션 입력' />
+
+            </UploadProductOptionInfo>
 
             <br />
 
@@ -246,9 +297,23 @@ export const AdminProductUpload = () => {
 
                 <input type='text' placeholder='제품가격' />
 
+                <input type='text' placeholder='배송료' />
+
+                <input type='text' placeholder='인당 구매제한 수량 입력' />
+
                 <input type='text' placeholder='기본 할인률' />
 
                 <input type='text' placeholder='포인트 적입률' />
+
+                <input type='text' placeholder='1번 옵션' />
+
+                <input type='text' placeholder='2번 옵션' />
+
+                <input type='text' placeholder='3번 옵션' />
+
+                <input type='text' placeholder='4번 옵션' />
+
+                <input type='text' placeholder='5번 옵션' />
 
             </InputCheck>
 

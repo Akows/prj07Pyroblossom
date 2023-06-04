@@ -294,11 +294,16 @@ const PurchaseOption1 = styled.div`
         height: 30px;
 
         border: none;
-        background-color: rgba( 65, 71, 89, 1 );
-        color: #D3BC8E;
+        border-radius: 5px;
+        background-color: #D3BC8E;
+        color: #414147;
 
         font-family: 'GIFont';
         font-size: 22px;
+    };
+    & > button:hover {
+        background-color: #414147;
+        color: #D3BC8E;
     };
 `;
 
@@ -331,10 +336,19 @@ const PurchaseOption2 = styled.div`
         width: 30px;
         height: 30px;
 
+        border: none;
+        border-radius: 5px;
+        background-color: #D3BC8E;
+        color: #414147;
+
         text-align: center;
 
         font-family: 'GIFont';
         font-size: 22px;
+    };
+    & > div:nth-child(1) > button:hover {
+        background-color: #414147;
+        color: #D3BC8E;
     };
     & > div:nth-child(1) > p {
         width: 30px;
@@ -373,12 +387,15 @@ const PurchaseUtil = styled.div`
 
         border: none;
         border-radius: 5px;
+        background-color: #D3BC8E;
+        color: #414147;
 
         font-family: 'GIFont';
         font-size: 16px;
     };
     & > button:hover {
-        background-color: gray;
+        background-color: #414147;
+        color: #D3BC8E;
     };
 `;
 
@@ -400,12 +417,15 @@ const PurchaseButton = styled.div`
 
         border: none;
         border-radius: 5px;
+        background-color: #D3BC8E;
+        color: #414147;
 
         font-family: 'GIFont';
         font-size: 16px;
     };
     & > button:hover {
-        background-color: gray;
+        background-color: #414147;
+        color: #D3BC8E;
     };
 `;
 
@@ -439,7 +459,9 @@ const OtherInfoButtons = styled.div`
         margin: 3px;
 
         border: none;
-        border-radius: 2px;
+        border-radius: 5px;
+        background-color: #D3BC8E;
+        color: #414147;
 
         font-family: 'GIFont';
         font-size: 16px;
@@ -450,7 +472,8 @@ const OtherInfoButtons = styled.div`
         };
     };
     & > button:hover {
-        border: 3px solid gray;
+        background-color: #414147;
+        color: #D3BC8E;
     };
 
     @media screen and (max-width: 1000px) {
