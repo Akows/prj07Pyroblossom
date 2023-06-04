@@ -223,6 +223,7 @@ export const PurchaseHistory = () => {
                         <ProductInfo>
                             <p>04.13 구매</p>
                             <p>통통폭탄인형</p>
+                            <p>1개</p>
                             <p>30,000원</p>
 
                         </ProductInfo>
@@ -244,6 +245,7 @@ export const PurchaseHistory = () => {
                         <ProductInfo>
                             <p>04.13 구매</p>
                             <p>통통폭탄인형통통폭탄인형통통폭탄인형통통폭탄인형통통폭탄인형통통폭탄인형통통폭탄인형</p>
+                            <p>1개</p>
                             <p>30,000원</p>
 
                         </ProductInfo>
@@ -265,6 +267,7 @@ export const PurchaseHistory = () => {
                         <ProductInfo>
                             <p>04.13 구매</p>
                             <p>통통폭탄인형</p>
+                            <p>1개</p>
                             <p>30,000원</p>
 
                         </ProductInfo>

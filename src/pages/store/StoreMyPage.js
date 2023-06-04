@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import Imagesrc1 from '../../assets/images/Genshin-Impact-Logo.webp';
 import Imagesrc2 from '../../assets/images/System_Shop.webp';
 import { PurchaseHistory } from '../../components/store/myPage/PurchaseHistory';
+import { ShoppingBasket } from '../../components/store/myPage/ShoppingBasket';
 
 const BackGround = styled.div`
     width: 100%;
@@ -367,7 +368,7 @@ export const StoreMyPage = () => {
 
                         {whatCompoIsShow === 'history' && <PurchaseHistory />}
 
-                        {whatCompoIsShow === 'basket' && <>장바구니</>}
+                        {whatCompoIsShow === 'basket' && <ShoppingBasket />}
 
                     </UserMyPage>
 
