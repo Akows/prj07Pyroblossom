@@ -1,8 +1,11 @@
 import React, { useState } from 'react'
 import styled from 'styled-components';
+import { PointChargeModal } from '../../components/PointChargeModal';
+
 import { AdminProductManagement } from '../../components/store/myPage/AdminProductManagement';
 import { AdminProductUpload } from '../../components/store/myPage/AdminProductUpload';
 import { MyPageNavigation } from '../../components/store/myPage/MyPageNavigation';
+import { PointHistory } from '../../components/store/myPage/PointHistory';
 
 import { PurchaseHistory } from '../../components/store/myPage/PurchaseHistory';
 import { ShoppingBasket } from '../../components/store/myPage/ShoppingBasket';
@@ -238,22 +241,13 @@ const AdminCompoButton = styled.div`
     border-radius: 15px;
 `;
 
-
-
-
-
-
-
-
-
-
-
-
 export const StoreMyPage = () => {
 
     const [isAdminLogin, setIsAdminLogin] = useState(false);
 
     const [whatCompoIsShow, setWhatCompoIsShow] = useState('history');
+
+    const [isShowModal, setIsShowModal] = useState(false);
 
     const setWhatComponentsRender = (name) => {
         setWhatCompoIsShow(name);
@@ -283,7 +277,7 @@ export const StoreMyPage = () => {
                                 <p>34,090p입니다.</p>
                             </UserPoint>
                             <UserPointRecharge>
-                                <button>포인트 충전하기</button>
+                                <button onClick={() => setIsShowModal(true)}>포인트 충전하기</button>
                             </UserPointRecharge>
 
                         </UserProfile>
@@ -301,11 +295,16 @@ export const StoreMyPage = () => {
                                 <CompoButton onClick={() => setWhatComponentsRender('basket')}>
                                     장바구니
                                 </CompoButton>
+                                <CompoButton onClick={() => setWhatComponentsRender('consumption')}>
+                                    포인트 내역
+                                </CompoButton>
                             </UserCompoButton>
 
                             {whatCompoIsShow === 'history' && <PurchaseHistory />}
 
                             {whatCompoIsShow === 'basket' && <ShoppingBasket />}
+
+                            {whatCompoIsShow === 'consumption' && <PointHistory />}
 
                         </UserMyPage>
 
@@ -335,6 +334,8 @@ export const StoreMyPage = () => {
                     </ComponentArea>
                 </AdminInnerContents>
             }
+
+            <PointChargeModal isShowModal={isShowModal} setIsShowModal={setIsShowModal} />
 
         </BackGround >
     );

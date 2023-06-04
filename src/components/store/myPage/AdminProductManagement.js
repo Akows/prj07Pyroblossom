@@ -173,9 +173,9 @@ const ProductOpen = styled.div`
 
 export const AdminProductManagement = () => {
 
-    const onUpload = () => {
+    // const onUpload = () => {
 
-    };
+    // };
 
     return (
         <>

@@ -4,7 +4,6 @@ import styled from 'styled-components';
 
 import loading from '../assets/images/background/loading.gif';
 
-
 const BackGround = styled.div`
     width: 100%;
     height: 100%;
