@@ -351,7 +351,7 @@ const UploadButton = styled.div`
 `;
 
 const initStateOption = {
-    optionCount: 1,
+    optionCount: 'option' + 1,
     optionArray: [{ number: 1 }],
 };
 const initStateInfomationFile = {
@@ -448,7 +448,18 @@ export const AdminProductUpload = () => {
         PurchaseQuantityLimit: '',
         mainCategory: '',
         subCategory: '',
-        productOption: {},
+        productOption: {
+            option1: '',
+            option2: '',
+            option3: '',
+            option4: '',
+            option5: '',
+            option6: '',
+            option7: '',
+            option8: '',
+            option9: '',
+            option10: '',
+        },
         discountRate: '',
         rewardAmount: '',
         productInformationFile: {},
@@ -461,15 +472,8 @@ export const AdminProductUpload = () => {
         setProductInfo({ ...productInfo, [event.target.id]: event.target.value });
     };
 
-    useEffect(() => {
-        console.log(productInfo);
-    }, [productInfo])
-
-
-
-
     const onUpload = () => {
-
+        console.log(productInfo);
     };
 
     return (
@@ -567,7 +571,7 @@ export const AdminProductUpload = () => {
                 {optionArray.map((item) => (
                     <Option key={item.number}>
                         <p>{item.number}번 옵션 입력</p>
-                        <input type='text' value={productInfo.productOption || ''} onChange={onChange} placeholder='옵션을 입력해주세요.' />
+                        <input type='text' id='productOption' value={productInfo.productOption[`${item.number}`] || ''} onChange={onChange} placeholder='옵션을 입력해주세요.' />
                     </Option>
                 ))}
 
