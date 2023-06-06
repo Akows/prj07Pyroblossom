@@ -14,9 +14,16 @@ const Test1 = () => {
 const AddProduct = (productInfo, productOptionInfo, productImgFile) => {
     return (dispatch, getState) => {
 
-        console.log(productInfo);
-        console.log(productOptionInfo);
+        // console.log(productInfo);
+        // console.log(productOptionInfo);
         console.log(productImgFile);
+
+        console.log(productImgFile.titleimage);
+
+        // 하나의 온전한 파일 데이터
+        console.log(productImgFile.titleimage[0]);
+
+        console.log(productImgFile.titleimage[0].name);
 
 
 
