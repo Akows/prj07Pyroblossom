@@ -27,6 +27,11 @@ const BackGround = styled.div`
 
     background-color: rgba( 65, 71, 89, 1 );
     background-attachment: fixed;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
 `;
 
 const BackGroundImage = styled.div`
@@ -43,7 +48,7 @@ const BackGroundImage = styled.div`
 `
 
 const InnerContents = styled.div`
-    width: 100%;
+    width: 1200px;
     height: 100%;
 
     z-index: 100;
@@ -52,6 +57,10 @@ const InnerContents = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
+
+    @media screen and (max-width: 1200px) {
+        width: 95%;
+    };
 `;
 
 const StoreTitleArea = styled.div`

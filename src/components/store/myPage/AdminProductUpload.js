@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from 'react'
+import React, { useReducer } from 'react'
 import styled from 'styled-components';
 
 const UploadIMG = styled.div`
@@ -315,24 +315,7 @@ const storeReducer = (state, action) => {
 export const AdminProductUpload = () => {
 
     const [response, dispatch] = useReducer(storeReducer, initState);
-
     const { optionCount, optionArray } = response;
-
-    useEffect(() => {
-        console.log(response);
-    }, [response])
-
-
-
-
-
-
-
-
-    // const [howMuchOption, setHowMuchOption] = useState(0);
-    // const [optionArray, setOptionArray] = useState([]);
-
-
 
     const optionNumberSet = (setType) => {
         if (setType === '+') {
@@ -342,9 +325,6 @@ export const AdminProductUpload = () => {
             };
 
             dispatch({ type: 'INCREASE' });
-
-            // setHowMuchOption(howMuchOption + 1);
-            // setOptionArray([...optionArray, { number: howMuchOption }]);
         };
 
         if (setType === '-') {
@@ -354,23 +334,8 @@ export const AdminProductUpload = () => {
             };
 
             dispatch({ type: 'DECREASE' });
-
-            // setHowMuchOption(howMuchOption - 1);
-
-            // setOptionArray(optionArray.filter(number => number === howMuchOption));
-
-
-            // setOptionArray(
-            //     optionArray.filter((number) => number === howMuchOption + 1)
-            // );
         };
-
     };
-
-    // useEffect(() => {
-    //     setHowMuchOption(howMuchOption);
-    // }, [howMuchOption])
-
 
     const onUpload = () => {
 

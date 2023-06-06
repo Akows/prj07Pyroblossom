@@ -15,9 +15,19 @@ const BackGround = styled.div`
     background-color: rgba( 65, 71, 89, 1 );
 `;
 
+const InnerContents = styled.div`
+    width: 1200px;
+    height: 100%;
 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 
-
+    @media screen and (max-width: 1200px) {
+        width: 95%;
+    };
+`;
 
 export const PaymentPage = () => {
 
@@ -25,11 +35,13 @@ export const PaymentPage = () => {
 
     return (
         <BackGround>
+            <InnerContents>
 
-            {whatComponentIsShow === 'orderpurchase' && <OrderPurchase setWhatComponentIsShow={setWhatComponentIsShow} />}
+                {whatComponentIsShow === 'orderpurchase' && <OrderPurchase setWhatComponentIsShow={setWhatComponentIsShow} />}
 
-            {whatComponentIsShow === 'purchasecomplete' && <PurchaseComplete />}
+                {whatComponentIsShow === 'purchasecomplete' && <PurchaseComplete />}
 
+            </InnerContents>
         </BackGround>
     );
 };

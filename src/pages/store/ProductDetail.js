@@ -24,6 +24,21 @@ const BackGround = styled.div`
     
     background-color: rgba( 65, 71, 89, 1 );
 `;
+
+const InnerContents = styled.div`
+    width: 1200px;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    @media screen and (max-width: 1200px) {
+        width: 95%;
+    };
+`;
+
 const ProductTypeShowArea = styled.div`
     width: 90%;
     height: 20px;
@@ -507,132 +522,137 @@ export const ProductDetail = () => {
     return (
         <BackGround>
 
-            <ProductTypeShowArea>
-                1차 카테고리 {'>'} 2차 카테고리 {'>'} {id}
-            </ProductTypeShowArea>
+            <InnerContents>
 
-            <ProductInfoArea>
-                <ProductInfo>
-                    <ProductImg>
-                        <img src={productimg} alt=''></img>
-                    </ProductImg>
-                    <ProductPayInfo>
-                        <ProductName>
-                            통통폭탄인형
-                        </ProductName>
-                        <ProductPrice>
-                            <SalePer>
-                                10%
-                            </SalePer>
+                <ProductTypeShowArea>
+                    1차 카테고리 {'>'} 2차 카테고리 {'>'} {id}
+                </ProductTypeShowArea>
 
-                            <Price>
-                                <ListPrice>
-                                    5000원
-                                </ListPrice>
-                                <LastPrice>
-                                    4500원
-                                </LastPrice>
-                            </Price>
-                        </ProductPrice>
+                <ProductInfoArea>
+                    <ProductInfo>
+                        <ProductImg>
+                            <img src={productimg} alt=''></img>
+                        </ProductImg>
+                        <ProductPayInfo>
+                            <ProductName>
+                                통통폭탄인형
+                            </ProductName>
+                            <ProductPrice>
+                                <SalePer>
+                                    10%
+                                </SalePer>
 
-
-
-                        <EventInfo>
-                            <p>회원님을 위한 해택</p>
-                            <hr />
-
-                            <p>적립포인트 : 0.1%, 45p</p>
-                            <p>이벤트 : 텍스트 리뷰 100p</p>
-                            <p>사은품 : </p>
-                        </EventInfo>
+                                <Price>
+                                    <ListPrice>
+                                        5000원
+                                    </ListPrice>
+                                    <LastPrice>
+                                        4500원
+                                    </LastPrice>
+                                </Price>
+                            </ProductPrice>
 
 
 
+                            <EventInfo>
+                                <p>회원님을 위한 해택</p>
+                                <hr />
+
+                                <p>적립포인트 : 0.1%, 45p</p>
+                                <p>이벤트 : 텍스트 리뷰 100p</p>
+                                <p>사은품 : </p>
+                            </EventInfo>
 
 
-                        <PurchaseInfo>
-                            <p>택배배송 : 무료, 우체국택배</p>
-                            <p>도서산간지역 3,000원</p>
-                            <hr />
 
-                            <PurchaseSelect>
-                                <option>통통폭탄인형</option>
-                            </PurchaseSelect>
 
-                        </PurchaseInfo>
 
-                        <PurchaseOption>
-                            <PurchaseOption1>
-                                <p>통통폭탄인형</p>
+                            <PurchaseInfo>
+                                <p>택배배송 : 무료, 우체국택배</p>
+                                <p>도서산간지역 3,000원</p>
+                                <hr />
 
-                                <button>X</button>
-                            </PurchaseOption1>
+                                <PurchaseSelect>
+                                    <option>통통폭탄인형</option>
+                                </PurchaseSelect>
 
-                            <PurchaseOption2>
+                            </PurchaseInfo>
 
-                                <div>
-                                    <button>-</button>
-                                    <p>0</p>
-                                    <button>+</button>
-                                </div>
+                            <PurchaseOption>
+                                <PurchaseOption1>
+                                    <p>통통폭탄인형</p>
 
-                                <div>
+                                    <button>X</button>
+                                </PurchaseOption1>
+
+                                <PurchaseOption2>
+
+                                    <div>
+                                        <button>-</button>
+                                        <p>0</p>
+                                        <button>+</button>
+                                    </div>
+
+                                    <div>
+                                        <p>0원</p>
+                                    </div>
+
+                                </PurchaseOption2>
+                            </PurchaseOption>
+
+                            <PurchasePrice>
+                                <PurchasePrice1>
+                                    전체 금액
+                                </PurchasePrice1>
+                                <PurchasePrice2>
+                                    <p>전체 수량 : 0개</p>
+
+                                    <SpecialCharacter>&#124;</SpecialCharacter>
+
                                     <p>0원</p>
-                                </div>
+                                </PurchasePrice2>
+                            </PurchasePrice>
 
-                            </PurchaseOption2>
-                        </PurchaseOption>
+                            <PurchaseUtil>
+                                <button>찜하기</button>
+                                <button>장바구니</button>
+                            </PurchaseUtil>
 
-                        <PurchasePrice>
-                            <PurchasePrice1>
-                                전체 금액
-                            </PurchasePrice1>
-                            <PurchasePrice2>
-                                <p>전체 수량 : 0개</p>
+                            <PurchaseButton ref={OtherInfoScrollMovePoint}>
+                                <button onClick={() => navigate('/store/payment')}>구매하기</button>
+                            </PurchaseButton>
+                        </ProductPayInfo>
+                    </ProductInfo>
+                </ProductInfoArea>
 
-                                <SpecialCharacter>&#124;</SpecialCharacter>
+                <OtherInfoArea>
+                    <OtherInfo>
+                        <OtherInfoButtons>
+                            <button onClick={() => setWhatComponentsRender('review')}>
+                                리뷰
+                            </button>
+                            <button onClick={() => setWhatComponentsRender('info')}>
+                                제품정보
+                            </button>
+                            <button onClick={() => setWhatComponentsRender('qna')}>
+                                QnA
+                            </button>
+                        </OtherInfoButtons>
 
-                                <p>0원</p>
-                            </PurchasePrice2>
-                        </PurchasePrice>
+                        <OtherInfoComponentArea>
 
-                        <PurchaseUtil>
-                            <button>찜하기</button>
-                            <button>장바구니</button>
-                        </PurchaseUtil>
+                            {whatCompoIsShow === 'review' && <Reviews />}
+                            {whatCompoIsShow === 'info' && <ProductInfomation />}
+                            {whatCompoIsShow === 'qna' && <QnA />}
 
-                        <PurchaseButton ref={OtherInfoScrollMovePoint}>
-                            <button onClick={() => navigate('/store/payment')}>구매하기</button>
-                        </PurchaseButton>
-                    </ProductPayInfo>
-                </ProductInfo>
-            </ProductInfoArea>
-
-            <OtherInfoArea>
-                <OtherInfo>
-                    <OtherInfoButtons>
-                        <button onClick={() => setWhatComponentsRender('review')}>
-                            리뷰
-                        </button>
-                        <button onClick={() => setWhatComponentsRender('info')}>
-                            제품정보
-                        </button>
-                        <button onClick={() => setWhatComponentsRender('qna')}>
-                            QnA
-                        </button>
-                    </OtherInfoButtons>
-
-                    <OtherInfoComponentArea>
-
-                        {whatCompoIsShow === 'review' && <Reviews />}
-                        {whatCompoIsShow === 'info' && <ProductInfomation />}
-                        {whatCompoIsShow === 'qna' && <QnA />}
-
-                    </OtherInfoComponentArea>
-                </OtherInfo>
+                        </OtherInfoComponentArea>
+                    </OtherInfo>
 
 
-            </OtherInfoArea>
+                </OtherInfoArea>
+
+            </InnerContents>
+
 
         </BackGround>
     );

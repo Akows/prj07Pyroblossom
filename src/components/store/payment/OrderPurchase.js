@@ -172,7 +172,7 @@ const DeliveryAddress = styled.div`
     justify-content: center;
 
     & > input {
-        width: 700px;
+        width: 95%;
         height: 40px;
 
         margin-left: 10px;

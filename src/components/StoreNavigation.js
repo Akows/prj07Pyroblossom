@@ -7,10 +7,11 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logOut } from '../redux/actions/userAction';
 
-import { AiOutlineUser } from 'react-icons/ai';
-import { AiOutlineMenu } from 'react-icons/ai';
-import { AiOutlinePicCenter } from 'react-icons/ai';
+import { AiOutlineUser, AiOutlineMenu, AiOutlinePicCenter } from 'react-icons/ai';
 import { FiLogIn, FiLogOut } from "react-icons/fi";
+import { BiCategory, BiCategoryAlt } from 'react-icons/bi';
+
+import { BiSolidCopy } from 'react-icons/bi';
 
 import TitleIMGsrc from '../assets/images/Genshin-Impact-LogoW.png';
 
@@ -41,7 +42,7 @@ const BackGround = styled.div`
 `;
 const MainNav = styled.div`
     width: 100%;
-    height: 40px;
+    height: 40%;
 
     display: flex;
     flex-direction: row;
@@ -53,7 +54,7 @@ const MainNav = styled.div`
 `;
 const SearchNav = styled.div`
     width: 100%;
-    height: 60px;
+    height: 60%;
 
     display: flex;
     flex-direction: row;
@@ -103,7 +104,7 @@ const SearchBar = styled.div`
 `;
 const SearchInput = styled.input`
     width: 80%;
-    height: 100%;
+    height: 80%;
 
     font-family: 'GIFont';
     font-size: 16px;
@@ -565,7 +566,8 @@ export const StoreNavigation = () => {
             <SearchNav>
                 <SearchBarArea>
                     <CategoryButton onClick={onShowCategoryList}>
-                        <AiOutlineMenu size={30} />
+                        {isCategoryShow && <BiCategoryAlt size={30} />}
+                        {!isCategoryShow && <BiCategory size={30} />}
                     </CategoryButton>
 
                     <CategoryList isCategoryShow={isCategoryShow}>
