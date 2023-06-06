@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components';
 
 const UploadIMG = styled.div`
@@ -74,6 +74,47 @@ const UploadInfo = styled.div`
     };
 `;
 
+const CategoryInfo = styled.div`
+    width: 100%;
+    height: 100%;
+
+    margin-top: 10px;
+    padding: 10px;
+
+    border: 1px solid gray;
+    border-radius: 15px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+
+    & > select {
+        width: 100%;
+        height: 30px;
+
+        font-family: 'GIFont';
+        font-size: 16px;
+        color: black;
+
+        background-color: #aaaaaa;
+        border-radius: 5px;
+        border: none;
+    };
+
+    & > select:nth-child(2) {
+        margin-bottom: 10px;
+    };
+    & > select:nth-child(4) {
+        margin-bottom: 10px;
+    };
+
+    & > p {
+        font-size: 14px;
+        margin-bottom: 3px;
+    };
+`;
+
 const UploadProductOptionInfo = styled.div`
     width: 100%;
     height: 100%;
@@ -93,6 +134,8 @@ const UploadProductOptionInfo = styled.div`
         width: 100%;
         height: 30px;
 
+        margin-top: 10px;
+
         font-family: 'GIFont';
         font-size: 16px;
         color: black;
@@ -102,12 +145,35 @@ const UploadProductOptionInfo = styled.div`
         border: none;
     };
 
-    & > input {
-        margin-top: 10px;
-    };
     & > p {
         font-size: 15px;
         margin-top: 5px;
+    };
+
+    & > button {
+        width: 100%;
+        height: 30px;
+
+        margin-top: 10px;
+        margin-bottom: 10px;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        border: none;
+        border-radius: 5px;
+        background-color: #D3BC8E;
+        color: #414147;
+
+        font-family: 'GIFont';
+        font-size: 16px;
+    };
+    
+    & > button:hover {
+        background-color: #414147;
+        color: #D3BC8E;
     };
 `;
 
@@ -220,6 +286,41 @@ const UploadButton = styled.div`
 
 export const AdminProductUpload = () => {
 
+    const [howMuchOption, setHowMuchOption] = useState(0);
+
+    const arr = [];
+
+    const optionNumberSet = (setType) => {
+        if (setType === '+') {
+
+            if (howMuchOption >= 10) {
+                alert('제품 옵션은 10개까지 등록할 수 있습니다.');
+                return;
+            };
+
+            setHowMuchOption(howMuchOption + 1);
+            arr.push(...arr, `${howMuchOption}`);
+
+            console.log(arr);
+        };
+
+        if (setType === '-') {
+
+            if (howMuchOption <= 0) {
+                alert('더 이상 옵션을 제거할 수 없습니다.');
+                return;
+            };
+
+            setHowMuchOption(howMuchOption - 1);
+            arr.pop();
+        };
+
+    };
+
+    useEffect(() => {
+
+    }, [])
+
     const onUpload = () => {
 
     };
@@ -253,10 +354,44 @@ export const AdminProductUpload = () => {
 
             <br />
 
+            <p>제품 분류 입력</p>
+            <CategoryInfo>
+
+                <p>대분류</p>
+                <select>
+                    <option>케이스</option>
+                    <option>패드</option>
+                    <option>문구</option>
+                    <option>서적</option>
+                    <option>침구</option>
+                    <option>피규어</option>
+                    <option>인형</option>
+                </select>
+
+                <p>소분류</p>
+                <select>
+                    <option>만화</option>
+                    <option>소설</option>
+                    <option>아트북</option>
+                </select>
+
+            </CategoryInfo>
+
+            <br />
+
             <p>제품 옵션 입력</p>
             <UploadProductOptionInfo>
 
-                <p>1번 옵션 입력</p>
+                {howMuchOption}
+
+                {arr.map((item) => (
+                    <>
+                        <p>{item.number}번 옵션 입력</p>
+                        <input type='text' placeholder='옵션을 입력해주세요.' />
+                    </>
+                ))}
+
+                {/* <p>1번 옵션 입력</p>
                 <input type='text' placeholder='1번 옵션 입력' />
 
                 <p>2번 옵션 입력</p>
@@ -269,7 +404,10 @@ export const AdminProductUpload = () => {
                 <input type='text' placeholder='4번 옵션 입력' />
 
                 <p>5번 옵션 입력</p>
-                <input type='text' placeholder='5번 옵션 입력' />
+                <input type='text' placeholder='5번 옵션 입력' /> */}
+
+                <button onClick={() => optionNumberSet('+')}>+</button>
+                <button onClick={() => optionNumberSet('-')}>-</button>
 
             </UploadProductOptionInfo>
 
@@ -300,6 +438,10 @@ export const AdminProductUpload = () => {
                 <input type='text' placeholder='배송료' />
 
                 <input type='text' placeholder='인당 구매제한 수량 입력' />
+
+                <input type='text' placeholder='대분류' />
+
+                <input type='text' placeholder='소분류' />
 
                 <input type='text' placeholder='기본 할인률' />
 

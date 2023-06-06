@@ -16,7 +16,10 @@ const appFireStore = getFirestore(app);
 const appAuth = getAuth();
 const timeStamp = Timestamp;
 
-// 파이어베이스 user 컬렉션 Ref.
+// 파이어베이스 컬렉션 Ref.
+// 유저 Ref.
 const userCollectionRef = collection(appFireStore, 'user');
+// 스토어 Ref.
+const storeCollectionRef = collection(appFireStore, 'store');
 
-export { appFireStore, appAuth, timeStamp, userCollectionRef }
+export { appFireStore, appAuth, timeStamp, userCollectionRef, storeCollectionRef }

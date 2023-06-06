@@ -73,7 +73,7 @@ const SignUp = (userData, navigate) => {
                     address2: userData.address2,
                     signupDate: createdTime
                 }
-            )
+            );
         };
 
         createUserWithEmailAndPassword(appAuth, userData.email, userData.password)
