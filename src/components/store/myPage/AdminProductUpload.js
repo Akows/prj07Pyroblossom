@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react'
+import React, { useEffect, useReducer, useState } from 'react'
 import styled from 'styled-components';
 
 const UploadIMG = styled.div`
@@ -97,7 +97,7 @@ const CategoryInfo = styled.div`
         font-size: 16px;
         color: black;
 
-        background-color: #aaaaaa;
+        background-color: white;
         border-radius: 5px;
         border: none;
     };
@@ -211,10 +211,72 @@ const UploadSaleInfo = styled.div`
         border: none;
     };
 
+    & > select {
+        width: 100%;
+        height: 30px;
+
+        font-family: 'GIFont';
+        font-size: 16px;
+        color: black;
+
+        background-color: white;
+        border-radius: 5px;
+        border: none;
+    };
+
     & > input:nth-child(2){
         margin-top: 10px;
     };
+    & > select:nth-child(3){
+        margin-top: 10px;
+    };
+    & > input:nth-child(4){
+        margin-top: 10px;
+    };
 `;
+
+const UploadProductInfo = styled.div`
+    width: 100%;
+    height: 100%;
+
+    margin-top: 10px;
+    padding: 10px;
+
+    border: 1px solid gray;
+    border-radius: 15px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+
+    & > button {
+        width: 100%;
+        height: 30px;
+
+        margin-top: 10px;
+        margin-bottom: 10px;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        border: none;
+        border-radius: 5px;
+        background-color: #D3BC8E;
+        color: #414147;
+
+        font-family: 'GIFont';
+        font-size: 16px;
+    };
+    
+    & > button:hover {
+        background-color: #414147;
+        color: #D3BC8E;
+    };
+`;
+
 
 const InputCheck = styled.div`
     width: 100%;
@@ -288,43 +350,64 @@ const UploadButton = styled.div`
     };
 `;
 
-const initState = {
+const initStateOption = {
     optionCount: 0,
     optionArray: [],
-}
+};
+const initStateInfomationFile = {
+    infomationFileCount: 0,
+    infomationFileArray: [],
+};
 
-const storeReducer = (state, action) => {
+const optionReducer = (state, action) => {
     switch (action.type) {
         case 'INCREASE':
             return {
                 optionCount: state.optionCount + 1,
                 optionArray: [...state.optionArray, { number: state.optionCount + 1 }],
             }
-
         case 'DECREASE':
             return {
-                optionArray: state.optionArray.filter(item => item.number !== state.optionCount),
                 optionCount: state.optionCount - 1,
+                optionArray: state.optionArray.filter(item => item.number !== state.optionCount),
             }
-
         default:
-            return state
+            return state;
+    };
+};
+const infomationFileReducer = (state, action) => {
+    switch (action.type) {
+        case 'ADDFILE':
+            return {
+                infomationFileCount: state.infomationFileCount + 1,
+                infomationFileArray: [...state.infomationFileArray, { number: state.infomationFileCount + 1 }],
+            }
+        case 'REMOVEFILE':
+            return {
+                infomationFileCount: state.infomationFileCount - 1,
+                infomationFileArray: state.infomationFileArray.filter(item => item.number !== state.infomationFileCount),
+            }
+        default:
+            return state;
     };
 };
 
 export const AdminProductUpload = () => {
 
-    const [response, dispatch] = useReducer(storeReducer, initState);
-    const { optionCount, optionArray } = response;
+    const [responseOption, dispatchOption] = useReducer(optionReducer, initStateOption);
+    const [responseInfomation, dispatchInfomation] = useReducer(infomationFileReducer, initStateInfomationFile);
 
-    const optionNumberSet = (setType) => {
+    const { optionCount, optionArray } = responseOption;
+    const { infomationFileCount, infomationFileArray } = responseInfomation;
+
+    const optionCountControl = (setType) => {
         if (setType === '+') {
             if (optionCount >= 10) {
                 alert('제품 옵션은 10개까지 등록할 수 있습니다.');
                 return;
             };
 
-            dispatch({ type: 'INCREASE' });
+            dispatchOption({ type: 'INCREASE' });
         };
 
         if (setType === '-') {
@@ -333,12 +416,45 @@ export const AdminProductUpload = () => {
                 return;
             };
 
-            dispatch({ type: 'DECREASE' });
+            dispatchOption({ type: 'DECREASE' });
         };
     };
 
-    const onUpload = () => {
+    const fileCountControl = (setType) => {
+        if (setType === '+') {
+            if (infomationFileCount >= 5) {
+                alert('제품 설명 사진파일은 5개까지 등록할 수 있습니다.');
+                return;
+            };
 
+            dispatchInfomation({ type: 'ADDFILE' });
+        };
+
+        if (setType === '-') {
+            if (infomationFileCount <= 0) {
+                alert('삭제할 첨부파일이 존재하지 않습니다.');
+                return;
+            };
+
+            dispatchInfomation({ type: 'REMOVEFILE' });
+        };
+    };
+
+    useEffect(() => {
+        console.log(responseOption);
+        console.log(responseInfomation);
+    }, [responseOption, responseInfomation])
+
+
+
+
+
+    const [first, setfirst] = useState();
+
+
+
+    const onUpload = () => {
+        setfirst(first);
     };
 
     return (
@@ -374,7 +490,8 @@ export const AdminProductUpload = () => {
             <CategoryInfo>
 
                 <p>대분류</p>
-                <select>
+                <select required>
+                    <option value=''>대분류 선택</option>
                     <option>케이스</option>
                     <option>패드</option>
                     <option>문구</option>
@@ -385,7 +502,8 @@ export const AdminProductUpload = () => {
                 </select>
 
                 <p>소분류</p>
-                <select>
+                <select required>
+                    <option value=''>소분류 선택</option>
                     <option>만화</option>
                     <option>소설</option>
                     <option>아트북</option>
@@ -405,8 +523,8 @@ export const AdminProductUpload = () => {
                     </Option>
                 ))}
 
-                <button onClick={() => optionNumberSet('+')}>옵션 추가</button>
-                <button onClick={() => optionNumberSet('-')}>옵션 제거</button>
+                <button onClick={() => optionCountControl('+')}>옵션 추가</button>
+                <button onClick={() => optionCountControl('-')}>옵션 제거</button>
 
             </UploadProductOptionInfo>
 
@@ -415,11 +533,36 @@ export const AdminProductUpload = () => {
             <p>할인 정보 입력</p>
             <UploadSaleInfo>
 
-                <input type='text' placeholder='기본 할인률 입력' />
+                <input type='text' placeholder='제품 할인률 입력' />
 
-                <input type='text' placeholder='포인트 적입률 입력' />
+                <input type='text' placeholder='포인트 적립률 입력' />
+
+                <select required>
+                    <option value=''>이벤트 종류 선택</option>
+                    <option>리뷰 이벤트</option>
+                    <option>추가 포인트 적립</option>
+                </select>
+
+                <input type='text' placeholder='이벤트 포인트 수치 입력' />
 
             </UploadSaleInfo>
+
+            <br />
+
+            <p>제품 설명 입력</p>
+            <UploadProductInfo>
+
+                {infomationFileArray.map((item) => (
+                    <Option key={item.number}>
+                        <p>{item.number}번 파일 첨부</p>
+                        <input type='file' />
+                    </Option>
+                ))}
+
+                <button onClick={() => fileCountControl('+')}>파일 추가</button>
+                <button onClick={() => fileCountControl('-')}>파일 제거</button>
+
+            </UploadProductInfo>
 
             <br />
 

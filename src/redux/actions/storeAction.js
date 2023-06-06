@@ -34,8 +34,15 @@ const AddProduct = () => {
                     MainCategory: '',
                     SubCategory: '',
 
+                    ProductOption: {},
+
                     DiscountRate: '',
                     RewardAmount: '',
+
+
+
+
+
                     ProductInformationFile1: '',
                     ProductInformationFile2: '',
                     ProductInformationFile3: '',
