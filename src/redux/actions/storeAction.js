@@ -11,7 +11,7 @@ const Test1 = () => {
 };
 
 
-const AddProduct = () => {
+const AddProduct = (productInfo) => {
     return (dispatch, getState) => {
         dispatch({ type: 'STORE_STATE_INIT' });
         dispatch({ type: 'STORE_LOADING' });
@@ -20,46 +20,23 @@ const AddProduct = () => {
             const querys = query(storeCollectionRef);
             const allProductCount = await getCountFromServer(querys);
 
-            const docRef = doc(storeCollectionRef, `${userData.email}`);
+            const docRef = doc(storeCollectionRef, `${productInfo.name}`);
             const createdTime = timeStamp.fromDate(new Date());
 
             await setDoc(docRef,
                 {
-                    Number: allProductCount.data().count + 1,
-
-                    Name: '',
-                    Price: '',
-                    DeliveryFee: '',
+                    number: allProductCount.data().count + 1,
+                    name: '',
+                    price: '',
+                    deliveryFee: '',
                     PurchaseQuantityLimit: '',
-                    MainCategory: '',
-                    SubCategory: '',
-
-                    ProductOption: {},
-
-                    DiscountRate: '',
-                    RewardAmount: '',
-
-
-
-
-
-                    ProductInformationFile1: '',
-                    ProductInformationFile2: '',
-                    ProductInformationFile3: '',
-                    ProductInformationFile4: '',
-                    ProductInformationFile5: '',
-
-
-
-                    userType: '일반회원',
-                    email: userData.email,
-                    password: userData.password,
-                    name: userData.name,
-                    phonenumber: userData.phonenumber,
-                    displayName: userData.displayname,
-                    address: userData.address,
-                    address2: userData.address2,
-                    signupDate: createdTime
+                    mainCategory: '',
+                    subCategory: '',
+                    productOption: {},
+                    discountRate: '',
+                    rewardAmount: '',
+                    productInformationFile: {},
+                    registrationDate: createdTime
                 }
             );
         };

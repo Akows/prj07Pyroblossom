@@ -351,8 +351,8 @@ const UploadButton = styled.div`
 `;
 
 const initStateOption = {
-    optionCount: 0,
-    optionArray: [],
+    optionCount: 1,
+    optionArray: [{ number: 1 }],
 };
 const initStateInfomationFile = {
     infomationFileCount: 0,
@@ -411,8 +411,8 @@ export const AdminProductUpload = () => {
         };
 
         if (setType === '-') {
-            if (optionCount <= 0) {
-                alert('더 이상 옵션을 제거할 수 없습니다.');
+            if (optionCount <= 1) {
+                alert('하나 이상의 옵션이 존재해야합니다.');
                 return;
             };
 
@@ -440,21 +440,36 @@ export const AdminProductUpload = () => {
         };
     };
 
+    const [productInfo, setProductInfo] = useState({
+        number: '',
+        name: '',
+        price: '',
+        deliveryFee: '',
+        PurchaseQuantityLimit: '',
+        mainCategory: '',
+        subCategory: '',
+        productOption: {},
+        discountRate: '',
+        rewardAmount: '',
+        productInformationFile: {},
+        registrationDate: ''
+    });
+
+    // const [productInfoFile, setProductInfoFile] = useState();
+
+    const onChange = (event) => {
+        setProductInfo({ ...productInfo, [event.target.id]: event.target.value });
+    };
+
     useEffect(() => {
-        console.log(responseOption);
-        console.log(responseInfomation);
-    }, [responseOption, responseInfomation])
+        console.log(productInfo);
+    }, [productInfo])
 
-
-
-
-
-    const [first, setfirst] = useState();
 
 
 
     const onUpload = () => {
-        setfirst(first);
+
     };
 
     return (
@@ -473,14 +488,14 @@ export const AdminProductUpload = () => {
             <p>제품 정보 입력</p>
             <UploadInfo>
 
-                <input type='text' placeholder='제품명 입력' />
+                <input type='text' id='name' value={productInfo.name || ''} onChange={onChange} placeholder='제품명 입력' />
 
-                <input type='text' placeholder='제품가격 입력' />
+                <input type='text' id='price' value={productInfo.price || ''} onChange={onChange} placeholder='제품가격 입력' />
 
-                <input type='text' placeholder='배송료 입력' />
+                <input type='text' id='deliveryFee' value={productInfo.deliveryFee || ''} onChange={onChange} placeholder='배송료 입력' />
                 <p>* 미입력시 무료배송.</p>
 
-                <input type='text' placeholder='인당 구매제한 수량 입력' />
+                <input type='text' id='PurchaseQuantityLimit' value={productInfo.PurchaseQuantityLimit || ''} onChange={onChange} placeholder='인당 구매제한 수량 입력' />
 
             </UploadInfo>
 
@@ -490,23 +505,56 @@ export const AdminProductUpload = () => {
             <CategoryInfo>
 
                 <p>대분류</p>
-                <select required>
-                    <option value=''>대분류 선택</option>
-                    <option>케이스</option>
-                    <option>패드</option>
-                    <option>문구</option>
-                    <option>서적</option>
-                    <option>침구</option>
-                    <option>피규어</option>
-                    <option>인형</option>
+                <select id='mainCategory' value={productInfo.mainCategory || ''} onChange={onChange} required>
+                    {/* <option value=''>대분류 선택</option>
+                    <option value='케이스류'>케이스</option>
+                    <option value='패드류'>패드</option>
+                    <option value='문구류'>문구</option>
+                    <option value='서적류'>서적</option>
+                    <option value='침구류'>침구</option>
+                    <option value='피규어'>피규어</option>
+                    <option value='인형'>인형</option> */}
                 </select>
 
                 <p>소분류</p>
-                <select required>
-                    <option value=''>소분류 선택</option>
-                    <option>만화</option>
-                    <option>소설</option>
-                    <option>아트북</option>
+                <select id='subCategory' value={productInfo.subCategory || ''} onChange={onChange} required>
+                    {/* {productInfo.mainCategory === '케이스류' && <>
+                        <option value=''>소분류 선택</option>
+                        <option value='123'>핸드폰 케이스</option>
+                        <option value=''>노트북 케이스</option>
+                    </>}
+
+                    {productInfo.mainCategory === '패드류' && <>
+                        <option value=''>소분류 선택</option>
+                        <option value=''>장패드</option>
+                        <option value=''>단패드</option>
+                    </>}
+
+                    {productInfo.mainCategory === '문구류' && <>
+                        <option value=''>소분류 선택</option>
+                        <option value=''>아동</option>
+                        <option value=''>14세 이상</option>
+                    </>}
+                    {productInfo.mainCategory === '서적류' && <>
+                        <option value=''>소분류 선택</option>
+                        <option value=''>만화</option>
+                        <option value=''>소설</option>
+                        <option value=''>아트북</option>
+                    </>}
+                    {productInfo.mainCategory === '침구류' && <>
+                        <option value=''>소분류 선택</option>
+                        <option value=''>이불</option>
+                        <option value=''>배개</option>
+                    </>}
+                    {productInfo.mainCategory === '피규어' && <>
+                        <option value=''>소분류 선택</option>
+                        <option value=''>PVC</option>
+                    </>}
+                    {productInfo.mainCategory === '인형' && <>
+                        <option value=''>소분류 선택</option>
+                        <option value=''>봉제 인형</option>
+                    </>} */}
+
                 </select>
 
             </CategoryInfo>
@@ -519,7 +567,7 @@ export const AdminProductUpload = () => {
                 {optionArray.map((item) => (
                     <Option key={item.number}>
                         <p>{item.number}번 옵션 입력</p>
-                        <input type='text' placeholder='옵션을 입력해주세요.' />
+                        <input type='text' value={productInfo.productOption || ''} onChange={onChange} placeholder='옵션을 입력해주세요.' />
                     </Option>
                 ))}
 
@@ -571,15 +619,15 @@ export const AdminProductUpload = () => {
 
                 <img src='' alt='None' />
 
-                <input type='text' placeholder='제품번호' />
+                <input type='text' value={productInfo.number || ''} readOnly placeholder='제품번호' />
 
-                <input type='text' placeholder='제품명' />
+                <input type='text' value={productInfo.name || ''} readOnly placeholder='제품명' />
 
-                <input type='text' placeholder='제품가격' />
+                <input type='text' value={productInfo.price || ''} readOnly placeholder='제품가격' />
 
-                <input type='text' placeholder='배송료' />
+                <input type='text' value={productInfo.price || ''} readOnly placeholder='배송료' />
 
-                <input type='text' placeholder='인당 구매제한 수량 입력' />
+                <input type='text' value={productInfo.price || ''} readOnly placeholder='인당 구매제한 수량 입력' />
 
                 <input type='text' placeholder='대분류' />
 
