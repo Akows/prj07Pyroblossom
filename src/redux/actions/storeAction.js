@@ -34,7 +34,9 @@ const AddProduct = (productInfo) => {
                     subCategory: '',
                     productOption: {},
                     discountRate: '',
-                    rewardAmount: '',
+                    rewardAmountRate: '',
+                    eventType: '',
+                    eventPoint: '',
                     productInformationFile: {},
                     registrationDate: createdTime
                 }

@@ -351,7 +351,7 @@ const UploadButton = styled.div`
 `;
 
 const initStateOption = {
-    optionCount: 'option' + 1,
+    optionCount: 1,
     optionArray: [{ number: 1 }],
 };
 const initStateInfomationFile = {
@@ -402,8 +402,8 @@ export const AdminProductUpload = () => {
 
     const optionCountControl = (setType) => {
         if (setType === '+') {
-            if (optionCount >= 10) {
-                alert('제품 옵션은 10개까지 등록할 수 있습니다.');
+            if (optionCount >= 5) {
+                alert('제품 옵션은 5개까지 등록할 수 있습니다.');
                 return;
             };
 
@@ -422,8 +422,8 @@ export const AdminProductUpload = () => {
 
     const fileCountControl = (setType) => {
         if (setType === '+') {
-            if (infomationFileCount >= 5) {
-                alert('제품 설명 사진파일은 5개까지 등록할 수 있습니다.');
+            if (infomationFileCount >= 3) {
+                alert('제품 설명 사진파일은 3개까지 등록할 수 있습니다.');
                 return;
             };
 
@@ -448,22 +448,21 @@ export const AdminProductUpload = () => {
         PurchaseQuantityLimit: '',
         mainCategory: '',
         subCategory: '',
-        productOption: {
-            option1: '',
-            option2: '',
-            option3: '',
-            option4: '',
-            option5: '',
-            option6: '',
-            option7: '',
-            option8: '',
-            option9: '',
-            option10: '',
-        },
         discountRate: '',
-        rewardAmount: '',
+        rewardAmountRate: '',
+        eventType: '',
+        eventPoint: '',
+
         productInformationFile: {},
         registrationDate: ''
+    });
+
+    const [productOptionInfo, setProductOption] = useState({
+        option1: '',
+        option2: '',
+        option3: '',
+        option4: '',
+        option5: '',
     });
 
     // const [productInfoFile, setProductInfoFile] = useState();
@@ -471,9 +470,13 @@ export const AdminProductUpload = () => {
     const onChange = (event) => {
         setProductInfo({ ...productInfo, [event.target.id]: event.target.value });
     };
+    const onChangeOption = (event) => {
+        setProductOption({ ...productOptionInfo, [event.target.id]: event.target.value });
+    };
 
     const onUpload = () => {
         console.log(productInfo);
+        console.log(productOptionInfo);
     };
 
     return (
@@ -568,12 +571,47 @@ export const AdminProductUpload = () => {
             <p>제품 옵션 입력</p>
             <UploadProductOptionInfo>
 
-                {optionArray.map((item) => (
+                {/* {optionArray.map((item) => (
                     <Option key={item.number}>
                         <p>{item.number}번 옵션 입력</p>
-                        <input type='text' id='productOption' value={productInfo.productOption[`${item.number}`] || ''} onChange={onChange} placeholder='옵션을 입력해주세요.' />
+                        <input type='text' id='productOption.option1' value={productInfo.productOption.option1 || ''} onChange={onChange} placeholder='옵션을 입력해주세요.' />
                     </Option>
-                ))}
+                ))} */}
+
+                {optionArray.length >= 1 && <>
+                    <Option>
+                        <p>1번 옵션 입력</p>
+                        <input type='text' id='option1' value={productOptionInfo.option1 || ''} onChange={onChangeOption} placeholder='1번 옵션을 입력해주세요.' />
+                    </Option>
+
+                    {optionArray.length >= 2 && <>
+                        <Option>
+                            <p>2번 옵션 입력</p>
+                            <input type='text' id='option2' value={productOptionInfo.option2 || ''} onChange={onChangeOption} placeholder='2번 옵션을 입력해주세요.' />
+                        </Option>
+
+                        {optionArray.length >= 3 && <>
+                            <Option>
+                                <p>3번 옵션 입력</p>
+                                <input type='text' id='option3' value={productOptionInfo.option3 || ''} onChange={onChangeOption} placeholder='3번 옵션을 입력해주세요.' />
+                            </Option>
+
+                            {optionArray.length >= 4 && <>
+                                <Option>
+                                    <p>4번 옵션 입력</p>
+                                    <input type='text' id='option4' value={productOptionInfo.option4 || ''} onChange={onChangeOption} placeholder='4번 옵션을 입력해주세요.' />
+                                </Option>
+
+                                {optionArray.length >= 5 && <>
+                                    <Option>
+                                        <p>5번 옵션 입력</p>
+                                        <input type='text' id='option5' value={productOptionInfo.option5 || ''} onChange={onChangeOption} placeholder='5번 옵션을 입력해주세요.' />
+                                    </Option>
+                                </>}
+                            </>}
+                        </>}
+                    </>}
+                </>}
 
                 <button onClick={() => optionCountControl('+')}>옵션 추가</button>
                 <button onClick={() => optionCountControl('-')}>옵션 제거</button>
@@ -585,17 +623,17 @@ export const AdminProductUpload = () => {
             <p>할인 정보 입력</p>
             <UploadSaleInfo>
 
-                <input type='text' placeholder='제품 할인률 입력' />
+                <input type='text' id='discountRate' value={productInfo.discountRate || ''} onChange={onChange} placeholder='제품 할인률 입력' />
 
-                <input type='text' placeholder='포인트 적립률 입력' />
+                <input type='text' id='rewardAmountRate' value={productInfo.rewardAmountRate || ''} onChange={onChange} placeholder='포인트 적립률 입력' />
 
-                <select required>
+                <select id='eventType' value={productInfo.eventType || ''} onChange={onChange} required>
                     <option value=''>이벤트 종류 선택</option>
                     <option>리뷰 이벤트</option>
                     <option>추가 포인트 적립</option>
                 </select>
 
-                <input type='text' placeholder='이벤트 포인트 수치 입력' />
+                <input type='text' id='eventPoint' value={productInfo.eventPoint || ''} onChange={onChange} placeholder='이벤트 포인트 수치 입력' />
 
             </UploadSaleInfo>
 
@@ -604,12 +642,33 @@ export const AdminProductUpload = () => {
             <p>제품 설명 입력</p>
             <UploadProductInfo>
 
-                {infomationFileArray.map((item) => (
+                {/* {infomationFileArray.map((item) => (
                     <Option key={item.number}>
                         <p>{item.number}번 파일 첨부</p>
                         <input type='file' />
                     </Option>
-                ))}
+                ))} */}
+
+                {infomationFileArray.length >= 1 && <>
+                    <Option>
+                        <p>1번 파일 첨부</p>
+                        <input type='file' />
+                    </Option>
+
+                    {infomationFileArray.length >= 2 && <>
+                        <Option>
+                            <p>1번 파일 첨부</p>
+                            <input type='file' />
+                        </Option>
+
+                        {infomationFileArray.length >= 3 && <>
+                            <Option>
+                                <p>1번 파일 첨부</p>
+                                <input type='file' />
+                            </Option>
+                        </>}
+                    </>}
+                </>}
 
                 <button onClick={() => fileCountControl('+')}>파일 추가</button>
                 <button onClick={() => fileCountControl('-')}>파일 제거</button>
@@ -629,27 +688,41 @@ export const AdminProductUpload = () => {
 
                 <input type='text' value={productInfo.price || ''} readOnly placeholder='제품가격' />
 
-                <input type='text' value={productInfo.price || ''} readOnly placeholder='배송료' />
+                <input type='text' value={productInfo.deliveryFee || ''} readOnly placeholder='배송료' />
 
-                <input type='text' value={productInfo.price || ''} readOnly placeholder='인당 구매제한 수량 입력' />
+                <input type='text' value={productInfo.PurchaseQuantityLimit || ''} readOnly placeholder='인당 구매제한 수량 입력' />
 
-                <input type='text' placeholder='대분류' />
+                <input type='text' value={productInfo.mainCategory || ''} readOnly placeholder='대분류' />
 
-                <input type='text' placeholder='소분류' />
+                <input type='text' value={productInfo.subCategory || ''} readOnly placeholder='소분류' />
 
-                <input type='text' placeholder='기본 할인률' />
+                {optionArray.length >= 1 && <>
+                    <input type='text' value={productOptionInfo.option1 || ''} readOnly placeholder='1번 옵션' />
 
-                <input type='text' placeholder='포인트 적입률' />
+                    {optionArray.length >= 2 && <>
+                        <input type='text' value={productOptionInfo.option2 || ''} readOnly placeholder='2번 옵션' />
 
-                <input type='text' placeholder='1번 옵션' />
+                        {optionArray.length >= 3 && <>
+                            <input type='text' value={productOptionInfo.option3 || ''} readOnly placeholder='3번 옵션' />
 
-                <input type='text' placeholder='2번 옵션' />
+                            {optionArray.length >= 4 && <>
+                                <input type='text' value={productOptionInfo.option4 || ''} readOnly placeholder='4번 옵션' />
 
-                <input type='text' placeholder='3번 옵션' />
+                                {optionArray.length >= 5 && <>
+                                    <input type='text' value={productOptionInfo.option5 || ''} readOnly placeholder='5번 옵션' />
+                                </>}
+                            </>}
+                        </>}
+                    </>}
+                </>}
 
-                <input type='text' placeholder='4번 옵션' />
+                <input type='text' value={productInfo.discountRate || ''} readOnly placeholder='기본 할인률' />
 
-                <input type='text' placeholder='5번 옵션' />
+                <input type='text' value={productInfo.rewardAmountRate || ''} readOnly placeholder='포인트 적입률' />
+
+                <input type='text' value={productInfo.eventType || ''} readOnly placeholder='기본 할인률' />
+
+                <input type='text' value={productInfo.eventPoint || ''} readOnly placeholder='포인트 적입률' />
 
             </InputCheck>
 
