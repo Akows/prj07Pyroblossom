@@ -11,46 +11,58 @@ const Test1 = () => {
 };
 
 
-const AddProduct = (productInfo) => {
+const AddProduct = (productInfo, productOptionInfo, productImgFile) => {
     return (dispatch, getState) => {
-        dispatch({ type: 'STORE_STATE_INIT' });
-        dispatch({ type: 'STORE_LOADING' });
 
-        const process = async () => {
-            const querys = query(storeCollectionRef);
-            const allProductCount = await getCountFromServer(querys);
-
-            const docRef = doc(storeCollectionRef, `${productInfo.name}`);
-            const createdTime = timeStamp.fromDate(new Date());
-
-            await setDoc(docRef,
-                {
-                    number: allProductCount.data().count + 1,
-                    name: '',
-                    price: '',
-                    deliveryFee: '',
-                    PurchaseQuantityLimit: '',
-                    mainCategory: '',
-                    subCategory: '',
-                    productOption: {},
-                    discountRate: '',
-                    rewardAmountRate: '',
-                    eventType: '',
-                    eventPoint: '',
-                    productInformationFile: {},
-                    registrationDate: createdTime
-                }
-            );
-        };
+        console.log(productInfo);
+        console.log(productOptionInfo);
+        console.log(productImgFile);
 
 
 
 
 
 
-        dispatch({ type: 'STORE_COMPLETE' });
-        dispatch({ type: 'STORE_ERROR' });
+
+        // dispatch({ type: 'STORE_STATE_INIT' });
+        // dispatch({ type: 'STORE_LOADING' });
+        // dispatch({ type: 'STORE_COMPLETE' });
+        // dispatch({ type: 'STORE_ERROR' });
+
+        // const process = async () => {
+        //     const querys = query(storeCollectionRef);
+        //     const allProductCount = await getCountFromServer(querys);
+
+        //     const docRef = doc(storeCollectionRef, `${productInfo.name}`);
+        //     const createdTime = timeStamp.fromDate(new Date());
+
+        //     await setDoc(docRef,
+        //         {
+        //             number: allProductCount.data().count + 1,
+        //             name: '',
+        //             price: '',
+        //             deliveryFee: '',
+        //             PurchaseQuantityLimit: '',
+        //             mainCategory: '',
+        //             subCategory: '',
+        //             productOption: {},
+        //             discountRate: '',
+        //             rewardAmountRate: '',
+        //             eventType: '',
+        //             eventPoint: '',
+        //             productInformationFile: {},
+        //             registrationDate: createdTime
+        //         }
+        //     );
+        // };
+
+
+
+
+
+
+
     };
 };
 
-export { Test1 };
+export { AddProduct };

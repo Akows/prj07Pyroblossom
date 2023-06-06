@@ -1,5 +1,7 @@
-import React, { useEffect, useReducer, useState } from 'react'
+import React, { useReducer, useState } from 'react'
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
+import { AddProduct } from '../../../redux/actions/storeAction';
 
 const UploadIMG = styled.div`
     width: 100%;
@@ -444,8 +446,8 @@ export const AdminProductUpload = () => {
         number: '',
         name: '',
         price: '',
-        deliveryFee: '',
-        PurchaseQuantityLimit: '',
+        deliveryFee: '0',
+        PurchaseQuantityLimit: '0',
         mainCategory: '',
         subCategory: '',
         discountRate: '',
@@ -465,7 +467,12 @@ export const AdminProductUpload = () => {
         option5: '',
     });
 
-    // const [productInfoFile, setProductInfoFile] = useState();
+    const [productImgFile, setProductImgFile] = useState({
+        titleimage: '',
+        infoimage1: '',
+        infoimage2: '',
+        infoimage3: '',
+    });
 
     const onChange = (event) => {
         setProductInfo({ ...productInfo, [event.target.id]: event.target.value });
@@ -473,10 +480,14 @@ export const AdminProductUpload = () => {
     const onChangeOption = (event) => {
         setProductOption({ ...productOptionInfo, [event.target.id]: event.target.value });
     };
+    const onFileUpload = (event) => {
+        setProductImgFile({ ...productImgFile, [event.target.id]: event.target.files });
+    };
+
+    const dispatch = useDispatch();
 
     const onUpload = () => {
-        console.log(productInfo);
-        console.log(productOptionInfo);
+        dispatch(AddProduct(productInfo, productOptionInfo, productImgFile));
     };
 
     return (
@@ -486,7 +497,7 @@ export const AdminProductUpload = () => {
             <p>제품 이미지 등록</p>
             <UploadIMG>
 
-                <input type='file' />
+                <input type='file' id='titleimage' onChange={onFileUpload} multiple={false} />
 
             </UploadIMG>
 
@@ -652,19 +663,19 @@ export const AdminProductUpload = () => {
                 {infomationFileArray.length >= 1 && <>
                     <Option>
                         <p>1번 파일 첨부</p>
-                        <input type='file' />
+                        <input type='file' id='infoimage1' onChange={onFileUpload} />
                     </Option>
 
                     {infomationFileArray.length >= 2 && <>
                         <Option>
                             <p>1번 파일 첨부</p>
-                            <input type='file' />
+                            <input type='file' id='infoimage2' onChange={onFileUpload} />
                         </Option>
 
                         {infomationFileArray.length >= 3 && <>
                             <Option>
                                 <p>1번 파일 첨부</p>
-                                <input type='file' />
+                                <input type='file' id='infoimage3' onChange={onFileUpload} />
                             </Option>
                         </>}
                     </>}
@@ -680,7 +691,7 @@ export const AdminProductUpload = () => {
             <p>입력 정보 확인</p>
             <InputCheck>
 
-                <img src='' alt='None' />
+                <img src={productImgFile.titleimage} alt='None' />
 
                 <input type='text' value={productInfo.number || ''} readOnly placeholder='제품번호' />
 
