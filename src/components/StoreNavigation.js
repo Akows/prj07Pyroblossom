@@ -11,8 +11,6 @@ import { AiOutlineUser, AiOutlineMenu, AiOutlinePicCenter } from 'react-icons/ai
 import { FiLogIn, FiLogOut } from "react-icons/fi";
 import { BiCategory, BiCategoryAlt } from 'react-icons/bi';
 
-import { BiSolidCopy } from 'react-icons/bi';
-
 import TitleIMGsrc from '../assets/images/Genshin-Impact-LogoW.png';
 
 const BackGround = styled.div`
@@ -430,6 +428,7 @@ export const StoreNavigation = () => {
 
     const onShowCategoryList = () => {
         setIsCategoryShow(!isCategoryShow);
+        setIsClick(false);
     };
 
     const onChangeSearchKeyword = (event) => {
@@ -464,7 +463,10 @@ export const StoreNavigation = () => {
 
             <MainNav>
                 <TitleAndMenuArea
-                    onClick={() => setIsClick(!isClick)}
+                    onClick={() => {
+                        setIsClick(!isClick);
+                        setIsCategoryShow(false);
+                    }}
                 >
                     <DropDownMenu>
                         {isClick ?
