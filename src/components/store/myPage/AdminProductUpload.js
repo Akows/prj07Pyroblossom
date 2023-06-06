@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useReducer, useState } from 'react'
 import styled from 'styled-components';
 
 const UploadIMG = styled.div`
@@ -130,26 +130,6 @@ const UploadProductOptionInfo = styled.div`
     align-items: flex-start;
     justify-content: center;
 
-    & > input {
-        width: 100%;
-        height: 30px;
-
-        margin-top: 10px;
-
-        font-family: 'GIFont';
-        font-size: 16px;
-        color: black;
-
-        background-color: #aaaaaa;
-        border-radius: 5px;
-        border: none;
-    };
-
-    & > p {
-        font-size: 15px;
-        margin-top: 5px;
-    };
-
     & > button {
         width: 100%;
         height: 30px;
@@ -174,6 +154,32 @@ const UploadProductOptionInfo = styled.div`
     & > button:hover {
         background-color: #414147;
         color: #D3BC8E;
+    };
+`;
+
+const Option = styled.div`
+    width: 100%;
+    height: 100%;
+
+
+    & > input {
+        width: 100%;
+        height: 30px;
+
+        margin-top: 10px;
+
+        font-family: 'GIFont';
+        font-size: 16px;
+        color: black;
+
+        background-color: #aaaaaa;
+        border-radius: 5px;
+        border: none;
+    };
+
+    & > p {
+        font-size: 15px;
+        margin-top: 5px;
     };
 `;
 
@@ -282,44 +288,89 @@ const UploadButton = styled.div`
     };
 `;
 
+const initState = {
+    optionCount: 0,
+    optionArray: [],
+}
 
+const storeReducer = (state, action) => {
+    switch (action.type) {
+        case 'INCREASE':
+            return {
+                optionCount: state.optionCount + 1,
+                optionArray: [...state.optionArray, { number: state.optionCount + 1 }],
+            }
+
+        case 'DECREASE':
+            return {
+                optionArray: state.optionArray.filter(item => item.number !== state.optionCount),
+                optionCount: state.optionCount - 1,
+            }
+
+        default:
+            return state
+    };
+};
 
 export const AdminProductUpload = () => {
 
-    const [howMuchOption, setHowMuchOption] = useState(0);
+    const [response, dispatch] = useReducer(storeReducer, initState);
 
-    const arr = [];
+    const { optionCount, optionArray } = response;
+
+    useEffect(() => {
+        console.log(response);
+    }, [response])
+
+
+
+
+
+
+
+
+    // const [howMuchOption, setHowMuchOption] = useState(0);
+    // const [optionArray, setOptionArray] = useState([]);
+
+
 
     const optionNumberSet = (setType) => {
         if (setType === '+') {
-
-            if (howMuchOption >= 10) {
+            if (optionCount >= 10) {
                 alert('제품 옵션은 10개까지 등록할 수 있습니다.');
                 return;
             };
 
-            setHowMuchOption(howMuchOption + 1);
-            arr.push(...arr, `${howMuchOption}`);
+            dispatch({ type: 'INCREASE' });
 
-            console.log(arr);
+            // setHowMuchOption(howMuchOption + 1);
+            // setOptionArray([...optionArray, { number: howMuchOption }]);
         };
 
         if (setType === '-') {
-
-            if (howMuchOption <= 0) {
+            if (optionCount <= 0) {
                 alert('더 이상 옵션을 제거할 수 없습니다.');
                 return;
             };
 
-            setHowMuchOption(howMuchOption - 1);
-            arr.pop();
+            dispatch({ type: 'DECREASE' });
+
+            // setHowMuchOption(howMuchOption - 1);
+
+            // setOptionArray(optionArray.filter(number => number === howMuchOption));
+
+
+            // setOptionArray(
+            //     optionArray.filter((number) => number === howMuchOption + 1)
+            // );
         };
 
     };
 
-    useEffect(() => {
+    // useEffect(() => {
+    //     setHowMuchOption(howMuchOption);
+    // }, [howMuchOption])
 
-    }, [])
 
     const onUpload = () => {
 
@@ -382,32 +433,15 @@ export const AdminProductUpload = () => {
             <p>제품 옵션 입력</p>
             <UploadProductOptionInfo>
 
-                {howMuchOption}
-
-                {arr.map((item) => (
-                    <>
+                {optionArray.map((item) => (
+                    <Option key={item.number}>
                         <p>{item.number}번 옵션 입력</p>
                         <input type='text' placeholder='옵션을 입력해주세요.' />
-                    </>
+                    </Option>
                 ))}
 
-                {/* <p>1번 옵션 입력</p>
-                <input type='text' placeholder='1번 옵션 입력' />
-
-                <p>2번 옵션 입력</p>
-                <input type='text' placeholder='2번 옵션 입력' />
-
-                <p>3번 옵션 입력</p>
-                <input type='text' placeholder='3번 옵션 입력' />
-
-                <p>4번 옵션 입력</p>
-                <input type='text' placeholder='4번 옵션 입력' />
-
-                <p>5번 옵션 입력</p>
-                <input type='text' placeholder='5번 옵션 입력' /> */}
-
-                <button onClick={() => optionNumberSet('+')}>+</button>
-                <button onClick={() => optionNumberSet('-')}>-</button>
+                <button onClick={() => optionNumberSet('+')}>옵션 추가</button>
+                <button onClick={() => optionNumberSet('-')}>옵션 제거</button>
 
             </UploadProductOptionInfo>
 
