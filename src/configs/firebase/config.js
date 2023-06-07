@@ -1,6 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { collection, getFirestore, Timestamp } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
+import { getStorage, ref } from 'firebase/storage';
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -14,12 +15,16 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const appFireStore = getFirestore(app);
 const appAuth = getAuth();
+const appStorage = getStorage();
 const timeStamp = Timestamp;
 
-// 파이어베이스 컬렉션 Ref.
+// 파이어스토어 컬렉션 Ref.
 // 유저 Ref.
 const userCollectionRef = collection(appFireStore, 'user');
 // 스토어 Ref.
 const storeCollectionRef = collection(appFireStore, 'store');
 
-export { appFireStore, appAuth, timeStamp, userCollectionRef, storeCollectionRef }
+// 파이어베이스 스토리지 Ref.
+const storageRef = ref(appStorage);
+
+export { appFireStore, appAuth, timeStamp, userCollectionRef, storeCollectionRef, storageRef }

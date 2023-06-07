@@ -1,7 +1,8 @@
-import React, { useReducer, useState } from 'react'
-import { useDispatch } from 'react-redux';
+import React, { useEffect, useReducer, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { AddProduct } from '../../../redux/actions/storeAction';
+import { Loading } from '../../Loading';
 
 const UploadIMG = styled.div`
     width: 100%;
@@ -446,16 +447,14 @@ export const AdminProductUpload = () => {
         number: '',
         name: '',
         price: '',
-        deliveryFee: '0',
-        PurchaseQuantityLimit: '0',
+        deliveryFee: '',
+        PurchaseQuantityLimit: '',
         mainCategory: '',
         subCategory: '',
         discountRate: '',
         rewardAmountRate: '',
         eventType: '',
         eventPoint: '',
-
-        productInformationFile: {},
         registrationDate: ''
     });
 
@@ -468,10 +467,10 @@ export const AdminProductUpload = () => {
     });
 
     const [productImgFile, setProductImgFile] = useState({
-        titleimage: '',
-        infoimage1: '',
-        infoimage2: '',
-        infoimage3: '',
+        titleImage: '',
+        infoImage0: '',
+        infoImage1: '',
+        infoImage2: '',
     });
 
     const onChange = (event) => {
@@ -487,17 +486,33 @@ export const AdminProductUpload = () => {
     const dispatch = useDispatch();
 
     const onUpload = () => {
+
+        if (productImgFile.titleImage === '') {
+            alert('제품 이미지는 반드시 등록해야합니다.');
+            return;
+        };
+
         dispatch(AddProduct(productInfo, productOptionInfo, productImgFile));
     };
 
+    const [isLoading, setIsLoading] = useState(false);
+    const getStoreState = useSelector((state) => state.store);
+
+    useEffect(() => {
+        setIsLoading(getStoreState.flagValue.isLoading);
+        // eslint-disable-next-line
+    }, [getStoreState.flagValue]);
+
     return (
         <>
+            {isLoading && <Loading />}
+
             <br />
 
             <p>제품 이미지 등록</p>
             <UploadIMG>
 
-                <input type='file' id='titleimage' onChange={onFileUpload} multiple={false} />
+                <input type='file' id='titleImage' onChange={onFileUpload} multiple={false} />
 
             </UploadIMG>
 
@@ -663,19 +678,19 @@ export const AdminProductUpload = () => {
                 {infomationFileArray.length >= 1 && <>
                     <Option>
                         <p>1번 파일 첨부</p>
-                        <input type='file' id='infoimage1' onChange={onFileUpload} />
+                        <input type='file' id='infoImage1' onChange={onFileUpload} />
                     </Option>
 
                     {infomationFileArray.length >= 2 && <>
                         <Option>
-                            <p>1번 파일 첨부</p>
-                            <input type='file' id='infoimage2' onChange={onFileUpload} />
+                            <p>2번 파일 첨부</p>
+                            <input type='file' id='infoImage2' onChange={onFileUpload} />
                         </Option>
 
                         {infomationFileArray.length >= 3 && <>
                             <Option>
-                                <p>1번 파일 첨부</p>
-                                <input type='file' id='infoimage3' onChange={onFileUpload} />
+                                <p>3번 파일 첨부</p>
+                                <input type='file' id='infoImage3' onChange={onFileUpload} />
                             </Option>
                         </>}
                     </>}
@@ -691,7 +706,7 @@ export const AdminProductUpload = () => {
             <p>입력 정보 확인</p>
             <InputCheck>
 
-                <img src={productImgFile.titleimage} alt='None' />
+                <img src={productImgFile.titleImage} alt='None' />
 
                 <input type='text' value={productInfo.number || ''} readOnly placeholder='제품번호' />
 
@@ -739,9 +754,21 @@ export const AdminProductUpload = () => {
 
 
             <UploadButtonArea >
-                <UploadButton onClick={onUpload}>
-                    제품 등록하기
-                </UploadButton>
+
+                {isLoading ?
+                    <>
+                        <UploadButton>
+                            등록 중..
+                        </UploadButton>
+                    </>
+                    :
+                    <>
+                        <UploadButton onClick={onUpload}>
+                            제품 등록하기
+                        </UploadButton>
+                    </>}
+
+
             </UploadButtonArea>
 
         </>
