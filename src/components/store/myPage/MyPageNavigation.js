@@ -78,7 +78,7 @@ const NavText = styled.div`
     };
 `;
 
-export const MyPageNavigation = ({ setAdmin }) => {
+export const MyPageNavigation = ({ isAdminLogin }) => {
     return (
         <Background>
 
@@ -87,8 +87,9 @@ export const MyPageNavigation = ({ setAdmin }) => {
                     <img src={Imagesrc1} alt='' />
                 </Link>
 
-                <NavText onClick={setAdmin}>
-                    마이페이지
+                <NavText>
+                    {isAdminLogin && '관리페이지'}
+                    {!isAdminLogin && '마이페이지'}
                 </NavText>
             </LogoAndCompoButton>
 

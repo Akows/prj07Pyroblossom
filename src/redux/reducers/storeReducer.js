@@ -42,8 +42,8 @@ const storeReducer = (prevState = initialState, action) => {
             case 'STORE_ERROR':
                 draft.flagValue.isLoading = false;
                 draft.flagValue.isError = true;
-                draft.processInfo.processCode = '에러 발생!';
-                draft.processInfo.processMessage = '에러 발생!';
+                draft.processInfo.processCode = action.payload.errorCode;
+                draft.processInfo.processMessage = action.payload.errorMessage;
                 break;
 
             default:

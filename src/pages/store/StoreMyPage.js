@@ -1,5 +1,7 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
+import { Loading } from '../../components/Loading';
 import { PointChargeModal } from '../../components/PointChargeModal';
 
 import { AdminProductManagement } from '../../components/store/myPage/AdminProductManagement';
@@ -243,25 +245,44 @@ const AdminCompoButton = styled.div`
 
 export const StoreMyPage = () => {
 
+    const getUserState = useSelector((state) => state.user);
+    const getStoreState = useSelector((state) => state.store);
+
     const [isAdminLogin, setIsAdminLogin] = useState(false);
 
     const [whatCompoIsShow, setWhatCompoIsShow] = useState('history');
 
     const [isShowModal, setIsShowModal] = useState(false);
 
+    const [isLoading, setIsLoading] = useState(false);
+
     const setWhatComponentsRender = (name) => {
         setWhatCompoIsShow(name);
     };
 
-    const setAdmin = () => {
-        setIsAdminLogin(!isAdminLogin);
-        setWhatCompoIsShow('productmanage');
-    };
+    useEffect(() => {
+        if (getUserState.userdata.displayName === 'Admin') {
+            setIsAdminLogin(true);
+            setWhatCompoIsShow('productmanage');
+        };
+    }, [getUserState.userdata])
+
+    useEffect(() => {
+        setIsLoading(getStoreState.flagValue.isLoading);
+    }, [getStoreState.flagValue]);
+
+    useEffect(() => {
+        if (getStoreState.processInfo.processCode === '작업 완료.') {
+            setWhatCompoIsShow('productmanage');
+        };
+    }, [getStoreState.processInfo]);
 
     return (
         <BackGround>
 
-            <MyPageNavigation setAdmin={setAdmin} />
+            {isLoading && <Loading />}
+
+            <MyPageNavigation isAdminLogin={isAdminLogin} />
 
             {!isAdminLogin &&
                 <InnerContents>
@@ -327,7 +348,7 @@ export const StoreMyPage = () => {
 
                     <ComponentArea>
 
-                        {whatCompoIsShow === 'productupload' && <AdminProductUpload />}
+                        {whatCompoIsShow === 'productupload' && <AdminProductUpload isLoading={isLoading} />}
 
                         {whatCompoIsShow === 'productmanage' && <AdminProductManagement />}
 

@@ -1,8 +1,8 @@
-import React, { useEffect, useReducer, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useReducer, useState } from 'react'
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { AddProduct } from '../../../redux/actions/storeAction';
-import { Loading } from '../../Loading';
 
 const UploadIMG = styled.div`
     width: 100%;
@@ -438,7 +438,10 @@ const infomationFileReducer = (state, action) => {
     };
 };
 
-export const AdminProductUpload = () => {
+export const AdminProductUpload = ({ isLoading }) => {
+
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const [responseOption, dispatchOption] = useReducer(optionReducer, initStateOption);
     const [responseInfomation, dispatchInfomation] = useReducer(infomationFileReducer, initStateInfomationFile);
@@ -534,30 +537,17 @@ export const AdminProductUpload = () => {
         setProductImgFile({ ...productImgFile, [event.target.id]: event.target.files });
     };
 
-    const dispatch = useDispatch();
-
     const onUpload = () => {
-
         if (productImgFile.titleImage === '') {
             alert('제품 이미지는 반드시 등록해야합니다.');
             return;
         };
 
-        dispatch(AddProduct(productInfo, productOptionInfo, productImgFile));
+        dispatch(AddProduct(productInfo, productOptionInfo, productImgFile, navigate));
     };
-
-    const [isLoading, setIsLoading] = useState(false);
-    const getStoreState = useSelector((state) => state.store);
-
-    useEffect(() => {
-        setIsLoading(getStoreState.flagValue.isLoading);
-        // eslint-disable-next-line
-    }, [getStoreState.flagValue]);
 
     return (
         <>
-            {isLoading && <Loading />}
-
             <br />
 
             <p>제품 이미지 등록</p>
@@ -765,7 +755,7 @@ export const AdminProductUpload = () => {
 
                 <input type='text' id='discountRate' value={productInfo.discountRate || ''} onChange={onChange} placeholder='제품 할인률 입력' />
 
-                <input type='text' id='rewardAmountRate' value={productInfo.rewardAmountRate || ''} onChange={onChange} placeholder='포인트 적립률 입력' />
+                <input type='text' id='rewardAmountRate' value={productInfo.rewardAmountRate || ''} onChange={onChange} placeholder='캐쉬백 포인트 수치 입력' />
 
                 <select id='eventType' value={productInfo.eventType || ''} onChange={onChange} required>
                     <option value=''>이벤트 종류 선택</option>
@@ -819,7 +809,8 @@ export const AdminProductUpload = () => {
 
             <p>입력 정보 확인</p>
             <InputCheck>
-
+                입력 정보를 확인하는 창을 모달로 할지 생각중.. 임시 폐쇄.
+                {/* 
                 <img src={productImgFile.titleImage} alt='None' />
 
                 <input type='text' value={productInfo.number || ''} readOnly placeholder='제품번호' />
@@ -862,7 +853,7 @@ export const AdminProductUpload = () => {
 
                 <input type='text' value={productInfo.eventType || ''} readOnly placeholder='기본 할인률' />
 
-                <input type='text' value={productInfo.eventPoint || ''} readOnly placeholder='포인트 적입률' />
+                <input type='text' value={productInfo.eventPoint || ''} readOnly placeholder='포인트 적입률' /> */}
 
             </InputCheck>
 

@@ -86,7 +86,7 @@ const CategoryButton = styled.div`
 
     @media screen and (max-width: 700px) {
         width: 10%;
-    }
+    };
 `;
 const SearchBar = styled.div`
     width: 500px;
@@ -98,7 +98,7 @@ const SearchBar = styled.div`
 
     @media screen and (max-width: 700px) {
         width: 90%;
-    }
+    };
 `;
 const SearchInput = styled.input`
     width: 80%;
@@ -400,6 +400,18 @@ const UserMenu = styled.div`
     flex-direction: row;
     align-items: center;
     justify-content: space-around;
+
+    & > a {
+        border-radius: 100px;
+
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+    };
+    & > a:hover {
+        background-color: gray;
+    };
 `;
 
 
@@ -490,11 +502,11 @@ export const StoreNavigation = () => {
                                             <UserMenuSub>
                                                 {getUserState.userdata.displayName === '관리자' ?
                                                     <Link to='user/adminpage'>
-                                                        <AiOutlineUser size={40} />
+                                                        <AiOutlineUser size={40} color='#D3BC8E' />
                                                     </Link>
                                                     :
                                                     <Link to='user/mypage'>
-                                                        <AiOutlineUser size={40} />
+                                                        <AiOutlineUser size={40} color='#D3BC8E' />
                                                     </Link>
                                                 }
                                                 <FiLogOut onClick={logOuts} size={40} />
@@ -541,22 +553,32 @@ export const StoreNavigation = () => {
                                     {getUserState.userdata.displayName === 'Admin' ?
                                         <>
                                             <Link to='/user/adminpage'>
-                                                <AiOutlineUser size={40} />
+                                                <AiOutlineUser size={40} color='#D3BC8E' />
                                             </Link>
                                         </>
                                         :
                                         <>
                                             <Link to='/user/mypage'>
-                                                <AiOutlineUser size={40} />
+                                                <AiOutlineUser size={40} color='#D3BC8E'
+                                                // HTML 내부에서 Hover Event를 이용하는 방법.
+                                                // onMouseOver={({ target }) => target.style.color = '#D3BC8E'}
+                                                // onMouseOut={({ target }) => target.style.color = '#D3BC8E'}
+                                                />
                                             </Link>
                                         </>
                                     }
-                                    <FiLogOut onClick={logOuts} size={40} />
+                                    <Link to=''>
+                                        <FiLogOut onClick={logOuts} size={40} color='#D3BC8E' />
+                                    </Link>
                                 </UserMenu>
                             </>
                             :
                             <>
-                                <Link to='/user/login'><FiLogIn size={30} /></Link>
+                                <UserMenu>
+                                    <Link to='/user/login'>
+                                        <FiLogIn size={30} />
+                                    </Link>
+                                </UserMenu>
                             </>
                         }
                     </Menu3>

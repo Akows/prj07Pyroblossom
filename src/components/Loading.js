@@ -1,5 +1,4 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import React from 'react'
 import styled from 'styled-components';
 
 import loading from '../assets/images/background/loading.gif';
@@ -38,24 +37,10 @@ const BackGround = styled.div`
 
 export const Loading = () => {
 
-    const navigate = useNavigate();
-
-    const [isLoading, setIsLoading] = useState(true);
-
-    const onClick = () => {
-        setIsLoading(false);
-        navigate('/');
-    };
-
-    if (isLoading) {
-        return (
-            <BackGround onClick={onClick}>
-                <img src={loading} alt='' />
-                <p>Loading...</p>
-
-                <br />
-                <p>테스트중, 한번 터치하면 로딩화면 해제</p>
-            </BackGround>
-        );
-    };
+    return (
+        <BackGround>
+            <img src={loading} alt='' />
+            <p>Loading...</p>
+        </BackGround>
+    );
 };

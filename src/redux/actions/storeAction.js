@@ -1,6 +1,7 @@
 import { doc, getCountFromServer, query, setDoc } from 'firebase/firestore';
 import { ref, uploadBytes } from 'firebase/storage';
-import { appAuth, timeStamp, storeCollectionRef, storageRef } from '../../configs/firebase/config'
+import { createErrorData } from '../../configs/errorCodes';
+import { timeStamp, storeCollectionRef, storageRef } from '../../configs/firebase/config'
 
 const Test1 = () => {
     return (dispatch, getState) => {
@@ -11,10 +12,8 @@ const Test1 = () => {
     };
 };
 
-
-const AddProduct = (productInfo, productOptionInfo, productImgFile) => {
+const AddProduct = (productInfo, productOptionInfo, productImgFile, navigate) => {
     return (dispatch, getState) => {
-
         dispatch({ type: 'STORE_STATE_INIT' });
         dispatch({ type: 'STORE_LOADING' });
 
@@ -93,12 +92,29 @@ const AddProduct = (productInfo, productOptionInfo, productImgFile) => {
             .then(() => {
                 dispatch({ type: 'STORE_COMPLETE' });
                 alert('제품 등록이 완료되었습니다.');
+                navigate('/store/mypage', { replace: true });
             })
             .catch((error) => {
-                console.log(error);
-                dispatch({ type: 'STORE_ERROR' });
+                dispatch({ type: 'STORE_ERROR', payload: createErrorData(error) });
+                alert('제품 등록 과정에서 에러가 발생하였습니다.');
+                navigate('/store/mypage', { replace: true });
             });
     };
 };
 
-export { Test1, AddProduct };
+const GetProductList = () => {
+    return (dispatch, getState) => {
+
+    };
+};
+
+
+
+
+
+
+
+
+
+
+export { Test1, AddProduct, GetProductList };
