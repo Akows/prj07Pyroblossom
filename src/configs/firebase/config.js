@@ -22,7 +22,7 @@ const timeStamp = Timestamp;
 // 유저 Ref.
 const userCollectionRef = collection(appFireStore, 'user');
 // 스토어 Ref.
-const storeCollectionRef = collection(appFireStore, 'store');
+const storeCollectionRef = collection(appFireStore, 'storeProducts');
 
 // 파이어베이스 스토리지 Ref.
 const storageRef = ref(appStorage);

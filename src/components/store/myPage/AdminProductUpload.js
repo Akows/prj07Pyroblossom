@@ -197,20 +197,21 @@ const Option = styled.div`
     };
 
     & > div > p {
-        height: 20px;
+        height: 25px;
 
-        font-size: 15px;
+        font-size: 14px;
         margin-top: 5px;
     };
 
     & > div > select {
-        width: 120px;
+        width: 110px;
         height: 20px;
 
+        margin-bottom: 5px;
         margin-left: 10px;
 
         font-family: 'GIFont';
-        font-size: 16px;
+        font-size: 15px;
         color: black;
 
         background-color: white;
@@ -218,8 +219,13 @@ const Option = styled.div`
         border: none;
     };
 
-    & > input:nth-child(4) {
+    & > input:nth-child(5) {
+        width: 30%;
+        height: 20px;
+
         margin-top: 0px;
+
+        font-size: 14px;
     };
 `;
 
@@ -495,19 +501,19 @@ export const AdminProductUpload = () => {
 
     const [productOptionInfo, setProductOption] = useState({
         option1: '',
-        option1SurchargeType: '',
+        option1SurchargeType: '변동없음',
         option1SurchargePrice: '',
         option2: '',
-        option2SurchargeType: '',
+        option2SurchargeType: '변동없음',
         option2SurchargePrice: '',
         option3: '',
-        option3SurchargeType: '',
+        option3SurchargeType: '변동없음',
         option3SurchargePrice: '',
         option4: '',
-        option4SurchargeType: '',
+        option4SurchargeType: '변동없음',
         option4SurchargePrice: '',
         option5: '',
-        option5SurchargeType: '',
+        option5SurchargeType: '변동없음',
         option5SurchargePrice: '',
     });
 
@@ -650,90 +656,96 @@ export const AdminProductUpload = () => {
 
                 {optionArray.length >= 1 && <>
                     <Option>
+                        <hr />
+
                         <p>1번 옵션 입력</p>
                         <input type='text' id='option1' value={productOptionInfo.option1 || ''} onChange={onChangeOption} placeholder='1번 옵션을 입력해주세요.' />
 
                         <div>
                             <p>1번 옵션 추가금액</p>
                             <select id='option1SurchargeType' value={productOptionInfo.option1SurchargeType || ''} onChange={onChangeOption} required>
-                                <option value=''>추가금액 없음</option>
-                                <option value='+'>+</option>
-                                <option value='-'>-</option>
+                                <option value='변동없음'>추가금액 없음</option>
+                                <option value='추가가격'>+</option>
+                                <option value='가격감소'>-</option>
                             </select>
                         </div>
 
-                        {productOptionInfo.option1SurchargeType !== '' && <input type='text' id='option1SurchargePrice' value={productOptionInfo.option1SurchargePrice || ''} onChange={onChangeOption} placeholder='1번 옵션의 추가금액을 입력해주세요.' />}
-
+                        {productOptionInfo.option1SurchargeType !== '변동없음' && <input type='text' id='option1SurchargePrice' value={productOptionInfo.option1SurchargePrice || ''} onChange={onChangeOption} placeholder='옵션의 변동수치를 입력해주세요.' />}
                     </Option>
 
                     {optionArray.length >= 2 && <>
                         <Option>
+                            <hr />
                             <p>2번 옵션 입력</p>
                             <input type='text' id='option2' value={productOptionInfo.option2 || ''} onChange={onChangeOption} placeholder='2번 옵션을 입력해주세요.' />
 
                             <div>
                                 <p>2번 옵션 추가금액</p>
                                 <select id='option2SurchargeType' value={productOptionInfo.option2SurchargeType || ''} onChange={onChangeOption} required>
-                                    <option value=''>추가금액 없음</option>
-                                    <option value='+'>+</option>
-                                    <option value='-'>-</option>
+                                    <option value='변동없음'>추가금액 없음</option>
+                                    <option value='추가가격'>+</option>
+                                    <option value='가격감소'>-</option>
                                 </select>
                             </div>
 
-                            {productOptionInfo.option2SurchargeType !== '' && <input type='text' id='option2SurchargePrice' value={productOptionInfo.option2SurchargePrice || ''} onChange={onChangeOption} placeholder='2번 옵션의 추가금액을 입력해주세요.' />}
+                            {productOptionInfo.option2SurchargeType !== '변동없음' && <input type='text' id='option2SurchargePrice' value={productOptionInfo.option2SurchargePrice || ''} onChange={onChangeOption} placeholder='옵션의 변동수치를 입력해주세요.' />}
 
                         </Option>
 
                         {optionArray.length >= 3 && <>
                             <Option>
+                                <hr />
                                 <p>3번 옵션 입력</p>
                                 <input type='text' id='option3' value={productOptionInfo.option3 || ''} onChange={onChangeOption} placeholder='3번 옵션을 입력해주세요.' />
 
                                 <div>
                                     <p>3번 옵션 추가금액</p>
                                     <select id='option3SurchargeType' value={productOptionInfo.option3SurchargeType || ''} onChange={onChangeOption} required>
-                                        <option value=''>추가금액 없음</option>
-                                        <option value='+'>+</option>
-                                        <option value='-'>-</option>
+                                        <option value='변동없음'>추가금액 없음</option>
+                                        <option value='추가가격'>+</option>
+                                        <option value='가격감소'>-</option>
                                     </select>
                                 </div>
 
-                                {productOptionInfo.option3SurchargeType !== '' && <input type='text' id='option3SurchargePrice' value={productOptionInfo.option3SurchargePrice || ''} onChange={onChangeOption} placeholder='3번 옵션의 추가금액을 입력해주세요.' />}
+                                {productOptionInfo.option3SurchargeType !== '변동없음' && <input type='text' id='option3SurchargePrice' value={productOptionInfo.option3SurchargePrice || ''} onChange={onChangeOption} placeholder='옵션의 변동수치를 입력해주세요.' />}
 
                             </Option>
 
                             {optionArray.length >= 4 && <>
                                 <Option>
+                                    <hr />
                                     <p>4번 옵션 입력</p>
                                     <input type='text' id='option4' value={productOptionInfo.option4 || ''} onChange={onChangeOption} placeholder='4번 옵션을 입력해주세요.' />
 
                                     <div>
                                         <p>4번 옵션 추가금액</p>
                                         <select id='option4SurchargeType' value={productOptionInfo.option4SurchargeType || ''} onChange={onChangeOption} required>
-                                            <option value=''>추가금액 없음</option>
-                                            <option value='+'>+</option>
-                                            <option value='-'>-</option>
+                                            <option value='변동없음'>추가금액 없음</option>
+                                            <option value='추가가격'>+</option>
+                                            <option value='가격감소'>-</option>
                                         </select>
                                     </div>
 
-                                    {productOptionInfo.option4SurchargeType !== '' && <input type='text' id='option4SurchargePrice' value={productOptionInfo.option4SurchargePrice || ''} onChange={onChangeOption} placeholder='4번 옵션의 추가금액을 입력해주세요.' />}
+                                    {productOptionInfo.option4SurchargeType !== '변동없음' && <input type='text' id='option4SurchargePrice' value={productOptionInfo.option4SurchargePrice || ''} onChange={onChangeOption} placeholder='옵션의 변동수치를 입력해주세요.' />}
                                 </Option>
 
                                 {optionArray.length >= 5 && <>
                                     <Option>
+                                        <hr />
                                         <p>5번 옵션 입력</p>
                                         <input type='text' id='option5' value={productOptionInfo.option5 || ''} onChange={onChangeOption} placeholder='5번 옵션을 입력해주세요.' />
 
                                         <div>
                                             <p>5번 옵션 추가금액</p>
                                             <select id='option5SurchargeType' value={productOptionInfo.option5SurchargeType || ''} onChange={onChangeOption} required>
-                                                <option value=''>추가금액 없음</option>
-                                                <option value='+'>+</option>
-                                                <option value='-'>-</option>
+                                                <option value='변동없음'>추가금액 없음</option>
+                                                <option value='추가가격'>+</option>
+                                                <option value='가격감소'>-</option>
                                             </select>
                                         </div>
 
-                                        {productOptionInfo.option5SurchargeType !== '' && <input type='text' id='option5SurchargePrice' value={productOptionInfo.option5SurchargePrice || ''} onChange={onChangeOption} placeholder='5번 옵션의 추가금액을 입력해주세요.' />}
+                                        {productOptionInfo.option5SurchargeType !== '변동없음' && <input type='text' id='option5SurchargePrice' value={productOptionInfo.option5SurchargePrice || ''} onChange={onChangeOption} placeholder='옵션의 변동수치를 입력해주세요.' />}
+                                        <hr />
                                     </Option>
                                 </>}
                             </>}
