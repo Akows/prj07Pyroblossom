@@ -1,8 +1,6 @@
-// import { doc, getCountFromServer, query, setDoc } from 'firebase/firestore';
+import { doc, getCountFromServer, query, setDoc } from 'firebase/firestore';
 import { ref, uploadBytes } from 'firebase/storage';
-// import { appAuth, timeStamp, storeCollectionRef, storageRef } from '../../configs/firebase/config'
-
-import { storageRef } from '../../configs/firebase/config'
+import { appAuth, timeStamp, storeCollectionRef, storageRef } from '../../configs/firebase/config'
 
 const Test1 = () => {
     return (dispatch, getState) => {
@@ -10,47 +8,6 @@ const Test1 = () => {
         dispatch({ type: 'STORE_LOADING' });
         dispatch({ type: 'STORE_COMPLETE' });
         dispatch({ type: 'STORE_ERROR' });
-
-        // const process = async () => {
-        //     const querys = query(storeCollectionRef);
-        //     const allProductCount = await getCountFromServer(querys);
-        //     const docRef = doc(storeCollectionRef, `${productInfo.name}`);
-
-        //     const createdTime = timeStamp.fromDate(new Date());
-
-        //     await setDoc(docRef,
-        //         {
-        //             number: allProductCount.data().count + 1,
-        //             name: productInfo.name,
-        //             price: productInfo.price,
-        //             deliveryFee: productInfo.deliveryFee,
-        //             PurchaseQuantityLimit: productInfo.PurchaseQuantityLimit,
-        //             mainCategory: productInfo.mainCategory,
-        //             subCategory: productInfo.subCategory,
-        //             productOption: {
-        //                 option1: productOptionInfo.option1,
-        //                 option2: productOptionInfo.option2,
-        //                 option3: productOptionInfo.option3,
-        //                 option4: productOptionInfo.option4,
-        //                 option5: productOptionInfo.option5,
-        //             },
-        //             discountRate: productInfo.discountRate,
-        //             rewardAmountRate: productInfo.rewardAmountRate,
-        //             eventType: productInfo.eventType,
-        //             eventPoint: productInfo.eventPoint,
-        //             productInformationFile: {
-        //                 titleimage: files.titleImageName,
-        //                 infoimage1: files.infoImage1Name,
-        //                 infoimage2: files.infoImage2Name,
-        //                 infoimage3: files.infoImage3Name,
-        //             },
-        //             registrationDate: createdTime
-        //         }
-        //     );
-        // };
-
-
-
     };
 };
 
@@ -72,9 +29,57 @@ const AddProduct = (productInfo, productOptionInfo, productImgFile) => {
             };
         };
 
+        const process = async (infoFiles, infoFileNames) => {
+            const querys = query(storeCollectionRef);
+            const allProductCount = await getCountFromServer(querys);
+            const docRef = doc(storeCollectionRef, `${productInfo.name}`);
 
+            const createdTime = timeStamp.fromDate(new Date());
 
-        const pro = async (infoFiles, infoFileNames) => {
+            await setDoc(docRef,
+                {
+                    number: allProductCount.data().count + 1,
+                    name: productInfo.name,
+                    price: productInfo.price,
+                    deliveryFee: productInfo.deliveryFee,
+                    PurchaseQuantityLimit: productInfo.PurchaseQuantityLimit,
+                    mainCategory: productInfo.mainCategory,
+                    subCategory: productInfo.subCategory,
+                    productOption: {
+                        option1: productOptionInfo.option1,
+                        option2: productOptionInfo.option2,
+                        option3: productOptionInfo.option3,
+                        option4: productOptionInfo.option4,
+                        option5: productOptionInfo.option5,
+                    },
+                    productOptionSurchargeType: {
+                        option1: productOptionInfo.option1SurchargeType,
+                        option2: productOptionInfo.option2SurchargeType,
+                        option3: productOptionInfo.option3SurchargeType,
+                        option4: productOptionInfo.option4SurchargeType,
+                        option5: productOptionInfo.option5SurchargeType,
+                    },
+                    productOptionSurchargePrice: {
+                        option1: productOptionInfo.option1SurchargePrice,
+                        option2: productOptionInfo.option2SurchargePrice,
+                        option3: productOptionInfo.option3SurchargePrice,
+                        option4: productOptionInfo.option4SurchargePrice,
+                        option5: productOptionInfo.option5SurchargePrice,
+                    },
+                    discountRate: productInfo.discountRate,
+                    rewardAmountRate: productInfo.rewardAmountRate,
+                    eventType: productInfo.eventType,
+                    eventPoint: productInfo.eventPoint,
+                    productInformationFile: {
+                        titleimage: productImgFile.titleImage[0].name,
+                        infoimage1: infoFileNames[0],
+                        infoimage2: infoFileNames[1],
+                        infoimage3: infoFileNames[2],
+                    },
+                    registrationDate: createdTime
+                }
+            );
+
             const imagesRef = ref(storageRef, `productsImage/${productInfo.name}/${productImgFile.titleImage[0].name}`);
             await uploadBytes(imagesRef, productImgFile.titleImage[0]);
 
@@ -84,31 +89,15 @@ const AddProduct = (productInfo, productOptionInfo, productImgFile) => {
             };
         };
 
-        pro(infoFiles, infoFileNames)
+        process(infoFiles, infoFileNames)
             .then(() => {
                 dispatch({ type: 'STORE_COMPLETE' });
+                alert('제품 등록이 완료되었습니다.');
             })
             .catch((error) => {
                 console.log(error);
                 dispatch({ type: 'STORE_ERROR' });
             });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     };
 };
 
