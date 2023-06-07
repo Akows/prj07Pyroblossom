@@ -1,7 +1,10 @@
 import React from 'react'
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import productimg from '../../../assets/images/testImg/testproductimg.jpg';
+import { GetProductList } from '../../../redux/actions/storeAction';
 
 const UtilButton = styled.div`
     width: 100%;
@@ -189,7 +192,8 @@ const ProductOpen = styled.div`
 
 export const AdminProductManagement = () => {
 
-
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     return (
         <>
@@ -210,7 +214,7 @@ export const AdminProductManagement = () => {
 
                 <input type='text' />
 
-                <button>검색</button>
+                <button onClick={() => dispatch(GetProductList())}>검색</button>
 
             </UtilButton>
 

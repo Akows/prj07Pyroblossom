@@ -107,6 +107,10 @@ const GetProductList = (keyword) => {
         dispatch({ type: 'STORE_STATE_INIT' });
         dispatch({ type: 'STORE_LOADING' });
 
+        const result = [];
+        const result2 = [];
+        const result3 = [];
+
         const process = async () => {
             // 첫번째 post 컬렉션의 스냅샷을 작성날짜 기준 내림차순 (orderBy 2번째 인자 생략시 기본 내림차순)으로 정렬해 10개의 문서만 받아오기
             const first = query(storeCollectionRef, orderBy('registrationDate'), limit(1));
@@ -119,10 +123,28 @@ const GetProductList = (keyword) => {
             const next = query(storeCollectionRef,
                 orderBy('registrationDate'),
                 startAfter(lastVisible),
-                limit(10));
+                limit(1));
+            const documentSnapshots2 = await getDocs(next);
 
+            documentSnapshots.forEach((doc) => {
+                result.push(doc.data());
+            });
+
+            documentSnapshots2.forEach((doc) => {
+                result2.push(doc.data());
+            });
+
+            console.log(result);
+            console.log(result2);
         };
 
+        process()
+            .then(() => {
+                dispatch({ type: 'STORE_COMPLETE' });
+            })
+            .catch((error) => {
+                dispatch({ type: 'STORE_ERROR', payload: createErrorData(error) });
+            });
 
 
 
@@ -141,17 +163,6 @@ const GetProductList = (keyword) => {
         //         console.log(doc.id, " => ", doc.data());
         //     });
         // };
-
-
-
-
-
-
-
-
-
-        dispatch({ type: 'STORE_COMPLETE' });
-        dispatch({ type: 'STORE_ERROR' });
     };
 };
 
