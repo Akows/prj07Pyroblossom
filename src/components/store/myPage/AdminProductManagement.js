@@ -45,8 +45,24 @@ const UtilButton = styled.div`
         background-color: #414147;
         color: #D3BC8E;
     };
-`;
 
+    & > input {
+        width: 400px;
+        height: 30px;
+
+        font-family: 'GIFont';
+        font-size: 16px;
+        color: black;
+
+        background-color: #aaaaaa;
+        border-radius: 5px;
+        border: none;
+
+        @media screen and (max-width: 600px) {
+            width: 70%;
+        };
+    };
+`;
 
 const ProductList = styled.div`
     width: 100%;
@@ -173,9 +189,7 @@ const ProductOpen = styled.div`
 
 export const AdminProductManagement = () => {
 
-    // const onUpload = () => {
 
-    // };
 
     return (
         <>
@@ -189,6 +203,14 @@ export const AdminProductManagement = () => {
                 </div>
 
                 <button>제품 삭제</button>
+
+            </UtilButton>
+
+            <UtilButton>
+
+                <input type='text' />
+
+                <button>검색</button>
 
             </UtilButton>
 
