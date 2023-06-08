@@ -1,5 +1,5 @@
-import React from 'react'
-import { useDispatch } from 'react-redux';
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -195,9 +195,29 @@ export const AdminProductManagement = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
+    const getStoreState = useSelector((state) => state.store);
+
+    const [listData, setListData] = useState('');
+
+    useEffect(() => {
+        dispatch(GetProductList(''));
+    }, []);
+
+    useEffect(() => {
+        setListData(getStoreState.processInfo.processData2.Data);
+    }, [getStoreState.processInfo]);
+
     return (
         <>
             <br />
+
+            <UtilButton>
+
+                <input type='text' />
+
+                <button>검색</button>
+
+            </UtilButton>
 
             <UtilButton>
 
@@ -212,78 +232,47 @@ export const AdminProductManagement = () => {
 
             <UtilButton>
 
-                <input type='text' />
+                <button onClick={() => dispatch(GetProductList('prev'))}>{'<'}-</button>
 
-                <button onClick={() => dispatch(GetProductList())}>검색</button>
+                <button onClick={() => dispatch(GetProductList('next'))}>-{'>'}</button>
 
             </UtilButton>
 
+
+
             <ProductList>
 
-                <Product>
-                    <input type='checkbox' />
-
-                    <ProductInfo>
-                        <ProductImg>
-                            <img src={productimg} alt='' />
-                        </ProductImg>
-                        <Infomation>
-                            <p>상품번호 0000001</p>
-                            <p>통통폭탄인형통통폭탄인형통통폭탄인형통통폭탄인형통통폭탄인형통통폭탄인형통통폭탄인형통통폭탄인형통통폭탄인형통통폭탄인형통통폭탄인형통통폭탄인형통통폭탄인형통통폭탄인형통통폭탄인형통통폭탄인형통통폭탄인형</p>
-                            <p>30,000원</p>
-                            <p>남은 수량 : 341개</p>
-                            <p>할인률 : 15%</p>
-
-                        </Infomation>
-                    </ProductInfo>
-
-                    <ProductOpen>
-                        <p>제품 공개</p>
+                {listData.map((item) => (
+                    <Product>
                         <input type='checkbox' />
-                    </ProductOpen>
 
-                    <ProductOpen>
-                        <p>정보 수정</p>
-                        <button>수정</button >
-                    </ProductOpen>
-                </Product>
+                        <ProductInfo>
+                            <ProductImg>
+                                <img src={`https://firebasestorage.googleapis.com/v0/b/prj07pyroblossom.appspot.com/o/productsImage%2F${item.name}%2F${item.productInformationFile.titleimage}?alt=media&token=bf2eff71-3c5e-4dc2-9706-445f95fd91e8`} alt='' />
+                            </ProductImg>
+                            <Infomation>
+                                <p>제품번호 {item.number}</p>
+                                <p>{item.name}</p>
+                                <p>{item.price}</p>
+                                <p>남은 수량 : 341개</p>
+                                <p>할인률 : {item.discountRate}%</p>
 
-                <Product>
-                    <input type='checkbox' />
+                            </Infomation>
+                        </ProductInfo>
 
-                    <ProductInfo>
-                        <ProductImg>
-                            <img src={productimg} alt='' />
-                        </ProductImg>
-                        <Infomation>
-                            <p>상품번호 0000002</p>
-                            <p>통통폭탄</p>
-                            <p>60,000원</p>
-                            <p>남은 수량 : 3341개</p>
-                            <p>할인률 : 7.5%</p>
+                        <ProductOpen>
+                            <p>제품 공개</p>
+                            <input type='checkbox' />
+                        </ProductOpen>
 
-                        </Infomation>
-                    </ProductInfo>
-
-                    <ProductOpen>
-                        <p>제품 공개</p>
-                        <input type='checkbox' />
-                    </ProductOpen>
-
-                    <ProductOpen>
-                        <p>정보 수정</p>
-                        <button>수정</button >
-                    </ProductOpen>
-                </Product>
-
-
-
-
-
-
+                        <ProductOpen>
+                            <p>정보 수정</p>
+                            <button>수정</button >
+                        </ProductOpen>
+                    </Product>
+                ))}
 
             </ProductList>
-
         </>
     );
 };

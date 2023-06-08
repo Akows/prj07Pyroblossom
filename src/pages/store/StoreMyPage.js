@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { Loading } from '../../components/Loading';
-import { PointChargeModal } from '../../components/PointChargeModal';
+import { PointChargeModal } from '../../components/store/PointChargeModal';
 
 import { AdminProductManagement } from '../../components/store/myPage/AdminProductManagement';
 import { AdminProductUpload } from '../../components/store/myPage/AdminProductUpload';

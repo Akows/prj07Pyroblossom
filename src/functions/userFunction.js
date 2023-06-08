@@ -1,5 +1,5 @@
 
-import { getDocs, query, where } from "firebase/firestore";
+import { getDocs, query, where } from 'firebase/firestore';
 import { userCollectionRef } from "../configs/firebase/config";
 
 // 유효성 검사.

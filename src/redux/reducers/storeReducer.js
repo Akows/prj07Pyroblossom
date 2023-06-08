@@ -8,6 +8,8 @@ const initialState = {
     processInfo: {
         processCode: '',
         processMessage: '',
+        processData1: '',
+        processData2: '',
     },
 };
 
@@ -21,9 +23,13 @@ const storeReducer = (prevState = initialState, action) => {
                     isError: false,
                     isLoading: false,
                 };
+                draft.processInfo.processCode = '';
+                draft.processInfo.processMessage = '';
+                break;
+            case 'STORE_PROCESSDATA_CLEAN':
                 draft.processInfo = {
-                    processCode: '',
-                    processMessage: '',
+                    processData1: '',
+                    processData2: '',
                 };
                 break;
 
@@ -44,7 +50,19 @@ const storeReducer = (prevState = initialState, action) => {
                 draft.flagValue.isError = true;
                 draft.processInfo.processCode = action.payload.errorCode;
                 draft.processInfo.processMessage = action.payload.errorMessage;
+                draft.processInfo.processData1 = '';
+                draft.processInfo.processData2 = '';
                 break;
+
+            case 'STORE_PAGING_PROCESS':
+                draft.processInfo.processCode = '목록 받아오는 중..';
+                draft.processInfo.processMessage = '목록 받아오는 중..';
+                draft.processInfo.processData1 = action.payload.processData1;
+                draft.processInfo.processData2 = action.payload.processData2;
+                break;
+
+
+
 
             default:
                 break;
