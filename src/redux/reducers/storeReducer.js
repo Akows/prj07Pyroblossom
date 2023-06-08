@@ -10,6 +10,7 @@ const initialState = {
         processMessage: '',
         processData1: '',
         processData2: '',
+        processData3: '',
     },
 };
 
@@ -30,6 +31,7 @@ const storeReducer = (prevState = initialState, action) => {
                 draft.processInfo = {
                     processData1: '',
                     processData2: '',
+                    processData3: '',
                 };
                 break;
 
@@ -52,13 +54,19 @@ const storeReducer = (prevState = initialState, action) => {
                 draft.processInfo.processMessage = action.payload.errorMessage;
                 draft.processInfo.processData1 = '';
                 draft.processInfo.processData2 = '';
+                draft.processInfo.processData3 = '';
                 break;
 
             case 'STORE_PAGING_PROCESS':
                 draft.processInfo.processCode = '목록 받아오는 중..';
                 draft.processInfo.processMessage = '목록 받아오는 중..';
-                draft.processInfo.processData1 = action.payload.processData1;
-                draft.processInfo.processData2 = action.payload.processData2;
+                if (action.payload.type === 'cal_pageIndex') {
+                    draft.processInfo.processData3 = action.payload.processData3;
+                };
+                if (action.payload.type === 'cal_pageCursor') {
+                    draft.processInfo.processData1 = action.payload.processData1;
+                    draft.processInfo.processData2 = action.payload.processData2;
+                };
                 break;
 
 

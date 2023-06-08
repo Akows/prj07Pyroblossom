@@ -1,4 +1,4 @@
-import { doc, endBefore, getCountFromServer, getDocs, limit, limitToLast, orderBy, query, setDoc, startAfter } from 'firebase/firestore';
+import { doc, endAt, endBefore, getCountFromServer, getDocs, limit, limitToLast, orderBy, query, setDoc, startAfter, startAt } from 'firebase/firestore';
 import { ref, uploadBytes } from 'firebase/storage';
 import { createErrorData } from '../../configs/errorCodes';
 import { timeStamp, storeCollectionRef, storageRef } from '../../configs/firebase/config'
@@ -42,6 +42,7 @@ const AddProduct = (productInfo, productOptionInfo, productImgFile, navigate) =>
                     price: productInfo.price,
                     deliveryFee: productInfo.deliveryFee,
                     PurchaseQuantityLimit: productInfo.PurchaseQuantityLimit,
+                    inventory: productInfo.inventory,
                     mainCategory: productInfo.mainCategory,
                     subCategory: productInfo.subCategory,
                     productOption: {
@@ -109,6 +110,12 @@ const GetProductList = (listGetType) => {
 
         const result = [];
 
+        // const calListOfBothEnds = async () => {
+        //     컬렉션 Doc의 전체 갯수를 계산하여 반환하는 함수.
+        //     const getCounts = await getCountFromServer(queryRef);
+        //     console.log(getCounts.data().count);
+        // };
+
         const pagingProcess = async (queryRef) => {
             const documentSnapshots = await getDocs(queryRef);
 
@@ -119,13 +126,42 @@ const GetProductList = (listGetType) => {
                 result.push(doc.data());
             });
 
+            // 페이지가 처음 렌더링 될 때 1번만 실행되는 함수.
+            // 전체 컬렉션의 가장 처음과 끝 Doc을 기록.
+            const { firstOfIndex, lastOfIndex } = getState().store.processInfo.processData3;
+
+            if (!firstOfIndex && !lastOfIndex) {
+                const firstQueryRef = query(storeCollectionRef, orderBy('number'), startAt(1));
+                const LastQueryRef = query(storeCollectionRef, orderBy('number'), endAt(1));
+    
+                const firstDocumentSnapshots = await getDocs(firstQueryRef);
+                const lastDocumentSnapshots = await getDocs(LastQueryRef);
+    
+                const firstDoc = firstDocumentSnapshots.docs[0];
+                const lastDoc = lastDocumentSnapshots.docs[0];
+
+                console.log(firstDoc.data().name);
+                console.log(lastDoc.data().name);
+
+                const returnData = {
+                    type: 'cal_pageIndex',
+                    processData3: {
+                        firstOfIndex: firstDoc,
+                        lastOfIndex: lastDoc,
+                    },
+                };
+
+                dispatch({ type: 'STORE_PAGING_PROCESS', payload: returnData });
+            };
+            
             const returnData = {
+                type: 'cal_pageCursor',
                 processData1: {
                     firstVisible: newFirstVisible, 
-                    lastVisible: newLastVisible
+                    lastVisible: newLastVisible,
                 },
                 processData2: {
-                    Data: result, 
+                    productData: result, 
                 },
             };
 
@@ -137,15 +173,15 @@ const GetProductList = (listGetType) => {
             const { firstVisible, lastVisible } = getState().store.processInfo.processData1;
 
             if (listGetType === '') {
-                queryRef = query(storeCollectionRef, orderBy('registrationDate'), limit(1));
+                queryRef = query(storeCollectionRef, orderBy('number'), limit(2));
             };
 
             if (listGetType === 'next') {
-                queryRef = query(storeCollectionRef, orderBy('registrationDate'), startAfter(firstVisible), limit(1));
+                queryRef = query(storeCollectionRef, orderBy('number'), startAfter(firstVisible), limit(2));
             };
 
             if (listGetType === 'prev') {
-                queryRef = query(storeCollectionRef, orderBy('registrationDate'), endBefore(lastVisible), limitToLast(1));
+                queryRef = query(storeCollectionRef, orderBy('number'), endBefore(lastVisible), limitToLast(2));
             };
 
             pagingProcess(queryRef)

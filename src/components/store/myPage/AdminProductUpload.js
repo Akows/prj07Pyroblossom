@@ -493,7 +493,8 @@ export const AdminProductUpload = ({ isLoading }) => {
         name: '',
         price: '',
         deliveryFee: '',
-        PurchaseQuantityLimit: '',
+        purchaseQuantityLimit: '',
+        inventory: '',
         mainCategory: '',
         subCategory: '',
         discountRate: '',
@@ -569,8 +570,9 @@ export const AdminProductUpload = ({ isLoading }) => {
                 <input type='text' id='deliveryFee' value={productInfo.deliveryFee || ''} onChange={onChange} placeholder='배송료 입력' />
                 <p>* 미입력시 무료배송.</p>
 
-                <input type='text' id='PurchaseQuantityLimit' value={productInfo.PurchaseQuantityLimit || ''} onChange={onChange} placeholder='인당 구매제한 수량 입력' />
+                <input type='text' id='purchaseQuantityLimit' value={productInfo.purchaseQuantityLimit || ''} onChange={onChange} placeholder='인당 구매제한 수량 입력' />
 
+                <input type='text' id='inventory' value={productInfo.inventory || ''} onChange={onChange} placeholder='재고량 입력' />
             </UploadInfo>
 
             <br />
@@ -821,7 +823,7 @@ export const AdminProductUpload = ({ isLoading }) => {
 
                 <input type='text' value={productInfo.deliveryFee || ''} readOnly placeholder='배송료' />
 
-                <input type='text' value={productInfo.PurchaseQuantityLimit || ''} readOnly placeholder='인당 구매제한 수량 입력' />
+                <input type='text' value={productInfo.purchaseQuantityLimit || ''} readOnly placeholder='인당 구매제한 수량 입력' />
 
                 <input type='text' value={productInfo.mainCategory || ''} readOnly placeholder='대분류' />
 
