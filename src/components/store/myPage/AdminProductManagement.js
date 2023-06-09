@@ -98,14 +98,26 @@ const Product = styled.div`
         width: 25px;
         height: 25px;
     };
+
+    @media screen and (max-width: 700px) {
+        flex-direction: column;
+        align-items: flex-start;
+    };
 `;
 const ProductInfo = styled.div`
-    width: 75%;
+    width: 60%;
     
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: flex-start;
+
+    @media screen and (max-width: 700px) {
+        width: 100%;
+
+        flex-direction: column;
+        align-items: flex-start;
+    };
 `;
 const ProductImg = styled.div`
     width: 120px;
@@ -188,24 +200,40 @@ const Infomation = styled.div`
         font-size: 14px;
         margin-top: 3px;
     };
+
+    @media screen and (max-width: 700px) {
+        width: 100%;
+
+        margin-left: 0px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+    };
 `;
 
+const ProductUtil = styled.div`
+    width: 40%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    @media screen and (max-width: 700px) {
+        width: 100%;
+    };
+`;
 
 const ProductOpen = styled.div`
-    width: 20%;
-    height: 120px;
+    width: 50%;
+    height: 80px;
     
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
 
-    & > input {
-        width: 50px;
-        height: 50px;
-
-        margin-top: 15px;
-    };
+    font-size: 22px;
 
     & > button {
         width: 50px;
@@ -217,13 +245,26 @@ const ProductOpen = styled.div`
         border-radius: 5px;
         background-color: #D3BC8E;
         color: #414147;
+        font-size: 18px;
 
         font-family: 'GIFont';
-        font-size: 16px;
     };
     & > button:hover {
         background-color: #414147;
         color: #D3BC8E;
+    };
+
+    & > p:nth-child(1) {
+
+    };
+    & > p:nth-child(2) {
+        margin-top: 30px;
+        opacity: 0.8;
+    };
+
+    @media screen and (max-width: 700px) {
+        width: 50%;
+
     };
 `;
 
@@ -237,6 +278,8 @@ export const AdminProductManagement = () => {
     const [listData, setListData] = useState([]);
     const [searchKeyword, setSearchKeyword] = useState('');
 
+    const [checkedItem, setCheckedItem] = useState(false);
+
     const [isDataFirst, setIsDataFirst] = useState(false);
     const [isDataLast, setIsDataLast] = useState(false);
 
@@ -245,6 +288,11 @@ export const AdminProductManagement = () => {
     };
     const onChargeSearchKeyword = (event) => {
         setSearchKeyword(event.target.value);
+    };
+
+
+    const onChangeProductDisclosure = () => {
+        console.log(checkedItem);
     };
 
     useEffect(() => {
@@ -286,11 +334,11 @@ export const AdminProductManagement = () => {
             <UtilButton>
 
                 <div>
-                    <input type='checkbox' />
+                    {/* <input type='checkbox' /> */}
                     <p>전체 선택</p>
                 </div>
 
-                <button>제품 삭제</button>
+                <button onClick={onChangeProductDisclosure}>상태전환</button>
 
             </UtilButton>
 
@@ -298,7 +346,7 @@ export const AdminProductManagement = () => {
 
                 {listData?.map((item) => (
                     <Product key={item.number}>
-                        <input type='checkbox' />
+                        <input type='checkbox' checked={checkedItem} onChange={setCheckedItem} />
 
                         <ProductInfo>
                             <ProductImg>
@@ -322,20 +370,21 @@ export const AdminProductManagement = () => {
                                 <p>진행중인 이벤트 : {item.eventType}.</p>
                                 <p>이벤트포인트 : {item.eventPoint}P</p>
 
-
-
                             </Infomation>
                         </ProductInfo>
 
-                        <ProductOpen>
-                            <p>제품 공개</p>
-                            <input type='checkbox' />
-                        </ProductOpen>
+                        <ProductUtil>
+                            <ProductOpen>
+                                <p>판매 상태</p>
+                                <p>{item.productDisclosure ? '공개' : '비공개'}</p>
+                            </ProductOpen>
 
-                        <ProductOpen>
-                            <p>정보 수정</p>
-                            <button>수정</button >
-                        </ProductOpen>
+                            <ProductOpen>
+                                <p>정보 수정</p>
+                                <button>수정</button>
+                            </ProductOpen>
+
+                        </ProductUtil>
                     </Product>
                 ))}
 

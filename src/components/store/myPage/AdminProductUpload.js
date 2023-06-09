@@ -70,6 +70,9 @@ const UploadInfo = styled.div`
     & > input:nth-child(5) {
         margin-top: 10px;
     };
+    & > input:nth-child(6) {
+        margin-top: 10px;
+    };
 
     & > p {
         font-size: 14px;
@@ -573,6 +576,7 @@ export const AdminProductUpload = ({ isLoading }) => {
                 <input type='text' id='purchaseQuantityLimit' value={productInfo.purchaseQuantityLimit || ''} onChange={onChange} placeholder='인당 구매제한 수량 입력' />
 
                 <input type='text' id='inventory' value={productInfo.inventory || ''} onChange={onChange} placeholder='재고량 입력' />
+
             </UploadInfo>
 
             <br />
@@ -594,40 +598,33 @@ export const AdminProductUpload = ({ isLoading }) => {
 
                 <p>소분류</p>
                 <select id='subCategory' value={productInfo.subCategory || ''} onChange={onChange} required>
+                    <option value=''>소분류 선택</option>
+
                     {productInfo.mainCategory === '케이스류' && <>
-                        <option value=''>소분류 선택</option>
                         <option value='123'>핸드폰 케이스</option>
                         <option value=''>노트북 케이스</option>
                     </>}
-
                     {productInfo.mainCategory === '패드류' && <>
-                        <option value=''>소분류 선택</option>
                         <option value=''>장패드</option>
                         <option value=''>단패드</option>
                     </>}
-
                     {productInfo.mainCategory === '문구류' && <>
-                        <option value=''>소분류 선택</option>
                         <option value=''>아동</option>
                         <option value=''>14세 이상</option>
                     </>}
                     {productInfo.mainCategory === '서적류' && <>
-                        <option value=''>소분류 선택</option>
                         <option value=''>만화</option>
                         <option value=''>소설</option>
                         <option value=''>아트북</option>
                     </>}
                     {productInfo.mainCategory === '침구류' && <>
-                        <option value=''>소분류 선택</option>
                         <option value=''>이불</option>
                         <option value=''>배개</option>
                     </>}
                     {productInfo.mainCategory === '피규어' && <>
-                        <option value=''>소분류 선택</option>
                         <option value=''>PVC</option>
                     </>}
                     {productInfo.mainCategory === '인형' && <>
-                        <option value=''>소분류 선택</option>
                         <option value=''>봉제 인형</option>
                     </>}
                 </select>

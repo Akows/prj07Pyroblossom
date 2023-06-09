@@ -76,6 +76,7 @@ const AddProduct = (productInfo, productOptionInfo, productImgFile, navigate) =>
                         infoimage2: infoFileNames[1],
                         infoimage3: infoFileNames[2],
                     },
+                    productDisclosure: false,
                     registrationDate: createdTime
                 }
             );
