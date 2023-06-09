@@ -125,12 +125,21 @@ const GetProductList = (listGetType, searchKeyword) => {
             documentSnapshots.forEach((doc) => {
                 result.push(doc.data());
             });
-
+            
             // 제품 검색의 경우 index와 cursor 모두를 다시 계산해주어야한다.
             if (searchKeyword) {
-                const firstQueryRef = query(storeCollectionRef, orderBy('number', 'asc'), where('name', '==', searchKeyword), limit(1));
-                const LastQueryRef = query(storeCollectionRef, orderBy('number', 'asc'), where('name', '==', searchKeyword),limitToLast(1));
-    
+                let firstQueryRef = '';
+                let LastQueryRef = '';
+
+                if (searchKeyword === '') {
+                    firstQueryRef = query(storeCollectionRef, orderBy('number', 'asc'), limit(1));
+                    LastQueryRef = query(storeCollectionRef, orderBy('number', 'asc'), limitToLast(1));
+                }
+                else {
+                    firstQueryRef = query(storeCollectionRef, orderBy('number', 'asc'), where('name', '==', searchKeyword), limit(1));
+                    LastQueryRef = query(storeCollectionRef, orderBy('number', 'asc'), where('name', '==', searchKeyword),limitToLast(1));
+                };
+
                 const firstDocumentSnapshots = await getDocs(firstQueryRef);
                 const lastDocumentSnapshots = await getDocs(LastQueryRef);
     
@@ -204,7 +213,12 @@ const GetProductList = (listGetType, searchKeyword) => {
             };
 
             if (listGetType === 'keywordsearch') {
-                queryRef = query(storeCollectionRef, orderBy('number'), where('name', '==', searchKeyword));
+                if (searchKeyword === '') {
+                    queryRef = query(storeCollectionRef, orderBy('number'), limit(2));
+                }
+                else {
+                    queryRef = query(storeCollectionRef, orderBy('number'), where('name', '==', searchKeyword), limit(2));
+                };
             };
 
             if (listGetType === 'next') {
