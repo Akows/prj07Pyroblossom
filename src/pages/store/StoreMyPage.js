@@ -256,6 +256,8 @@ export const StoreMyPage = () => {
 
     const [isLoading, setIsLoading] = useState(false);
 
+    const [updateData, setUpdateData] = useState({});
+
     const setWhatComponentsRender = (name) => {
         setWhatCompoIsShow(name);
     };
@@ -348,9 +350,9 @@ export const StoreMyPage = () => {
 
                     <ComponentArea>
 
-                        {whatCompoIsShow === 'productupload' && <AdminProductUpload isLoading={isLoading} />}
+                        {whatCompoIsShow === 'productupload' && <AdminProductUpload isLoading={isLoading} updateData={updateData} />}
 
-                        {whatCompoIsShow === 'productmanage' && <AdminProductManagement />}
+                        {whatCompoIsShow === 'productmanage' && <AdminProductManagement setWhatCompoIsShow={setWhatCompoIsShow} setUpdateData={setUpdateData} />}
 
                     </ComponentArea>
                 </AdminInnerContents>

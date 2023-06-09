@@ -1,4 +1,4 @@
-import React, { useReducer, useState } from 'react'
+import React, { useEffect, useReducer, useState } from 'react'
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -441,7 +441,7 @@ const infomationFileReducer = (state, action) => {
     };
 };
 
-export const AdminProductUpload = ({ isLoading }) => {
+export const AdminProductUpload = ({ isLoading, updateData }) => {
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -451,6 +451,8 @@ export const AdminProductUpload = ({ isLoading }) => {
 
     const { optionCount, optionArray } = responseOption;
     const { infomationFileCount, infomationFileArray } = responseInfomation;
+
+    const [isUpdate, setIsUpdate] = useState(false);
 
     const optionCountControl = (setType) => {
         if (setType === '+') {
@@ -547,8 +549,96 @@ export const AdminProductUpload = ({ isLoading }) => {
             return;
         };
 
-        dispatch(AddProduct(productInfo, productOptionInfo, productImgFile, navigate));
+        for (let [key, value] of Object.entries(productOptionInfo)) {
+            if (key === 'option1SurchargeType' && value === '변동없음') {
+
+            };
+        };
+
+        console.log();
+
+
+        // dispatch(AddProduct(productInfo, productOptionInfo, productImgFile, navigate));
     };
+
+    useEffect(() => {
+        if (updateData) {
+            console.log(updateData);
+
+            setIsUpdate(true);
+
+            setProductInfo({
+                name: updateData.name,
+                price: updateData.price,
+                deliveryFee: updateData.deliveryFee,
+                purchaseQuantityLimit: updateData.purchaseQuantityLimit,
+                inventory: updateData.inventory,
+                mainCategory: updateData.mainCategory,
+                subCategory: updateData.subCategory,
+                discountRate: updateData.discountRate,
+                rewardAmountRate: updateData.rewardAmountRate,
+                eventType: updateData.eventType,
+                eventPoint: updateData.eventPoint,
+            });
+
+            setProductOption({
+                option1: updateData.productOption.option1,
+                option1SurchargeType: updateData.productOptionSurchargeType.option1,
+                option1SurchargePrice: updateData.productOptionSurchargePrice.option1,
+                option2: updateData.productOption.option2,
+                option2SurchargeType: updateData.productOptionSurchargeType.option2,
+                option2SurchargePrice: updateData.productOptionSurchargePrice.option2,
+                option3: updateData.productOption.option3,
+                option3SurchargeType: updateData.productOptionSurchargeType.option3,
+                option3SurchargePrice: updateData.productOptionSurchargePrice.option3,
+                option4: updateData.productOption.option4,
+                option4SurchargeType: updateData.productOptionSurchargeType.option4,
+                option4SurchargePrice: updateData.productOptionSurchargePrice.option4,
+                option5: updateData.productOption.option5,
+                option5SurchargeType: updateData.productOptionSurchargeType.option5,
+                option5SurchargePrice: updateData.productOptionSurchargePrice.option5,
+            });
+
+            let optionCount = 0;
+            for (let [value] of Object.entries(updateData.productOption)) {
+                if (value !== '') {
+                    optionCount++;
+                };
+            };
+
+            for (let i = 0; i < optionCount - 1; i++) {
+                dispatchOption({ type: 'INCREASE' });
+            };
+
+
+        }
+        else {
+            setIsUpdate(false);
+        };
+        // eslint-disable-next-line
+    }, [updateData])
+
+    // useEffect(() => {
+
+
+    //     if (isUpdate) {
+
+
+
+
+
+    //         // console.log(updateData.productOption.length);
+
+    //         // if (updateData.productOption) {
+    //         //     dispatchOption({ type: 'INCREASE' });
+    //         // };
+
+    //     }
+    //     else {
+
+    //     };
+    //     // eslint-disable-next-line
+    // }, [isUpdate])
 
     return (
         <>
@@ -658,7 +748,6 @@ export const AdminProductUpload = ({ isLoading }) => {
                                 <option value='가격감소'>-</option>
                             </select>
                         </div>
-
                         {productOptionInfo.option1SurchargeType !== '변동없음' && <input type='text' id='option1SurchargePrice' value={productOptionInfo.option1SurchargePrice || ''} onChange={onChangeOption} placeholder='옵션의 변동수치를 입력해주세요.' />}
                     </Option>
 

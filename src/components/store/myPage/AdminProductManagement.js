@@ -268,7 +268,7 @@ const ProductOpen = styled.div`
     };
 `;
 
-export const AdminProductManagement = () => {
+export const AdminProductManagement = ({ setWhatCompoIsShow, setUpdateData }) => {
 
     // const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -294,6 +294,17 @@ export const AdminProductManagement = () => {
     const onChangeProductDisclosure = () => {
         console.log(checkedItem);
     };
+
+
+
+    const productUpdate = (item) => {
+        setWhatCompoIsShow('productupload');
+        setUpdateData(item);
+    };
+
+
+
+
 
     useEffect(() => {
         dispatch(GetProductList(''));
@@ -381,7 +392,7 @@ export const AdminProductManagement = () => {
 
                             <ProductOpen>
                                 <p>정보 수정</p>
-                                <button>수정</button>
+                                <button onClick={() => productUpdate(item)}>수정</button>
                             </ProductOpen>
 
                         </ProductUtil>
