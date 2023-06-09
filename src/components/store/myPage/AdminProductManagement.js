@@ -235,9 +235,17 @@ export const AdminProductManagement = () => {
     const getStoreState = useSelector((state) => state.store);
 
     const [listData, setListData] = useState([]);
+    const [searchKeyword, setSearchKeyword] = useState('');
 
-    const [isDataFirst, setIsDataFirst] = useState(true);
+    const [isDataFirst, setIsDataFirst] = useState(false);
     const [isDataLast, setIsDataLast] = useState(false);
+
+    const keywordSearch = () => {
+        dispatch(GetProductList('keywordsearch', searchKeyword));
+    };
+    const onChargeSearchKeyword = (event) => {
+        setSearchKeyword(event.target.value);
+    };
 
     useEffect(() => {
         dispatch(GetProductList(''));
@@ -247,19 +255,19 @@ export const AdminProductManagement = () => {
     useEffect(() => {
         setListData(getStoreState.processInfo.processData2.productData);
 
-        // if (getStoreState.processInfo.processData1.firstVisible?.data().number === getStoreState.processInfo.processData1.firstOfIndex?.data().number) {
-        //     setIsDataFirst(true);
-        // };
+        if (getStoreState.processInfo.processData1.firstVisible?.data().number === getStoreState.processInfo.processData3.firstOfIndex?.data().number) {
+            setIsDataFirst(true);
+        }
+        else {
+            setIsDataFirst(false);
+        };
 
-        // if (getStoreState.processInfo.processData1.lastVisible?.data().number === getStoreState.processInfo.processData1.lastOfIndex?.data().number) {
-        //     setIsDataLast(true);
-        // };
-
-        // console.log(getStoreState.processInfo.processData1.firstVisible?.data().number); // 1 2
-        // console.log(getStoreState.processInfo.processData1.lastVisible?.data().number);  // 2 3
-
-        // console.log(getStoreState.processInfo.processData3.firstOfIndex?.data()); // 1 1
-        // console.log(getStoreState.processInfo.processData3.lastOfIndex?.data());  // 1 1
+        if (getStoreState.processInfo.processData1.lastVisible?.data().number === getStoreState.processInfo.processData3.lastOfIndex?.data().number) {
+            setIsDataLast(true);
+        }
+        else {
+            setIsDataLast(false);
+        };
 
     }, [getStoreState.processInfo]);
 
@@ -269,9 +277,9 @@ export const AdminProductManagement = () => {
 
             <UtilButton>
 
-                <input type='text' />
+                <input type='text' value={searchKeyword} onChange={onChargeSearchKeyword} placeholder='검색할 제품명을 입력해주세요.' />
 
-                <button>검색</button>
+                <button onClick={keywordSearch}>검색</button>
 
             </UtilButton>
 
@@ -285,28 +293,6 @@ export const AdminProductManagement = () => {
                 <button>제품 삭제</button>
 
             </UtilButton>
-
-            <UtilButton>
-
-                {/* {isDataFirst ?
-                    <button>/</button>
-                    :
-                    <button onClick={() => dispatch(GetProductList('prev'))}>{'<'}-</button>
-                }
-
-                {isDataLast ?
-                    <button>/</button>
-                    :
-                    <button onClick={() => dispatch(GetProductList('next'))}>-{'>'}</button>
-                } */}
-
-                <button onClick={() => dispatch(GetProductList('prev'))}>{'<'}-</button>
-
-                <button onClick={() => dispatch(GetProductList('next'))}>-{'>'}</button>
-
-            </UtilButton>
-
-
 
             <ProductList>
 
@@ -354,6 +340,20 @@ export const AdminProductManagement = () => {
                 ))}
 
             </ProductList>
+
+            <UtilButton>
+                {isDataFirst ?
+                    <button>페이지 끝</button>
+                    :
+                    <button onClick={() => dispatch(GetProductList('prev'))}>{'<'}-</button>
+                }
+
+                {isDataLast ?
+                    <button>페이지 끝</button>
+                    :
+                    <button onClick={() => dispatch(GetProductList('next'))}>-{'>'}</button>
+                }
+            </UtilButton>
         </>
     );
 };

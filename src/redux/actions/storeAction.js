@@ -1,4 +1,4 @@
-import { doc, endAt, endBefore, getCountFromServer, getDocs, limit, limitToLast, orderBy, query, setDoc, startAfter, startAt } from 'firebase/firestore';
+import { doc, endAt, endBefore, getCountFromServer, getDocs, limit, limitToLast, orderBy, query, setDoc, startAfter, startAt, where } from 'firebase/firestore';
 import { ref, uploadBytes } from 'firebase/storage';
 import { createErrorData } from '../../configs/errorCodes';
 import { timeStamp, storeCollectionRef, storageRef } from '../../configs/firebase/config'
@@ -103,7 +103,7 @@ const AddProduct = (productInfo, productOptionInfo, productImgFile, navigate) =>
     };
 };
 
-const GetProductList = (listGetType) => {
+const GetProductList = (listGetType, searchKeyword) => {
     return (dispatch, getState) => {
         dispatch({ type: 'STORE_STATE_INIT' });
         dispatch({ type: 'STORE_LOADING' });
@@ -126,13 +126,10 @@ const GetProductList = (listGetType) => {
                 result.push(doc.data());
             });
 
-            // 페이지가 처음 렌더링 될 때 1번만 실행되는 함수.
-            // 전체 컬렉션의 가장 처음과 끝 Doc을 기록.
-            const { firstOfIndex, lastOfIndex } = getState().store.processInfo.processData3;
-
-            if (!firstOfIndex && !lastOfIndex) {
-                const firstQueryRef = query(storeCollectionRef, orderBy('number'), startAt(1));
-                const LastQueryRef = query(storeCollectionRef, orderBy('number'), endAt(1));
+            // 제품 검색의 경우 index와 cursor 모두를 다시 계산해주어야한다.
+            if (searchKeyword) {
+                const firstQueryRef = query(storeCollectionRef, orderBy('number', 'asc'), where('name', '==', searchKeyword), limit(1));
+                const LastQueryRef = query(storeCollectionRef, orderBy('number', 'asc'), where('name', '==', searchKeyword),limitToLast(1));
     
                 const firstDocumentSnapshots = await getDocs(firstQueryRef);
                 const lastDocumentSnapshots = await getDocs(LastQueryRef);
@@ -140,8 +137,38 @@ const GetProductList = (listGetType) => {
                 const firstDoc = firstDocumentSnapshots.docs[0];
                 const lastDoc = lastDocumentSnapshots.docs[0];
 
-                console.log(firstDoc.data().name);
-                console.log(lastDoc.data().name);
+                const returnData = {
+                    type: 'cal_IndexAndCursor',
+                    processData1: {
+                        firstVisible: newFirstVisible, 
+                        lastVisible: newLastVisible,
+                    },
+                    processData2: {
+                        productData: result, 
+                    },
+                    processData3: {
+                        firstOfIndex: firstDoc,
+                        lastOfIndex: lastDoc,
+                    },
+                };
+
+                dispatch({ type: 'STORE_PAGING_PROCESS', payload: returnData });
+                return;
+            };
+
+            // 페이지가 처음 렌더링 될 때 1번만 실행되는 함수.
+            // 전체 컬렉션의 가장 처음과 끝 Doc을 기록.
+            const { firstOfIndex, lastOfIndex } = getState().store.processInfo.processData3;
+
+            if (!firstOfIndex && !lastOfIndex) {
+                const firstQueryRef = query(storeCollectionRef, orderBy('number', 'asc'), limit(1));
+                const LastQueryRef = query(storeCollectionRef, orderBy('number', 'asc'), limitToLast(1));
+    
+                const firstDocumentSnapshots = await getDocs(firstQueryRef);
+                const lastDocumentSnapshots = await getDocs(LastQueryRef);
+    
+                const firstDoc = firstDocumentSnapshots.docs[0];
+                const lastDoc = lastDocumentSnapshots.docs[0];
 
                 const returnData = {
                     type: 'cal_pageIndex',
@@ -174,6 +201,10 @@ const GetProductList = (listGetType) => {
 
             if (listGetType === '') {
                 queryRef = query(storeCollectionRef, orderBy('number'), limit(2));
+            };
+
+            if (listGetType === 'keywordsearch') {
+                queryRef = query(storeCollectionRef, orderBy('number'), where('name', '==', searchKeyword));
             };
 
             if (listGetType === 'next') {

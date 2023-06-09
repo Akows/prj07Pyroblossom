@@ -67,6 +67,11 @@ const storeReducer = (prevState = initialState, action) => {
                     draft.processInfo.processData1 = action.payload.processData1;
                     draft.processInfo.processData2 = action.payload.processData2;
                 };
+                if (action.payload.type === 'cal_IndexAndCursor') {
+                    draft.processInfo.processData1 = action.payload.processData1;
+                    draft.processInfo.processData2 = action.payload.processData2;
+                    draft.processInfo.processData3 = action.payload.processData3;
+                };
                 break;
 
 
