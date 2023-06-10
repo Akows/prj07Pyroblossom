@@ -562,7 +562,7 @@ export const AdminProductUpload = ({ isLoading, updateData }) => {
     };
 
     useEffect(() => {
-        if (updateData) {
+        if (!updateData === {}) {
             console.log(updateData);
 
             setIsUpdate(true);
