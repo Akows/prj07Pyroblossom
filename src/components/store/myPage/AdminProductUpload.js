@@ -601,7 +601,7 @@ export const AdminProductUpload = ({ isLoading, updateData }) => {
             });
 
             let optionCount = 0;
-            for (let [value] of Object.entries(updateData.productOption)) {
+            for (let [key, value] of Object.entries(updateData.productOption)) {
                 if (value !== '') {
                     optionCount++;
                 };

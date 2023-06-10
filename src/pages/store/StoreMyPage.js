@@ -340,7 +340,20 @@ export const StoreMyPage = () => {
                 <AdminInnerContents>
 
                     <AdminCompoButton>
-                        <CompoButton onClick={() => setWhatComponentsRender('productmanage')}>
+                        <CompoButton onClick={() => {
+                            if (Object.keys(updateData).length !== 0) {
+                                const choiceResult = window.confirm('제품 수정을 취소하시겠어요?');
+
+                                if (!choiceResult) {
+                                    return;
+                                }
+                                else {
+                                    setUpdateData({});
+                                };
+                            };
+
+                            setWhatComponentsRender('productmanage')
+                        }}>
                             제품 조회/삭제
                         </CompoButton>
                         <CompoButton onClick={() => setWhatComponentsRender('productupload')}>

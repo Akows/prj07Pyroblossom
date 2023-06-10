@@ -355,6 +355,8 @@ export const AdminProductManagement = ({ setWhatCompoIsShow, setUpdateData }) =>
 
             <ProductList>
 
+                {listData?.length === 0 && '존재하지 않는 상품입니다.'}
+
                 {listData?.map((item) => (
                     <Product key={item.number}>
                         <input type='checkbox' checked={checkedItem} onChange={setCheckedItem} />
