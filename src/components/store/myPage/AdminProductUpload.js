@@ -555,14 +555,15 @@ export const AdminProductUpload = ({ isLoading, updateData }) => {
             };
         };
 
-        console.log();
+        // console.log(productInfo, productOptionInfo, productImgFile);
 
-
-        // dispatch(AddProduct(productInfo, productOptionInfo, productImgFile, navigate));
+        dispatch(AddProduct(productInfo, productOptionInfo, productImgFile, navigate));
     };
 
     useEffect(() => {
-        if (!updateData === {}) {
+        // updateData의 존재 유무를 판별.
+        // updateData 객체의 keys의 length가 0이 아닐 경우에만 코드가 동작.
+        if (Object.keys(updateData).length !== 0) {
             console.log(updateData);
 
             setIsUpdate(true);
@@ -695,7 +696,7 @@ export const AdminProductUpload = ({ isLoading, updateData }) => {
                         <option value=''>노트북 케이스</option>
                     </>}
                     {productInfo.mainCategory === '패드류' && <>
-                        <option value=''>장패드</option>
+                        <option value='longPad'>장패드</option>
                         <option value=''>단패드</option>
                     </>}
                     {productInfo.mainCategory === '문구류' && <>

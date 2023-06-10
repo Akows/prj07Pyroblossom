@@ -17,6 +17,8 @@ const AddProduct = (productInfo, productOptionInfo, productImgFile, navigate) =>
         dispatch({ type: 'STORE_STATE_INIT' });
         dispatch({ type: 'STORE_LOADING' });
 
+        console.log(productInfo, productOptionInfo, productImgFile);
+
         let infoFiles = ['', '', ''];
         let infoFileNames = ['', '', ''];
 
@@ -41,7 +43,7 @@ const AddProduct = (productInfo, productOptionInfo, productImgFile, navigate) =>
                     name: productInfo.name,
                     price: productInfo.price,
                     deliveryFee: productInfo.deliveryFee,
-                    PurchaseQuantityLimit: productInfo.PurchaseQuantityLimit,
+                    purchaseQuantityLimit: productInfo.purchaseQuantityLimit,
                     inventory: productInfo.inventory,
                     mainCategory: productInfo.mainCategory,
                     subCategory: productInfo.subCategory,
@@ -223,11 +225,11 @@ const GetProductList = (listGetType, searchKeyword) => {
             };
 
             if (listGetType === 'next') {
-                queryRef = query(storeCollectionRef, orderBy('number'), startAfter(firstVisible), limit(2));
+                queryRef = query(storeCollectionRef, orderBy('number'), startAfter(lastVisible), limit(2));
             };
 
             if (listGetType === 'prev') {
-                queryRef = query(storeCollectionRef, orderBy('number'), endBefore(lastVisible), limitToLast(2));
+                queryRef = query(storeCollectionRef, orderBy('number'), endBefore(firstVisible), limitToLast(2));
             };
 
             pagingProcess(queryRef)
