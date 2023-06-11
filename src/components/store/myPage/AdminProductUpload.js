@@ -549,14 +549,6 @@ export const AdminProductUpload = ({ isLoading, updateData }) => {
             return;
         };
 
-        for (let [key, value] of Object.entries(productOptionInfo)) {
-            if (key === 'option1SurchargeType' && value === '변동없음') {
-
-            };
-        };
-
-        // console.log(productInfo, productOptionInfo, productImgFile);
-
         dispatch(AddProduct(productInfo, productOptionInfo, productImgFile, navigate));
     };
 
@@ -601,7 +593,7 @@ export const AdminProductUpload = ({ isLoading, updateData }) => {
             });
 
             let optionCount = 0;
-            for (let [key, value] of Object.entries(updateData.productOption)) {
+            for (let [value] of Object.entries(updateData.productOption)) {
                 if (value !== '') {
                     optionCount++;
                 };
@@ -619,27 +611,9 @@ export const AdminProductUpload = ({ isLoading, updateData }) => {
         // eslint-disable-next-line
     }, [updateData])
 
-    // useEffect(() => {
+    const onUpdate = () => {
 
-
-    //     if (isUpdate) {
-
-
-
-
-
-    //         // console.log(updateData.productOption.length);
-
-    //         // if (updateData.productOption) {
-    //         //     dispatchOption({ type: 'INCREASE' });
-    //         // };
-
-    //     }
-    //     else {
-
-    //     };
-    //     // eslint-disable-next-line
-    // }, [isUpdate])
+    };
 
     return (
         <>
@@ -659,7 +633,7 @@ export const AdminProductUpload = ({ isLoading, updateData }) => {
 
                 <input type='text' id='name' value={productInfo.name || ''} onChange={onChange} placeholder='제품명 입력' />
 
-                <input type='text' id='price' value={productInfo.price || ''} onChange={onChange} placeholder='제품가격 입력' />
+                <input type='number' id='price' value={productInfo.price || ''} onChange={onChange} placeholder='제품가격 입력' />
 
                 <input type='text' id='deliveryFee' value={productInfo.deliveryFee || ''} onChange={onChange} placeholder='배송료 입력' />
                 <p>* 미입력시 무료배송.</p>
@@ -899,6 +873,7 @@ export const AdminProductUpload = ({ isLoading, updateData }) => {
             <p>입력 정보 확인</p>
             <InputCheck>
                 입력 정보를 확인하는 창을 모달로 할지 생각중.. 임시 폐쇄.
+
                 {/* 
                 <img src={productImgFile.titleImage} alt='None' />
 
@@ -957,9 +932,15 @@ export const AdminProductUpload = ({ isLoading, updateData }) => {
                     </>
                     :
                     <>
-                        <UploadButton onClick={onUpload}>
-                            제품 등록하기
-                        </UploadButton>
+                        {isUpdate ?
+                            <UploadButton onClick={onUpdate}>
+                                수정하기
+                            </UploadButton>
+                            :
+                            <UploadButton onClick={onUpload}>
+                                제품 등록하기
+                            </UploadButton>
+                        }
                     </>}
 
 

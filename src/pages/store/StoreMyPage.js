@@ -349,10 +349,19 @@ export const StoreMyPage = () => {
                                 }
                                 else {
                                     setUpdateData({});
+                                    setWhatComponentsRender('productmanage')
                                 };
                             };
 
-                            setWhatComponentsRender('productmanage')
+                            const choiceResult = window.confirm('제품 등록을 취소하시겠어요?');
+
+                            if (!choiceResult) {
+                                return;
+                            }
+                            else {
+                                setUpdateData({});
+                                setWhatComponentsRender('productmanage')
+                            };
                         }}>
                             제품 조회/삭제
                         </CompoButton>

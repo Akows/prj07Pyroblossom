@@ -307,26 +307,37 @@ export const AdminProductManagement = ({ setWhatCompoIsShow, setUpdateData }) =>
 
 
     useEffect(() => {
-        dispatch(GetProductList(''));
+        dispatch(GetProductList('firstRender', 2, ''));
         // eslint-disable-next-line
-    }, []);
+    }, [getStoreState.flagValue.isRendering]);
 
     useEffect(() => {
-        setListData(getStoreState.processInfo.processData2.productData);
+        setListData(getStoreState.processInfo.processData2);
 
-        if (getStoreState.processInfo.processData1.firstVisible?.data().number === getStoreState.processInfo.processData3.firstOfIndex?.data().number) {
+        const firstItem = getStoreState.processInfo.processData1.firstOfPage;
+        const lastItem = getStoreState.processInfo.processData1.lastOfPage;
+
+        const firstIndex = getStoreState.processInfo.processData1.firstOfAllList;
+        const lastIndex = getStoreState.processInfo.processData1.lastOfAllList;
+
+
+        if (firstItem.data().number === firstIndex.data().number) {
             setIsDataFirst(true);
         }
         else {
             setIsDataFirst(false);
         };
 
-        if (getStoreState.processInfo.processData1.lastVisible?.data().number === getStoreState.processInfo.processData3.lastOfIndex?.data().number) {
+        if (lastItem.data().number === lastIndex.data().number) {
             setIsDataLast(true);
         }
         else {
             setIsDataLast(false);
         };
+
+        // return () => {
+        //     console.log('store out');
+        // };
 
     }, [getStoreState.processInfo]);
 

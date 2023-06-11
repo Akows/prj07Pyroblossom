@@ -4,13 +4,13 @@ const initialState = {
     flagValue: {
         isError: false,
         isLoading: false,
+        isRendering: false,
     },
     processInfo: {
         processCode: '',
         processMessage: '',
         processData1: '',
         processData2: '',
-        processData3: '',
     },
 };
 
@@ -31,7 +31,6 @@ const storeReducer = (prevState = initialState, action) => {
                 draft.processInfo = {
                     processData1: '',
                     processData2: '',
-                    processData3: '',
                 };
                 break;
 
@@ -54,7 +53,27 @@ const storeReducer = (prevState = initialState, action) => {
                 draft.processInfo.processMessage = action.payload.errorMessage;
                 draft.processInfo.processData1 = '';
                 draft.processInfo.processData2 = '';
-                draft.processInfo.processData3 = '';
+                break;
+
+
+
+            case 'STORE_TEST':
+                draft.processInfo.processCode = '페이징 완료.';
+                draft.processInfo.processMessage = '페이징 완료.';
+                draft.processInfo.processData1 = action.payload.pagingStandardData;
+                draft.processInfo.processData2 = action.payload.productInfo;
+                break;
+
+
+
+
+
+
+
+
+
+            case 'STORE_RENDERING':
+                draft.flagValue.isRendering = true;
                 break;
 
             case 'STORE_PAGING_PROCESS':

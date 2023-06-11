@@ -1,7 +1,8 @@
-import { doc, endAt, endBefore, getCountFromServer, getDocs, limit, limitToLast, orderBy, query, setDoc, startAfter, startAt, where } from 'firebase/firestore';
+import { doc, endBefore, getCountFromServer, getDocs, limit, limitToLast, orderBy, query, setDoc, startAfter, where } from 'firebase/firestore';
 import { ref, uploadBytes } from 'firebase/storage';
 import { createErrorData } from '../../configs/errorCodes';
 import { timeStamp, storeCollectionRef, storageRef } from '../../configs/firebase/config'
+import { productOptionInfoProcess } from '../../functions/storeFunction';
 
 const Test1 = () => {
     return (dispatch, getState) => {
@@ -14,10 +15,9 @@ const Test1 = () => {
 
 const AddProduct = (productInfo, productOptionInfo, productImgFile, navigate) => {
     return (dispatch, getState) => {
+
         dispatch({ type: 'STORE_STATE_INIT' });
         dispatch({ type: 'STORE_LOADING' });
-
-        console.log(productInfo, productOptionInfo, productImgFile);
 
         let infoFiles = ['', '', ''];
         let infoFileNames = ['', '', ''];
@@ -29,6 +29,8 @@ const AddProduct = (productInfo, productOptionInfo, productImgFile, navigate) =>
                 infoFileNames[i] = productImgFile[`infoImage${i + 1}`][0].name;
             };
         };
+
+        const processOptionData = productOptionInfoProcess(productInfo, productOptionInfo);
 
         const process = async (infoFiles, infoFileNames) => {
             const querys = query(storeCollectionRef);
@@ -48,25 +50,25 @@ const AddProduct = (productInfo, productOptionInfo, productImgFile, navigate) =>
                     mainCategory: productInfo.mainCategory,
                     subCategory: productInfo.subCategory,
                     productOption: {
-                        option1: productOptionInfo.option1,
-                        option2: productOptionInfo.option2,
-                        option3: productOptionInfo.option3,
-                        option4: productOptionInfo.option4,
-                        option5: productOptionInfo.option5,
+                        option1: processOptionData.option1,
+                        option2: processOptionData.option2,
+                        option3: processOptionData.option3,
+                        option4: processOptionData.option4,
+                        option5: processOptionData.option5,
                     },
                     productOptionSurchargeType: {
-                        option1: productOptionInfo.option1SurchargeType,
-                        option2: productOptionInfo.option2SurchargeType,
-                        option3: productOptionInfo.option3SurchargeType,
-                        option4: productOptionInfo.option4SurchargeType,
-                        option5: productOptionInfo.option5SurchargeType,
+                        option1: processOptionData.option1SurchargeType,
+                        option2: processOptionData.option2SurchargeType,
+                        option3: processOptionData.option3SurchargeType,
+                        option4: processOptionData.option4SurchargeType,
+                        option5: processOptionData.option5SurchargeType,
                     },
                     productOptionSurchargePrice: {
-                        option1: productOptionInfo.option1SurchargePrice,
-                        option2: productOptionInfo.option2SurchargePrice,
-                        option3: productOptionInfo.option3SurchargePrice,
-                        option4: productOptionInfo.option4SurchargePrice,
-                        option5: productOptionInfo.option5SurchargePrice,
+                        option1: processOptionData.option1SurchargePrice,
+                        option2: processOptionData.option2SurchargePrice,
+                        option3: processOptionData.option3SurchargePrice,
+                        option4: processOptionData.option4SurchargePrice,
+                        option5: processOptionData.option5SurchargePrice,
                     },
                     discountRate: productInfo.discountRate,
                     rewardAmountRate: productInfo.rewardAmountRate,
@@ -95,6 +97,7 @@ const AddProduct = (productInfo, productOptionInfo, productImgFile, navigate) =>
         process(infoFiles, infoFileNames)
             .then(() => {
                 dispatch({ type: 'STORE_COMPLETE' });
+                dispatch({ type: 'STORE_RENDERING' });
                 alert('제품 등록이 완료되었습니다.');
                 navigate('/store/mypage', { replace: true });
             })
@@ -106,142 +109,101 @@ const AddProduct = (productInfo, productOptionInfo, productImgFile, navigate) =>
     };
 };
 
-const GetProductList = (listGetType, searchKeyword) => {
+const GetProductList = (listCallType, itemPerPage, searchKeyword) => {
     return (dispatch, getState) => {
+        
         dispatch({ type: 'STORE_STATE_INIT' });
         dispatch({ type: 'STORE_LOADING' });
 
-        const result = [];
+        const returnData = {
+            pagingStandardData: {
+                firstOfPage: '',
+                lastOfPage: '',
+                firstOfAllList: '',
+                lastOfAllList: '',
+            },
+            productInfo: [],
+        };
 
-        // const calListOfBothEnds = async () => {
-        //     컬렉션 Doc의 전체 갯수를 계산하여 반환하는 함수.
-        //     const getCounts = await getCountFromServer(queryRef);
-        //     console.log(getCounts.data().count);
-        // };
+        const calculateBothEndsIndex = async () => {
+            // 우선 제품 목록의 첫 번째와 마지막 제품이 무엇인지 특정해야한다.
+            // 조건검색을 했을 경우에는 쿼리 조건이 다르게 적용되어야 한다.
+            let firstQueryRef = '';
+            let LastQueryRef = '';
 
-        const pagingProcess = async (queryRef) => {
-            const documentSnapshots = await getDocs(queryRef);
+            if (listCallType === 'keywordsearch') {
+                firstQueryRef = query(storeCollectionRef, orderBy('number', 'asc'), where('name', '==', searchKeyword), limit(1));
+                LastQueryRef = query(storeCollectionRef, orderBy('number', 'asc'), where('name', '==', searchKeyword), limitToLast(1));
+            }
+            else {
+                firstQueryRef = query(storeCollectionRef, orderBy('number', 'asc'), limit(1));
+                LastQueryRef = query(storeCollectionRef, orderBy('number', 'asc'), limitToLast(1));
+            };
+            
+            const firstDocumentSnapshots = await getDocs(firstQueryRef);
+            const lastDocumentSnapshots = await getDocs(LastQueryRef);
 
-            const newFirstVisible = documentSnapshots.docs[0];
-            const newLastVisible = documentSnapshots.docs[documentSnapshots.docs.length - 1];
+            // 페이지 커서의 한계점을 출력하기 위해 전체 제품 리스트의 첫 번째와 마지막 요소의 정보를 저장해준다.
+            returnData.pagingStandardData.firstOfAllList = firstDocumentSnapshots.docs[0];
+            returnData.pagingStandardData.lastOfAllList = lastDocumentSnapshots.docs[0];
+        };
 
-            documentSnapshots.forEach((doc) => {
+        const calculateProductPerPage = async () => {
+            // 다음으로는 전체 제품 리스트 중 페이지 당 출력할 제품의 갯수만큼 데이터를 불러온다. (지금은 페이지당 2개)
+            
+            // 제품 목록을 조회하는 방식에 따라 쿼리를 다르게 적용한다.
+            let queryRef = '';
+            // 최초 랜더링일 때, itemPerPage만큼 데이터를 조회해온다.
+            // 만약 검색어를 입력하지 않았는데 검색 버튼을 클릭할 경우에도 마찬가지로 처리한다.
+            if (listCallType === 'firstRender' || searchKeyword === '') {
+                queryRef = query(storeCollectionRef, orderBy('number'), limit(itemPerPage));
+            }
+            // 검색일 때, where 함수를 사용하여 조건검색으로 데이터를 조회해온다.
+            else if (listCallType === 'keywordsearch') {
+                queryRef = query(storeCollectionRef, orderBy('number'), where('name', '==', searchKeyword), limit(2));
+            };
+            
+            // 다른 페이지로 이동할 경우, 페이지 이동을 위한 데이터 Index를 바탕으로 데이터를 조회해온다.
+            // 페이지가 렌더링 되었을 때 무조건 1차례 데이터를 받아오고 이 과정에서 페이지 이동에 필요한 데이터가 Redux에 저장되어있다.
+            // 따라서 당 정보를 가져와서 사용한다.
+            const { firstOfPage, lastOfPage } = getState().store.processInfo.processData1;
+            if (listCallType === 'next') {
+                queryRef = query(storeCollectionRef, orderBy('number'), startAfter(lastOfPage), limit(itemPerPage));
+            }
+            else if (listCallType === 'prev') {
+                queryRef = query(storeCollectionRef, orderBy('number'), endBefore(firstOfPage), limitToLast(itemPerPage));
+            };
+            
+            // 그리고 쿼리를 기준으로 Doc을 가져온다.
+            const allDocumentSnapshots = await getDocs(queryRef);
+
+            // 또한 페이지 이동을 위해 호출해온 데이터의 가장 첫 요소와 마지막 요소의 정보를 저장해준다. ()
+            returnData.pagingStandardData.firstOfPage = allDocumentSnapshots.docs[0];
+            returnData.pagingStandardData.lastOfPage = allDocumentSnapshots.docs[allDocumentSnapshots.docs.length - 1];
+
+            // 제품 데이터를 배열에 담아 저장해준다.
+            const result = [];
+            allDocumentSnapshots.forEach((doc) => {
                 result.push(doc.data());
             });
-            
-            // 제품 검색의 경우 index와 cursor 모두를 다시 계산해주어야한다.
-            if (searchKeyword) {
-                let firstQueryRef = '';
-                let LastQueryRef = '';
-
-                if (searchKeyword === '') {
-                    firstQueryRef = query(storeCollectionRef, orderBy('number', 'asc'), limit(1));
-                    LastQueryRef = query(storeCollectionRef, orderBy('number', 'asc'), limitToLast(1));
-                }
-                else {
-                    firstQueryRef = query(storeCollectionRef, orderBy('number', 'asc'), where('name', '==', searchKeyword), limit(1));
-                    LastQueryRef = query(storeCollectionRef, orderBy('number', 'asc'), where('name', '==', searchKeyword),limitToLast(1));
-                };
-
-                const firstDocumentSnapshots = await getDocs(firstQueryRef);
-                const lastDocumentSnapshots = await getDocs(LastQueryRef);
-    
-                const firstDoc = firstDocumentSnapshots.docs[0];
-                const lastDoc = lastDocumentSnapshots.docs[0];
-
-                const returnData = {
-                    type: 'cal_IndexAndCursor',
-                    processData1: {
-                        firstVisible: newFirstVisible, 
-                        lastVisible: newLastVisible,
-                    },
-                    processData2: {
-                        productData: result, 
-                    },
-                    processData3: {
-                        firstOfIndex: firstDoc,
-                        lastOfIndex: lastDoc,
-                    },
-                };
-
-                dispatch({ type: 'STORE_PAGING_PROCESS', payload: returnData });
-                return;
-            };
-
-            // 페이지가 처음 렌더링 될 때 1번만 실행되는 함수.
-            // 전체 컬렉션의 가장 처음과 끝 Doc을 기록.
-            const { firstOfIndex, lastOfIndex } = getState().store.processInfo.processData3;
-
-            if (!firstOfIndex && !lastOfIndex) {
-                const firstQueryRef = query(storeCollectionRef, orderBy('number', 'asc'), limit(1));
-                const LastQueryRef = query(storeCollectionRef, orderBy('number', 'asc'), limitToLast(1));
-    
-                const firstDocumentSnapshots = await getDocs(firstQueryRef);
-                const lastDocumentSnapshots = await getDocs(LastQueryRef);
-    
-                const firstDoc = firstDocumentSnapshots.docs[0];
-                const lastDoc = lastDocumentSnapshots.docs[0];
-
-                const returnData = {
-                    type: 'cal_pageIndex',
-                    processData3: {
-                        firstOfIndex: firstDoc,
-                        lastOfIndex: lastDoc,
-                    },
-                };
-
-                dispatch({ type: 'STORE_PAGING_PROCESS', payload: returnData });
-            };
-            
-            const returnData = {
-                type: 'cal_pageCursor',
-                processData1: {
-                    firstVisible: newFirstVisible, 
-                    lastVisible: newLastVisible,
-                },
-                processData2: {
-                    productData: result, 
-                },
-            };
-
-            dispatch({ type: 'STORE_PAGING_PROCESS', payload: returnData });
+            returnData.productInfo = result;
         };
 
-        const process = (listGetType) => {
-            let queryRef = '';
-            const { firstVisible, lastVisible } = getState().store.processInfo.processData1;
+        calculateBothEndsIndex()
+        .then(() => {
+            calculateProductPerPage()
+            .then(() => {
+                dispatch({ type: 'STORE_COMPLETE', payload: returnData});
+                dispatch({ type: 'STORE_TEST', payload: returnData});
+            })
+            .catch((error) => {
+                dispatch({ type: 'STORE_ERROR', payload: createErrorData(error) });
+            });
+        })
+        .catch((error) => {
+            dispatch({ type: 'STORE_ERROR', payload: createErrorData(error) });
+        });
 
-            if (listGetType === '') {
-                queryRef = query(storeCollectionRef, orderBy('number'), limit(2));
-            };
-
-            if (listGetType === 'keywordsearch') {
-                if (searchKeyword === '') {
-                    queryRef = query(storeCollectionRef, orderBy('number'), limit(2));
-                }
-                else {
-                    queryRef = query(storeCollectionRef, orderBy('number'), where('name', '==', searchKeyword), limit(2));
-                };
-            };
-
-            if (listGetType === 'next') {
-                queryRef = query(storeCollectionRef, orderBy('number'), startAfter(lastVisible), limit(2));
-            };
-
-            if (listGetType === 'prev') {
-                queryRef = query(storeCollectionRef, orderBy('number'), endBefore(firstVisible), limitToLast(2));
-            };
-
-            pagingProcess(queryRef)
-                .then(() => {
-                    dispatch({ type: 'STORE_COMPLETE' });
-                })
-                .catch((error) => {
-                    dispatch({ type: 'STORE_ERROR', payload: createErrorData(error) });
-                });
-        };
-
-        process(listGetType);
     };
 };
 
