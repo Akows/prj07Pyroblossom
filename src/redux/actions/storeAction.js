@@ -116,13 +116,13 @@ const GetProductList = (listCallType, itemPerPage, searchKeyword) => {
         dispatch({ type: 'STORE_LOADING' });
 
         const returnData = {
-            pagingStandardData: {
+            processData1: {
                 firstOfPage: '',
                 lastOfPage: '',
                 firstOfAllList: '',
                 lastOfAllList: '',
             },
-            productInfo: [],
+            processData2: '',
         };
 
         const calculateBothEndsIndex = async () => {
@@ -144,8 +144,8 @@ const GetProductList = (listCallType, itemPerPage, searchKeyword) => {
             const lastDocumentSnapshots = await getDocs(LastQueryRef);
 
             // 페이지 커서의 한계점을 출력하기 위해 전체 제품 리스트의 첫 번째와 마지막 요소의 정보를 저장해준다.
-            returnData.pagingStandardData.firstOfAllList = firstDocumentSnapshots.docs[0];
-            returnData.pagingStandardData.lastOfAllList = lastDocumentSnapshots.docs[0];
+            returnData.processData1.firstOfAllList = firstDocumentSnapshots.docs[0];
+            returnData.processData1.lastOfAllList = lastDocumentSnapshots.docs[0];
         };
 
         const calculateProductPerPage = async () => {
@@ -178,15 +178,15 @@ const GetProductList = (listCallType, itemPerPage, searchKeyword) => {
             const allDocumentSnapshots = await getDocs(queryRef);
 
             // 또한 페이지 이동을 위해 호출해온 데이터의 가장 첫 요소와 마지막 요소의 정보를 저장해준다. ()
-            returnData.pagingStandardData.firstOfPage = allDocumentSnapshots.docs[0];
-            returnData.pagingStandardData.lastOfPage = allDocumentSnapshots.docs[allDocumentSnapshots.docs.length - 1];
+            returnData.processData1.firstOfPage = allDocumentSnapshots.docs[0];
+            returnData.processData1.lastOfPage = allDocumentSnapshots.docs[allDocumentSnapshots.docs.length - 1];
 
             // 제품 데이터를 배열에 담아 저장해준다.
             const result = [];
             allDocumentSnapshots.forEach((doc) => {
                 result.push(doc.data());
             });
-            returnData.productInfo = result;
+            returnData.processData2 = result;
         };
 
         calculateBothEndsIndex()

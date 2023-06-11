@@ -60,8 +60,8 @@ const storeReducer = (prevState = initialState, action) => {
             case 'STORE_TEST':
                 draft.processInfo.processCode = '페이징 완료.';
                 draft.processInfo.processMessage = '페이징 완료.';
-                draft.processInfo.processData1 = action.payload.pagingStandardData;
-                draft.processInfo.processData2 = action.payload.productInfo;
+                draft.processInfo.processData1 = action.payload.processData1;
+                draft.processInfo.processData2 = action.payload.processData2;
                 break;
 
 

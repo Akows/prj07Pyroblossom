@@ -187,23 +187,23 @@ const productOptionInfoProcess = (productInfo, productOptionInfo) => {
 
 //             // 제품 검색의 경우 index와 cursor 모두를 다시 계산해주어야한다.
 //             if (searchKeyword) {
-//                 let firstQueryRef = '';
-//                 let LastQueryRef = '';
+//                 // let firstQueryRef = '';
+//                 // let LastQueryRef = '';
 
-//                 if (searchKeyword === '') {
-//                     firstQueryRef = query(storeCollectionRef, orderBy('number', 'asc'), limit(1));
-//                     LastQueryRef = query(storeCollectionRef, orderBy('number', 'asc'), limitToLast(1));
-//                 }
-//                 else {
-//                     firstQueryRef = query(storeCollectionRef, orderBy('number', 'asc'), where('name', '==', searchKeyword), limit(1));
-//                     LastQueryRef = query(storeCollectionRef, orderBy('number', 'asc'), where('name', '==', searchKeyword), limitToLast(1));
-//                 };
+//                 // if (searchKeyword === '') {
+//                 //     firstQueryRef = query(storeCollectionRef, orderBy('number', 'asc'), limit(1));
+//                 //     LastQueryRef = query(storeCollectionRef, orderBy('number', 'asc'), limitToLast(1));
+//                 // }
+//                 // else {
+//                 //     firstQueryRef = query(storeCollectionRef, orderBy('number', 'asc'), where('name', '==', searchKeyword), limit(1));
+//                 //     LastQueryRef = query(storeCollectionRef, orderBy('number', 'asc'), where('name', '==', searchKeyword), limitToLast(1));
+//                 // };
 
-//                 const firstDocumentSnapshots = await getDocs(firstQueryRef);
-//                 const lastDocumentSnapshots = await getDocs(LastQueryRef);
+//                 // const firstDocumentSnapshots = await getDocs(firstQueryRef);
+//                 // const lastDocumentSnapshots = await getDocs(LastQueryRef);
 
-//                 const firstDoc = firstDocumentSnapshots.docs[0];
-//                 const lastDoc = lastDocumentSnapshots.docs[0];
+//                 // const firstDoc = firstDocumentSnapshots.docs[0];
+//                 // const lastDoc = lastDocumentSnapshots.docs[0];
 
 //                 const returnData = {
 //                     type: 'cal_IndexAndCursor',
@@ -264,29 +264,29 @@ const productOptionInfoProcess = (productInfo, productOptionInfo) => {
 //         };
 
 //         const process = (listGetType) => {
-//             let queryRef = '';
-//             const { firstVisible, lastVisible } = getState().store.processInfo.processData1;
+//             // let queryRef = '';
+//             // const { firstVisible, lastVisible } = getState().store.processInfo.processData1;
 
-//             if (listGetType === '') {
-//                 queryRef = query(storeCollectionRef, orderBy('number'), limit(2));
-//             };
+//             // if (listGetType === '') {
+//             //     queryRef = query(storeCollectionRef, orderBy('number'), limit(2));
+//             // };
 
-//             if (listGetType === 'keywordsearch') {
-//                 if (searchKeyword === '') {
-//                     queryRef = query(storeCollectionRef, orderBy('number'), limit(2));
-//                 }
-//                 else {
-//                     queryRef = query(storeCollectionRef, orderBy('number'), where('name', '==', searchKeyword), limit(2));
-//                 };
-//             };
+//             // if (listGetType === 'keywordsearch') {
+//             //     if (searchKeyword === '') {
+//             //         queryRef = query(storeCollectionRef, orderBy('number'), limit(2));
+//             //     }
+//             //     else {
+//             //         queryRef = query(storeCollectionRef, orderBy('number'), where('name', '==', searchKeyword), limit(2));
+//             //     };
+//             // };
 
-//             if (listGetType === 'next') {
-//                 queryRef = query(storeCollectionRef, orderBy('number'), startAfter(lastVisible), limit(2));
-//             };
+//             // if (listGetType === 'next') {
+//             //     queryRef = query(storeCollectionRef, orderBy('number'), startAfter(lastVisible), limit(2));
+//             // };
 
-//             if (listGetType === 'prev') {
-//                 queryRef = query(storeCollectionRef, orderBy('number'), endBefore(firstVisible), limitToLast(2));
-//             };
+//             // if (listGetType === 'prev') {
+//             //     queryRef = query(storeCollectionRef, orderBy('number'), endBefore(firstVisible), limitToLast(2));
+//             // };
 
 //             pagingProcess(queryRef)
 //                 .then(() => {

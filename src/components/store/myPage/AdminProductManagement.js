@@ -277,6 +277,7 @@ export const AdminProductManagement = ({ setWhatCompoIsShow, setUpdateData }) =>
 
     const [listData, setListData] = useState([]);
     const [searchKeyword, setSearchKeyword] = useState('');
+    const [productPerPage, setProductPerPage] = useState(2);
 
     const [checkedItem, setCheckedItem] = useState(false);
 
@@ -284,7 +285,7 @@ export const AdminProductManagement = ({ setWhatCompoIsShow, setUpdateData }) =>
     const [isDataLast, setIsDataLast] = useState(false);
 
     const keywordSearch = () => {
-        dispatch(GetProductList('keywordsearch', searchKeyword));
+        dispatch(GetProductList('keywordsearch', productPerPage, searchKeyword));
     };
     const onChargeSearchKeyword = (event) => {
         setSearchKeyword(event.target.value);
@@ -293,6 +294,7 @@ export const AdminProductManagement = ({ setWhatCompoIsShow, setUpdateData }) =>
 
     const onChangeProductDisclosure = () => {
         console.log(checkedItem);
+        setProductPerPage(productPerPage);
     };
 
 
@@ -307,32 +309,33 @@ export const AdminProductManagement = ({ setWhatCompoIsShow, setUpdateData }) =>
 
 
     useEffect(() => {
-        dispatch(GetProductList('firstRender', 2, ''));
+        dispatch(GetProductList('firstRender', productPerPage, searchKeyword));
         // eslint-disable-next-line
-    }, [getStoreState.flagValue.isRendering]);
+    }, []);
 
     useEffect(() => {
-        setListData(getStoreState.processInfo.processData2);
 
-        const firstItem = getStoreState.processInfo.processData1.firstOfPage;
-        const lastItem = getStoreState.processInfo.processData1.lastOfPage;
+        if (getStoreState.processInfo.processData1 !== '' || getStoreState.processInfo.processData2 !== '') {
+            setListData(getStoreState.processInfo.processData2);
 
-        const firstIndex = getStoreState.processInfo.processData1.firstOfAllList;
-        const lastIndex = getStoreState.processInfo.processData1.lastOfAllList;
+            const firstItem = getStoreState.processInfo.processData1.firstOfPage;
+            const lastItem = getStoreState.processInfo.processData1.lastOfPage;
+            const firstIndex = getStoreState.processInfo.processData1.firstOfAllList;
+            const lastIndex = getStoreState.processInfo.processData1.lastOfAllList;
 
+            if (firstItem?.data().number === firstIndex?.data().number) {
+                setIsDataFirst(true);
+            }
+            else {
+                setIsDataFirst(false);
+            };
 
-        if (firstItem.data().number === firstIndex.data().number) {
-            setIsDataFirst(true);
-        }
-        else {
-            setIsDataFirst(false);
-        };
-
-        if (lastItem.data().number === lastIndex.data().number) {
-            setIsDataLast(true);
-        }
-        else {
-            setIsDataLast(false);
+            if (lastItem?.data().number === lastIndex?.data().number) {
+                setIsDataLast(true);
+            }
+            else {
+                setIsDataLast(false);
+            };
         };
 
         // return () => {
@@ -418,13 +421,13 @@ export const AdminProductManagement = ({ setWhatCompoIsShow, setUpdateData }) =>
                 {isDataFirst ?
                     <button>페이지 끝</button>
                     :
-                    <button onClick={() => dispatch(GetProductList('prev'))}>{'<'}-</button>
+                    <button onClick={() => dispatch(GetProductList('prev', productPerPage, ''))}>{'<'}-</button>
                 }
 
                 {isDataLast ?
                     <button>페이지 끝</button>
                     :
-                    <button onClick={() => dispatch(GetProductList('next'))}>-{'>'}</button>
+                    <button onClick={() => dispatch(GetProductList('next', productPerPage, ''))}>-{'>'}</button>
                 }
             </UtilButton>
         </>
