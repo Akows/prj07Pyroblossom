@@ -1,4 +1,4 @@
-import { deleteDoc, doc, endBefore, getCountFromServer, getDocs, limit, limitToLast, orderBy, query, setDoc, startAfter, updateDoc, where } from 'firebase/firestore';
+import { deleteDoc, doc, endBefore, getCountFromServer, getDoc, getDocs, limit, limitToLast, orderBy, query, setDoc, startAfter, updateDoc, where } from 'firebase/firestore';
 import { ref, uploadBytes } from 'firebase/storage';
 import { createErrorData } from '../../configs/errorCodes';
 import { timeStamp, storeCollectionRef, storageRef } from '../../configs/firebase/config'
@@ -207,12 +207,10 @@ const GetProductList = (listCallType, itemPerPage, searchKeyword) => {
     };
 };
 
-const GetProductInfo = (productNumber) => {
+const GetProductInfo = (productName) => {
     return (dispatch, getState) => {
         dispatch({ type: 'STORE_STATE_INIT' });
         dispatch({ type: 'STORE_LOADING' });
-
-        console.log(productNumber);
 
         const returnData = {
             processData1: {
@@ -225,14 +223,11 @@ const GetProductInfo = (productNumber) => {
         };
 
         const process = async () => {
-            const queryRef = query(storeCollectionRef, orderBy('number'), where('number', '==', productNumber), limit(1));
-        
-            const documentSnapshots = await getDocs(queryRef);
-
-            documentSnapshots.forEach((doc) => {
-                returnData.processData2 = doc.data();
-                console.log(doc.data());
-            });
+            const docRef = doc(storeCollectionRef, productName);
+            const docSnap = await getDoc(docRef);
+            
+            returnData.processData2.push(docSnap.data());
+            
         };
 
         process()

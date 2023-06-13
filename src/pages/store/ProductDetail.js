@@ -6,7 +6,6 @@ import { Reviews } from '../../components/store/productDetail/Reviews';
 import { QnA } from '../../components/store/productDetail/QnA';
 import { ProductInfomation } from '../../components/store/productDetail/ProductInfomation';
 
-import productimg from '../../assets/images/testImg/testproductimg.jpg';
 import { useDispatch, useSelector } from 'react-redux';
 import { GetProductInfo } from '../../redux/actions/storeAction';
 
@@ -165,7 +164,7 @@ const Price = styled.div`
     justify-content: flex-end;
 `;
 const ListPrice = styled.div`
-    width: 80px;
+    width: 120px;
     height: 100%;
 
     display: flex;
@@ -180,7 +179,7 @@ const ListPrice = styled.div`
     opacity: 0.3;
 `;
 const LastPrice = styled.div`
-    width: 100px;
+    width: 120px;
     height: 100%;
 
     display: flex;
@@ -192,7 +191,6 @@ const LastPrice = styled.div`
     color: #D3BC8E;
 
     margin-right: 5px;
-    margin-left: 10px;
 `;
 
 const EventInfo = styled.div`
@@ -522,9 +520,16 @@ export const ProductDetail = () => {
         OtherInfoScrollMovePoint.current?.scrollIntoView({ behavior: 'smooth' });
     };
 
-
     const getStoreState = useSelector((state) => state.store);
     const [productData, setProductData] = useState([]);
+
+    const [purchaseList, setPurchaseList] = useState('');
+
+    const onSelectPurchaseOption = (event) => {
+        console.log(event.target.value);
+        setPurchaseList(event.target.value);
+    };
+
 
     useEffect(() => {
         dispatch(GetProductInfo(id));
@@ -532,11 +537,6 @@ export const ProductDetail = () => {
     }, []);
     useEffect(() => {
         setProductData(getStoreState.processInfo.processData2);
-
-        // if (getStoreState.processInfo.processData1 !== '' || getStoreState.processInfo.processData2 !== '') {
-        //     setProductData(getStoreState.processInfo.processData2);
-        // };
-
     }, [getStoreState.processInfo]);
 
 
@@ -546,41 +546,39 @@ export const ProductDetail = () => {
             <InnerContents>
 
                 <ProductTypeShowArea>
-                    1차 카테고리 {'>'} 2차 카테고리 {'>'} {id}
+                    {productData[0]?.mainCategory} {'>'} {productData[0]?.subCategory} {'>'} {productData[0]?.name}
                 </ProductTypeShowArea>
 
                 <ProductInfoArea>
                     <ProductInfo>
                         <ProductImg>
-                            <img src={productimg} alt=''></img>
+                            <img src={`https://firebasestorage.googleapis.com/v0/b/prj07pyroblossom.appspot.com/o/productsImage%2F${productData[0]?.name}%2F${productData[0]?.productInformationFile?.titleimage}?alt=media&token=bf2eff71-3c5e-4dc2-9706-445f95fd91e8`} alt='' />
                         </ProductImg>
                         <ProductPayInfo>
                             <ProductName>
-                                통통폭탄인형
+                                {productData[0]?.name}
                             </ProductName>
                             <ProductPrice>
                                 <SalePer>
-                                    10%
+                                    {productData[0]?.discountRate}%
                                 </SalePer>
 
                                 <Price>
                                     <ListPrice>
-                                        5000원
+                                        {productData[0]?.price}원
                                     </ListPrice>
                                     <LastPrice>
-                                        4500원
+                                        {productData[0]?.price - (productData[0]?.price * productData[0]?.discountRate / 100)}원
                                     </LastPrice>
                                 </Price>
                             </ProductPrice>
-
-
 
                             <EventInfo>
                                 <p>회원님을 위한 해택</p>
                                 <hr />
 
-                                <p>적립포인트 : 0.1%, 45p</p>
-                                <p>이벤트 : 텍스트 리뷰 100p</p>
+                                <p>적립포인트 : {productData[0]?.rewardAmountRate}P</p>
+                                <p>이벤트 : {productData[0]?.eventType}, {productData[0]?.eventPoint}P</p>
                                 <p>사은품 : </p>
                             </EventInfo>
 
@@ -590,11 +588,16 @@ export const ProductDetail = () => {
 
                             <PurchaseInfo>
                                 <p>택배배송 : 무료, 우체국택배</p>
-                                <p>도서산간지역 3,000원</p>
+                                <p>도서산간지역 {productData[0]?.deliveryFee}원</p>
                                 <hr />
 
-                                <PurchaseSelect>
-                                    <option>통통폭탄인형</option>
+                                <PurchaseSelect value={purchaseList} onChange={onSelectPurchaseOption}>
+                                    <option value=''>제품옵션선택</option>
+                                    {productData[0]?.productOption.option1 !== '옵션없음' && <option value='option1'>{productData[0]?.productOption.option1}</option>}
+                                    {productData[0]?.productOption.option2 !== '옵션없음' && <option value='option2'>{productData[0]?.productOption.option2}</option>}
+                                    {productData[0]?.productOption.option3 !== '옵션없음' && <option value='option3'>{productData[0]?.productOption.option3}</option>}
+                                    {productData[0]?.productOption.option4 !== '옵션없음' && <option value='option4'>{productData[0]?.productOption.option4}</option>}
+                                    {productData[0]?.productOption.option5 !== '옵션없음' && <option value='option5'>{productData[0]?.productOption.option5}</option>}
                                 </PurchaseSelect>
 
                             </PurchaseInfo>
@@ -662,7 +665,7 @@ export const ProductDetail = () => {
 
                         <OtherInfoComponentArea>
 
-                            {whatCompoIsShow === 'review' && <Reviews />}
+                            {whatCompoIsShow === 'review' && <Reviews eventPoint={productData[0]?.eventPoint} />}
                             {whatCompoIsShow === 'info' && <ProductInfomation />}
                             {whatCompoIsShow === 'qna' && <QnA />}
 

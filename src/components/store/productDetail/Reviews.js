@@ -185,7 +185,7 @@ const UserReview = styled.div`
 `;
 
 
-export const Reviews = () => {
+export const Reviews = ({ eventPoint }) => {
     return (
         <BackGround>
             <ReviewInfo>
@@ -193,7 +193,7 @@ export const Reviews = () => {
                     <p>상품리뷰</p>
                     <p>상품을 구매하신 분들이 남긴 리뷰입니다.</p>
                     <p>리뷰 작성시 다음과 같은 해택이 제공됩니다.</p>
-                    <p>리뷰 작성 이벤트 포인트 : <FontB>100p</FontB></p>
+                    <p>리뷰 작성 이벤트 포인트 : <FontB>{eventPoint}p</FontB></p>
                 </ReviewInfoTitle>
                 <ReviewInfoScore>
                     <ReviewInfoGrade>
