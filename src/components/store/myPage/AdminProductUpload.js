@@ -2,7 +2,7 @@ import React, { useEffect, useReducer, useState } from 'react'
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { AddProduct } from '../../../redux/actions/storeAction';
+import { AddProduct, UpdateProduct } from '../../../redux/actions/storeAction';
 
 const UploadIMG = styled.div`
     width: 100%;
@@ -533,6 +533,11 @@ export const AdminProductUpload = ({ isLoading, updateData }) => {
         infoImage2: '',
     });
 
+    const [updateNeedData, setUpdateNeedData] = useState({
+        number: '',
+        formerName: '',
+    });
+
     const onChange = (event) => {
         setProductInfo({ ...productInfo, [event.target.id]: event.target.value });
     };
@@ -560,6 +565,11 @@ export const AdminProductUpload = ({ isLoading, updateData }) => {
 
             setIsUpdate(true);
 
+            setUpdateNeedData({
+                number: updateData.number,
+                formerName: updateData.name,
+            });
+
             setProductInfo({
                 name: updateData.name,
                 price: updateData.price,
@@ -572,6 +582,7 @@ export const AdminProductUpload = ({ isLoading, updateData }) => {
                 rewardAmountRate: updateData.rewardAmountRate,
                 eventType: updateData.eventType,
                 eventPoint: updateData.eventPoint,
+                registrationDate: updateData.registrationDate,
             });
 
             setProductOption({
@@ -593,8 +604,9 @@ export const AdminProductUpload = ({ isLoading, updateData }) => {
             });
 
             let optionCount = 0;
-            for (let [value] of Object.entries(updateData.productOption)) {
-                if (value !== '') {
+            // eslint-disable-next-line
+            for (let [key, value] of Object.entries(updateData.productOption)) {
+                if (value !== '옵션없음') {
                     optionCount++;
                 };
             };
@@ -602,7 +614,6 @@ export const AdminProductUpload = ({ isLoading, updateData }) => {
             for (let i = 0; i < optionCount - 1; i++) {
                 dispatchOption({ type: 'INCREASE' });
             };
-
 
         }
         else {
@@ -612,7 +623,12 @@ export const AdminProductUpload = ({ isLoading, updateData }) => {
     }, [updateData])
 
     const onUpdate = () => {
+        if (productImgFile.titleImage === '') {
+            alert('제품 이미지는 반드시 등록해야합니다.');
+            return;
+        };
 
+        dispatch(UpdateProduct(updateNeedData, productInfo, productOptionInfo, productImgFile, navigate));
     };
 
     return (

@@ -1,4 +1,4 @@
-import { doc, endBefore, getCountFromServer, getDocs, limit, limitToLast, orderBy, query, setDoc, startAfter, where } from 'firebase/firestore';
+import { deleteDoc, doc, endBefore, getCountFromServer, getDocs, limit, limitToLast, orderBy, query, setDoc, startAfter, where } from 'firebase/firestore';
 import { ref, uploadBytes } from 'firebase/storage';
 import { createErrorData } from '../../configs/errorCodes';
 import { timeStamp, storeCollectionRef, storageRef } from '../../configs/firebase/config'
@@ -97,7 +97,7 @@ const AddProduct = (productInfo, productOptionInfo, productImgFile, navigate) =>
         process(infoFiles, infoFileNames)
             .then(() => {
                 dispatch({ type: 'STORE_COMPLETE' });
-                dispatch({ type: 'STORE_RENDERING' });
+                dispatch({ type: 'STORE_RENDERING_ON' });
                 alert('제품 등록이 완료되었습니다.');
                 navigate('/store/mypage', { replace: true });
             })
@@ -193,8 +193,8 @@ const GetProductList = (listCallType, itemPerPage, searchKeyword) => {
         .then(() => {
             calculateProductPerPage()
             .then(() => {
-                dispatch({ type: 'STORE_COMPLETE', payload: returnData});
-                dispatch({ type: 'STORE_TEST', payload: returnData});
+                dispatch({ type: 'STORE_COMPLETE' });
+                dispatch({ type: 'STORE_GET_PRODUCTLIST', payload: returnData});
             })
             .catch((error) => {
                 dispatch({ type: 'STORE_ERROR', payload: createErrorData(error) });
@@ -207,16 +207,106 @@ const GetProductList = (listCallType, itemPerPage, searchKeyword) => {
     };
 };
 
+const UpdateProduct = (updateNeedData, productInfo, productOptionInfo, productImgFile, navigate) => {
+    return (dispatch, getState) => {
+        dispatch({ type: 'STORE_STATE_INIT' });
+        dispatch({ type: 'STORE_LOADING' });
+
+        console.log(updateNeedData, productInfo, productOptionInfo, productImgFile);
+
+        let infoFiles = ['', '', ''];
+        let infoFileNames = ['', '', ''];
+
+        for (let i = 0; i < 3; i++) {
+            // productImgFile의 가장 첫 번째 자리는 제품 타이틀 이미지가 들어가있으므로 정보이미지 파일 처리를 위해서는 i의 값에 1을 더해주어야 한다.
+            if (productImgFile[`infoImage${i + 1}`]) {
+                infoFiles[i] = productImgFile[`infoImage${i + 1}`][0];
+                infoFileNames[i] = productImgFile[`infoImage${i + 1}`][0].name;
+            };
+        };
+
+        const processOptionData = productOptionInfoProcess(productInfo, productOptionInfo);
+
+        const process = async () => {
+            const docRef = doc(storeCollectionRef, `${productInfo.name}`);
+            
+            await setDoc(docRef,
+                {
+                    number: updateNeedData.number,
+                    name: productInfo.name,
+                    price: productInfo.price,
+                    deliveryFee: productInfo.deliveryFee,
+                    purchaseQuantityLimit: productInfo.purchaseQuantityLimit,
+                    inventory: productInfo.inventory,
+                    mainCategory: productInfo.mainCategory,
+                    subCategory: productInfo.subCategory,
+                    productOption: {
+                        option1: processOptionData.option1,
+                        option2: processOptionData.option2,
+                        option3: processOptionData.option3,
+                        option4: processOptionData.option4,
+                        option5: processOptionData.option5,
+                    },
+                    productOptionSurchargeType: {
+                        option1: processOptionData.option1SurchargeType,
+                        option2: processOptionData.option2SurchargeType,
+                        option3: processOptionData.option3SurchargeType,
+                        option4: processOptionData.option4SurchargeType,
+                        option5: processOptionData.option5SurchargeType,
+                    },
+                    productOptionSurchargePrice: {
+                        option1: processOptionData.option1SurchargePrice,
+                        option2: processOptionData.option2SurchargePrice,
+                        option3: processOptionData.option3SurchargePrice,
+                        option4: processOptionData.option4SurchargePrice,
+                        option5: processOptionData.option5SurchargePrice,
+                    },
+                    discountRate: productInfo.discountRate,
+                    rewardAmountRate: productInfo.rewardAmountRate,
+                    eventType: productInfo.eventType,
+                    eventPoint: productInfo.eventPoint,
+                    productInformationFile: {
+                        titleimage: productImgFile.titleImage[0].name,
+                        infoimage1: infoFileNames[0],
+                        infoimage2: infoFileNames[1],
+                        infoimage3: infoFileNames[2],
+                    },
+                    productDisclosure: false,
+                    registrationDate: productInfo.registrationDate,
+                }
+            );
+            await deleteDoc(doc(storeCollectionRef, updateNeedData.formerName));
+
+            const imagesRef = ref(storageRef, `productsImage/${productInfo.name}/${productImgFile.titleImage[0].name}`);
+            await uploadBytes(imagesRef, productImgFile.titleImage[0]);
+
+            for (let i = 0; i < 3; i++) {
+                const imagesRef = ref(storageRef, `productsInfoImage/${productInfo.name}/${infoFileNames[i]}`);
+                await uploadBytes(imagesRef, infoFiles[i]);
+            };
+        };
+
+        process(infoFiles, infoFileNames)
+            .then(() => {
+                dispatch({ type: 'STORE_COMPLETE' });
+                dispatch({ type: 'STORE_RENDERING_ON' });
+                alert('제품 수정이 완료되었습니다.');
+                navigate('/store/mypage', { replace: true });
+            })
+            .catch((error) => {
+                dispatch({ type: 'STORE_ERROR', payload: createErrorData(error) });
+                alert('제품 수정 과정에서 에러가 발생하였습니다.');
+                navigate('/store/mypage', { replace: true });
+            });
+    };
+};
 
 
 
 
 
 
-
-
-
-export { Test1, AddProduct, GetProductList };
+export { Test1, AddProduct, GetProductList, UpdateProduct };
 
 
 

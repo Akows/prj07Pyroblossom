@@ -349,7 +349,8 @@ export const StoreMyPage = () => {
                                 }
                                 else {
                                     setUpdateData({});
-                                    setWhatComponentsRender('productmanage')
+                                    setWhatComponentsRender('productmanage');
+                                    return;
                                 };
                             };
 
@@ -361,6 +362,7 @@ export const StoreMyPage = () => {
                             else {
                                 setUpdateData({});
                                 setWhatComponentsRender('productmanage')
+                                return;
                             };
                         }}>
                             제품 조회/삭제

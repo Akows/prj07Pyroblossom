@@ -311,10 +311,9 @@ export const AdminProductManagement = ({ setWhatCompoIsShow, setUpdateData }) =>
     useEffect(() => {
         dispatch(GetProductList('firstRender', productPerPage, searchKeyword));
         // eslint-disable-next-line
-    }, []);
+    }, [getStoreState.flagValue.isRendering]);
 
     useEffect(() => {
-
         if (getStoreState.processInfo.processData1 !== '' || getStoreState.processInfo.processData2 !== '') {
             setListData(getStoreState.processInfo.processData2);
 

@@ -55,9 +55,14 @@ const storeReducer = (prevState = initialState, action) => {
                 draft.processInfo.processData2 = '';
                 break;
 
+            case 'STORE_RENDERING_ON':
+                draft.flagValue.isRendering = true;
+                break;
+            case 'STORE_RENDERING_OFF':
+                draft.flagValue.isRendering = false;
+                break;
 
-
-            case 'STORE_TEST':
+            case 'STORE_GET_PRODUCTLIST':
                 draft.processInfo.processCode = '페이징 완료.';
                 draft.processInfo.processMessage = '페이징 완료.';
                 draft.processInfo.processData1 = action.payload.processData1;
@@ -72,9 +77,7 @@ const storeReducer = (prevState = initialState, action) => {
 
 
 
-            case 'STORE_RENDERING':
-                draft.flagValue.isRendering = true;
-                break;
+
 
             case 'STORE_PAGING_PROCESS':
                 draft.processInfo.processCode = '목록 받아오는 중..';
