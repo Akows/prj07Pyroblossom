@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { GetProductList } from '../../../redux/actions/storeAction';
+import { ChangeProductDisclosure, GetProductList } from '../../../redux/actions/storeAction';
 
 const UtilButton = styled.div`
     width: 100%;
@@ -261,6 +262,9 @@ const ProductOpen = styled.div`
         margin-top: 30px;
         opacity: 0.8;
     };
+    & > p:nth-child(2):hover {
+        opacity: 1;
+    };
 
     @media screen and (max-width: 700px) {
         width: 50%;
@@ -270,14 +274,14 @@ const ProductOpen = styled.div`
 
 export const AdminProductManagement = ({ setWhatCompoIsShow, setUpdateData }) => {
 
-    // const navigate = useNavigate();
+    const navigate = useNavigate();
     const dispatch = useDispatch();
 
     const getStoreState = useSelector((state) => state.store);
 
     const [listData, setListData] = useState([]);
     const [searchKeyword, setSearchKeyword] = useState('');
-    const [productPerPage, setProductPerPage] = useState(2);
+    const [productPerPage, setProductPerPage] = useState(5);
 
     const [checkedItem, setCheckedItem] = useState(false);
 
@@ -292,9 +296,16 @@ export const AdminProductManagement = ({ setWhatCompoIsShow, setUpdateData }) =>
     };
 
 
-    const onChangeProductDisclosure = () => {
-        console.log(checkedItem);
-        setProductPerPage(productPerPage);
+    const onChangeProductDisclosure = (productName, productDisclosure) => {
+        const confirmChoice = window.confirm('제품상태를 변경하시겠습니까?');
+
+        if (!confirmChoice) {
+            return;
+        }
+        else {
+            dispatch(ChangeProductDisclosure(productName, productDisclosure, navigate));
+            setProductPerPage(productPerPage);
+        };
     };
 
 
@@ -355,16 +366,16 @@ export const AdminProductManagement = ({ setWhatCompoIsShow, setUpdateData }) =>
 
             </UtilButton>
 
-            <UtilButton>
+            {/* <UtilButton>
 
                 <div>
-                    {/* <input type='checkbox' /> */}
+                    <input type='checkbox' />
                     <p>전체 선택</p>
                 </div>
 
                 <button onClick={onChangeProductDisclosure}>상태전환</button>
 
-            </UtilButton>
+            </UtilButton> */}
 
             <ProductList>
 
@@ -372,7 +383,7 @@ export const AdminProductManagement = ({ setWhatCompoIsShow, setUpdateData }) =>
 
                 {listData?.map((item) => (
                     <Product key={item.number}>
-                        <input type='checkbox' checked={checkedItem} onChange={setCheckedItem} />
+                        {/* <input type='checkbox' checked={checkedItem} onChange={setCheckedItem} /> */}
 
                         <ProductInfo>
                             <ProductImg>
@@ -402,7 +413,7 @@ export const AdminProductManagement = ({ setWhatCompoIsShow, setUpdateData }) =>
                         <ProductUtil>
                             <ProductOpen>
                                 <p>판매 상태</p>
-                                <p>{item.productDisclosure ? '공개' : '비공개'}</p>
+                                <p onClick={() => onChangeProductDisclosure(item.name, item.productDisclosure)}>{item.productDisclosure ? '공개' : '비공개'}</p>
                             </ProductOpen>
 
                             <ProductOpen>

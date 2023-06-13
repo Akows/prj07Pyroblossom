@@ -1,4 +1,4 @@
-import { deleteDoc, doc, endBefore, getCountFromServer, getDocs, limit, limitToLast, orderBy, query, setDoc, startAfter, where } from 'firebase/firestore';
+import { deleteDoc, doc, endBefore, getCountFromServer, getDocs, limit, limitToLast, orderBy, query, setDoc, startAfter, updateDoc, where } from 'firebase/firestore';
 import { ref, uploadBytes } from 'firebase/storage';
 import { createErrorData } from '../../configs/errorCodes';
 import { timeStamp, storeCollectionRef, storageRef } from '../../configs/firebase/config'
@@ -160,7 +160,7 @@ const GetProductList = (listCallType, itemPerPage, searchKeyword) => {
             }
             // 검색일 때, where 함수를 사용하여 조건검색으로 데이터를 조회해온다.
             else if (listCallType === 'keywordsearch') {
-                queryRef = query(storeCollectionRef, orderBy('number'), where('name', '==', searchKeyword), limit(2));
+                queryRef = query(storeCollectionRef, orderBy('number'), where('name', '==', searchKeyword), limit(itemPerPage));
             };
             
             // 다른 페이지로 이동할 경우, 페이지 이동을 위한 데이터 Index를 바탕으로 데이터를 조회해온다.
@@ -301,12 +301,49 @@ const UpdateProduct = (updateNeedData, productInfo, productOptionInfo, productIm
     };
 };
 
+const ChangeProductDisclosure = (productName, productDisclosure, navigate) => {
+    return (dispatch, getState) => {
+
+        console.log(productName, productDisclosure);
+
+        let result = '';
+
+        const process = async () => {
+            const docRef = doc(storeCollectionRef, productName);
+            
+            await updateDoc(docRef,
+                {
+                    productDisclosure: !productDisclosure,
+                }
+            );
+        };
+
+        if (!productDisclosure) {
+            result = '공개';
+        }
+        else {
+            result = '비공개';
+        };
+
+        process()
+            .then(() => {
+                dispatch({ type: 'STORE_COMPLETE' });
+                dispatch({ type: 'STORE_RENDERING_ON' });
+                alert(`제품이 ${result}처리되었습니다.`);
+                navigate('/store/mypage', { replace: true });
+            })
+            .catch((error) => {
+                dispatch({ type: 'STORE_ERROR', payload: createErrorData(error) });
+                alert('제품 상태 과정에서 에러가 발생하였습니다.');
+                navigate('/store/mypage', { replace: true });
+            });
+    };
+};
 
 
 
 
-
-export { Test1, AddProduct, GetProductList, UpdateProduct };
+export { Test1, AddProduct, GetProductList, UpdateProduct, ChangeProductDisclosure };
 
 
 
