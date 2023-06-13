@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import '../../assets/animation.css';
@@ -17,6 +17,8 @@ import BackgroundImagesrc from '../../assets/images/background/upLiyueport2.jpg'
 import MainImagesrc from '../../assets/images/System_Shop.webp';
 // import Sub1Imagesrc from '../../assets/images/character_eula_portrait.png';
 import Sub2Imagesrc from '../../assets/images/Character_Klee_Full_Wish.webp';
+import { useDispatch, useSelector } from 'react-redux';
+import { GetProductList } from '../../redux/actions/storeAction';
 
 const BackGround = styled.div`
     width: 100%;
@@ -161,11 +163,24 @@ const Product = styled.div`
 
     margin: 3px;
 
-    border: 1px solid wheat;
+    &:hover {
+        background-color: gray;
+        opacity: 0.8;
+    };
 `;
 const ProductImg = styled.div`
     width: 100%;
     height: 80%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    & > img {
+        width: 100%;
+        height: 250px;
+    };
 `;
 const ProductTitle = styled.div`
     width: 100%;
@@ -178,52 +193,23 @@ const ProductTitle = styled.div`
 export const StoreMain = () => {
 
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
-    // const dispatch = useDispatch();
-    // const getUserState = useSelector((state) => state.user);
-    // const getStoreState = useSelector((state) => state.store);
+    const getStoreState = useSelector((state) => state.store);
 
-    // const [isUserError, setIsUserError] = useState(false);
-    // const [isUserLoading, setIsUserLoading] = useState(false);
-    // const [isStoreError, setIsStoreError] = useState(false);
-    // const [isStoreLoading, setIsStoreLoading] = useState(false);
+    const [listData, setListData] = useState([]);
 
-    // useEffect(() => {
-    //     setIsUserError(getUserState.flagvalue.isError);
-    //     setIsUserLoading(getUserState.flagvalue.isLoading);
-    // }, [getUserState.flagvalue]);
+    useEffect(() => {
+        dispatch(GetProductList('firstRender', 9, ''));
+        // eslint-disable-next-line
+    }, []);
 
-    // useEffect(() => {
-    //     setIsStoreError(getStoreState.flagValue.isError);
-    //     setIsStoreLoading(getStoreState.flagValue.isLoading);
-    // }, [getStoreState.flagValue]);
+    useEffect(() => {
+        if (getStoreState.processInfo.processData1 !== '' || getStoreState.processInfo.processData2 !== '') {
+            setListData(getStoreState.processInfo.processData2);
+        };
+    }, [getStoreState.processInfo]);
 
-    const testDatas = [
-        {
-            id: 'zEqgm2E3in0iMejvOqho',
-            name: '1번 제품',
-        },
-        {
-            id: '02',
-            name: '2번 제품',
-        },
-        {
-            id: '03',
-            name: '3번 제품',
-        },
-        {
-            id: '04',
-            name: '4번 제품',
-        },
-        {
-            id: '05',
-            name: '5번 제품',
-        },
-        {
-            id: '06',
-            name: '6번 제품',
-        },
-    ];
 
     return (
         <BackGround>
@@ -244,16 +230,20 @@ export const StoreMain = () => {
                     </TitleSub2Image>
 
                 </StoreTitleArea>
+
                 <StoreSlideShowArea>
                     <Sildeshow />
                 </StoreSlideShowArea>
+
                 <StoreListArea>
 
-                    {testDatas.map(item => (
-                        <Product key={item.id} onClick={() => navigate(`/store/productdetail/${item.id}`)}>
+                    {listData?.map(item => (
+                        <Product key={item.number} onClick={() => navigate(`/store/productdetail/${item.name}`)}>
                             <ProductImg>
-                                제품사진
+                                <img src={`https://firebasestorage.googleapis.com/v0/b/prj07pyroblossom.appspot.com/o/productsImage%2F${item.name}%2F${item.productInformationFile.titleimage}?alt=media&token=bf2eff71-3c5e-4dc2-9706-445f95fd91e8`} alt='' />
                             </ProductImg>
+
+                            <hr />
 
                             <ProductTitle>
                                 {item.name}

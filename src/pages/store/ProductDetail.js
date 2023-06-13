@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -7,6 +7,8 @@ import { QnA } from '../../components/store/productDetail/QnA';
 import { ProductInfomation } from '../../components/store/productDetail/ProductInfomation';
 
 import productimg from '../../assets/images/testImg/testproductimg.jpg';
+import { useDispatch, useSelector } from 'react-redux';
+import { GetProductInfo } from '../../redux/actions/storeAction';
 
 const SpecialCharacter = styled.p`
     margin-left: 2px;
@@ -509,6 +511,7 @@ export const ProductDetail = () => {
 
     const { id } = useParams();
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const [whatCompoIsShow, setWhatCompoIsShow] = useState('review');
 
@@ -518,6 +521,24 @@ export const ProductDetail = () => {
         setWhatCompoIsShow(name);
         OtherInfoScrollMovePoint.current?.scrollIntoView({ behavior: 'smooth' });
     };
+
+
+    const getStoreState = useSelector((state) => state.store);
+    const [productData, setProductData] = useState([]);
+
+    useEffect(() => {
+        dispatch(GetProductInfo(id));
+        // eslint-disable-next-line
+    }, []);
+    useEffect(() => {
+        setProductData(getStoreState.processInfo.processData2);
+
+        // if (getStoreState.processInfo.processData1 !== '' || getStoreState.processInfo.processData2 !== '') {
+        //     setProductData(getStoreState.processInfo.processData2);
+        // };
+
+    }, [getStoreState.processInfo]);
+
 
     return (
         <BackGround>

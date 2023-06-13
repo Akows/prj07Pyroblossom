@@ -117,12 +117,12 @@ const GetProductList = (listCallType, itemPerPage, searchKeyword) => {
 
         const returnData = {
             processData1: {
-                firstOfPage: '',
-                lastOfPage: '',
-                firstOfAllList: '',
-                lastOfAllList: '',
+                firstOfPage: {},
+                lastOfPage: {},
+                firstOfAllList: {},
+                lastOfAllList: {},
             },
-            processData2: '',
+            processData2: [],
         };
 
         const calculateBothEndsIndex = async () => {
@@ -206,6 +206,48 @@ const GetProductList = (listCallType, itemPerPage, searchKeyword) => {
 
     };
 };
+
+const GetProductInfo = (productNumber) => {
+    return (dispatch, getState) => {
+        dispatch({ type: 'STORE_STATE_INIT' });
+        dispatch({ type: 'STORE_LOADING' });
+
+        console.log(productNumber);
+
+        const returnData = {
+            processData1: {
+                firstOfPage: {},
+                lastOfPage: {},
+                firstOfAllList: {},
+                lastOfAllList: {},
+            },
+            processData2: [],
+        };
+
+        const process = async () => {
+            const queryRef = query(storeCollectionRef, orderBy('number'), where('number', '==', productNumber), limit(1));
+        
+            const documentSnapshots = await getDocs(queryRef);
+
+            documentSnapshots.forEach((doc) => {
+                returnData.processData2 = doc.data();
+                console.log(doc.data());
+            });
+        };
+
+        process()
+        .then(() => {
+            dispatch({ type: 'STORE_COMPLETE' });
+            dispatch({ type: 'STORE_GET_PRODUCTLIST', payload: returnData});
+        })
+        .catch((error) => {
+            dispatch({ type: 'STORE_ERROR', payload: createErrorData(error) });
+        });
+
+    };
+};
+
+
 
 const UpdateProduct = (updateNeedData, productInfo, productOptionInfo, productImgFile, navigate) => {
     return (dispatch, getState) => {
@@ -343,7 +385,7 @@ const ChangeProductDisclosure = (productName, productDisclosure, navigate) => {
 
 
 
-export { Test1, AddProduct, GetProductList, UpdateProduct, ChangeProductDisclosure };
+export { Test1, AddProduct, GetProductList, GetProductInfo, UpdateProduct, ChangeProductDisclosure };
 
 
 
