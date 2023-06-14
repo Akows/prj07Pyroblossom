@@ -108,6 +108,7 @@ const Sildeshow = () => {
     const [tochedX, setTochedX] = useState(0);
     const [tochedY, setTochedY] = useState(0);
 
+    // 윈도우 클릭 제스쳐.
     const onMouseDown = (event) => {
         setMouseDownClientX(event.clientX);
         setMouseDownClientY(event.clientY);
@@ -129,6 +130,8 @@ const Sildeshow = () => {
             };
         }
     };
+
+    // 모바일 터치 제스쳐.
     const onTouchStart = (event) => {
         setTochedX(event.changedTouches[0].pageX);
         setTochedY(event.changedTouches[0].pageY);
