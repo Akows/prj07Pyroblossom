@@ -78,7 +78,7 @@ const StoreTitleArea = styled.div`
 
 `;
 const StoreSlideShowArea = styled.div`
-    width: 90%;
+    width: 100%;
     height: 400px;
 
     margin-top: 80px;

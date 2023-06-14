@@ -18,6 +18,13 @@ const BackGround = styled.div`
     flex-direction: row;
     justify-content: center;
     align-items: center;
+
+    -webkit-user-select:none;
+    -moz-user-select:none;
+    -ms-user-select:none;
+    user-select:none;
+
+    border: 2px red solid;
 `;
 
 const SildeButton = styled.img`
@@ -38,7 +45,7 @@ const SildeButton = styled.img`
 
 const SildeBlock = styled.div`
     width: 100%;
-    height: 600px;
+    height: 100%;
 
     display: flex; 
     flex-direction: column; 
@@ -49,9 +56,12 @@ const SildeBlock = styled.div`
 const SlideImg = styled.img`
     width: 400px;
     height: 400px;
+
+    touch-action: auto;  
 `;
 
 const SlidePointer = styled.div`
+    width: 100%;
     height: 10%;
 
     display: flex; 
@@ -60,6 +70,9 @@ const SlidePointer = styled.div`
     align-items: center;
 `;
 const PointerDots = styled.div`
+    width: 100%;
+    height: 100%;
+
     display: flex; 
     flex-direction: row;
     justify-content: center;
@@ -87,6 +100,71 @@ const Sildeshow = () => {
     const [currentSlide, setCurrentSlide] = useState(0);
     const [whatSlideIsShow, setWhatSlideIsShow] = useState(sildeImg1);
     const slideLength = 5;
+
+    const [mouseDownClientX, setMouseDownClientX] = useState(0);
+    const [mouseDownClientY, setMouseDownClientY] = useState(0);
+    const [mouseUpClientX, setMouseUpClientX] = useState(0);
+    const [mouseUpClientY, setMouseUpClientY] = useState(0);
+    const [tochedX, setTochedX] = useState(0);
+    const [tochedY, setTochedY] = useState(0);
+
+    const onMouseDown = (event) => {
+        setMouseDownClientX(event.clientX);
+        setMouseDownClientY(event.clientY);
+    };
+    const onMouseUp = (event) => {
+        setMouseUpClientX(event.clientX);
+        setMouseUpClientY(event.clientY);
+
+        const dragSpaceX = Math.abs(mouseDownClientX - mouseUpClientX);
+        const dragSpaceY = Math.abs(mouseDownClientY - mouseUpClientY);
+        const vector = dragSpaceX / dragSpaceY;
+
+        if (mouseDownClientX !== 0 && dragSpaceX > 100 && vector > 2) {
+            if (mouseUpClientX < mouseDownClientX) {
+                showSlide(currentSlide - 1);
+            }
+            else if (mouseUpClientX > mouseDownClientX) {
+                showSlide(currentSlide + 1);
+            };
+        }
+    };
+    const onTouchStart = (event) => {
+        setTochedX(event.changedTouches[0].pageX);
+        setTochedY(event.changedTouches[0].pageY);
+    };
+    const onTouchEnd = (event) => {
+        const distanceX = tochedX - event.changedTouches[0].pageX;
+        const distanceY = tochedY - event.changedTouches[0].pageY;
+        const vector = Math.abs(distanceX / distanceY);
+
+        if (distanceX > 30 && vector > 2) {
+            showSlide(currentSlide - 1);
+        }
+        else if (distanceX < -30 && vector > 2) {
+            showSlide(currentSlide + 1);
+        };
+    };
+
+    // useEffect(() => {
+
+    //     const dragSpaceX = Math.abs(mouseDownClientX - mouseUpClientX);
+    //     const dragSpaceY = Math.abs(mouseDownClientY - mouseUpClientY);
+    //     const vector = dragSpaceX / dragSpaceY;
+
+    //     console.log(dragSpaceX, dragSpaceY);
+
+    //     if (mouseDownClientX !== 0 && dragSpaceX > 100 && vector > 2) {
+    //         if (mouseUpClientX < mouseDownClientX) {
+    //             showSlide(currentSlide - 1);
+    //         }
+    //         else if (mouseUpClientX > mouseDownClientX) {
+    //             showSlide(currentSlide + 1);
+    //         };
+    //     }
+
+    //     // eslint-disable-next-line
+    // }, [mouseUpClientX]);
 
     const [isActive1, setIsActive1] = useState(false);
     const [isActive2, setIsActive2] = useState(false);
@@ -196,12 +274,16 @@ const Sildeshow = () => {
     }, 2000);
 
     return (
-        <BackGround>
+        <BackGround
+            onMouseDown={onMouseDown}
+            onMouseUp={onMouseUp}
+            onTouchEnd={onTouchEnd}
+            onTouchStart={onTouchStart}
+        >
 
             <SildeButton src={leftarrow} alt='' onClick={() => { showSlide(currentSlide - 1) }} />
 
             <SildeBlock>
-
                 <SlideImg src={whatSlideIsShow} />
 
                 <SlidePointer>
