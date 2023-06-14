@@ -514,7 +514,6 @@ export const ProductDetail = () => {
     const [whatCompoIsShow, setWhatCompoIsShow] = useState('review');
 
     const OtherInfoScrollMovePoint = useRef();
-
     const setWhatComponentsRender = (name) => {
         setWhatCompoIsShow(name);
         OtherInfoScrollMovePoint.current?.scrollIntoView({ behavior: 'smooth' });
@@ -523,20 +522,56 @@ export const ProductDetail = () => {
     const getStoreState = useSelector((state) => state.store);
     const [productData, setProductData] = useState([]);
 
-    const [purchaseList, setPurchaseList] = useState('');
-
+    const [purchaseOption, setpurchaseOption] = useState('');
+    const [purchaseList, setPurchaseList] = useState([]);
     const onSelectPurchaseOption = (event) => {
-        console.log(event.target.value);
-        setPurchaseList(event.target.value);
+
+        const data = {
+            optionNumber: '',
+            optionName: '',
+            optionPrice: '',
+        };
+
+        for (let [key, value] of Object.entries(productData[0]?.productOption)) {
+            if (event.target.value === value) {
+                data.optionNumber = key;
+                data.optionName = value;
+            };
+        };
+
+        for (let [key, value] of Object.entries(productData[0]?.productOptionSurchargePrice)) {
+            if (event.target.value === value) {
+                data.optionPrice = value;
+                console.log(key, value);
+            };
+        };
+
+
+        // productData[0]?.productOption.forEach((item) => {
+
+        // });
+
+
+        // if (event.target.value === productData[0]?.productOption.option1) {
+
+        // };
+
+
+
+        setPurchaseList([...purchaseList, data]);
     };
+
+
 
 
     useEffect(() => {
         dispatch(GetProductInfo(id));
         // eslint-disable-next-line
     }, []);
+
     useEffect(() => {
         setProductData(getStoreState.processInfo.processData2);
+        console.log(productData);
     }, [getStoreState.processInfo]);
 
 
@@ -591,38 +626,44 @@ export const ProductDetail = () => {
                                 <p>도서산간지역 {productData[0]?.deliveryFee}원</p>
                                 <hr />
 
-                                <PurchaseSelect value={purchaseList} onChange={onSelectPurchaseOption}>
+                                <PurchaseSelect onChange={onSelectPurchaseOption}>
                                     <option value=''>제품옵션선택</option>
-                                    {productData[0]?.productOption.option1 !== '옵션없음' && <option value='option1'>{productData[0]?.productOption.option1}</option>}
-                                    {productData[0]?.productOption.option2 !== '옵션없음' && <option value='option2'>{productData[0]?.productOption.option2}</option>}
-                                    {productData[0]?.productOption.option3 !== '옵션없음' && <option value='option3'>{productData[0]?.productOption.option3}</option>}
-                                    {productData[0]?.productOption.option4 !== '옵션없음' && <option value='option4'>{productData[0]?.productOption.option4}</option>}
-                                    {productData[0]?.productOption.option5 !== '옵션없음' && <option value='option5'>{productData[0]?.productOption.option5}</option>}
+                                    {productData[0]?.productOption.option1 !== '옵션없음' && <option value={productData[0]?.option1}>{productData[0]?.productOption.option1}</option>}
+                                    {productData[0]?.productOption.option2 !== '옵션없음' && <option value={productData[0]?.option2}>{productData[0]?.productOption.option2}</option>}
+                                    {productData[0]?.productOption.option3 !== '옵션없음' && <option value={productData[0]?.option3}>{productData[0]?.productOption.option3}</option>}
+                                    {productData[0]?.productOption.option4 !== '옵션없음' && <option value={productData[0]?.option4}>{productData[0]?.productOption.option4}</option>}
+                                    {productData[0]?.productOption.option5 !== '옵션없음' && <option value={productData[0]?.option5}>{productData[0]?.productOption.option5}</option>}
                                 </PurchaseSelect>
 
                             </PurchaseInfo>
 
-                            <PurchaseOption>
-                                <PurchaseOption1>
-                                    <p>통통폭탄인형</p>
+                            {purchaseList.map((item) => (
+                                <PurchaseOption key={item.optionNumber}>
 
-                                    <button>X</button>
-                                </PurchaseOption1>
+                                    {item.optionNumber}
 
-                                <PurchaseOption2>
+                                    <PurchaseOption1>
+                                        <p>{item.optionName}</p>
 
-                                    <div>
-                                        <button>-</button>
-                                        <p>0</p>
-                                        <button>+</button>
-                                    </div>
+                                        <button>X</button>
+                                    </PurchaseOption1>
 
-                                    <div>
-                                        <p>0원</p>
-                                    </div>
+                                    <PurchaseOption2>
 
-                                </PurchaseOption2>
-                            </PurchaseOption>
+                                        <div>
+                                            <button>-</button>
+                                            <p>0</p>
+                                            <button>+</button>
+                                        </div>
+
+                                        <div>
+                                            <p>{item.optionPrice}원</p>
+                                        </div>
+
+                                    </PurchaseOption2>
+                                </PurchaseOption>
+                            ))}
+
 
                             <PurchasePrice>
                                 <PurchasePrice1>

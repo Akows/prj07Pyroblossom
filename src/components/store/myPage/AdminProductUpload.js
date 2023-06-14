@@ -561,8 +561,6 @@ export const AdminProductUpload = ({ isLoading, updateData }) => {
         // updateData의 존재 유무를 판별.
         // updateData 객체의 keys의 length가 0이 아닐 경우에만 코드가 동작.
         if (Object.keys(updateData).length !== 0) {
-            console.log(updateData);
-
             setIsUpdate(true);
 
             setUpdateNeedData({
