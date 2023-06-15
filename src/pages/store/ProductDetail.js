@@ -7,7 +7,7 @@ import { QnA } from '../../components/store/productDetail/QnA';
 import { ProductInfomation } from '../../components/store/productDetail/ProductInfomation';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { GetProductInfo } from '../../redux/actions/storeAction';
+import { GetProductInfo, SavePurchaseData } from '../../redux/actions/storeAction';
 
 const SpecialCharacter = styled.p`
     margin-left: 2px;
@@ -524,6 +524,8 @@ export const ProductDetail = () => {
 
     const [purchaseList, setPurchaseList] = useState([]);
 
+    const [totalAmount, setTotalAmount] = useState(0);
+
     const onSelectPurchaseOption = (event) => {
 
         // 옵션선택문구는 옵션선택으로 간주되지 않도록 한번 걸러준다.
@@ -543,6 +545,7 @@ export const ProductDetail = () => {
             optionName: '',
             optionPrice: '',
             purchaseQuantity: 1,
+            totalAmount: 0,
         };
 
         for (let [key, value] of Object.entries(productData[0]?.productOption)) {
@@ -556,6 +559,7 @@ export const ProductDetail = () => {
         for (let [key, value] of Object.entries(productData[0]?.productOptionSurchargePrice)) {
             if (data.optionNumber === key) {
                 data.optionPrice = value;
+                data.totalAmount = value;
                 break;
             };
         };
@@ -575,10 +579,13 @@ export const ProductDetail = () => {
             if (data.purchaseQuantity < 1) {
                 alert('상품의 갯수는 1개 이상이어야합니다.');
                 data.purchaseQuantity = 1;
+                return;
             };
+            data.totalAmount = data.optionPrice * data.purchaseQuantity;
         }
         else if (type === '+') {
             data.purchaseQuantity += 1;
+            data.totalAmount = data.optionPrice * data.purchaseQuantity;
         };
 
         // 기존 배열의 optionNumber와 현재 제어중인 optionNumber를 비교하여..
@@ -601,6 +608,9 @@ export const ProductDetail = () => {
         );
     };
 
+    const onBuy = () => {
+        dispatch(SavePurchaseData(purchaseList, totalAmount));
+    };
 
     useEffect(() => {
         dispatch(GetProductInfo(id));
@@ -611,6 +621,15 @@ export const ProductDetail = () => {
         setProductData(getStoreState.processInfo.processData2);
     }, [getStoreState.processInfo]);
 
+    useEffect(() => {
+        let result = 0;
+
+        for (let value of purchaseList) {
+            result += value.totalAmount;
+        };
+
+        setTotalAmount(result);
+    }, [purchaseList]);
 
     return (
         <BackGround>
@@ -691,7 +710,7 @@ export const ProductDetail = () => {
                                         </div>
 
                                         <div>
-                                            <p>{item.optionPrice * item.purchaseQuantity}원</p>
+                                            <p>{item.totalAmount}원</p>
                                         </div>
 
                                     </PurchaseOption2>
@@ -704,11 +723,11 @@ export const ProductDetail = () => {
                                     전체 금액
                                 </PurchasePrice1>
                                 <PurchasePrice2>
-                                    <p>전체 수량 : 0개</p>
+                                    <p>선택 품목 : {purchaseList.length}개</p>
 
                                     <SpecialCharacter>&#124;</SpecialCharacter>
 
-                                    <p>0원</p>
+                                    <p>{totalAmount}원</p>
                                 </PurchasePrice2>
                             </PurchasePrice>
 
@@ -718,7 +737,7 @@ export const ProductDetail = () => {
                             </PurchaseUtil>
 
                             <PurchaseButton ref={OtherInfoScrollMovePoint}>
-                                <button onClick={() => navigate('/store/payment')}>구매하기</button>
+                                <button onClick={() => onBuy()}>구매하기</button>
                             </PurchaseButton>
                         </ProductPayInfo>
                     </ProductInfo>

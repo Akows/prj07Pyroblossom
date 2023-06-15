@@ -19,7 +19,7 @@ const ProductListButtonArea = styled.div`
 
     border-bottom: 1px solid gray;
 
-    & > p:nth-child(2) {
+    & > div:nth-child(2) {
         font-size: 18px;
 
         display: flex;
@@ -28,11 +28,11 @@ const ProductListButtonArea = styled.div`
         justify-content: center;
     };
 
-    & > p > p {
+    & > div > p {
         margin: 10px;
     };
 
-    & > p > p:nth-child(2) {
+    & > div > p:nth-child(2) {
         opacity: 0.4;
     };
 `;
@@ -401,11 +401,11 @@ export const OrderPurchase = ({ setWhatComponentIsShow }) => {
             <ProductListButtonArea>
                 <p>주문/결제</p>
 
-                <p>
+                <div>
                     <p>주문/결제</p>
                     {'>'}
                     <p>완료</p>
-                </p>
+                </div>
             </ProductListButtonArea>
 
             <ProductListArea>
@@ -440,11 +440,11 @@ export const OrderPurchase = ({ setWhatComponentIsShow }) => {
 
                         <div>
                             <input type="checkbox" id='formerdeliveryaddress' name='기존배송지' />
-                            <label for='formerdeliveryaddress'>기존 배송지</label>
+                            <label htmlFor='formerdeliveryaddress'>기존 배송지</label>
                         </div>
                         <div>
                             <input type="checkbox" id='newdeliveryaddress' name='신규배송지' />
-                            <label for='newdeliveryaddress'>신규 배송지</label>
+                            <label htmlFor='newdeliveryaddress'>신규 배송지</label>
                         </div>
                     </fieldset>
 
@@ -484,7 +484,7 @@ export const OrderPurchase = ({ setWhatComponentIsShow }) => {
                     <p>결제수단</p>
 
                     <PaymentWay>
-                        <input type='checkbox' checked /> <p>포인트 결제</p>
+                        <input type='checkbox' /> <p>포인트 결제</p>
                     </PaymentWay>
                 </PaymentMethod>
 

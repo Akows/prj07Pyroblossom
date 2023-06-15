@@ -20,7 +20,7 @@ const ProductListButtonArea = styled.div`
 
     border-bottom: 1px solid gray;
 
-    & > p:nth-child(2) {
+    & > div:nth-child(2) {
         font-size: 18px;
 
         display: flex;
@@ -29,11 +29,11 @@ const ProductListButtonArea = styled.div`
         justify-content: center;
     };
 
-    & > p > p {
+    & > div > p {
         margin: 10px;
     };
 
-    & > p > p:nth-child(1) {
+    & > div > p:nth-child(1) {
         opacity: 0.4;
     };
 `;
@@ -275,11 +275,11 @@ export const PurchaseComplete = () => {
             <ProductListButtonArea>
                 <p>주문/결제</p>
 
-                <p>
+                <div>
                     <p>주문/결제</p>
                     {'>'}
                     <p>완료</p>
-                </p>
+                </div>
             </ProductListButtonArea>
 
             <CompleteText>

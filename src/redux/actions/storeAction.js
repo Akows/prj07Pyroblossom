@@ -377,10 +377,25 @@ const ChangeProductDisclosure = (productName, productDisclosure, navigate) => {
     };
 };
 
+const SavePurchaseData = (purchaseList, totalAmount) => {
+    return (dispatch, getState) => {
+
+
+        console.log(purchaseList, totalAmount);
 
 
 
-export { Test1, AddProduct, GetProductList, GetProductInfo, UpdateProduct, ChangeProductDisclosure };
+        // dispatch({ type: 'STORE_STATE_INIT' });
+        // dispatch({ type: 'STORE_LOADING' });
+        // dispatch({ type: 'STORE_COMPLETE' });
+        // dispatch({ type: 'STORE_ERROR' });
+    };
+};
+
+
+
+
+export { Test1, AddProduct, GetProductList, GetProductInfo, UpdateProduct, ChangeProductDisclosure, SavePurchaseData };
 
 
 

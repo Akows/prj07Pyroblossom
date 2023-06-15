@@ -12,6 +12,7 @@ const initialState = {
         processData1: '',
         processData2: '',
     },
+    purchaseData: {}
 };
 
 const storeReducer = (prevState = initialState, action) => {
