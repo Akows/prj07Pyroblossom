@@ -177,6 +177,8 @@ const ProductImg = styled.div`
     justify-content: center;
     align-items: center;
 
+    opacity: ${(props) => props.isSale ? '0.3' : '1'};
+
     & > img {
         width: 100%;
         height: 250px;
@@ -185,9 +187,25 @@ const ProductImg = styled.div`
 const ProductTitle = styled.div`
     width: 100%;
     height: 20%;
+`;
+
+const ProductName = styled.div`
+    width: 100%;
+    height: 40%;
 
     font-size: 24px;
     color: #D3BC8E;
+
+    text-decoration: ${(props) => props.isSale ? 'line-through' : 'none'};
+`;
+
+const SoldOutMsg = styled.p`
+    font-size: 18px;
+    color: red;
+`;
+const SaleMsg = styled.p`
+    font-size: 18px;
+    color: green;
 `;
 
 export const StoreMain = () => {
@@ -239,14 +257,26 @@ export const StoreMain = () => {
 
                     {listData?.map(item => (
                         <Product key={item.number} onClick={() => navigate(`/store/productdetail/${item.name}`)}>
-                            <ProductImg>
+                            <ProductImg isSale={item.inventory <= 0}>
                                 <img src={`https://firebasestorage.googleapis.com/v0/b/prj07pyroblossom.appspot.com/o/productsImage%2F${item.name}%2F${item.productInformationFile.titleimage}?alt=media&token=bf2eff71-3c5e-4dc2-9706-445f95fd91e8`} alt='' />
                             </ProductImg>
 
                             <hr />
 
                             <ProductTitle>
-                                {item.name}
+
+                                <ProductName isSale={item.inventory <= 0}>
+                                    {item.name}
+                                </ProductName>
+
+                                <div>
+                                    {item.inventory <= 0 ?
+                                        <SoldOutMsg>품절</SoldOutMsg>
+                                        :
+                                        <SaleMsg>판매중</SaleMsg>
+                                    }
+                                </div>
+
                             </ProductTitle>
                         </Product>
                     ))}
