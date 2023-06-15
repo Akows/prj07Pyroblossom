@@ -522,46 +522,84 @@ export const ProductDetail = () => {
     const getStoreState = useSelector((state) => state.store);
     const [productData, setProductData] = useState([]);
 
-    const [purchaseOption, setpurchaseOption] = useState('');
     const [purchaseList, setPurchaseList] = useState([]);
+
     const onSelectPurchaseOption = (event) => {
+
+        // 옵션선택문구는 옵션선택으로 간주되지 않도록 한번 걸러준다.
+        if (event.target.value === '') {
+            return;
+        };
+
+        // 한번 선택된 옵션이 다시 선택되지 않도록 걸러준다.
+        for (let value of purchaseList) {
+            if (event.target.value === value.optionName) {
+                return;
+            };
+        };
 
         const data = {
             optionNumber: '',
             optionName: '',
             optionPrice: '',
+            purchaseQuantity: 1,
         };
 
         for (let [key, value] of Object.entries(productData[0]?.productOption)) {
             if (event.target.value === value) {
                 data.optionNumber = key;
                 data.optionName = value;
+                break;
             };
         };
 
         for (let [key, value] of Object.entries(productData[0]?.productOptionSurchargePrice)) {
-            if (event.target.value === value) {
+            if (data.optionNumber === key) {
                 data.optionPrice = value;
-                console.log(key, value);
+                break;
             };
         };
-
-
-        // productData[0]?.productOption.forEach((item) => {
-
-        // });
-
-
-        // if (event.target.value === productData[0]?.productOption.option1) {
-
-        // };
-
-
 
         setPurchaseList([...purchaseList, data]);
     };
 
+    const onPurchaseQuantity = (type, item) => {
 
+        // 깊은 복사로 item 객체를 복사.
+        const data = JSON.parse(JSON.stringify(item));
+
+        // 변경된 갯수값을 반영.
+        if (type === '-') {
+            data.purchaseQuantity -= 1;
+
+            if (data.purchaseQuantity < 1) {
+                alert('상품의 갯수는 1개 이상이어야합니다.');
+                data.purchaseQuantity = 1;
+            };
+        }
+        else if (type === '+') {
+            data.purchaseQuantity += 1;
+        };
+
+        // 기존 배열의 optionNumber와 현재 제어중인 optionNumber를 비교하여..
+        // 동일한 경우에는 새롭게 만든 data가 기존의 요소를 대체하도록 한다.
+        const itemNumber = item.optionNumber;
+        setPurchaseList(
+            purchaseList.map((item) =>
+                item.optionNumber === itemNumber ? data : item
+            )
+        );
+    };
+
+    const onOptionDelete = (item) => {
+        const itemNumber = item.optionNumber;
+
+        setPurchaseList(
+            purchaseList.filter((item) =>
+                item.optionNumber !== itemNumber
+            )
+        );
+    };
 
 
     useEffect(() => {
@@ -571,7 +609,6 @@ export const ProductDetail = () => {
 
     useEffect(() => {
         setProductData(getStoreState.processInfo.processData2);
-        console.log(productData);
     }, [getStoreState.processInfo]);
 
 
@@ -639,25 +676,22 @@ export const ProductDetail = () => {
 
                             {purchaseList.map((item) => (
                                 <PurchaseOption key={item.optionNumber}>
-
-                                    {item.optionNumber}
-
                                     <PurchaseOption1>
                                         <p>{item.optionName}</p>
 
-                                        <button>X</button>
+                                        <button onClick={() => onOptionDelete(item)}>X</button>
                                     </PurchaseOption1>
 
                                     <PurchaseOption2>
 
                                         <div>
-                                            <button>-</button>
-                                            <p>0</p>
-                                            <button>+</button>
+                                            <button onClick={() => onPurchaseQuantity('-', item)}>-</button>
+                                            <p>{item.purchaseQuantity}</p>
+                                            <button onClick={() => onPurchaseQuantity('+', item)}>+</button>
                                         </div>
 
                                         <div>
-                                            <p>{item.optionPrice}원</p>
+                                            <p>{item.optionPrice * item.purchaseQuantity}원</p>
                                         </div>
 
                                     </PurchaseOption2>
