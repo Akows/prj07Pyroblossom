@@ -609,7 +609,9 @@ export const ProductDetail = () => {
     };
 
     const onBuy = () => {
-        dispatch(SavePurchaseData(purchaseList, totalAmount));
+        alert('구매하기');
+
+        // dispatch(SavePurchaseData(purchaseList, totalAmount));
     };
 
     useEffect(() => {
@@ -736,8 +738,12 @@ export const ProductDetail = () => {
                                 <button>장바구니</button>
                             </PurchaseUtil>
 
-                            <PurchaseButton ref={OtherInfoScrollMovePoint}>
-                                <button onClick={() => onBuy()}>구매하기</button>
+                            <PurchaseButton ref={OtherInfoScrollMovePoint} isSale={productData[0]?.inventory <= 0}>
+                                {productData[0]?.inventory <= 0 ?
+                                    <button>품절</button>
+                                    :
+                                    <button onClick={() => onBuy()}>구매하기</button>
+                                }
                             </PurchaseButton>
                         </ProductPayInfo>
                     </ProductInfo>
