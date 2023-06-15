@@ -54,6 +54,7 @@ const storeReducer = (prevState = initialState, action) => {
                 draft.processInfo.processMessage = action.payload.errorMessage;
                 draft.processInfo.processData1 = '';
                 draft.processInfo.processData2 = '';
+                draft.processInfo.purchaseData = {};
                 break;
 
             case 'STORE_RENDERING_ON':
@@ -70,7 +71,12 @@ const storeReducer = (prevState = initialState, action) => {
                 draft.processInfo.processData2 = action.payload.processData2;
                 break;
 
-
+            case 'STORE_SAVE_PURCHASEDATA':
+                draft.processInfo.purchaseData = action.payload;
+                break;
+            case 'STORE_CLEAN_PURCHASEDATA':
+                draft.processInfo.purchaseData = {};
+                break;
 
 
 
