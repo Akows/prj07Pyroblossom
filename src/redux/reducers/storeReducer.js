@@ -72,10 +72,10 @@ const storeReducer = (prevState = initialState, action) => {
                 break;
 
             case 'STORE_SAVE_PURCHASEDATA':
-                draft.processInfo.purchaseData = action.payload;
+                draft.purchaseData = action.payload;
                 break;
             case 'STORE_CLEAN_PURCHASEDATA':
-                draft.processInfo.purchaseData = {};
+                draft.purchaseData = {};
                 break;
 
 

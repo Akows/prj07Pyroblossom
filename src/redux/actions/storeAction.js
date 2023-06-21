@@ -397,17 +397,20 @@ const ChangeProductDisclosure = (productName, productDisclosure, navigate) => {
     };
 };
 
-const SavePurchaseData = (purchaseList, totalAmount) => {
+const BuyPurchaseData = (purchaseList, totalQuantity, totalAmount, navigate) => {
     return (dispatch, getState) => {
         dispatch({ type: 'STORE_STATE_INIT' });
         dispatch({ type: 'STORE_LOADING' });
 
         const data = {
             purchaseList: purchaseList,
-            totalAmount: totalAmount
+            totalQuantity: totalQuantity,
+            totalAmount: totalAmount,
         };
 
         dispatch({ type: 'STORE_SAVE_PURCHASEDATA', payload: data });
+        navigate('/store/payment', { replace: true });
+
         dispatch({ type: 'STORE_COMPLETE' });
     };
 };
@@ -415,7 +418,7 @@ const SavePurchaseData = (purchaseList, totalAmount) => {
 
 
 
-export { Test1, AddProduct, GetProductList, GetProductInfo, UpdateProduct, ChangeProductDisclosure, SavePurchaseData };
+export { Test1, AddProduct, GetProductList, GetProductInfo, UpdateProduct, ChangeProductDisclosure, BuyPurchaseData };
 
 
 

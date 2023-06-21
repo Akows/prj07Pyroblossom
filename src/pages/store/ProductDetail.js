@@ -502,7 +502,6 @@ const OtherInfoComponentArea = styled.div`
     height: 100%;
 
     margin-top: 20px;
-
 `;
 
 export const ProductDetail = () => {
@@ -559,8 +558,8 @@ export const ProductDetail = () => {
 
         for (let [key, value] of Object.entries(productData[0]?.productOptionSurchargePrice)) {
             if (data.optionNumber === key) {
-                data.optionPrice = value;
-                data.totalAmount = value;
+                data.optionPrice = value - (value * productData[0]?.discountRate / 100);
+                data.totalAmount = value - (value * productData[0]?.discountRate / 100);
                 break;
             };
         };
@@ -631,6 +630,11 @@ export const ProductDetail = () => {
     };
 
     const onBuy = () => {
+        if (purchaseList.length === 0) {
+            alert('하나 이상의 옵션을 선택해야합니다.');
+            return;
+        };
+
         dispatch(BuyPurchaseData(purchaseList, totalQuantity, totalAmount, navigate));
     };
 

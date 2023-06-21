@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { OrderPurchase } from '../../components/store/payment/OrderPurchase';
 import { PurchaseComplete } from '../../components/store/payment/PurchaseComplete';
@@ -32,19 +32,30 @@ const InnerContents = styled.div`
 
 export const PaymentPage = () => {
 
-    const { data } = useLocation();
+    // const { data } = useLocation();
 
-    useEffect(() => {
-        console.log(data);
-    }, [data]);
+    // useEffect(() => {
+    //     console.log(data);
+    // }, [data]);
 
     const [whatComponentIsShow, setWhatComponentIsShow] = useState('orderpurchase');
+
+
+
+    const getStoreState = useSelector((state) => state.store);
+    const [purchaseData, setPurchaseData] = useState({});
+    const [productData, setProductData] = useState({});
+
+    useEffect(() => {
+        setPurchaseData(getStoreState.purchaseData);
+        setProductData(getStoreState.processInfo.processData2);
+    }, [getStoreState.purchaseData]);
 
     return (
         <BackGround>
             <InnerContents>
 
-                {whatComponentIsShow === 'orderpurchase' && <OrderPurchase setWhatComponentIsShow={setWhatComponentIsShow} />}
+                {whatComponentIsShow === 'orderpurchase' && <OrderPurchase setWhatComponentIsShow={setWhatComponentIsShow} purchaseData={purchaseData} productData={productData} />}
 
                 {whatComponentIsShow === 'purchasecomplete' && <PurchaseComplete />}
 

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components';
 
 import productimg from '../../../assets/images/testImg/testproductimg.jpg';
@@ -101,9 +101,11 @@ const DeliveryInfo = styled.div`
     height: 50px;
 
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
+
+    margin-bottom: 20px;
 
     & > p {
         font-size: 18px;
@@ -383,18 +385,27 @@ const PaymentSubmit = styled.div`
 
 
 
-export const OrderPurchase = ({ setWhatComponentIsShow }) => {
+export const OrderPurchase = ({ setWhatComponentIsShow, purchaseData, productData }) => {
+
+    const [purchaseDatas, setPurchaseDatas] = useState([]);
 
     const onSubmit = () => {
-        const submitCheck = window.confirm('결제하시겠습니까?');
+        console.log(purchaseData);
+        console.log(productData);
 
-        if (!submitCheck) {
-            return;
-        }
-        else {
-            setWhatComponentIsShow('purchasecomplete');
-        };
+        // const submitCheck = window.confirm('결제하시겠습니까?');
+
+        // if (!submitCheck) {
+        //     return;
+        // }
+        // else {
+        //     setWhatComponentIsShow('purchasecomplete');
+        // };
     };
+
+    useEffect(() => {
+        setPurchaseDatas(purchaseData.purchaseList);
+    }, [purchaseData]);
 
     return (
         <>
@@ -409,28 +420,35 @@ export const OrderPurchase = ({ setWhatComponentIsShow }) => {
             </ProductListButtonArea>
 
             <ProductListArea>
-                <ProductInfo>
 
-                    <ProductImg>
-                        <img src={productimg} alt='' />
-                    </ProductImg>
-                    <PurchaseInfo>
+                {purchaseDatas?.map((item) => (
+                    <ProductInfo key={item.optionNumber}>
 
-                        <PurchaseName>
-                            <p>통통폭탄인형</p>
-                        </PurchaseName>
-                        <DeliveryInfo>
-                            <p>무료배송</p>
-                            <p>1개</p>
-                        </DeliveryInfo>
-                        <PurchasePrice>
-                            <p>(-) 5,000원</p>
-                            <p>40,000원</p>
-                        </PurchasePrice>
+                        <ProductImg>
+                            <img src={`https://firebasestorage.googleapis.com/v0/b/prj07pyroblossom.appspot.com/o/productsImage%2F${productData[0].name}%2F${productData[0]?.productInformationFile.titleimage}?alt=media&token=bf2eff71-3c5e-4dc2-9706-445f95fd91e8`} alt='' />
+                        </ProductImg>
+                        <PurchaseInfo>
 
-                    </PurchaseInfo>
+                            <PurchaseName>
+                                <p>{item.optionName}</p>
+                            </PurchaseName>
+                            <DeliveryInfo>
+                                <p>구매수량 : {item.purchaseQuantity}개</p>
+                                {productData[0]?.deliveryFee === 0 ? <p>무료배송</p> : <p>배송료 : {productData[0]?.deliveryFee}원</p>}
+                            </DeliveryInfo>
+                            <PurchasePrice>
+                                {productData[0]?.price > item.optionPrice ? <p>(-) {productData[0]?.discountRate}%</p> : <p></p>}
+                                <p>{item.totalAmount}원</p>
+                            </PurchasePrice>
 
-                </ProductInfo>
+                        </PurchaseInfo>
+
+                    </ProductInfo>
+                ))}
+
+
+
+
 
 
 
@@ -472,10 +490,10 @@ export const OrderPurchase = ({ setWhatComponentIsShow }) => {
                     <p>결제상세</p>
 
                     <PriceInfo>
-                        <p>주문금액 : 30,000원</p>
-                        <p>배송비 : 0원</p>
-                        <p>할인 : 5,000원</p>
-                        <p>결제금액 : 25,000원</p>
+                        <p>주문금액 : {purchaseData.totalAmount}원</p>
+                        <p>배송비 : {productData[0]?.deliveryFee}원</p>
+                        <p></p>
+                        <p>결제금액 : {purchaseData.totalAmount + parseInt(productData[0]?.deliveryFee)}원</p>
                     </PriceInfo>
 
                 </BuyerBenefit>
@@ -484,7 +502,7 @@ export const OrderPurchase = ({ setWhatComponentIsShow }) => {
                     <p>결제수단</p>
 
                     <PaymentWay>
-                        <input type='checkbox' /> <p>포인트 결제</p>
+                        <input type='checkbox' value='' checked /> <p>포인트 결제</p>
                     </PaymentWay>
                 </PaymentMethod>
 
