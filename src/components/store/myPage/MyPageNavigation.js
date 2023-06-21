@@ -83,10 +83,10 @@ export const MyPageNavigation = ({ isAdminLogin }) => {
         <Background>
 
             <LogoAndCompoButton>
-                <Link to='/'>
-                    <img src={Imagesrc1} alt='' />
-                </Link>
 
+                <Link to='/store'>
+                    <img src={Imagesrc2} alt='' />
+                </Link>
                 <NavText>
                     {isAdminLogin && '관리페이지'}
                     {!isAdminLogin && '마이페이지'}
@@ -95,13 +95,10 @@ export const MyPageNavigation = ({ isAdminLogin }) => {
 
             <NavUtilButton>
 
-                <Link to='/store'>
-                    <img src={Imagesrc2} alt='' />
+                <Link to='/'>
+                    <img src={Imagesrc1} alt='' />
                 </Link>
 
-                <NavText>
-                    스토어
-                </NavText>
             </NavUtilButton>
 
         </Background>

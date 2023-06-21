@@ -137,6 +137,7 @@ export const PointChargeModal = ({ userData, isShowModal, setIsShowModal }) => {
     const [isChargePointEmpty, setIsChargePointEmpty] = useState(false);
     const [isChargePointRewriteEmpty, setIsChargePointRewriteEmpty] = useState(false);
 
+    // eslint-disable-next-line
     const [isFirstRenderingChargePoint, setIsFirstRenderingChargePoint] = useState(true);
     const [isFirstRenderingChargePointRewrite, setIsFirstRenderingChargePointRewrite] = useState(true);
 
@@ -187,6 +188,8 @@ export const PointChargeModal = ({ userData, isShowModal, setIsShowModal }) => {
         }
         else {
             dispatch(ChargePoint(userData.email, chargePointRewrite, navigate));
+            setChargePoint(0);
+            setChargePointRewrite(0);
             setIsShowModal(false);
         };
     };

@@ -511,8 +511,10 @@ const ChargePoint = (userEmail, chargePoint, navigate) => {
 
         updataUserInfo()
         .then(() => {
+            dispatch({ type: 'STORE_COMPLETE' });
+            dispatch({ type: 'STORE_RENDERING_ON' });
             alert(`${chargePoint}원이 충전되었습니다.`);
-            navigate('/store', { replace: true });
+            navigate('/store/mypage', { replace: true });
         })
         .catch((error) => {
             dispatch({ type: 'ERROR', payload: createErrorData(error) });

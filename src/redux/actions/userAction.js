@@ -306,10 +306,12 @@ const GetUserData = (email) => {
             .then((result) => {
                 dispatch({ type: 'COMPLETE' });
                 dispatch({ type: 'LOG_IN_SUCCESS', payload: result });
+                dispatch({ type: 'STORE_RENDERING_OFF' });
 
             })
             .catch((error) => {
                 dispatch({ type: 'ERROR', payload: createErrorData(error) });
+                dispatch({ type: 'STORE_RENDERING_OFF' });
             });
 
     };

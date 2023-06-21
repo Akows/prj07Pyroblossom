@@ -173,15 +173,6 @@ const KeywordButtonArea = styled.div`
     align-items: center;
     justify-content: center;
 `;
-const MyPageButtonArea = styled.div`
-    width: 100%;
-    height: 50%;
-
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-end;
-`;
 
 const KeywordButton = styled.button`
     width: 100px;
@@ -200,33 +191,6 @@ const KeywordButton = styled.button`
         font-size: 12px;
     }
 `;
-const MyShoppingButton = styled.button`
-    width: 100px;
-    height: 85%;
-
-    margin-right: 5px;
-
-    border: 2px solid #535B6C;
-    border-radius: 15px;
-    background-color: #50596B;
-
-    font-family: 'GIFont';
-    font-size: 16px;
-    color: #D3BC8E;
-`;
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 const NavArea = styled.div`
     height: 100%;
@@ -447,11 +411,6 @@ export const StoreNavigation = () => {
         setSearchKeyword(event.target.value);
     };
 
-    const onLinkMyPage = () => {
-        navigate('/store/mypage');
-        setIsCategoryShow(false);
-    };
-
     const onSearch = (keyword) => {
         if (!searchKeyword) {
             alert('검색어를 입력해주세요.');
@@ -500,15 +459,9 @@ export const StoreNavigation = () => {
 
                                         {getUserState.flagvalue.isLogin ?
                                             <UserMenuSub>
-                                                {getUserState.userdata.displayName === '관리자' ?
-                                                    <Link to='user/adminpage'>
-                                                        <AiOutlineUser size={40} color='#D3BC8E' />
-                                                    </Link>
-                                                    :
-                                                    <Link to='user/mypage'>
-                                                        <AiOutlineUser size={40} color='#D3BC8E' />
-                                                    </Link>
-                                                }
+                                                <Link to='/store/mypage'>
+                                                    <AiOutlineUser size={40} color='#D3BC8E' />
+                                                </Link>
                                                 <FiLogOut onClick={logOuts} size={40} />
                                             </UserMenuSub>
                                             :
@@ -550,23 +503,9 @@ export const StoreNavigation = () => {
                         {getUserState.flagvalue.isLogin ?
                             <>
                                 <UserMenu>
-                                    {getUserState.userdata.displayName === 'Admin' ?
-                                        <>
-                                            <Link to='/user/adminpage'>
-                                                <AiOutlineUser size={40} color='#D3BC8E' />
-                                            </Link>
-                                        </>
-                                        :
-                                        <>
-                                            <Link to='/user/mypage'>
-                                                <AiOutlineUser size={40} color='#D3BC8E'
-                                                // HTML 내부에서 Hover Event를 이용하는 방법.
-                                                // onMouseOver={({ target }) => target.style.color = '#D3BC8E'}
-                                                // onMouseOut={({ target }) => target.style.color = '#D3BC8E'}
-                                                />
-                                            </Link>
-                                        </>
-                                    }
+                                    <Link to='/store/mypage'>
+                                        <AiOutlineUser size={40} color='#D3BC8E' />
+                                    </Link>
                                     <Link to=''>
                                         <FiLogOut onClick={logOuts} size={40} color='#D3BC8E' />
                                     </Link>
@@ -595,12 +534,6 @@ export const StoreNavigation = () => {
                     </CategoryButton>
 
                     <CategoryList isCategoryShow={isCategoryShow}>
-                        <MyPageButtonArea>
-                            <MyShoppingButton onClick={onLinkMyPage}>
-                                마이페이지
-                            </MyShoppingButton>
-                        </MyPageButtonArea>
-
                         <KeywordButtonArea>
                             <KeywordButton onClick={() => onCategorySearch('케이스')}>케이스</KeywordButton>
                             <KeywordButton onClick={() => onCategorySearch('패드')}>패드</KeywordButton>

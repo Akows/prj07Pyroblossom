@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { Loading } from '../../components/Loading';
 import { PointChargeModal } from '../../components/store/PointChargeModal';
@@ -11,6 +11,7 @@ import { PointHistory } from '../../components/store/myPage/PointHistory';
 
 import { PurchaseHistory } from '../../components/store/myPage/PurchaseHistory';
 import { ShoppingBasket } from '../../components/store/myPage/ShoppingBasket';
+import { GetUserData } from '../../redux/actions/userAction';
 
 const BackGround = styled.div`
     width: 100%;
@@ -245,8 +246,11 @@ const AdminCompoButton = styled.div`
 
 export const StoreMyPage = () => {
 
+    const dispatch = useDispatch();
     const getUserState = useSelector((state) => state.user);
     const getStoreState = useSelector((state) => state.store);
+
+    const [userDatas, setUserDatas] = useState();
 
     const [isAdminLogin, setIsAdminLogin] = useState(false);
 
@@ -263,10 +267,22 @@ export const StoreMyPage = () => {
     };
 
     useEffect(() => {
+        dispatch(GetUserData(getUserState.userdata.email));
+
         if (getUserState.userdata.displayName === 'Admin') {
             setIsAdminLogin(true);
             setWhatCompoIsShow('productmanage');
+        }
+        else {
+            setIsAdminLogin(false);
+            setWhatCompoIsShow('history');
         };
+
+        // eslint-disable-next-line
+    }, [getStoreState.flagValue.isRendering]);
+
+    useEffect(() => {
+        setUserDatas(getUserState.userdata);
     }, [getUserState.userdata])
 
     useEffect(() => {
@@ -292,12 +308,12 @@ export const StoreMyPage = () => {
                         <UserProfile>
 
                             <UserInfo>
-                                <p>Member01님!</p>
-                                <p>Member01@Member01.com</p>
+                                <p>{userDatas?.name}님!</p>
+                                <p>{userDatas?.email}</p>
                             </UserInfo>
                             <UserPoint>
                                 <p>귀하의 포인트는</p>
-                                <p>34,090p입니다.</p>
+                                <p>{userDatas?.point}P입니다.</p>
                             </UserPoint>
                             <UserPointRecharge>
                                 <button onClick={() => setIsShowModal(true)}>포인트 충전하기</button>
@@ -382,7 +398,7 @@ export const StoreMyPage = () => {
                 </AdminInnerContents>
             }
 
-            <PointChargeModal isShowModal={isShowModal} setIsShowModal={setIsShowModal} />
+            <PointChargeModal userData={userDatas} isShowModal={isShowModal} setIsShowModal={setIsShowModal} />
 
         </BackGround >
     );
