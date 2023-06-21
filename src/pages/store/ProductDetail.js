@@ -7,7 +7,7 @@ import { QnA } from '../../components/store/productDetail/QnA';
 import { ProductInfomation } from '../../components/store/productDetail/ProductInfomation';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { GetProductInfo, BuyPurchaseData } from '../../redux/actions/storeAction';
+import { GetProductInfo, GoToPurchasePage } from '../../redux/actions/storeAction';
 
 const SpecialCharacter = styled.p`
     margin-left: 2px;
@@ -635,7 +635,7 @@ export const ProductDetail = () => {
             return;
         };
 
-        dispatch(BuyPurchaseData(purchaseList, totalQuantity, totalAmount, navigate));
+        dispatch(GoToPurchasePage(purchaseList, totalQuantity, totalAmount, navigate));
     };
 
     useEffect(() => {

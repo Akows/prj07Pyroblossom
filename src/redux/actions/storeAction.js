@@ -1,7 +1,7 @@
 import { deleteDoc, doc, endBefore, getCountFromServer, getDoc, getDocs, limit, limitToLast, orderBy, query, setDoc, startAfter, updateDoc, where } from 'firebase/firestore';
 import { ref, uploadBytes } from 'firebase/storage';
 import { createErrorData } from '../../configs/errorCodes';
-import { timeStamp, storeCollectionRef, storageRef } from '../../configs/firebase/config'
+import { timeStamp, storeCollectionRef, storageRef, userCollectionRef, purchaseRecordCollectionRef } from '../../configs/firebase/config'
 import { productOptionInfoProcess } from '../../functions/storeFunction';
 
 const Test1 = () => {
@@ -391,13 +391,13 @@ const ChangeProductDisclosure = (productName, productDisclosure, navigate) => {
             })
             .catch((error) => {
                 dispatch({ type: 'STORE_ERROR', payload: createErrorData(error) });
-                alert('제품 상태 과정에서 에러가 발생하였습니다.');
+                alert('제품 상태 변경 과정에서 에러가 발생하였습니다.');
                 navigate('/store/mypage', { replace: true });
             });
     };
 };
 
-const BuyPurchaseData = (purchaseList, totalQuantity, totalAmount, navigate) => {
+const GoToPurchasePage = (purchaseList, totalQuantity, totalAmount, navigate) => {
     return (dispatch, getState) => {
         dispatch({ type: 'STORE_STATE_INIT' });
         dispatch({ type: 'STORE_LOADING' });
@@ -409,16 +409,76 @@ const BuyPurchaseData = (purchaseList, totalQuantity, totalAmount, navigate) => 
         };
 
         dispatch({ type: 'STORE_SAVE_PURCHASEDATA', payload: data });
-        navigate('/store/payment', { replace: true });
-
         dispatch({ type: 'STORE_COMPLETE' });
+        
+        navigate('/store/payment', { replace: true });
+    };
+};
+
+const PurchaseProduct = (purchaseData, productData, userData, navigate) => {
+    return (dispatch, getState) => {
+        dispatch({ type: 'STORE_STATE_INIT' });
+        dispatch({ type: 'STORE_LOADING' });
+
+        // 구매 기록을 저장.
+        const addRecord = async () => {
+            const querys = query(purchaseRecordCollectionRef);
+            const allPurchaseRecordCount = await getCountFromServer(querys);
+
+            const docRef = doc(purchaseRecordCollectionRef, toString(allPurchaseRecordCount.data().count + 1));
+
+            const createdTime = timeStamp.fromDate(new Date());
+
+            await setDoc(docRef,
+                {
+                    userName: userData.email,
+                    address: userData.address,
+                    address2: userData.address2,
+                    date: createdTime,
+                    purchaseData: purchaseData,
+                }
+            );
+        };
+
+        // 유저 데이터의 포인트 값을 수정.
+        const updataUserInfo = async () => {
+            const docRef = doc(userCollectionRef, userData.email);
+            const docSnap = await getDoc(docRef);
+
+            const beforePoint = docSnap.data().point;
+
+            console.log(beforePoint);
+            console.log(beforePoint - purchaseData.totalAmount);
+
+            await setDoc(docRef, {
+                point: beforePoint - purchaseData.totalAmount,
+            }, { merge: true });
+        };
+
+        addRecord()
+        .then(() => {
+            updataUserInfo()
+            .then(() => {
+                dispatch({ type: 'STORE_COMPLETE' });
+            })
+            .catch((error) => {
+                dispatch({ type: 'STORE_ERROR', payload: createErrorData(error) });
+                // navigate('/store/mypage', { replace: true });
+            });
+        })
+        .catch((error) => {
+            dispatch({ type: 'STORE_ERROR', payload: createErrorData(error) });
+            // navigate('/store/mypage', { replace: true });
+        });
+
     };
 };
 
 
 
 
-export { Test1, AddProduct, GetProductList, GetProductInfo, UpdateProduct, ChangeProductDisclosure, BuyPurchaseData };
+
+export { Test1, AddProduct, GetProductList, GetProductInfo, UpdateProduct, ChangeProductDisclosure, GoToPurchasePage, PurchaseProduct };
 
 
 

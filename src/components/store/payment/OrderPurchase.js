@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components';
 
-import productimg from '../../../assets/images/testImg/testproductimg.jpg';
-
 const ProductListButtonArea = styled.div`
     width: 90%;
     height: 50px;
@@ -385,27 +383,27 @@ const PaymentSubmit = styled.div`
 
 
 
-export const OrderPurchase = ({ setWhatComponentIsShow, purchaseData, productData }) => {
+export const OrderPurchase = ({ setWhatComponentIsShow, purchaseData, productData, userData, onPurchase }) => {
 
     const [purchaseDatas, setPurchaseDatas] = useState([]);
+    const [userDatas, setUserDatas] = useState([]);
 
     const onSubmit = () => {
-        console.log(purchaseData);
-        console.log(productData);
 
-        // const submitCheck = window.confirm('결제하시겠습니까?');
+        const submitCheck = window.confirm('결제하시겠습니까?');
 
-        // if (!submitCheck) {
-        //     return;
-        // }
-        // else {
-        //     setWhatComponentIsShow('purchasecomplete');
-        // };
+        if (!submitCheck) {
+            return;
+        }
+        else {
+            onPurchase(purchaseData, productData, userData);
+        };
     };
 
     useEffect(() => {
         setPurchaseDatas(purchaseData.purchaseList);
-    }, [purchaseData]);
+        setUserDatas(userData);
+    }, [purchaseData, userData]);
 
     return (
         <>
@@ -446,18 +444,12 @@ export const OrderPurchase = ({ setWhatComponentIsShow, purchaseData, productDat
                     </ProductInfo>
                 ))}
 
-
-
-
-
-
-
                 <ShippingAddress>
                     <fieldset>
                         <legend>배송지 정보</legend>
 
                         <div>
-                            <input type="checkbox" id='formerdeliveryaddress' name='기존배송지' />
+                            <input type="checkbox" id='formerdeliveryaddress' name='기존배송지' checked />
                             <label htmlFor='formerdeliveryaddress'>기존 배송지</label>
                         </div>
                         <div>
@@ -468,8 +460,8 @@ export const OrderPurchase = ({ setWhatComponentIsShow, purchaseData, productDat
 
                     <DeliveryAddress>
                         <input />
-                        <input />
-                        <input />
+                        <input value={userDatas.address} />
+                        <input value={userDatas.address2} />
                     </DeliveryAddress>
 
                 </ShippingAddress>
@@ -478,17 +470,6 @@ export const OrderPurchase = ({ setWhatComponentIsShow, purchaseData, productDat
                 <BuyerBenefit>
                     <p>할인 및 최종결제 내용</p>
 
-                    <PointInfo>
-                        <p>보유 포인트 : 3000p</p>
-
-                        <PointUse>
-                            <p>사용 :</p> <input /> <button>전액사용</button>
-                        </PointUse>
-
-                    </PointInfo>
-
-                    <p>결제상세</p>
-
                     <PriceInfo>
                         <p>주문금액 : {purchaseData.totalAmount}원</p>
                         <p>배송비 : {productData[0]?.deliveryFee}원</p>
@@ -496,13 +477,22 @@ export const OrderPurchase = ({ setWhatComponentIsShow, purchaseData, productDat
                         <p>결제금액 : {purchaseData.totalAmount + parseInt(productData[0]?.deliveryFee)}원</p>
                     </PriceInfo>
 
+                    <PointInfo>
+                        <p>보유 포인트 : {userDatas.point}P</p>
+
+                        <PointUse>
+                            <p>사용 :</p> <input value={purchaseData.totalAmount + parseInt(productData[0]?.deliveryFee)} />
+                        </PointUse>
+
+                    </PointInfo>
+
                 </BuyerBenefit>
 
                 <PaymentMethod>
                     <p>결제수단</p>
 
                     <PaymentWay>
-                        <input type='checkbox' value='' checked /> <p>포인트 결제</p>
+                        <input type='checkbox' value='' readOnly checked /> <p>포인트 결제</p>
                     </PaymentWay>
                 </PaymentMethod>
 

@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { ErrorModal } from '../../components/ErrorModal';
+import { Loading } from '../../components/Loading';
 import { OrderPurchase } from '../../components/store/payment/OrderPurchase';
 import { PurchaseComplete } from '../../components/store/payment/PurchaseComplete';
+import { PurchaseProduct } from '../../redux/actions/storeAction';
+import { GetUserData } from '../../redux/actions/userAction';
 
 const BackGround = styled.div`
     width: 100%;
@@ -32,6 +37,9 @@ const InnerContents = styled.div`
 
 export const PaymentPage = () => {
 
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+
     // const { data } = useLocation();
 
     // useEffect(() => {
@@ -41,25 +49,58 @@ export const PaymentPage = () => {
     const [whatComponentIsShow, setWhatComponentIsShow] = useState('orderpurchase');
 
 
-
+    const getUserState = useSelector((state) => state.user);
     const getStoreState = useSelector((state) => state.store);
+
     const [purchaseData, setPurchaseData] = useState({});
     const [productData, setProductData] = useState({});
+    const [userData, setUserData] = useState({});
+
+    const [isError, setIsError] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+
+    const onClickError = () => {
+        setIsError(false);
+    };
+
+    const onPurchase = (purchaseData, productData, userData) => {
+        setWhatComponentIsShow('purchasecomplete');
+        dispatch(PurchaseProduct(purchaseData, productData, userData, navigate));
+    };
+
+    useEffect(() => {
+        dispatch(GetUserData(getUserState.userdata.email));
+        // eslint-disable-next-line
+    }, []);
 
     useEffect(() => {
         setPurchaseData(getStoreState.purchaseData);
         setProductData(getStoreState.processInfo.processData2);
-    }, [getStoreState.purchaseData]);
+        setUserData(getUserState.userdata);
+        // eslint-disable-next-line
+    }, [getStoreState.purchaseData, getUserState.userdata]);
+
+    useEffect(() => {
+        setIsError(getStoreState.flagValue.isError);
+        setIsLoading(getStoreState.flagValue.isLoading);
+    }, [getStoreState.flagValue]);
 
     return (
         <BackGround>
+
+            {isLoading && <Loading />}
+
             <InnerContents>
 
-                {whatComponentIsShow === 'orderpurchase' && <OrderPurchase setWhatComponentIsShow={setWhatComponentIsShow} purchaseData={purchaseData} productData={productData} />}
+                {whatComponentIsShow === 'orderpurchase' && <OrderPurchase setWhatComponentIsShow={setWhatComponentIsShow} purchaseData={purchaseData} productData={productData} userData={userData} onPurchase={onPurchase} />}
 
                 {whatComponentIsShow === 'purchasecomplete' && <PurchaseComplete />}
 
             </InnerContents>
+
+            <ErrorModal isError={isError} getUserState={getStoreState} onClickError={onClickError} type='store' />
+
         </BackGround>
+
     );
 };

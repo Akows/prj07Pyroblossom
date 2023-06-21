@@ -6,6 +6,7 @@ import { AddressInputModal } from '../../components/user/AddressInput';
 import { GetUserData, UserUpdate } from '../../redux/actions/userAction';
 import { checkDuplication } from '../../functions/userFunction';
 import { DeleteAccountModal } from '../../components/user/DeleteAccountModal';
+import { Loading } from '../../components/Loading';
 
 const BackGround = styled.div`
     width: 100%;
@@ -367,6 +368,7 @@ export const MyPage = () => {
         if (!userData.email) {
             dispatch(GetUserData(getUserState.userdata.email));
         }
+
         setUserData(getUserState.userdata);
         // eslint-disable-next-line
     }, [getUserState.userdata]);
@@ -383,6 +385,8 @@ export const MyPage = () => {
 
     return (
         <BackGround>
+
+            {isLoading && <Loading />}
 
             <FormBorder>
 
@@ -467,6 +471,11 @@ export const MyPage = () => {
                     </FormInfo>
 
                     <FormInfo>
+                        <p>현재 포인트 :</p>
+                        {userData.point}P
+                    </FormInfo>
+
+                    <FormInfo>
                         <p>사용자 주소 :</p>
                         {isUpdate ?
                             <>
@@ -495,8 +504,8 @@ export const MyPage = () => {
                     </FormInfo>
 
                     <FormScript>
-                        <Script>* 1</Script>
-                        <Script>* 2</Script>
+                        <Script></Script>
+                        <Script></Script>
                     </FormScript>
 
                     {isUpdate ? <></> :

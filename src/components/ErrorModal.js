@@ -114,7 +114,7 @@ const ErrorButton = styled.div`
     };
 `;
 
-export const ErrorModal = ({ isError, getUserState, onClickError }) => {
+export const ErrorModal = ({ isError, getUserState, onClickError, type }) => {
     return (
         <ErrorModalBorder isError={isError}>
             <ErrorDecoImageBox>
@@ -128,8 +128,17 @@ export const ErrorModal = ({ isError, getUserState, onClickError }) => {
                 </ErrorTitle>
 
                 <ErrorInfo>
-                    <h3>에러코드 : {getUserState.errorinfo.errorCode}</h3> <br />
-                    <p>{getUserState.errorinfo.errorMessage}</p>
+                    {type === 'store' ?
+                        <>
+                            <h3>에러코드 : {getUserState.processInfo.errorCode}</h3> <br />
+                            <p>{getUserState.processInfo.errorMessage}</p>
+                        </>
+                        :
+                        <>
+                            <h3>에러코드 : {getUserState.errorinfo.errorCode}</h3> <br />
+                            <p>{getUserState.errorinfo.errorMessage}</p>
+                        </>
+                    }
                 </ErrorInfo>
 
                 <ErrorButton>

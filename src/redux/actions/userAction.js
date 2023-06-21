@@ -71,7 +71,8 @@ const SignUp = (userData, navigate) => {
                     displayName: userData.displayname,
                     address: userData.address,
                     address2: userData.address2,
-                    signupDate: createdTime
+                    signupDate: createdTime,
+                    point: 100000,
                 }
             );
         };
@@ -295,6 +296,7 @@ const GetUserData = (email) => {
                 address: docSnap.data().address,
                 address2: docSnap.data().address2,
                 signupDate: docSnap.data().signupDate.toDate().toLocaleString(),
+                point: docSnap.data().point,
             };
 
             return userData;
