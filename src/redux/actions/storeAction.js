@@ -445,14 +445,14 @@ const PurchaseProduct = (purchaseData, productData, userData, navigate) => {
             const docRef = doc(userCollectionRef, userData.email);
             const docSnap = await getDoc(docRef);
 
-            const beforePoint = docSnap.data().point;
+            const beforePoint = parseInt(docSnap.data().point);
 
             if (beforePoint < purchaseData.totalAmount) {
                 throw errorCode.storeError.InsufficientPoint;
             };
 
             await setDoc(docRef, {
-                point: beforePoint - purchaseData.totalAmount,
+                point: beforePoint - parseInt(purchaseData.totalAmount),
             }, { merge: true });
         };
 
@@ -493,10 +493,39 @@ const GetPurchaseRecord = (type) => {
 };
 
 
+const ChargePoint = (userEmail, chargePoint, navigate) => {
+    return (dispatch, getState) => {
+        dispatch({ type: 'STORE_STATE_INIT' });
+        dispatch({ type: 'STORE_LOADING' });
+
+        const updataUserInfo = async () => {
+            const docRef = doc(userCollectionRef, userEmail);
+            const docSnap = await getDoc(docRef);
+
+            const beforePoint = parseInt(docSnap.data().point);
+
+            await setDoc(docRef, {
+                point: beforePoint + parseInt(chargePoint),
+            }, { merge: true });
+        };
+
+        updataUserInfo()
+        .then(() => {
+            alert(`${chargePoint}원이 충전되었습니다.`);
+            navigate('/store', { replace: true });
+        })
+        .catch((error) => {
+            dispatch({ type: 'ERROR', payload: createErrorData(error) });
+        });
+    };
+};
 
 
 
-export { Test1, AddProduct, GetProductList, GetProductInfo, UpdateProduct, ChangeProductDisclosure, GoToPurchasePage, PurchaseProduct, GetPurchaseRecord };
+
+
+
+export { Test1, AddProduct, GetProductList, GetProductInfo, UpdateProduct, ChangeProductDisclosure, GoToPurchasePage, PurchaseProduct, GetPurchaseRecord, ChargePoint };
 
 
 

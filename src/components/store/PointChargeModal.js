@@ -1,6 +1,8 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { ChargePoint } from '../../redux/actions/storeAction';
 
 const BackGround = styled.div`
     width: 100%;
@@ -73,6 +75,12 @@ const ChargeFunc = styled.div`
         background-color: #aaaaaa;
         border-radius: 5px;
         border: none;
+
+        border-color: ${(props) => props.isEmpty ? 'red' : 'gray'};
+
+        &::placeholder {
+            color: ${(props) => props.isEmpty ? 'red' : 'gray'};
+        };
     };
 
     & > p:nth-child(3) {
@@ -118,22 +126,79 @@ const Button = styled.div`
     };
 `;
 
-export const PointChargeModal = ({ isShowModal, setIsShowModal }) => {
+export const PointChargeModal = ({ userData, isShowModal, setIsShowModal }) => {
 
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    const [chargePoint, setChargePoint] = useState(0);
+    const [chargePointRewrite, setChargePointRewrite] = useState(0);
+
+    const [isChargePointEmpty, setIsChargePointEmpty] = useState(false);
+    const [isChargePointRewriteEmpty, setIsChargePointRewriteEmpty] = useState(false);
+
+    const [isFirstRenderingChargePoint, setIsFirstRenderingChargePoint] = useState(true);
+    const [isFirstRenderingChargePointRewrite, setIsFirstRenderingChargePointRewrite] = useState(true);
+
+    const [isRewriteSame, setIsRewriteSame] = useState(false);
+
+    const onChange = (event) => {
+        setChargePoint(event.target.value);
+        setIsFirstRenderingChargePoint(false);
+        setIsChargePointEmpty(false);
+
+        if (event.target.value === '') {
+            setIsFirstRenderingChargePoint(true);
+            setIsChargePointEmpty(true);
+        };
+    };
+
+    const onChangeRewrite = (event) => {
+        setChargePointRewrite(event.target.value);
+        setIsFirstRenderingChargePointRewrite(false);
+        setIsChargePointRewriteEmpty(false);
+
+        if (event.target.value === '') {
+            setIsFirstRenderingChargePointRewrite(true);
+            setIsChargePointRewriteEmpty(true);
+        };
+    };
 
     const onClick = () => {
+        if (!chargePoint) {
+            setIsChargePointEmpty(true);
+            return;
+        };
+
+        if (!chargePointRewrite) {
+            setIsChargePointRewriteEmpty(true);
+            return;
+        };
+
+        if (!isRewriteSame) {
+            alert('충전 포인트의 수치가 일치하지않습니다.');
+            return;
+        };
+
         const confirmChoice = window.confirm('충전하시겠어요?');
 
         if (!confirmChoice) {
             return;
         }
         else {
-            alert('0000원, 충전되었습니다.');
+            dispatch(ChargePoint(userData.email, chargePointRewrite, navigate));
             setIsShowModal(false);
-            navigate('/store', { replace: true });
         };
     };
+
+    useEffect(() => {
+        if (chargePoint === '' || chargePointRewrite === '') {
+            setIsRewriteSame(false);
+            return;
+        };
+
+        setIsRewriteSame(chargePoint === chargePointRewrite);
+    }, [chargePoint, chargePointRewrite]);
 
     if (isShowModal) {
         return (
@@ -145,13 +210,20 @@ export const PointChargeModal = ({ isShowModal, setIsShowModal }) => {
                         <p>포인트 충전하기</p>
                     </Title>
                     <ChargeFunc>
-                        <input type='text' placeholder='충전액수를 입력해주세요.' />
+                        <input type='number' value={chargePoint} onChange={onChange} placeholder='충전액수를 입력해주세요.' isEmpty={isChargePointEmpty} />
 
-                        <input type='text' placeholder='충전액수를 한번 더 입력해주세요.' />
+                        <input type='number' value={chargePointRewrite} onChange={onChangeRewrite} placeholder='충전액수를 한번 더 입력해주세요.' isEmpty={isChargePointRewriteEmpty} />
+
+                        {isFirstRenderingChargePointRewrite ? <></> :
+                            <>
+                                {!isRewriteSame && '불일치!'}
+                            </>
+                        }
 
                         <p>* 충전 내역은 마이페이지에서 확인가능합니다.</p>
                         <p>* 액수가 정확한지 꼭 확인해주세요.</p>
                     </ChargeFunc>
+
                     <Button onClick={onClick}>
                         <button>
                             완료

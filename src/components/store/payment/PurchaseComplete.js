@@ -305,11 +305,7 @@ export const PurchaseComplete = ({ onClickError, purchaseData, productData, user
                         </div>
                     </ProductListButtonArea>
 
-                    <CompleteText>
-
-                    </CompleteText>
-
-                    <PointChargeModal isShowModal={isShowModal} setIsShowModal={setIsShowModal} />
+                    <PointChargeModal userData={userData} isShowModal={isShowModal} setIsShowModal={setIsShowModal} />
                 </>
                 :
                 <>
