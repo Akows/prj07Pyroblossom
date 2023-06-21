@@ -174,6 +174,14 @@ const GetProductList = (listCallType, itemPerPage, searchKeyword) => {
             else if (listCallType === 'keywordsearch') {
                 queryRef = query(storeCollectionRef, orderBy('number'), where('name', '==', searchKeyword), limit(itemPerPage));
             };
+
+            // 일반 유저화면에서의 제품 로딩의 경우, 비공개된 제품이 출력되서는 안된다.
+            if (listCallType === 'commonusergetproduct') {
+                queryRef = query(storeCollectionRef, orderBy('number'), where('productDisclosure', '==', true), limit(itemPerPage));
+            };
+
+
+
             
             // 다른 페이지로 이동할 경우, 페이지 이동을 위한 데이터 Index를 바탕으로 데이터를 조회해온다.
             // 페이지가 렌더링 되었을 때 무조건 1차례 데이터를 받아오고 이 과정에서 페이지 이동에 필요한 데이터가 Redux에 저장되어있다.

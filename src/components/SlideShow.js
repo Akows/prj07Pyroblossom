@@ -1,14 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import leftarrow from '../assets/images/button/btnleft.png';
 import rightarrow from '../assets/images/button/btnright.png';
-
-import sildeImg1 from '../assets/slideshow/testimg1.jfif';
-import sildeImg2 from '../assets/slideshow/testimg2.jfif';
-import sildeImg3 from '../assets/slideshow/testimg3.jfif';
-import sildeImg4 from '../assets/slideshow/testimg4.jfif';
-import sildeImg5 from '../assets/slideshow/testimg5.jfif';
 
 const BackGround = styled.div`
     width: 100%;
@@ -23,8 +18,6 @@ const BackGround = styled.div`
     -moz-user-select:none;
     -ms-user-select:none;
     user-select:none;
-
-    border: 2px red solid;
 `;
 
 const SildeButton = styled.img`
@@ -95,10 +88,14 @@ const PointerDot = styled.div`
     background-color: ${(props) => props.isActive ? 'white' : 'gray'};
 `;
 
-const Sildeshow = () => {
+const Sildeshow = ({ listData }) => {
+
+    const [productData, setProductData] = useState({});
 
     const [currentSlide, setCurrentSlide] = useState(0);
-    const [whatSlideIsShow, setWhatSlideIsShow] = useState(sildeImg1);
+    const [slideImgSrc, setSlideImgSrc] = useState('');
+    const [slideLinkName, setSlideLinkName] = useState('');
+
     const slideLength = 5;
 
     const [mouseDownClientX, setMouseDownClientX] = useState(0);
@@ -128,7 +125,7 @@ const Sildeshow = () => {
             else if (mouseUpClientX > mouseDownClientX) {
                 showSlide(currentSlide + 1);
             };
-        }
+        };
     };
 
     // 모바일 터치 제스쳐.
@@ -149,6 +146,7 @@ const Sildeshow = () => {
         };
     };
 
+    // 드래그를 이용한 슬라이드 변경 (useEffect 버전.)
     // useEffect(() => {
 
     //     const dragSpaceX = Math.abs(mouseDownClientX - mouseUpClientX);
@@ -218,12 +216,31 @@ const Sildeshow = () => {
 
     useEffect(() => {
         showSlide(0);
-    }, []);
+
+        setProductData({
+            slide1Img: `https://firebasestorage.googleapis.com/v0/b/prj07pyroblossom.appspot.com/o/productsImage%2F${listData[0]?.name}%2F${listData[0]?.productInformationFile.titleimage}?alt=media&token=bf2eff71-3c5e-4dc2-9706-445f95fd91e8`,
+            slide1Name: listData[0]?.name,
+            slide2Img: `https://firebasestorage.googleapis.com/v0/b/prj07pyroblossom.appspot.com/o/productsImage%2F${listData[1]?.name}%2F${listData[1]?.productInformationFile.titleimage}?alt=media&token=bf2eff71-3c5e-4dc2-9706-445f95fd91e8`,
+            slide2Name: listData[1]?.name,
+            slide3Img: `https://firebasestorage.googleapis.com/v0/b/prj07pyroblossom.appspot.com/o/productsImage%2F${listData[2]?.name}%2F${listData[2]?.productInformationFile.titleimage}?alt=media&token=bf2eff71-3c5e-4dc2-9706-445f95fd91e8`,
+            slide3Name: listData[2]?.name,
+            slide4Img: `https://firebasestorage.googleapis.com/v0/b/prj07pyroblossom.appspot.com/o/productsImage%2F${listData[3]?.name}%2F${listData[3]?.productInformationFile.titleimage}?alt=media&token=bf2eff71-3c5e-4dc2-9706-445f95fd91e8`,
+            slide4Name: listData[3]?.name,
+            slide5Img: `https://firebasestorage.googleapis.com/v0/b/prj07pyroblossom.appspot.com/o/productsImage%2F${listData[4]?.name}%2F${listData[4]?.productInformationFile.titleimage}?alt=media&token=bf2eff71-3c5e-4dc2-9706-445f95fd91e8`,
+            slide5Name: listData[4]?.name,
+        });
+
+        setSlideImgSrc(productData.slide1Img);
+        setSlideLinkName(productData.slide1Name);
+
+        // eslint-disable-next-line
+    }, [listData]);
 
     useEffect(() => {
         switch (currentSlide) {
             case 0:
-                setWhatSlideIsShow(sildeImg1);
+                setSlideImgSrc(productData.slide1Img);
+                setSlideLinkName(productData.slide1Name);
                 setIsActive1(true);
                 setIsActive2(false);
                 setIsActive3(false);
@@ -231,7 +248,8 @@ const Sildeshow = () => {
                 setIsActive5(false);
                 break;
             case 1:
-                setWhatSlideIsShow(sildeImg2);
+                setSlideImgSrc(productData.slide2Img);
+                setSlideLinkName(productData.slide2Name);
                 setIsActive1(false);
                 setIsActive2(true);
                 setIsActive3(false);
@@ -239,7 +257,8 @@ const Sildeshow = () => {
                 setIsActive5(false);
                 break;
             case 2:
-                setWhatSlideIsShow(sildeImg3);
+                setSlideImgSrc(productData.slide3Img);
+                setSlideLinkName(productData.slide3Name);
                 setIsActive1(false);
                 setIsActive2(false);
                 setIsActive3(true);
@@ -247,7 +266,8 @@ const Sildeshow = () => {
                 setIsActive5(false);
                 break;
             case 3:
-                setWhatSlideIsShow(sildeImg4);
+                setSlideImgSrc(productData.slide4Img);
+                setSlideLinkName(productData.slide4Name);
                 setIsActive1(false);
                 setIsActive2(false);
                 setIsActive3(false);
@@ -255,7 +275,8 @@ const Sildeshow = () => {
                 setIsActive5(false);
                 break;
             case 4:
-                setWhatSlideIsShow(sildeImg5);
+                setSlideImgSrc(productData.slide5Img);
+                setSlideLinkName(productData.slide5Name);
                 setIsActive1(false);
                 setIsActive2(false);
                 setIsActive3(false);
@@ -265,17 +286,18 @@ const Sildeshow = () => {
             default:
                 break;
         }
+
+        // eslint-disable-next-line    
     }, [currentSlide]);
 
-    // eslint-disable-next-line
-    // useInterval(() => {
-    //     showSlide(currentSlide);
-    //     setCurrentSlide(currentSlide + 1);
+    useInterval(() => {
+        showSlide(currentSlide);
+        setCurrentSlide(currentSlide + 1);
 
-    //     if (currentSlide > slideLength - 2) {
-    //         setCurrentSlide(0);
-    //     }
-    // }, 2000);
+        if (currentSlide > slideLength - 2) {
+            setCurrentSlide(0);
+        }
+    }, 2000);
 
     return (
         <BackGround
@@ -288,7 +310,9 @@ const Sildeshow = () => {
             <SildeButton src={leftarrow} alt='' onClick={() => { showSlide(currentSlide - 1) }} />
 
             <SildeBlock>
-                <SlideImg src={whatSlideIsShow} />
+                <Link to={`/store/productdetail/${slideLinkName}`}>
+                    <SlideImg src={slideImgSrc} />
+                </Link>
 
                 <SlidePointer>
                     <PointerDots>

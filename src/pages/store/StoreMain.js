@@ -79,9 +79,9 @@ const StoreTitleArea = styled.div`
 `;
 const StoreSlideShowArea = styled.div`
     width: 100%;
-    height: 400px;
+    height: 550px;
 
-    margin-top: 80px;
+    margin-top: 0px;
 
     z-index: 3;
 `;
@@ -218,7 +218,7 @@ export const StoreMain = () => {
     const [listData, setListData] = useState([]);
 
     useEffect(() => {
-        dispatch(GetProductList('firstRender', 9, ''));
+        dispatch(GetProductList('commonusergetproduct', 9, ''));
         // eslint-disable-next-line
     }, []);
 
@@ -250,10 +250,12 @@ export const StoreMain = () => {
                 </StoreTitleArea>
 
                 <StoreSlideShowArea>
-                    <Sildeshow />
+                    <Sildeshow listData={listData} />
                 </StoreSlideShowArea>
 
                 <StoreListArea>
+
+                    {listData.length === 0 && '제품 정보가 존재하지 않습니다.'}
 
                     {listData?.map(item => (
                         <Product key={item.number} onClick={() => navigate(`/store/productdetail/${item.name}`)}>
