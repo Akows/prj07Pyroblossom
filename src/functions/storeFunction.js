@@ -4,18 +4,28 @@ const productOptionInfoProcess = (productInfo, productOptionInfo) => {
         option1: '',
         option1SurchargeType: '',
         option1SurchargePrice: '',
+        option1PurchaseQuantityLimit: '',
+        option1Inventory: '',
         option2: '',
         option2SurchargeType: '',
         option2SurchargePrice: '',
+        option2PurchaseQuantityLimit: '',
+        option2Inventory: '',
         option3: '',
         option3SurchargeType: '',
         option3SurchargePrice: '',
+        option3PurchaseQuantityLimit: '',
+        option3Inventory: '',
         option4: '',
         option4SurchargeType: '',
         option4SurchargePrice: '',
+        option4PurchaseQuantityLimit: '',
+        option4Inventory: '',
         option5: '',
         option5SurchargeType: '',
         option5SurchargePrice: '',
+        option5PurchaseQuantityLimit: '',
+        option5Inventory: '',
     };
 
     // 옵션 데이터 1차 가공.
@@ -24,26 +34,36 @@ const productOptionInfoProcess = (productInfo, productOptionInfo) => {
         resultData.option1 = '옵션없음';
         resultData.option1SurchargeType = '';
         resultData.option1SurchargePrice = '';
+        resultData.option1PurchaseQuantityLimit = '';
+        resultData.option1Inventory = '';
     };
     if (productOptionInfo.option2 === '') {
         resultData.option2 = '옵션없음';
         resultData.option2SurchargeType = '';
         resultData.option2SurchargePrice = '';
+        resultData.option2PurchaseQuantityLimit = '';
+        resultData.option2Inventory = '';
     };
     if (productOptionInfo.option3 === '') {
         resultData.option3 = '옵션없음';
         resultData.option3SurchargeType = '';
         resultData.option3SurchargePrice = '';
+        resultData.option3PurchaseQuantityLimit = '';
+        resultData.option3Inventory = '';
     };
     if (productOptionInfo.option4 === '') {
         resultData.option4 = '옵션없음';
         resultData.option4SurchargeType = '';
         resultData.option4SurchargePrice = '';
+        resultData.option4PurchaseQuantityLimit = '';
+        resultData.option4Inventory = '';
     };
     if (productOptionInfo.option5 === '') {
         resultData.option5 = '옵션없음';
         resultData.option5SurchargeType = '';
         resultData.option5SurchargePrice = '';
+        resultData.option5PurchaseQuantityLimit = '';
+        resultData.option5Inventory = '';
     };
 
     // 옵션 데이터 2차 가공.
@@ -52,26 +72,36 @@ const productOptionInfoProcess = (productInfo, productOptionInfo) => {
         resultData.option1 = productOptionInfo.option1;
         resultData.option1SurchargeType = productOptionInfo.option1SurchargeType;
         resultData.option1SurchargePrice = parseInt(productInfo.price);
+        resultData.option1PurchaseQuantityLimit = productOptionInfo.option1PurchaseQuantityLimit;
+        resultData.option1Inventory = productOptionInfo.option1Inventory;
     };
     if (productOptionInfo.option2 !== '' && productOptionInfo.option2SurchargeType === '변동없음') {
         resultData.option2 = productOptionInfo.option2;
         resultData.option2SurchargeType = productOptionInfo.option2SurchargeType;
         resultData.option2SurchargePrice = parseInt(productInfo.price);
+        resultData.option2PurchaseQuantityLimit = productOptionInfo.option2PurchaseQuantityLimit;
+        resultData.option2Inventory = productOptionInfo.option2Inventory;
     };
     if (productOptionInfo.option3 !== '' && productOptionInfo.option3SurchargeType === '변동없음') {
         resultData.option3 = productOptionInfo.option3;
         resultData.option3SurchargeType = productOptionInfo.option3SurchargeType;
         resultData.option3SurchargePrice = parseInt(productInfo.price);
+        resultData.option3PurchaseQuantityLimit = productOptionInfo.option3PurchaseQuantityLimit;
+        resultData.option3Inventory = productOptionInfo.option3Inventory;
     };
     if (productOptionInfo.option4 !== '' && productOptionInfo.option4SurchargeType === '변동없음') {
         resultData.option4 = productOptionInfo.option4;
         resultData.option4SurchargeType = productOptionInfo.option4SurchargeType;
         resultData.option4SurchargePrice = parseInt(productInfo.price);
+        resultData.option4PurchaseQuantityLimit = productOptionInfo.option4PurchaseQuantityLimit;
+        resultData.option4Inventory = productOptionInfo.option4Inventory;
     };
     if (productOptionInfo.option5 !== '' && productOptionInfo.option5SurchargeType === '변동없음') {
         resultData.option5 = productOptionInfo.option5;
         resultData.option5SurchargeType = productOptionInfo.option5SurchargeType;
         resultData.option5SurchargePrice = parseInt(productInfo.price);
+        resultData.option5PurchaseQuantityLimit = productOptionInfo.option5PurchaseQuantityLimit;
+        resultData.option5Inventory = productOptionInfo.option5Inventory;
     };
 
     // 옵션 데이터 3차 가공.
@@ -87,6 +117,9 @@ const productOptionInfoProcess = (productInfo, productOptionInfo) => {
         if (productOptionInfo.option1SurchargeType === '가격감소') {
             resultData.option1SurchargePrice = parseInt(productInfo.price) - parseInt(productOptionInfo.option1SurchargePrice);
         };
+
+        resultData.option1PurchaseQuantityLimit = productOptionInfo.option1PurchaseQuantityLimit;
+        resultData.option1Inventory = productOptionInfo.option1Inventory;
     };
     if (productOptionInfo.option2 !== '' && (productOptionInfo.option2SurchargeType === '추가가격' || '가격감소')) {
         resultData.option2 = productOptionInfo.option2;
@@ -99,6 +132,9 @@ const productOptionInfoProcess = (productInfo, productOptionInfo) => {
         if (productOptionInfo.option2SurchargeType === '가격감소') {
             resultData.option2SurchargePrice = parseInt(productInfo.price) - parseInt(productOptionInfo.option2SurchargePrice);
         };
+
+        resultData.option2PurchaseQuantityLimit = productOptionInfo.option2PurchaseQuantityLimit;
+        resultData.option2Inventory = productOptionInfo.option2Inventory;
     };
     if (productOptionInfo.option3 !== '' && (productOptionInfo.option3SurchargeType === '추가가격' || '가격감소')) {
         resultData.option3 = productOptionInfo.option3;
@@ -111,6 +147,9 @@ const productOptionInfoProcess = (productInfo, productOptionInfo) => {
         if (productOptionInfo.option3SurchargeType === '가격감소') {
             resultData.option3SurchargePrice = parseInt(productInfo.price) - parseInt(productOptionInfo.option3SurchargePrice);
         };
+
+        resultData.option3PurchaseQuantityLimit = productOptionInfo.option3PurchaseQuantityLimit;
+        resultData.option3Inventory = productOptionInfo.option3Inventory;
     };
     if (productOptionInfo.option4 !== '' && (productOptionInfo.option4SurchargeType === '추가가격' || '가격감소')) {
         resultData.option4 = productOptionInfo.option4;
@@ -123,6 +162,9 @@ const productOptionInfoProcess = (productInfo, productOptionInfo) => {
         if (productOptionInfo.option4SurchargeType === '가격감소') {
             resultData.option4SurchargePrice = parseInt(productInfo.price) - parseInt(productOptionInfo.option4SurchargePrice);
         };
+
+        resultData.option4PurchaseQuantityLimit = productOptionInfo.option4PurchaseQuantityLimit;
+        resultData.option4Inventory = productOptionInfo.option4Inventory;
     };
     if (productOptionInfo.option5 !== '' && (productOptionInfo.option5SurchargeType === '추가가격' || '가격감소')) {
         resultData.option5 = productOptionInfo.option5;
@@ -135,6 +177,9 @@ const productOptionInfoProcess = (productInfo, productOptionInfo) => {
         if (productOptionInfo.option5SurchargeType === '가격감소') {
             resultData.option5SurchargePrice = parseInt(productInfo.price) - parseInt(productOptionInfo.option5SurchargePrice);
         };
+
+        resultData.option5PurchaseQuantityLimit = productOptionInfo.option5PurchaseQuantityLimit;
+        resultData.option5Inventory = productOptionInfo.option5Inventory;
     };
 
     return resultData;

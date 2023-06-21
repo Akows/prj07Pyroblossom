@@ -283,7 +283,7 @@ export const AdminProductManagement = ({ setWhatCompoIsShow, setUpdateData }) =>
     const [searchKeyword, setSearchKeyword] = useState('');
     const [productPerPage, setProductPerPage] = useState(5);
 
-    const [checkedItem, setCheckedItem] = useState(false);
+    // const [checkedItem, setCheckedItem] = useState(false);
 
     const [isDataFirst, setIsDataFirst] = useState(false);
     const [isDataLast, setIsDataLast] = useState(false);
@@ -379,7 +379,7 @@ export const AdminProductManagement = ({ setWhatCompoIsShow, setUpdateData }) =>
 
             <ProductList>
 
-                {listData?.length === 0 && '존재하지 않는 상품입니다.'}
+                {listData?.length === 0 && '상품이 존재하지 않습니다.'}
 
                 {listData?.map((item) => (
                     <Product key={item.number}>
@@ -393,15 +393,35 @@ export const AdminProductManagement = ({ setWhatCompoIsShow, setUpdateData }) =>
                                 <p>제품번호 : {item.number}</p>
                                 <p>제품명 : {item.name}</p>
                                 <p>제품 가격 : {item.price}원</p>
-                                <p>남은 수량 : {item.inventory}개</p>
+                                <p></p>
                                 <p>할인률 : {item.discountRate}%</p>
                                 <p>제품분류 : {item.mainCategory} {'>'} {item.subCategory}</p>
 
-                                {item.productOption.option1 ? <p>{item.productOption.option1}, {item.productOptionSurchargePrice.option1}원</p> : <p></p>}
-                                {item.productOption.option2 ? <p>{item.productOption.option2}, {item.productOptionSurchargePrice.option2}원</p> : <p></p>}
-                                {item.productOption.option3 ? <p>{item.productOption.option3}, {item.productOptionSurchargePrice.option3}원</p> : <p></p>}
-                                {item.productOption.option4 ? <p>{item.productOption.option4}, {item.productOptionSurchargePrice.option4}원</p> : <p></p>}
-                                {item.productOption.option5 ? <p>{item.productOption.option5}, {item.productOptionSurchargePrice.option5}원</p> : <p></p>}
+                                {item.productOption.option1 !== '옵션없음' ?
+                                    <p>{item.productOption.option1}, {item.productOptionSurchargePrice.option1}원, {item.productOptionInventory.option1}개 남음. 구매제한 {item.productOptionPurchaseQuantityLimit.option1}개 한정.</p>
+                                    :
+                                    <p></p>
+                                }
+                                {item.productOption.option2 !== '옵션없음' ?
+                                    <p>{item.productOption.option2}, {item.productOptionSurchargePrice.option2}원, {item.productOptionInventory.option2}개 남음. 구매제한 {item.productOptionPurchaseQuantityLimit.option2}개 한정.</p>
+                                    :
+                                    <p></p>
+                                }
+                                {item.productOption.option3 !== '옵션없음' ?
+                                    <p>{item.productOption.option3}, {item.productOptionSurchargePrice.option3}원, {item.productOptionInventory.option3}개 남음. 구매제한 {item.productOptionPurchaseQuantityLimit.option3}개 한정.</p>
+                                    :
+                                    <p></p>
+                                }
+                                {item.productOption.option4 !== '옵션없음' ?
+                                    <p>{item.productOption.option4}, {item.productOptionSurchargePrice.option4}원, {item.productOptionInventory.option4}개 남음. 구매제한 {item.productOptionPurchaseQuantityLimit.option4}개 한정.</p>
+                                    :
+                                    <p></p>
+                                }
+                                {item.productOption.option5 !== '옵션없음' ?
+                                    <p>{item.productOption.option5}, {item.productOptionSurchargePrice.option5}원, {item.productOptionInventory.option5}개 남음. 구매제한 {item.productOptionPurchaseQuantityLimit.option5}개 한정.</p>
+                                    :
+                                    <p></p>
+                                }
 
                                 <p>보너스포인트 : {item.rewardAmountRate}P</p>
                                 <p>진행중인 이벤트 : {item.eventType}.</p>

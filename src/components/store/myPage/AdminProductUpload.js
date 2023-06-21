@@ -168,10 +168,10 @@ const Option = styled.div`
     height: 100%;
 
     & > input {
-        width: 100%;
+        width: 50%;
         height: 30px;
 
-        margin-top: 10px;
+        margin-top: 5px;
 
         font-family: 'GIFont';
         font-size: 16px;
@@ -189,9 +189,9 @@ const Option = styled.div`
 
     & > div {
         width: 100%;
-        height: 100%;
+        height: 50px;
 
-        margin-top: 10px;
+        margin-top: 5px;
 
         display: flex;
         flex-direction: row;
@@ -222,13 +222,43 @@ const Option = styled.div`
         border: none;
     };
 
-    & > input:nth-child(5) {
-        width: 30%;
+    & > div > input {
+        width: 50%;
         height: 20px;
 
-        margin-top: 0px;
+        font-family: 'GIFont';
+        font-size: 16px;
+        color: black;
 
-        font-size: 14px;
+        background-color: #aaaaaa;
+        border-radius: 5px;
+        border: none;
+    };
+
+    & > div:nth-child(6) {
+        width: 100%;
+        height: 100%;
+
+        flex-direction: column;
+        align-items: flex-start;
+    };
+    & > div:nth-child(7) {
+        width: 100%;
+        height: 100%;
+
+        flex-direction: column;
+        align-items: flex-start;
+
+        margin-bottom: 5px;
+    };
+    & > div:nth-child(8) {
+        width: 100%;
+        height: 100%;
+
+        flex-direction: column;
+        align-items: flex-start;
+
+        margin-bottom: 5px;
     };
 `;
 
@@ -512,18 +542,28 @@ export const AdminProductUpload = ({ isLoading, updateData }) => {
         option1: '',
         option1SurchargeType: '변동없음',
         option1SurchargePrice: '',
+        option1PurchaseQuantityLimit: '',
+        option1Inventory: '',
         option2: '',
         option2SurchargeType: '변동없음',
         option2SurchargePrice: '',
+        option2PurchaseQuantityLimit: '',
+        option2Inventory: '',
         option3: '',
         option3SurchargeType: '변동없음',
         option3SurchargePrice: '',
+        option3PurchaseQuantityLimit: '',
+        option3Inventory: '',
         option4: '',
         option4SurchargeType: '변동없음',
         option4SurchargePrice: '',
+        option4PurchaseQuantityLimit: '',
+        option4Inventory: '',
         option5: '',
         option5SurchargeType: '변동없음',
         option5SurchargePrice: '',
+        option5PurchaseQuantityLimit: '',
+        option5Inventory: '',
     });
 
     const [productImgFile, setProductImgFile] = useState({
@@ -553,6 +593,8 @@ export const AdminProductUpload = ({ isLoading, updateData }) => {
             alert('제품 이미지는 반드시 등록해야합니다.');
             return;
         };
+
+        // console.log(productInfo, productOptionInfo, productImgFile);
 
         dispatch(AddProduct(productInfo, productOptionInfo, productImgFile, navigate));
     };
@@ -587,18 +629,28 @@ export const AdminProductUpload = ({ isLoading, updateData }) => {
                 option1: updateData.productOption.option1,
                 option1SurchargeType: updateData.productOptionSurchargeType.option1,
                 option1SurchargePrice: updateData.productOptionSurchargePrice.option1,
+                option1PurchaseQuantityLimit: updateData.productOptionPurchaseQuantityLimit.option1,
+                option1Inventory: updateData.productOptionInventory.option1,
                 option2: updateData.productOption.option2,
                 option2SurchargeType: updateData.productOptionSurchargeType.option2,
                 option2SurchargePrice: updateData.productOptionSurchargePrice.option2,
+                option2PurchaseQuantityLimit: updateData.productOptionPurchaseQuantityLimit.option2,
+                option2Inventory: updateData.productOptionInventory.option2,
                 option3: updateData.productOption.option3,
                 option3SurchargeType: updateData.productOptionSurchargeType.option3,
                 option3SurchargePrice: updateData.productOptionSurchargePrice.option3,
+                option3PurchaseQuantityLimit: updateData.productOptionPurchaseQuantityLimit.option3,
+                option3Inventory: updateData.productOptionInventory.option3,
                 option4: updateData.productOption.option4,
                 option4SurchargeType: updateData.productOptionSurchargeType.option4,
                 option4SurchargePrice: updateData.productOptionSurchargePrice.option4,
+                option4PurchaseQuantityLimit: updateData.productOptionPurchaseQuantityLimit.option4,
+                option4Inventory: updateData.productOptionInventory.option4,
                 option5: updateData.productOption.option5,
                 option5SurchargeType: updateData.productOptionSurchargeType.option5,
                 option5SurchargePrice: updateData.productOptionSurchargePrice.option5,
+                option5PurchaseQuantityLimit: updateData.productOptionPurchaseQuantityLimit.option5,
+                option5Inventory: updateData.productOptionInventory.option5,
             });
 
             let optionCount = 0;
@@ -651,10 +703,6 @@ export const AdminProductUpload = ({ isLoading, updateData }) => {
 
                 <input type='text' id='deliveryFee' value={productInfo.deliveryFee || ''} onChange={onChange} placeholder='배송료 입력' />
                 <p>* 미입력시 무료배송.</p>
-
-                <input type='text' id='purchaseQuantityLimit' value={productInfo.purchaseQuantityLimit || ''} onChange={onChange} placeholder='인당 구매제한 수량 입력' />
-
-                <input type='text' id='inventory' value={productInfo.inventory || ''} onChange={onChange} placeholder='재고량 입력' />
 
             </UploadInfo>
 
@@ -712,7 +760,7 @@ export const AdminProductUpload = ({ isLoading, updateData }) => {
 
             <br />
 
-            <p>제품 옵션 입력</p>
+            <p>제품 옵션 정보 입력</p>
             <UploadProductOptionInfo>
 
                 {/* {optionArray.map((item) => (
@@ -737,7 +785,20 @@ export const AdminProductUpload = ({ isLoading, updateData }) => {
                                 <option value='가격감소'>-</option>
                             </select>
                         </div>
+
                         {productOptionInfo.option1SurchargeType !== '변동없음' && <input type='text' id='option1SurchargePrice' value={productOptionInfo.option1SurchargePrice || ''} onChange={onChangeOption} placeholder='옵션의 변동수치를 입력해주세요.' />}
+
+                        <hr />
+
+                        <div>
+                            <p>1번 옵션 구매한도량 입력</p>
+                            <input type='text' id='option1PurchaseQuantityLimit' value={productOptionInfo.option1PurchaseQuantityLimit || ''} onChange={onChangeOption} placeholder='1번 옵션의 구매제한 한도를 입력해주세요.' />
+                        </div>
+                        <div>
+                            <p>1번 옵션 재고량 입력</p>
+                            <input type='text' id='option1Inventory' value={productOptionInfo.option1Inventory || ''} onChange={onChangeOption} placeholder='1번 옵션의 재고량을 입력해주세요.' />
+                        </div>
+
                     </Option>
 
                     {optionArray.length >= 2 && <>
@@ -756,6 +817,17 @@ export const AdminProductUpload = ({ isLoading, updateData }) => {
                             </div>
 
                             {productOptionInfo.option2SurchargeType !== '변동없음' && <input type='text' id='option2SurchargePrice' value={productOptionInfo.option2SurchargePrice || ''} onChange={onChangeOption} placeholder='옵션의 변동수치를 입력해주세요.' />}
+
+                            <hr />
+
+                            <div>
+                                <p>2번 옵션 구매한도량 입력</p>
+                                <input type='text' id='option2PurchaseQuantityLimit' value={productOptionInfo.option2PurchaseQuantityLimit || ''} onChange={onChangeOption} placeholder='2번 옵션의 구매제한 한도를 입력해주세요.' />
+                            </div>
+                            <div>
+                                <p>2번 옵션 재고량 입력</p>
+                                <input type='text' id='option2Inventory' value={productOptionInfo.option2Inventory || ''} onChange={onChangeOption} placeholder='2번 옵션의 재고량을 입력해주세요.' />
+                            </div>
 
                         </Option>
 
@@ -776,6 +848,17 @@ export const AdminProductUpload = ({ isLoading, updateData }) => {
 
                                 {productOptionInfo.option3SurchargeType !== '변동없음' && <input type='text' id='option3SurchargePrice' value={productOptionInfo.option3SurchargePrice || ''} onChange={onChangeOption} placeholder='옵션의 변동수치를 입력해주세요.' />}
 
+                                <hr />
+
+                                <div>
+                                    <p>3번 옵션 재고량 입력</p>
+                                    <input type='text' id='option3PurchaseQuantityLimit' value={productOptionInfo.option3PurchaseQuantityLimit || ''} onChange={onChangeOption} placeholder='3번 옵션의 구매제한 한도를 입력해주세요.' />
+                                </div>
+                                <div>
+                                    <p>3번 옵션 구매한도량 입력</p>
+                                    <input type='text' id='option3Inventory' value={productOptionInfo.option3Inventory || ''} onChange={onChangeOption} placeholder='3번 옵션의 재고량을 입력해주세요.' />
+                                </div>
+
                             </Option>
 
                             {optionArray.length >= 4 && <>
@@ -794,6 +877,18 @@ export const AdminProductUpload = ({ isLoading, updateData }) => {
                                     </div>
 
                                     {productOptionInfo.option4SurchargeType !== '변동없음' && <input type='text' id='option4SurchargePrice' value={productOptionInfo.option4SurchargePrice || ''} onChange={onChangeOption} placeholder='옵션의 변동수치를 입력해주세요.' />}
+
+                                    <hr />
+
+                                    <div>
+                                        <p>4번 옵션 재고량 입력</p>
+                                        <input type='text' id='option4PurchaseQuantityLimit' value={productOptionInfo.option4PurchaseQuantityLimit || ''} onChange={onChangeOption} placeholder='4번 옵션의 구매제한 한도를 입력해주세요.' />
+                                    </div>
+                                    <div>
+                                        <p>4번 옵션 구매한도량 입력</p>
+                                        <input type='text' id='option4Inventory' value={productOptionInfo.option4Inventory || ''} onChange={onChangeOption} placeholder='4번 옵션의 재고량을 입력해주세요.' />
+                                    </div>
+
                                 </Option>
 
                                 {optionArray.length >= 5 && <>
@@ -812,7 +907,17 @@ export const AdminProductUpload = ({ isLoading, updateData }) => {
                                         </div>
 
                                         {productOptionInfo.option5SurchargeType !== '변동없음' && <input type='text' id='option5SurchargePrice' value={productOptionInfo.option5SurchargePrice || ''} onChange={onChangeOption} placeholder='옵션의 변동수치를 입력해주세요.' />}
+
                                         <hr />
+
+                                        <div>
+                                            <p>5번 옵션 재고량 입력</p>
+                                            <input type='text' id='option5PurchaseQuantityLimit' value={productOptionInfo.option5PurchaseQuantityLimit || ''} onChange={onChangeOption} placeholder='5번 옵션의 구매제한 한도를 입력해주세요.' />
+                                        </div>
+                                        <div>
+                                            <p>5번 옵션 구매한도량 입력</p>
+                                            <input type='text' id='option5Inventory' value={productOptionInfo.option5Inventory || ''} onChange={onChangeOption} placeholder='5번 옵션의 재고량을 입력해주세요.' />
+                                        </div>
                                     </Option>
                                 </>}
                             </>}
