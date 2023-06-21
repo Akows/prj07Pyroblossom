@@ -1,7 +1,7 @@
 import { deleteDoc, doc, endBefore, getCountFromServer, getDoc, getDocs, limit, limitToLast, orderBy, query, setDoc, startAfter, updateDoc, where } from 'firebase/firestore';
 import { ref, uploadBytes } from 'firebase/storage';
 import { createErrorData } from '../../configs/errorCodes';
-import { timeStamp, storeCollectionRef, storageRef, userCollectionRef, purchaseRecordCollectionRef } from '../../configs/firebase/config'
+import { timeStamp, storeCollectionRef, storageRef, purchaseRecordCollectionRef, userCollectionRef } from '../../configs/firebase/config'
 import { productOptionInfoProcess } from '../../functions/storeFunction';
 
 const Test1 = () => {
@@ -417,15 +417,15 @@ const GoToPurchasePage = (purchaseList, totalQuantity, totalAmount, navigate) =>
 
 const PurchaseProduct = (purchaseData, productData, userData, navigate) => {
     return (dispatch, getState) => {
-        dispatch({ type: 'STORE_STATE_INIT' });
-        dispatch({ type: 'STORE_LOADING' });
+        // dispatch({ type: 'STORE_STATE_INIT' });
+        // dispatch({ type: 'STORE_LOADING' });
 
         // 구매 기록을 저장.
         const addRecord = async () => {
             const querys = query(purchaseRecordCollectionRef);
             const allPurchaseRecordCount = await getCountFromServer(querys);
 
-            const docRef = doc(purchaseRecordCollectionRef, toString(allPurchaseRecordCount.data().count + 1));
+            const docRef = doc(purchaseRecordCollectionRef, `${allPurchaseRecordCount.data().count + 1}`);
 
             const createdTime = timeStamp.fromDate(new Date());
 
@@ -435,7 +435,7 @@ const PurchaseProduct = (purchaseData, productData, userData, navigate) => {
                     address: userData.address,
                     address2: userData.address2,
                     date: createdTime,
-                    purchaseData: purchaseData,
+                    purchaseData: purchaseData.purchaseList,
                 }
             );
         };
@@ -446,10 +446,7 @@ const PurchaseProduct = (purchaseData, productData, userData, navigate) => {
             const docSnap = await getDoc(docRef);
 
             const beforePoint = docSnap.data().point;
-
-            console.log(beforePoint);
-            console.log(beforePoint - purchaseData.totalAmount);
-
+            
             await setDoc(docRef, {
                 point: beforePoint - purchaseData.totalAmount,
             }, { merge: true });
