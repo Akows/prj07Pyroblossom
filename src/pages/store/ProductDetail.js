@@ -7,7 +7,7 @@ import { QnA } from '../../components/store/productDetail/QnA';
 import { ProductInfomation } from '../../components/store/productDetail/ProductInfomation';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { GetProductInfo, SavePurchaseData } from '../../redux/actions/storeAction';
+import { GetProductInfo, BuyPurchaseData } from '../../redux/actions/storeAction';
 
 const SpecialCharacter = styled.p`
     margin-left: 2px;
@@ -524,6 +524,7 @@ export const ProductDetail = () => {
 
     const [purchaseList, setPurchaseList] = useState([]);
 
+    const [totalQuantity, setTotalQuantity] = useState(0);
     const [totalAmount, setTotalAmount] = useState(0);
 
     const onSelectPurchaseOption = (event) => {
@@ -564,10 +565,13 @@ export const ProductDetail = () => {
             };
         };
 
+        setTotalQuantity(totalQuantity + data.purchaseQuantity);
         setPurchaseList([...purchaseList, data]);
     };
 
     const onPurchaseQuantity = (type, item) => {
+
+        console.log(item);
 
         // 깊은 복사로 item 객체를 복사.
         const data = JSON.parse(JSON.stringify(item));
@@ -581,11 +585,27 @@ export const ProductDetail = () => {
                 data.purchaseQuantity = 1;
                 return;
             };
+
             data.totalAmount = data.optionPrice * data.purchaseQuantity;
+            setTotalQuantity(totalQuantity - 1);
         }
         else if (type === '+') {
-            data.purchaseQuantity += 1;
-            data.totalAmount = data.optionPrice * data.purchaseQuantity;
+
+            // 각 옵션의 구매갯수 제한보다 더 많은 수량을 선택할 수 없도록 한다.
+            for (let [key, value] of Object.entries(productData[0]?.productOptionPurchaseQuantityLimit)) {
+                if (data.optionNumber === key) {
+
+                    if (data.purchaseQuantity > value) {
+                        alert('구매 갯수 제한보다 더 많이 구매할 수 없습니다.');
+                        break;
+                    }
+                    else {
+                        data.purchaseQuantity += 1;
+                        data.totalAmount = data.optionPrice * data.purchaseQuantity;
+                        setTotalQuantity(totalQuantity + 1);
+                    };
+                };
+            };
         };
 
         // 기존 배열의 optionNumber와 현재 제어중인 optionNumber를 비교하여..
@@ -606,12 +626,12 @@ export const ProductDetail = () => {
                 item.optionNumber !== itemNumber
             )
         );
+
+        setTotalQuantity(totalQuantity - item.purchaseQuantity);
     };
 
     const onBuy = () => {
-        alert('구매하기');
-
-        // dispatch(SavePurchaseData(purchaseList, totalAmount));
+        dispatch(BuyPurchaseData(purchaseList, totalQuantity, totalAmount, navigate));
     };
 
     useEffect(() => {
@@ -725,7 +745,7 @@ export const ProductDetail = () => {
                                     전체 금액
                                 </PurchasePrice1>
                                 <PurchasePrice2>
-                                    <p>선택 품목 : {purchaseList.length}개</p>
+                                    <p>선택 품목 : {totalQuantity}개</p>
 
                                     <SpecialCharacter>&#124;</SpecialCharacter>
 
