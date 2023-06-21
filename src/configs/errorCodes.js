@@ -85,6 +85,14 @@ const errorCode = {
         },
     },
 
+
+    storeError: {
+        InsufficientPoint: {
+            code: 'SE001',
+            message: '소지 포인트가 부족합니다.',
+        },
+    },
+
 };
 
 export { createErrorData, errorCode };

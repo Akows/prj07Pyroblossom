@@ -1,6 +1,6 @@
 import { deleteDoc, doc, endBefore, getCountFromServer, getDoc, getDocs, limit, limitToLast, orderBy, query, setDoc, startAfter, updateDoc, where } from 'firebase/firestore';
 import { ref, uploadBytes } from 'firebase/storage';
-import { createErrorData } from '../../configs/errorCodes';
+import { createErrorData, errorCode } from '../../configs/errorCodes';
 import { timeStamp, storeCollectionRef, storageRef, purchaseRecordCollectionRef, userCollectionRef } from '../../configs/firebase/config'
 import { productOptionInfoProcess } from '../../functions/storeFunction';
 
@@ -446,15 +446,19 @@ const PurchaseProduct = (purchaseData, productData, userData, navigate) => {
             const docSnap = await getDoc(docRef);
 
             const beforePoint = docSnap.data().point;
-            
+
+            if (beforePoint < purchaseData.totalAmount) {
+                throw errorCode.storeError.InsufficientPoint;
+            };
+
             await setDoc(docRef, {
                 point: beforePoint - purchaseData.totalAmount,
             }, { merge: true });
         };
 
-        addRecord()
+        updataUserInfo()
         .then(() => {
-            updataUserInfo()
+            addRecord()
             .then(() => {
                 dispatch({ type: 'STORE_COMPLETE' });
             })

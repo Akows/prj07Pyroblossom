@@ -130,8 +130,8 @@ export const ErrorModal = ({ isError, getUserState, onClickError, type }) => {
                 <ErrorInfo>
                     {type === 'store' ?
                         <>
-                            <h3>에러코드 : {getUserState.processInfo.errorCode}</h3> <br />
-                            <p>{getUserState.processInfo.errorMessage}</p>
+                            <h3>에러코드 : {getUserState.processInfo.processCode}</h3> <br />
+                            <p>{getUserState.processInfo.processMessage}</p>
                         </>
                         :
                         <>

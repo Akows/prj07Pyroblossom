@@ -59,13 +59,16 @@ export const PaymentPage = () => {
     const [isError, setIsError] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
+    const [isShowModal, setIsShowModal] = useState(false);
+
     const onClickError = () => {
         setIsError(false);
+        setIsShowModal(true);
     };
 
     const onPurchase = (purchaseData, productData, userData) => {
-        setWhatComponentIsShow('purchasecomplete');
         dispatch(PurchaseProduct(purchaseData, productData, userData, navigate));
+        setWhatComponentIsShow('purchasecomplete');
     };
 
     useEffect(() => {
@@ -94,7 +97,7 @@ export const PaymentPage = () => {
 
                 {whatComponentIsShow === 'orderpurchase' && <OrderPurchase setWhatComponentIsShow={setWhatComponentIsShow} purchaseData={purchaseData} productData={productData} userData={userData} onPurchase={onPurchase} />}
 
-                {whatComponentIsShow === 'purchasecomplete' && <PurchaseComplete onClickError={onClickError} purchaseData={purchaseData} productData={productData} userData={userData} />}
+                {whatComponentIsShow === 'purchasecomplete' && <PurchaseComplete onClickError={onClickError} purchaseData={purchaseData} productData={productData} userData={userData} isShowModal={isShowModal} setIsShowModal={setIsShowModal} />}
 
             </InnerContents>
 

@@ -1,4 +1,5 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 const BackGround = styled.div`
@@ -119,6 +120,8 @@ const Button = styled.div`
 
 export const PointChargeModal = ({ isShowModal, setIsShowModal }) => {
 
+    const navigate = useNavigate();
+
     const onClick = () => {
         const confirmChoice = window.confirm('충전하시겠어요?');
 
@@ -128,6 +131,7 @@ export const PointChargeModal = ({ isShowModal, setIsShowModal }) => {
         else {
             alert('0000원, 충전되었습니다.');
             setIsShowModal(false);
+            navigate('/store', { replace: true });
         };
     };
 
