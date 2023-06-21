@@ -94,7 +94,7 @@ export const PaymentPage = () => {
 
                 {whatComponentIsShow === 'orderpurchase' && <OrderPurchase setWhatComponentIsShow={setWhatComponentIsShow} purchaseData={purchaseData} productData={productData} userData={userData} onPurchase={onPurchase} />}
 
-                {whatComponentIsShow === 'purchasecomplete' && <PurchaseComplete />}
+                {whatComponentIsShow === 'purchasecomplete' && <PurchaseComplete onClickError={onClickError} purchaseData={purchaseData} productData={productData} userData={userData} />}
 
             </InnerContents>
 

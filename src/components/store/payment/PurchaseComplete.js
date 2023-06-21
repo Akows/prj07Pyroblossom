@@ -1,8 +1,12 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import productimg from '../../../assets/images/testImg/testproductimg.jpg';
+import { GetPurchaseRecord } from '../../../redux/actions/storeAction';
+import { ErrorModal } from '../../ErrorModal';
+import { Loading } from '../../Loading';
 
 const ProductListButtonArea = styled.div`
     width: 90%;
@@ -103,9 +107,11 @@ const DeliveryInfo = styled.div`
     height: 50px;
 
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
+
+    margin-bottom: 20px;
 
     & > p {
         font-size: 18px;
@@ -262,16 +268,40 @@ const PaymentSubmit = styled.div`
     };
 `;
 
-export const PurchaseComplete = () => {
+export const PurchaseComplete = ({ onClickError, purchaseData, productData, userData }) => {
 
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    const getStoreState = useSelector((state) => state.store);
+
+    const [purchaseDatas, setPurchaseDatas] = useState([]);
+    const [productDatas, setProductDatas] = useState({});
+    const [userDatas, setUserDatas] = useState({});
+
+    const [isError, setIsError] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     const onSubmit = () => {
         navigate('/store/mypage');
     };
 
+    useEffect(() => {
+        setPurchaseDatas(purchaseData);
+        setProductDatas(productData);
+        setUserDatas(userData);
+        // eslint-disable-next-line
+    }, [purchaseData, productData, userData]);
+
+    useEffect(() => {
+        setIsError(getStoreState.flagValue.isError);
+        setIsLoading(getStoreState.flagValue.isLoading);
+    }, [getStoreState.flagValue]);
+
     return (
         <>
+            {isLoading && <Loading />}
+
             <ProductListButtonArea>
                 <p>주문/결제</p>
 
@@ -284,47 +314,48 @@ export const PurchaseComplete = () => {
 
             <CompleteText>
 
-                <ProductInfo>
+                {purchaseDatas.purchaseList?.map((item) => (
+                    <ProductInfo key={item.optionNumber}>
 
-                    <ProductImg>
-                        <img src={productimg} alt='' />
-                    </ProductImg>
-                    <PurchaseInfo>
+                        <ProductImg>
+                            <img src={`https://firebasestorage.googleapis.com/v0/b/prj07pyroblossom.appspot.com/o/productsImage%2F${productDatas[0].name}%2F${productDatas[0]?.productInformationFile.titleimage}?alt=media&token=bf2eff71-3c5e-4dc2-9706-445f95fd91e8`} alt='' />
+                        </ProductImg>
+                        <PurchaseInfo>
 
-                        <PurchaseName>
-                            <p>통통폭탄인형</p>
-                        </PurchaseName>
-                        <DeliveryInfo>
-                            <p>무료배송</p>
-                            <p>1개</p>
-                        </DeliveryInfo>
-                        <PurchasePrice>
-                            <p>(-) 5,000원</p>
-                            <p>40,000원</p>
-                        </PurchasePrice>
+                            <PurchaseName>
+                                <p>{item.optionName}</p>
+                            </PurchaseName>
+                            <DeliveryInfo>
+                                <p>구매수량 : {item.purchaseQuantity}개</p>
+                                {productDatas[0]?.deliveryFee === 0 ? <p>무료배송</p> : <p>배송료 : {productDatas[0]?.deliveryFee}원</p>}
+                            </DeliveryInfo>
+                            <PurchasePrice>
+                                {productDatas[0]?.price > item.optionPrice ? <p>(-) {productDatas[0]?.discountRate}%</p> : <p></p>}
+                                <p>{item.totalAmount}원</p>
+                            </PurchasePrice>
 
-                    </PurchaseInfo>
+                        </PurchaseInfo>
 
-                </ProductInfo>
+                    </ProductInfo>
+                ))}
 
                 <ShippingAddress>
                     <DeliveryAddress>
                         <p>배송주소</p>
 
-                        <p>서울특별시 서울구 서울동 서울서울</p>
-                        <p>서울아파트 서울동 서울호</p>
+                        <p>{userDatas.address}</p>
+                        <p>{userDatas.address2}</p>
                     </DeliveryAddress>
-
                 </ShippingAddress>
 
                 <BuyerBenefit>
                     <p>할인 및 최종결제 내역</p>
 
                     <PriceInfo>
-                        <p>주문금액 : 30,000원</p>
-                        <p>배송비 : 0원</p>
-                        <p>할인 : 5,000원</p>
-                        <p>결제금액 : 25,000원</p>
+                        <p>주문금액 : {purchaseData.totalAmount}원</p>
+                        <p>배송비 : {productDatas[0]?.deliveryFee}원</p>
+                        <p></p>
+                        <p>결제금액 : {purchaseData.totalAmount + parseInt(productDatas[0]?.deliveryFee)}원</p>
                     </PriceInfo>
 
                 </BuyerBenefit>
@@ -336,9 +367,7 @@ export const PurchaseComplete = () => {
                     <button onClick={onSubmit}>확인</button>
                 </PaymentSubmit>
 
-
-
-
+                <ErrorModal isError={isError} getUserState={getStoreState} onClickError={onClickError} type='store' />
 
             </CompleteText>
         </>

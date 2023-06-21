@@ -417,8 +417,8 @@ const GoToPurchasePage = (purchaseList, totalQuantity, totalAmount, navigate) =>
 
 const PurchaseProduct = (purchaseData, productData, userData, navigate) => {
     return (dispatch, getState) => {
-        // dispatch({ type: 'STORE_STATE_INIT' });
-        // dispatch({ type: 'STORE_LOADING' });
+        dispatch({ type: 'STORE_STATE_INIT' });
+        dispatch({ type: 'STORE_LOADING' });
 
         // 구매 기록을 저장.
         const addRecord = async () => {
@@ -471,11 +471,28 @@ const PurchaseProduct = (purchaseData, productData, userData, navigate) => {
     };
 };
 
+const GetPurchaseRecord = (type) => {
+    return (dispatch, getState) => {
+        // dispatch({ type: 'STORE_STATE_INIT' });
+        // dispatch({ type: 'STORE_LOADING' });
+
+        const process = async () => {
+            const querys = query(purchaseRecordCollectionRef);
+            const allPurchaseRecordCount = await getCountFromServer(querys);
+            const docRef = doc(storeCollectionRef, `${allPurchaseRecordCount}`);
+            const docSnap = await getDoc(docRef);
+            console.log(docSnap.data());
+        };
+
+        process();
+    };
+};
 
 
 
 
-export { Test1, AddProduct, GetProductList, GetProductInfo, UpdateProduct, ChangeProductDisclosure, GoToPurchasePage, PurchaseProduct };
+
+export { Test1, AddProduct, GetProductList, GetProductInfo, UpdateProduct, ChangeProductDisclosure, GoToPurchasePage, PurchaseProduct, GetPurchaseRecord };
 
 
 
