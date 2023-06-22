@@ -277,7 +277,10 @@ export const StoreMyPage = () => {
         }
         else {
             setIsAdminLogin(false);
-            setWhatCompoIsShow('history');
+
+            if (getStoreState.flagValue.isRendering) {
+                setWhatCompoIsShow('history');
+            };
         };
 
         // eslint-disable-next-line
@@ -348,11 +351,11 @@ export const StoreMyPage = () => {
                                 </CompoButton>
                             </UserCompoButton>
 
-                            {whatCompoIsShow === 'history' && <PurchaseHistory />}
+                            {whatCompoIsShow === 'history' && <PurchaseHistory userdata={getUserState.userdata} />}
 
                             {whatCompoIsShow === 'basket' && <ShoppingBasket />}
 
-                            {whatCompoIsShow === 'consumption' && <PointHistory />}
+                            {whatCompoIsShow === 'consumption' && <PointHistory userdata={getUserState.userdata} />}
 
                         </UserMyPage>
 

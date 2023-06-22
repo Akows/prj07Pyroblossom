@@ -243,7 +243,7 @@ const UtilButton = styled.div`
     };
 `;
 
-export const PurchaseHistory = () => {
+export const PurchaseHistory = ({ userdata }) => {
 
     const dispatch = useDispatch();
 
@@ -257,14 +257,15 @@ export const PurchaseHistory = () => {
     const [isDataLast, setIsDataLast] = useState(false);
 
     const keywordSearch = () => {
-        dispatch(GetpurchaseRecord('keywordsearch', productPerPage, searchKeyword));
+        dispatch(GetpurchaseRecord('keywordsearch', productPerPage, searchKeyword, userdata.email));
     };
     const onChargeSearchKeyword = (event) => {
         setSearchKeyword(event.target.value);
     };
 
     useEffect(() => {
-        dispatch(GetpurchaseRecord('firstRender', productPerPage, ''));
+        dispatch(GetpurchaseRecord('firstRender', productPerPage, '', userdata.email));
+        setProductPerPage(5);
         // eslint-disable-next-line
     }, []);
 
@@ -277,14 +278,14 @@ export const PurchaseHistory = () => {
             const firstIndex = getStoreState.processInfo.processData1.firstOfAllList;
             const lastIndex = getStoreState.processInfo.processData1.lastOfAllList;
 
-            if (firstItem.data().purchaseNumber === firstIndex.data().purchaseNumber) {
+            if (firstItem?.data().purchaseNumber === firstIndex?.data().purchaseNumber) {
                 setIsDataFirst(true);
             }
             else {
                 setIsDataFirst(false);
             };
 
-            if (lastItem.data().purchaseNumber === lastIndex.data().purchaseNumber) {
+            if (lastItem?.data().purchaseNumber === lastIndex?.data().purchaseNumber) {
                 setIsDataLast(true);
             }
             else {
@@ -296,6 +297,7 @@ export const PurchaseHistory = () => {
         //     console.log('store out');
         // };
 
+        // eslint-disable-next-line
     }, [getStoreState.processInfo.processData1]);
 
     return (
@@ -363,13 +365,13 @@ export const PurchaseHistory = () => {
                 {isDataFirst ?
                     <button>페이지 끝</button>
                     :
-                    <button onClick={() => dispatch(GetpurchaseRecord('prev', productPerPage, ''))}>{'<'}-</button>
+                    <button onClick={() => dispatch(GetpurchaseRecord('prev', productPerPage, '', userdata.email))}>{'<'}-</button>
                 }
 
                 {isDataLast ?
                     <button>페이지 끝</button>
                     :
-                    <button onClick={() => dispatch(GetpurchaseRecord('next', productPerPage, ''))}>-{'>'}</button>
+                    <button onClick={() => dispatch(GetpurchaseRecord('next', productPerPage, '', userdata.email))}>-{'>'}</button>
                 }
             </UtilButton>
         </>

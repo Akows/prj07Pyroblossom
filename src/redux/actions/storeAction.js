@@ -563,11 +563,7 @@ const ChargePoint = (userEmail, chargePoint, navigate) => {
     };
 };
 
-
-
-
-
-const GetpurchaseRecord = (listCallType, itemPerPage, searchKeyword) => {
+const GetpurchaseRecord = (listCallType, itemPerPage, searchKeyword, userEmail) => {
     return (dispatch, getState) => {
         dispatch({ type: 'STORE_STATE_INIT' });
         dispatch({ type: 'STORE_LOADING' });
@@ -587,12 +583,12 @@ const GetpurchaseRecord = (listCallType, itemPerPage, searchKeyword) => {
             let LastQueryRef = '';
 
             if (listCallType === 'keywordsearch') {
-                firstQueryRef = query(purchaseRecordCollectionRef, orderBy('date', 'asc'), where('name', '==', searchKeyword), limit(1));
-                LastQueryRef = query(purchaseRecordCollectionRef, orderBy('date', 'asc'), where('name', '==', searchKeyword), limitToLast(1));
+                firstQueryRef = query(purchaseRecordCollectionRef, orderBy('date', 'asc'), where('name', '==', searchKeyword), where('userEmail', '==', userEmail), limit(1));
+                LastQueryRef = query(purchaseRecordCollectionRef, orderBy('date', 'asc'), where('name', '==', searchKeyword), where('userEmail', '==', userEmail), limitToLast(1));
             }
             else {
-                firstQueryRef = query(purchaseRecordCollectionRef, orderBy('date', 'asc'), limit(1));
-                LastQueryRef = query(purchaseRecordCollectionRef, orderBy('date', 'asc'), limitToLast(1));
+                firstQueryRef = query(purchaseRecordCollectionRef, orderBy('date', 'asc'), where('userEmail', '==', userEmail), limit(1));
+                LastQueryRef = query(purchaseRecordCollectionRef, orderBy('date', 'asc'), where('userEmail', '==', userEmail), limitToLast(1));
             };
             
             const firstDocumentSnapshots = await getDocs(firstQueryRef);
@@ -611,16 +607,16 @@ const GetpurchaseRecord = (listCallType, itemPerPage, searchKeyword) => {
             // 최초 랜더링일 때, itemPerPage만큼 데이터를 조회해온다.
             // 만약 검색어를 입력하지 않았는데 검색 버튼을 클릭할 경우에도 마찬가지로 처리한다.
             if (listCallType === 'firstRender' || searchKeyword === '') {
-                queryRef = query(purchaseRecordCollectionRef, orderBy('date'), limit(itemPerPage));
+                queryRef = query(purchaseRecordCollectionRef, orderBy('date'), where('userEmail', '==', userEmail), limit(itemPerPage));
             }
             // 검색일 때, where 함수를 사용하여 조건검색으로 데이터를 조회해온다.
             else if (listCallType === 'keywordsearch') {
-                queryRef = query(purchaseRecordCollectionRef, orderBy('date'), where('name', '==', searchKeyword), limit(itemPerPage));
+                queryRef = query(purchaseRecordCollectionRef, orderBy('date'), where('name', '==', searchKeyword), where('userEmail', '==', userEmail), limit(itemPerPage));
             };
 
             // 일반 유저화면에서의 제품 로딩의 경우, 비공개된 제품이 출력되서는 안된다.
             if (listCallType === 'commonusergetproduct') {
-                queryRef = query(purchaseRecordCollectionRef, orderBy('date'), where('productDisclosure', '==', true), limit(itemPerPage));
+                queryRef = query(purchaseRecordCollectionRef, orderBy('date'), where('productDisclosure', '==', true), where('userEmail', '==', userEmail), limit(itemPerPage));
             };
 
             // 다른 페이지로 이동할 경우, 페이지 이동을 위한 데이터 Index를 바탕으로 데이터를 조회해온다.
@@ -628,10 +624,10 @@ const GetpurchaseRecord = (listCallType, itemPerPage, searchKeyword) => {
             // 따라서 당 정보를 가져와서 사용한다.
             const { firstOfPage, lastOfPage } = getState().store.processInfo.processData1;
             if (listCallType === 'next') {
-                queryRef = query(purchaseRecordCollectionRef, orderBy('date'), startAfter(lastOfPage), limit(itemPerPage));
+                queryRef = query(purchaseRecordCollectionRef, orderBy('date'), where('userEmail', '==', userEmail), startAfter(lastOfPage), limit(itemPerPage));
             }
             else if (listCallType === 'prev') {
-                queryRef = query(purchaseRecordCollectionRef, orderBy('date'), endBefore(firstOfPage), limitToLast(itemPerPage));
+                queryRef = query(purchaseRecordCollectionRef, orderBy('date'), where('userEmail', '==', userEmail), endBefore(firstOfPage), limitToLast(itemPerPage));
             };
             
             // 그리고 쿼리를 기준으로 Doc을 가져온다.
@@ -649,6 +645,9 @@ const GetpurchaseRecord = (listCallType, itemPerPage, searchKeyword) => {
                 data.date = dateFormat(doc.data().date.toDate());
                 result.push(data);
             });
+
+            console.log(result);
+
             returnData.processData2 = result;
         };
 
@@ -672,10 +671,81 @@ const GetpurchaseRecord = (listCallType, itemPerPage, searchKeyword) => {
 
 
 
+const GetPointRecord = (listCallType, itemPerPage, userEmail) => {
+    return (dispatch, getState) => {
+        dispatch({ type: 'STORE_STATE_INIT' });
+        dispatch({ type: 'STORE_LOADING' });
 
+        const returnData = {
+            processData1: {
+                firstOfPage: {},
+                lastOfPage: {},
+                firstOfAllList: {},
+                lastOfAllList: {},
+            },
+            processData2: [],
+        };
 
+        const calculateBothEndsIndex = async () => {
+            const firstQueryRef = query(pointRecordCollectionRef, orderBy('recordDate', 'asc'), where('userEmail', '==', userEmail), limit(1));
+            const LastQueryRef = query(pointRecordCollectionRef, orderBy('recordDate', 'asc'), where('userEmail', '==', userEmail), limitToLast(1));
+            
+            const firstDocumentSnapshots = await getDocs(firstQueryRef);
+            const lastDocumentSnapshots = await getDocs(LastQueryRef);
 
-export { Test1, AddProduct, GetProductList, GetProductInfo, UpdateProduct, ChangeProductDisclosure, GoToPurchasePage, PurchaseProduct, ChargePoint, GetpurchaseRecord };
+            returnData.processData1.firstOfAllList = firstDocumentSnapshots.docs[0];
+            returnData.processData1.lastOfAllList = lastDocumentSnapshots.docs[0];
+        };
+
+        const calculateProductPerPage = async () => {
+
+            let queryRef = '';
+
+            if (listCallType === 'firstRender') {
+                queryRef = query(pointRecordCollectionRef, orderBy('recordDate'), where('userEmail', '==', userEmail), limit(itemPerPage));
+            };
+
+            const { firstOfPage, lastOfPage } = getState().store.processInfo.processData1;
+            if (listCallType === 'next') {
+                queryRef = query(pointRecordCollectionRef, orderBy('recordDate'), where('userEmail', '==', userEmail), startAfter(lastOfPage), limit(itemPerPage));
+            }
+            else if (listCallType === 'prev') {
+                queryRef = query(pointRecordCollectionRef, orderBy('recordDate'), where('userEmail', '==', userEmail), endBefore(firstOfPage), limitToLast(itemPerPage));
+            };
+            
+            const allDocumentSnapshots = await getDocs(queryRef);
+            returnData.processData1.firstOfPage = allDocumentSnapshots.docs[0];
+            returnData.processData1.lastOfPage = allDocumentSnapshots.docs[allDocumentSnapshots.docs.length - 1];
+
+            const result = [];
+            let data = {};
+            allDocumentSnapshots.forEach((doc) => {
+                data = Object.assign(doc.data());
+                data.recordDate = dateFormat(doc.data().recordDate.toDate());
+                result.push(data);
+            });
+            returnData.processData2 = result;
+        };
+
+        calculateBothEndsIndex()
+        .then(() => {
+            calculateProductPerPage()
+            .then(() => {
+                dispatch({ type: 'STORE_COMPLETE' });
+                dispatch({ type: 'STORE_GET_PRODUCTLIST', payload: returnData});
+            })
+            .catch((error) => {
+                dispatch({ type: 'STORE_ERROR', payload: createErrorData(error) });
+            });
+        })
+        .catch((error) => {
+            dispatch({ type: 'STORE_ERROR', payload: createErrorData(error) });
+        });
+
+    };
+};
+
+export { Test1, AddProduct, GetProductList, GetProductInfo, UpdateProduct, ChangeProductDisclosure, GoToPurchasePage, PurchaseProduct, ChargePoint, GetpurchaseRecord, GetPointRecord };
 
 
 
