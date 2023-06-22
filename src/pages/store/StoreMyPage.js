@@ -267,7 +267,9 @@ export const StoreMyPage = () => {
     };
 
     useEffect(() => {
-        dispatch(GetUserData(getUserState.userdata.email));
+        if (getUserState.userdata) {
+            dispatch(GetUserData(getUserState.userdata.email));
+        };
 
         if (getUserState.userdata.displayName === 'Admin') {
             setIsAdminLogin(true);
@@ -283,6 +285,13 @@ export const StoreMyPage = () => {
 
     useEffect(() => {
         setUserDatas(getUserState.userdata);
+
+        // 새로고침이 일어났을 때 point 정보가 없다면?
+        // 유저 정보를 호출하여 Redux Store에 넣는다.
+        if (!getUserState.userdata.point) {
+            dispatch(GetUserData(getUserState.userdata.email));
+        };
+        // eslint-disable-next-line
     }, [getUserState.userdata])
 
     useEffect(() => {

@@ -25,8 +25,10 @@ const userCollectionRef = collection(appFireStore, 'user');
 const storeCollectionRef = collection(appFireStore, 'storeProducts');
 // 구매기록 Ref.
 const purchaseRecordCollectionRef = collection(appFireStore, 'purchaseRecord');
+// 포인트 사용기록 Ref.
+const pointRecordCollectionRef = collection(appFireStore, 'pointRecord');
 
 // 파이어베이스 스토리지 Ref.
 const storageRef = ref(appStorage);
 
-export { appFireStore, appAuth, timeStamp, userCollectionRef, storeCollectionRef, purchaseRecordCollectionRef, storageRef }
+export { appFireStore, appAuth, timeStamp, userCollectionRef, storeCollectionRef, purchaseRecordCollectionRef, pointRecordCollectionRef, storageRef }

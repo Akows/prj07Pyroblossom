@@ -269,22 +269,22 @@ export const PurchaseHistory = () => {
     }, []);
 
     useEffect(() => {
-        if (getStoreState.processInfo.processData1 !== '' || getStoreState.processInfo.processData2 !== '') {
+        if (Object.keys(getStoreState.processInfo.processData1).length !== 0) {
             setListData(getStoreState.processInfo.processData2);
 
-            const firstItem = getStoreState.processInfo.processData1?.firstOfPage;
-            const lastItem = getStoreState.processInfo.processData1?.lastOfPage;
-            const firstIndex = getStoreState.processInfo.processData1?.firstOfAllList;
-            const lastIndex = getStoreState.processInfo.processData1?.lastOfAllList;
+            const firstItem = getStoreState.processInfo.processData1.firstOfPage;
+            const lastItem = getStoreState.processInfo.processData1.lastOfPage;
+            const firstIndex = getStoreState.processInfo.processData1.firstOfAllList;
+            const lastIndex = getStoreState.processInfo.processData1.lastOfAllList;
 
-            if (firstItem?.data().purchaseNumber === firstIndex?.data().purchaseNumber) {
+            if (firstItem.data().purchaseNumber === firstIndex.data().purchaseNumber) {
                 setIsDataFirst(true);
             }
             else {
                 setIsDataFirst(false);
             };
 
-            if (lastItem?.data().purchaseNumber === lastIndex?.data().purchaseNumber) {
+            if (lastItem.data().purchaseNumber === lastIndex.data().purchaseNumber) {
                 setIsDataLast(true);
             }
             else {
@@ -296,7 +296,7 @@ export const PurchaseHistory = () => {
         //     console.log('store out');
         // };
 
-    }, [getStoreState.processInfo]);
+    }, [getStoreState.processInfo.processData1]);
 
     return (
         <>

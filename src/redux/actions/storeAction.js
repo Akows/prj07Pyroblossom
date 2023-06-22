@@ -1,7 +1,7 @@
 import { deleteDoc, doc, endBefore, getCountFromServer, getDoc, getDocs, limit, limitToLast, orderBy, query, setDoc, startAfter, updateDoc, where } from 'firebase/firestore';
 import { ref, uploadBytes } from 'firebase/storage';
 import { createErrorData, errorCode } from '../../configs/errorCodes';
-import { timeStamp, storeCollectionRef, storageRef, purchaseRecordCollectionRef, userCollectionRef } from '../../configs/firebase/config'
+import { timeStamp, storeCollectionRef, storageRef, purchaseRecordCollectionRef, userCollectionRef, pointRecordCollectionRef } from '../../configs/firebase/config'
 import { dateFormat, productOptionInfoProcess } from '../../functions/storeFunction';
 
 const Test1 = () => {
@@ -443,12 +443,14 @@ const PurchaseProduct = (purchaseData, productData, userData, navigate) => {
             );
         };
 
+        let beforePoint = 0;
+
         // 유저 데이터의 포인트 값을 수정.
         const updataUserInfo = async () => {
             const docRef = doc(userCollectionRef, userData.email);
             const docSnap = await getDoc(docRef);
 
-            const beforePoint = parseInt(docSnap.data().point);
+            beforePoint = parseInt(docSnap.data().point);
 
             if (beforePoint < purchaseData.totalAmount) {
                 throw errorCode.storeError.InsufficientPoint;
@@ -459,11 +461,36 @@ const PurchaseProduct = (purchaseData, productData, userData, navigate) => {
             }, { merge: true });
         };
 
+        const recordPointData = async () => {
+            const querys = query(pointRecordCollectionRef);
+            const count = await getCountFromServer(querys);
+
+            const docRef = doc(pointRecordCollectionRef, `${count.data().count + 1}`);
+            const createdTime = timeStamp.fromDate(new Date());
+
+            await setDoc(docRef,
+                {
+                    userEmail: userData.email,
+                    recordType: '-',
+                    recordNumber: parseInt(purchaseData.totalAmount),
+                    recordDesc: '포인트 사용(굿즈 스토어 물건 구매).',
+                    recordDate: createdTime,
+                    leftoverPoint: beforePoint - parseInt(purchaseData.totalAmount),
+                }
+            );
+        };
+
         updataUserInfo()
         .then(() => {
             addRecord()
             .then(() => {
-                dispatch({ type: 'STORE_COMPLETE' });
+                recordPointData()
+                .then(() => {
+                    dispatch({ type: 'STORE_COMPLETE' });
+                })
+                .catch((error) => {
+                    dispatch({ type: 'STORE_ERROR', payload: createErrorData(error) });
+                });
             })
             .catch((error) => {
                 dispatch({ type: 'STORE_ERROR', payload: createErrorData(error) });
@@ -483,23 +510,52 @@ const ChargePoint = (userEmail, chargePoint, navigate) => {
         dispatch({ type: 'STORE_STATE_INIT' });
         dispatch({ type: 'STORE_LOADING' });
 
+        let beforePoint = 0;
+
         const updataUserInfo = async () => {
             const docRef = doc(userCollectionRef, userEmail);
             const docSnap = await getDoc(docRef);
 
-            const beforePoint = parseInt(docSnap.data().point);
+            beforePoint = parseInt(docSnap.data().point);
 
             await setDoc(docRef, {
                 point: beforePoint + parseInt(chargePoint),
             }, { merge: true });
         };
 
+        const recordPointData = async () => {
+            console.log('충전!');
+
+            const querys = query(pointRecordCollectionRef);
+            const count = await getCountFromServer(querys);
+
+            const docRef = doc(pointRecordCollectionRef, `${count.data().count + 1}`);
+            const createdTime = timeStamp.fromDate(new Date());
+
+            await setDoc(docRef,
+                {
+                    userEmail: userEmail,
+                    recordType: '+',
+                    recordNumber: chargePoint,
+                    recordDesc: '포인트 충전.',
+                    recordDate: createdTime,
+                    leftoverPoint: beforePoint + parseInt(chargePoint),
+                }
+            );
+        };
+
         updataUserInfo()
         .then(() => {
-            dispatch({ type: 'STORE_COMPLETE' });
-            dispatch({ type: 'STORE_RENDERING_ON' });
-            alert(`${chargePoint}원이 충전되었습니다.`);
-            navigate('/store/mypage', { replace: true });
+            recordPointData()
+            .then(() => {
+                dispatch({ type: 'STORE_COMPLETE' });
+                dispatch({ type: 'STORE_RENDERING_ON' });
+                alert(`${chargePoint}원이 충전되었습니다.`);
+                navigate('/store/mypage', { replace: true });
+            })
+            .catch((error) => {
+                dispatch({ type: 'ERROR', payload: createErrorData(error) });
+            })
         })
         .catch((error) => {
             dispatch({ type: 'ERROR', payload: createErrorData(error) });
