@@ -290,14 +290,14 @@ const Sildeshow = ({ listData }) => {
         // eslint-disable-next-line    
     }, [currentSlide]);
 
-    useInterval(() => {
-        showSlide(currentSlide);
-        setCurrentSlide(currentSlide + 1);
+    // useInterval(() => {
+    //     showSlide(currentSlide);
+    //     setCurrentSlide(currentSlide + 1);
 
-        if (currentSlide > slideLength - 2) {
-            setCurrentSlide(0);
-        }
-    }, 2000);
+    //     if (currentSlide > slideLength - 2) {
+    //         setCurrentSlide(0);
+    //     }
+    // }, 2000);
 
     return (
         <BackGround

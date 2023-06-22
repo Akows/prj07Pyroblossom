@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import '../../assets/animation.css';
@@ -216,18 +216,79 @@ export const StoreMain = () => {
     const getStoreState = useSelector((state) => state.store);
 
     const [listData, setListData] = useState([]);
+    const [slideListData, setSlideListData] = useState([]);
+
+    const [listLast, setListLast] = useState();
+    const [indexLast, setLndexLast] = useState();
+
+    const [isDataLast, setIsDataLast] = useState(false);
+
+    const observer = useRef();
+    const deepPoint = useRef();
 
     useEffect(() => {
-        dispatch(GetProductList('commonusergetproduct', 9, ''));
+        dispatch(GetProductList('commonusergetproduct', 1, ''));
+
+        observer.current = new IntersectionObserver(entries => {
+            entries.forEach((item) => {
+                if (item.isIntersecting) {
+
+                    if (!isDataLast) {
+                        console.log('데이터 불러오기');
+                        dispatch(GetProductList('next', 1, ''));
+                    }
+                    else {
+
+                    };
+                }
+                else {
+
+                };
+            });
+        }, { threshold: 1 });
+
+        observer.current.observe(deepPoint.current);
+
         // eslint-disable-next-line
     }, []);
 
     useEffect(() => {
+        if (setSlideListData.length !== 0) {
+            setSlideListData(getStoreState.processInfo.processData2);
+        };
+
+        if (!listLast && !indexLast) {
+            setListLast(getStoreState.processInfo.processData1.lastOfPage);
+            setLndexLast(getStoreState.processInfo.processData1.lastOfAllList);
+        };
+
         if (getStoreState.processInfo.processData1 !== '' || getStoreState.processInfo.processData2 !== '') {
-            setListData(getStoreState.processInfo.processData2);
+
+            let newData = {};
+            getStoreState.processInfo.processData2.map((item) => {
+                newData = Object.assign(item);
+                setListData([...listData, newData]);
+
+            });
+
+            // setListData(listData.concat(newData));
         };
     }, [getStoreState.processInfo]);
 
+    useEffect(() => {
+        if (listLast && indexLast) {
+            const check = listLast.data().number === indexLast.data().number;
+
+            if (check) {
+                console.log('마지막 데이터에 도달함.');
+                setIsDataLast(true);
+            }
+            else {
+                console.log('마지막 데이터에 도달하지 않음.');
+                setIsDataLast(false);
+            };
+        };
+    }, [listLast, indexLast]);
 
     return (
         <BackGround>
@@ -250,12 +311,12 @@ export const StoreMain = () => {
                 </StoreTitleArea>
 
                 <StoreSlideShowArea>
-                    <Sildeshow listData={listData} />
+                    {/* <Sildeshow listData={slideListData} /> */}
                 </StoreSlideShowArea>
 
                 <StoreListArea>
 
-                    {listData.length === 0 && '제품 정보가 존재하지 않습니다.'}
+                    {listData?.length === 0 && '제품 정보가 존재하지 않습니다.'}
 
                     {listData?.map(item => (
                         <Product key={item.number} onClick={() => navigate(`/store/productdetail/${item.name}`)}>
@@ -279,12 +340,15 @@ export const StoreMain = () => {
                                     }
                                 </div>
 
+                                <p>{item.price}</p>
+
                             </ProductTitle>
                         </Product>
                     ))}
 
                 </StoreListArea>
 
+                <p ref={deepPoint}></p>
 
             </InnerContents>
         </BackGround>
