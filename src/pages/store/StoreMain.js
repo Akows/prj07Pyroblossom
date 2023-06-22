@@ -260,7 +260,7 @@ export const StoreMain = () => {
                     {listData?.map(item => (
                         <Product key={item.number} onClick={() => navigate(`/store/productdetail/${item.name}`)}>
                             <ProductImg isSale={item.inventory <= 0}>
-                                <img src={`https://firebasestorage.googleapis.com/v0/b/prj07pyroblossom.appspot.com/o/productsImage%2F${item.name}%2F${item.productInformationFile.titleimage}?alt=media&token=bf2eff71-3c5e-4dc2-9706-445f95fd91e8`} alt='' />
+                                <img src={`https://firebasestorage.googleapis.com/v0/b/prj07pyroblossom.appspot.com/o/productsImage%2F${item.name}%2F${item.productInformationFile?.titleimage}?alt=media&token=bf2eff71-3c5e-4dc2-9706-445f95fd91e8`} alt='' />
                             </ProductImg>
 
                             <hr />

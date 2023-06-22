@@ -2,7 +2,7 @@ import { deleteDoc, doc, endBefore, getCountFromServer, getDoc, getDocs, limit, 
 import { ref, uploadBytes } from 'firebase/storage';
 import { createErrorData, errorCode } from '../../configs/errorCodes';
 import { timeStamp, storeCollectionRef, storageRef, purchaseRecordCollectionRef, userCollectionRef } from '../../configs/firebase/config'
-import { productOptionInfoProcess } from '../../functions/storeFunction';
+import { dateFormat, productOptionInfoProcess } from '../../functions/storeFunction';
 
 const Test1 = () => {
     return (dispatch, getState) => {
@@ -431,11 +431,14 @@ const PurchaseProduct = (purchaseData, productData, userData, navigate) => {
 
             await setDoc(docRef,
                 {
+                    purchaseNumber: allPurchaseRecordCount.data().count + 1,
                     userName: userData.email,
                     address: userData.address,
                     address2: userData.address2,
                     date: createdTime,
-                    purchaseData: purchaseData.purchaseList,
+                    purchaseData: purchaseData,
+                    productData: productData,
+                    isDelete: false,
                 }
             );
         };
@@ -584,8 +587,11 @@ const GetpurchaseRecord = (listCallType, itemPerPage, searchKeyword) => {
 
             // 제품 데이터를 배열에 담아 저장해준다.
             const result = [];
+            let data = {};
             allDocumentSnapshots.forEach((doc) => {
-                result.push(doc.data());
+                data = Object.assign(doc.data());
+                data.date = dateFormat(doc.data().date.toDate());
+                result.push(data);
             });
             returnData.processData2 = result;
         };

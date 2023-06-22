@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 
-import productimg from '../../../assets/images/testImg/testproductimg.jpg';
 import { GetpurchaseRecord } from '../../../redux/actions/storeAction';
 
 const UserUtilButton = styled.div`
@@ -265,7 +264,7 @@ export const PurchaseHistory = () => {
     };
 
     useEffect(() => {
-        dispatch(GetpurchaseRecord('firstRender', productPerPage, searchKeyword));
+        dispatch(GetpurchaseRecord('firstRender', productPerPage, ''));
         // eslint-disable-next-line
     }, []);
 
@@ -273,34 +272,24 @@ export const PurchaseHistory = () => {
         if (getStoreState.processInfo.processData1 !== '' || getStoreState.processInfo.processData2 !== '') {
             setListData(getStoreState.processInfo.processData2);
 
-            const firstItem = getStoreState.processInfo.processData1.firstOfPage;
-            const lastItem = getStoreState.processInfo.processData1.lastOfPage;
-            const firstIndex = getStoreState.processInfo.processData1.firstOfAllList;
-            const lastIndex = getStoreState.processInfo.processData1.lastOfAllList;
+            const firstItem = getStoreState.processInfo.processData1?.firstOfPage;
+            const lastItem = getStoreState.processInfo.processData1?.lastOfPage;
+            const firstIndex = getStoreState.processInfo.processData1?.firstOfAllList;
+            const lastIndex = getStoreState.processInfo.processData1?.lastOfAllList;
 
-            console.log(firstItem?.data());
-            console.log(firstIndex?.data());
-
-            console.log(lastItem?.data());
-            console.log(lastIndex?.data());
-
-
-            if (firstItem?.data().date === firstIndex?.data().date) {
+            if (firstItem?.data().purchaseNumber === firstIndex?.data().purchaseNumber) {
                 setIsDataFirst(true);
             }
             else {
                 setIsDataFirst(false);
             };
 
-            if (lastItem?.data().date === lastIndex?.data().date) {
+            if (lastItem?.data().purchaseNumber === lastIndex?.data().purchaseNumber) {
                 setIsDataLast(true);
             }
             else {
                 setIsDataLast(false);
             };
-
-            console.log(isDataFirst);
-            console.log(isDataLast);
         };
 
         // return () => {
@@ -338,26 +327,25 @@ export const PurchaseHistory = () => {
 
             <UserComponent>
 
-                {listData?.length === 0 && '상품이 존재하지 않습니다.'}
+                {listData?.length === 0 && '결제내역이 존재하지 않습니다.'}
 
-                {listData?.map((item, index) => (
+                {listData?.map((ite, index) => (
                     <History key={index}>
                         <HistoryState>
                             <p>구매상태</p>
                             <p>X</p>
                         </HistoryState>
 
-                        {item.purchaseData?.map((item) => (
+                        {ite.purchaseData?.purchaseList.map((item) => (
                             <HistoryInfo key={item.optionNumber}>
                                 <ProductImg>
-                                    <img src={productimg} alt='' />
+                                    <img src={`https://firebasestorage.googleapis.com/v0/b/prj07pyroblossom.appspot.com/o/productsImage%2F${item.optionName}%2F${ite.productData[0].productInformationFile?.titleimage}?alt=media&token=bf2eff71-3c5e-4dc2-9706-445f95fd91e8`} alt='' />
                                 </ProductImg>
                                 <ProductInfo>
-                                    <p>04.13 구매</p>
+                                    <p>{ite.date}</p>
                                     <p>{item.optionName}</p>
                                     <p>{item.purchaseQuantity}개</p>
                                     <p>{item.totalAmount}원</p>
-
                                 </ProductInfo>
 
                             </HistoryInfo>
