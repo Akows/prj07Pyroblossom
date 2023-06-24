@@ -227,15 +227,15 @@ export const StoreMain = () => {
     const deepPoint = useRef();
 
     useEffect(() => {
-        dispatch(GetProductList('commonusergetproduct', 1, ''));
+        dispatch(GetProductList('commonusergetproduct', 5, ''));
 
         observer.current = new IntersectionObserver(entries => {
             entries.forEach((item) => {
                 if (item.isIntersecting) {
 
                     if (!isDataLast) {
-                        console.log('데이터 불러오기');
-                        dispatch(GetProductList('next', 1, ''));
+                        // console.log('데이터 불러오기');
+                        // dispatch(GetProductList('next', 1, ''));
                     }
                     else {
 
@@ -264,14 +264,13 @@ export const StoreMain = () => {
 
         if (getStoreState.processInfo.processData1 !== '' || getStoreState.processInfo.processData2 !== '') {
 
-            let newData = {};
-            getStoreState.processInfo.processData2.map((item) => {
-                newData = Object.assign(item);
-                setListData([...listData, newData]);
+            // let newData = {};
+            // getStoreState.processInfo.processData2.map((item) => {
+            //     newData = Object.assign(item);
+            //     setListData([...listData, newData]);
+            // });
 
-            });
-
-            // setListData(listData.concat(newData));
+            setListData(getStoreState.processInfo.processData2);
         };
     }, [getStoreState.processInfo]);
 
@@ -311,7 +310,7 @@ export const StoreMain = () => {
                 </StoreTitleArea>
 
                 <StoreSlideShowArea>
-                    {/* <Sildeshow listData={slideListData} /> */}
+                    <Sildeshow listData={slideListData} />
                 </StoreSlideShowArea>
 
                 <StoreListArea>
