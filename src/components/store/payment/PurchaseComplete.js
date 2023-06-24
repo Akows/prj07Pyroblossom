@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { PointChargeModal } from '../PointChargeModal';
@@ -267,6 +267,7 @@ const PaymentSubmit = styled.div`
 export const PurchaseComplete = ({ onClickError, purchaseData, productData, userData, isShowModal, setIsShowModal }) => {
 
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const getStoreState = useSelector((state) => state.store);
 
@@ -289,6 +290,11 @@ export const PurchaseComplete = ({ onClickError, purchaseData, productData, user
 
     useEffect(() => {
         setIsPointEnough(getStoreState.flagValue.isPointEnough);
+
+        if (!getStoreState.flagValue.isError) {
+            dispatch({ type: 'STORE_ENOUGH_POINT' });
+        };
+        // eslint-disable-next-line
     }, [getStoreState.flagValue]);
 
     return (

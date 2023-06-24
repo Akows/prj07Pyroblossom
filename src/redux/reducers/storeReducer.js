@@ -58,7 +58,9 @@ const storeReducer = (prevState = initialState, action) => {
             case 'STORE_NOTENOUGH_POINT':
                 draft.flagValue.isPointEnough = false;
                 break;
-
+            case 'STORE_ENOUGH_POINT':
+                draft.flagValue.isPointEnough = true;
+                break;
 
             case 'STORE_RENDERING_ON':
                 draft.flagValue.isRendering = true;
