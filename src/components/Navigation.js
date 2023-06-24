@@ -262,12 +262,12 @@ export const Navigation = () => {
                                 </TitleImage>
                                 <DownMenu>
                                     <Link to='/store'>굿즈스토어</Link>
-                                    <Link to='/'>
+                                    {/* <Link to='/'>
                                         미구현
                                     </Link>
                                     <Link to='/freeboard'>
                                         로딩화면테스트
-                                    </Link>
+                                    </Link> */}
 
                                     {getUserState.flagvalue.isLogin ?
                                         <UserMenuSub>
@@ -308,12 +308,12 @@ export const Navigation = () => {
                 <Menu2>
                     <Link to='/store'>굿즈스토어</Link>
                 </Menu2>
-                <Menu2>
+                {/* <Menu2>
                     <Link to='/'>미구현</Link>
                 </Menu2>
                 <Menu2>
                     <Link to='/freeboard'>로딩화면테스트</Link>
-                </Menu2>
+                </Menu2> */}
             </MenuArea>
 
             <UserArea

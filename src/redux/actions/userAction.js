@@ -13,6 +13,7 @@ const IsLoginCheck = () => {
             if (!user) {
                 console.log('사용자 인증 정보가 존재하지 않음.');
                 dispatch({ type: 'COMPLETE' });
+                dispatch({ type: 'LOG_OUT' });
             }
             else {
                 const loginUserData = {

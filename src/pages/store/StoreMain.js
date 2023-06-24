@@ -218,9 +218,12 @@ export const StoreMain = () => {
     const [listData, setListData] = useState([]);
     const [slideListData, setSlideListData] = useState([]);
 
+    // 무한 스크롤 사용 중단으로 아래 변수는 일시 미사용.
+    // eslint-disable-next-line
     const [listLast, setListLast] = useState();
+    // eslint-disable-next-line
     const [indexLast, setLndexLast] = useState();
-
+    // eslint-disable-next-line
     const [isDataLast, setIsDataLast] = useState(false);
 
     const observer = useRef();
@@ -257,10 +260,10 @@ export const StoreMain = () => {
             setSlideListData(getStoreState.processInfo.processData2);
         };
 
-        if (!listLast && !indexLast) {
-            setListLast(getStoreState.processInfo.processData1.lastOfPage);
-            setLndexLast(getStoreState.processInfo.processData1.lastOfAllList);
-        };
+        // if (!listLast && !indexLast) {
+        //     setListLast(getStoreState.processInfo.processData1.lastOfPage);
+        //     setLndexLast(getStoreState.processInfo.processData1.lastOfAllList);
+        // };
 
         if (getStoreState.processInfo.processData1 !== '' || getStoreState.processInfo.processData2 !== '') {
 
@@ -274,20 +277,20 @@ export const StoreMain = () => {
         };
     }, [getStoreState.processInfo]);
 
-    useEffect(() => {
-        if (listLast && indexLast) {
-            const check = listLast.data().number === indexLast.data().number;
+    // useEffect(() => {
+    //     if (listLast && indexLast) {
+    //         const check = listLast.data().number === indexLast.data().number;
 
-            if (check) {
-                console.log('마지막 데이터에 도달함.');
-                setIsDataLast(true);
-            }
-            else {
-                console.log('마지막 데이터에 도달하지 않음.');
-                setIsDataLast(false);
-            };
-        };
-    }, [listLast, indexLast]);
+    //         if (check) {
+    //             console.log('마지막 데이터에 도달함.');
+    //             setIsDataLast(true);
+    //         }
+    //         else {
+    //             console.log('마지막 데이터에 도달하지 않음.');
+    //             setIsDataLast(false);
+    //         };
+    //     };
+    // }, [listLast, indexLast]);
 
     return (
         <BackGround>

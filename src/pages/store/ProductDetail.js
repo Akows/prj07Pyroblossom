@@ -510,6 +510,9 @@ export const ProductDetail = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
+    const getUserState = useSelector((state) => state.user);
+    const getStoreState = useSelector((state) => state.store);
+
     const [whatCompoIsShow, setWhatCompoIsShow] = useState('review');
 
     const OtherInfoScrollMovePoint = useRef();
@@ -518,7 +521,8 @@ export const ProductDetail = () => {
         OtherInfoScrollMovePoint.current?.scrollIntoView({ behavior: 'smooth' });
     };
 
-    const getStoreState = useSelector((state) => state.store);
+    const [isLogin, setIsLogin] = useState(false);
+
     const [productData, setProductData] = useState([]);
 
     const [purchaseList, setPurchaseList] = useState([]);
@@ -635,6 +639,11 @@ export const ProductDetail = () => {
             return;
         };
 
+        if (!isLogin) {
+            alert('로그인한 회원만 구매가 가능합니다.');
+            return;
+        };
+
         dispatch(GoToPurchasePage(purchaseList, totalQuantity, totalAmount, navigate));
     };
 
@@ -642,6 +651,10 @@ export const ProductDetail = () => {
         dispatch(GetProductInfo(id));
         // eslint-disable-next-line
     }, []);
+
+    useEffect(() => {
+        setIsLogin(getUserState.flagvalue.isLogin);
+    }, [getUserState.flagvalue]);
 
     useEffect(() => {
         setProductData(getStoreState.processInfo.processData2);

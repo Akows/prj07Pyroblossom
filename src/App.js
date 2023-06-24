@@ -97,19 +97,29 @@ function App() {
         <Route path='user/*' element={<UserLayout />} >
           <Route path='login' element={!getUserState.flagvalue.isLogin ? <Login /> : <Navigate to='/' replace={true} />} />
           <Route path='signup' element={!getUserState.flagvalue.isLogin ? <Signup /> : <Navigate to='/' replace={true} />} />
-          <Route path='mypage' element={<MyPage />} />
-          <Route path='adminpage' element={<AdminPage />} />
+
+          <Route path='mypage' element={getUserState.flagvalue.isLogin ? <MyPage /> : <Navigate to='/' replace={true} />} />
+          <Route path='adminpage' element={getUserState.flagvalue.isLogin ? <AdminPage /> : <Navigate to='/' replace={true} />} />
+
+          {/* <Route path='mypage' element={<MyPage />} />
+          <Route path='adminpage' element={<AdminPage />} /> */}
         </Route>
 
         <Route path='store/*' element={<StoreLayout />} >
           <Route index element={<StoreMain />} />
           <Route path='productlist/:searchtype/:keyword' element={<ProductList />} />
           <Route path='productdetail/:id' element={<ProductDetail />} />
-          <Route path='payment' element={<PaymentPage />} />
+
+          <Route path='payment' element={getUserState.flagvalue.isLogin ? <PaymentPage /> : <Navigate to='/store' replace={true} />} />
+
+          {/* <Route path='payment' element={<PaymentPage />} /> */}
         </Route>
 
         <Route path='store/mypage' element={<NoNavLayout />} >
-          <Route index element={<StoreMyPage />} />
+
+          <Route index element={getUserState.flagvalue.isLogin ? <StoreMyPage /> : <Navigate to='/store' replace={true} />} />
+
+          {/* <Route index element={<StoreMyPage />} /> */}
         </Route>
 
 
