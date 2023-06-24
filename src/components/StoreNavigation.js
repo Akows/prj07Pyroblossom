@@ -417,7 +417,7 @@ export const StoreNavigation = () => {
             return;
         };
 
-        navigate(`/store/productlist/normal/${searchKeyword}`);
+        navigate(`/store/productlist/keywordSearch/${searchKeyword}`);
         setSearchKeyword('');
         setIsCategoryShow(false);
     };

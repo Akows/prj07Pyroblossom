@@ -1,8 +1,11 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import productimg from '../../assets/images/testImg/testproductimg.jpg';
+import { Loading } from '../../components/Loading';
+import { GetProductList } from '../../redux/actions/storeAction';
 
 const BackGround = styled.div`
     width: 100%;
@@ -215,11 +218,44 @@ const ProductInfo = styled.div`
 
 export const ProductList = () => {
 
-    const { searchtype } = useParams();
-    const { keyword } = useParams();
+    const { searchtype } = useParams(); // 일반 검색시에는 keywordSearch, 카테고리 검색은 category.
+    const { keyword } = useParams(); // 일반 검색시에는 검색값, 카테고리 검색은 카테고리 이름.
+
+    const dispatch = useDispatch();
+
+    const getStoreState = useSelector((state) => state.store);
+
+    const [listData, setListData] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+
+    const searchSubCategory = () => {
+        dispatch(GetProductList('subCategorySearch', 10, keyword));
+    };
+
+    useEffect(() => {
+        if (searchtype === 'keywordSearch') {
+            dispatch(GetProductList('keywordSearch', 10, keyword));
+        }
+        else {
+            dispatch(GetProductList('categorySearch', 10, keyword));
+        };
+        // eslint-disable-next-line
+    }, []);
+
+    useEffect(() => {
+        setIsLoading(getStoreState.flagValue.isLoading);
+    }, [getStoreState.flagValue]);
+
+    useEffect(() => {
+        if (getStoreState.processInfo.processData2 !== '') {
+            setListData(getStoreState.processInfo.processData2);
+        };
+    }, [getStoreState.processInfo]);
 
     return (
         <BackGround>
+
+            {isLoading && <Loading />}
 
             <ProductListTitle>
                 입력하신 '{keyword}'에 대한 검색 결과입니다.
@@ -268,51 +304,20 @@ export const ProductList = () => {
 
                 <ProductLists>
 
-                    <Product>
-                        <ProductPic>
-                            <img src={productimg} alt=''></img>
-                        </ProductPic>
+                    {listData.map((item) => (
+                        <Product key={item.number}>
+                            <ProductPic>
+                                <img src={productimg} alt=''></img>
+                            </ProductPic>
 
-                        <ProductInfo>
-                            <p>통통폭탄인형</p>
-                            <p>30,000원 | 무료배송</p>
-                            <p>인형 {'>'} 봉제인형</p>
-                            <p>리뷰 2334 - 구매 12334 - 등록일 2023.03 - 찜하기 556</p>
-                        </ProductInfo>
-
-
-                    </Product>
-
-                    <Product>
-                        <ProductPic>
-                            <img src={productimg} alt=''></img>
-                        </ProductPic>
-
-                        <ProductInfo>
-                            <p>통통폭탄인형</p>
-                            <p>30,000원 | 무료배송</p>
-                            <p>인형 {'>'} 봉제인형</p>
-                            <p>리뷰 2334 - 구매 12334 - 등록일 2023.03 - 찜하기 556</p>
-                        </ProductInfo>
-                    </Product>
-
-
-
-                    <Product>
-                        <ProductPic>
-                            <img src={productimg} alt=''></img>
-                        </ProductPic>
-
-                        <ProductInfo>
-                            <p>통통폭탄인형</p>
-                            <p>30,000원 | 무료배송</p>
-                            <p>인형 {'>'} 봉제인형</p>
-                            <p>리뷰 2334 - 구매 12334 - 등록일 2023.03 - 찜하기 556</p>
-                        </ProductInfo>
-                    </Product>
-
-
-
+                            <ProductInfo>
+                                <p>{item.name}</p>
+                                <p>{item.price}원 | {item.deliveryFee !== 0 ? `${item.deliveryFee}원` : '무료배송'}</p>
+                                <p>{item.mainCategory} {'>'} {item.subCategory}</p>
+                                {/* <p>리뷰 2334 - 구매 12334 - 등록일 2023.03 - 찜하기 556</p> */}
+                            </ProductInfo>
+                        </Product>
+                    ))}
                 </ProductLists>
 
 

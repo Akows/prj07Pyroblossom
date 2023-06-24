@@ -143,7 +143,7 @@ const GetProductList = (listCallType, itemPerPage, searchKeyword) => {
             let firstQueryRef = '';
             let LastQueryRef = '';
 
-            if (listCallType === 'keywordsearch') {
+            if (listCallType === 'keywordSearch') {
                 firstQueryRef = query(storeCollectionRef, orderBy('number', 'asc'), where('name', '==', searchKeyword), limit(1));
                 LastQueryRef = query(storeCollectionRef, orderBy('number', 'asc'), where('name', '==', searchKeyword), limitToLast(1));
             }
@@ -166,23 +166,26 @@ const GetProductList = (listCallType, itemPerPage, searchKeyword) => {
             // 제품 목록을 조회하는 방식에 따라 쿼리를 다르게 적용한다.
             let queryRef = '';
             // 최초 랜더링일 때, itemPerPage만큼 데이터를 조회해온다.
-            // 만약 검색어를 입력하지 않았는데 검색 버튼을 클릭할 경우에도 마찬가지로 처리한다.
-            if (listCallType === 'firstRender' || searchKeyword === '') {
-                queryRef = query(storeCollectionRef, orderBy('number'), limit(itemPerPage));
-            }
-            // 검색일 때, where 함수를 사용하여 조건검색으로 데이터를 조회해온다.
-            else if (listCallType === 'keywordsearch') {
-                queryRef = query(storeCollectionRef, orderBy('number'), where('name', '==', searchKeyword), limit(itemPerPage));
-            };
 
             // 일반 유저화면에서의 제품 로딩의 경우, 비공개된 제품이 출력되서는 안된다.
             if (listCallType === 'commonusergetproduct') {
                 queryRef = query(storeCollectionRef, orderBy('number'), where('productDisclosure', '==', true), limit(itemPerPage));
+            }
+            // 만약 검색어를 입력하지 않았는데 검색 버튼을 클릭할 경우에도 마찬가지로 처리한다.
+            else if (listCallType === 'firstRender' || searchKeyword === '') {
+                queryRef = query(storeCollectionRef, orderBy('number'), limit(itemPerPage));
+            }
+            // 검색일 때, where 함수를 사용하여 조건검색으로 데이터를 조회해온다.
+            else if (listCallType === 'keywordSearch') {
+                queryRef = query(storeCollectionRef, orderBy('number'), where('name', '==', searchKeyword), limit(itemPerPage));
+            }
+            else if (listCallType === 'categorySearch') {
+                queryRef = query(storeCollectionRef, orderBy('number'), where('mainCategory', '==', searchKeyword), limit(itemPerPage));
+            }
+            else if (listCallType === 'subCategorySearch') {
+                queryRef = query(storeCollectionRef, orderBy('number'), where('subCategory', '==', searchKeyword), limit(itemPerPage));
             };
 
-
-
-            
             // 다른 페이지로 이동할 경우, 페이지 이동을 위한 데이터 Index를 바탕으로 데이터를 조회해온다.
             // 페이지가 렌더링 되었을 때 무조건 1차례 데이터를 받아오고 이 과정에서 페이지 이동에 필요한 데이터가 Redux에 저장되어있다.
             // 따라서 당 정보를 가져와서 사용한다.
