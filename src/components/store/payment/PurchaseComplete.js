@@ -274,7 +274,7 @@ export const PurchaseComplete = ({ onClickError, purchaseData, productData, user
     const [productDatas, setProductDatas] = useState({});
     const [userDatas, setUserDatas] = useState({});
 
-    const [isError, setIsError] = useState(false);
+    const [isPointEnough, setIsPointEnough] = useState(false);
 
     const onSubmit = () => {
         navigate('/store/mypage');
@@ -288,12 +288,12 @@ export const PurchaseComplete = ({ onClickError, purchaseData, productData, user
     }, [purchaseData, productData, userData]);
 
     useEffect(() => {
-        setIsError(getStoreState.flagValue.isError);
+        setIsPointEnough(getStoreState.flagValue.isPointEnough);
     }, [getStoreState.flagValue]);
 
     return (
         <>
-            {isError ?
+            {!isPointEnough ?
                 <>
                     <ProductListButtonArea>
                         <p>주문/결제</p>

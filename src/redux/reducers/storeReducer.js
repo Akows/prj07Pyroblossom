@@ -5,12 +5,13 @@ const initialState = {
         isError: false,
         isLoading: false,
         isRendering: false,
+        isPointEnough: true,
     },
     processInfo: {
         processCode: '',
         processMessage: '',
-        processData1: '',
-        processData2: '',
+        processData1: {},
+        processData2: [],
     },
     purchaseData: {}
 };
@@ -21,10 +22,8 @@ const storeReducer = (prevState = initialState, action) => {
         switch (action.type) {
 
             case 'STORE_STATE_INIT':
-                draft.flagValue = {
-                    isError: false,
-                    isLoading: false,
-                };
+                draft.flagValue.isLoading = false;
+                draft.flagValue.isError = false;
                 draft.processInfo.processCode = '';
                 draft.processInfo.processMessage = '';
                 break;
@@ -37,7 +36,6 @@ const storeReducer = (prevState = initialState, action) => {
 
             case 'STORE_LOADING':
                 draft.flagValue.isLoading = true;
-                draft.flagValue.isError = false;
                 draft.processInfo.processCode = '로딩 중..';
                 draft.processInfo.processMessage = '로딩 중..';
                 break;
@@ -56,6 +54,11 @@ const storeReducer = (prevState = initialState, action) => {
                 draft.processInfo.processData2 = '';
                 draft.processInfo.purchaseData = {};
                 break;
+
+            case 'STORE_NOTENOUGH_POINT':
+                draft.flagValue.isPointEnough = false;
+                break;
+
 
             case 'STORE_RENDERING_ON':
                 draft.flagValue.isRendering = true;

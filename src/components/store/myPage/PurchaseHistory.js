@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 
-import { GetpurchaseRecord } from '../../../redux/actions/storeAction';
+import { DeletePurchaseRecord, GetpurchaseRecord } from '../../../redux/actions/storeAction';
 
 const UserUtilButton = styled.div`
     width: 100%;
@@ -40,29 +40,28 @@ const SearchInput = styled.input`
     };
 `;
 
-const SearchDateInput = styled.div`
-    width: 80%;
-    height: 100%;
-`;
-const InputDate = styled.input`
-    width: 95%;
-    height: 30px;
+// const SearchDateInput = styled.div`
+//     width: 80%;
+//     height: 100%;
+// `;
+// const InputDate = styled.input`
+//     width: 95%;
+//     height: 30px;
 
-    font-family: 'GIFont';
-    font-size: 18px;
-    color: black;
+//     font-family: 'GIFont';
+//     font-size: 18px;
+//     color: black;
 
-    margin-top: 5px;
+//     margin-top: 5px;
 
-    background-color: #aaaaaa;
-    border-radius: 5px;
-    border: none;
-`;
+//     background-color: #aaaaaa;
+//     border-radius: 5px;
+//     border: none;
+// `;
 const SearchButton = styled.button`
     width: 20%;
     height: 100%;
 
-    margin: 5px;
 
     border: 2px solid #535B6C;
     border-radius: 25px;
@@ -263,6 +262,17 @@ export const PurchaseHistory = ({ userdata }) => {
         setSearchKeyword(event.target.value);
     };
 
+    const deleteHistory = (purchaseNumber) => {
+        const confirmChoice = window.confirm('구매내역을 삭제하시겠습니까?');
+
+        if (!confirmChoice) {
+            return;
+        }
+        else {
+            dispatch(DeletePurchaseRecord(purchaseNumber));
+        };
+    };
+
     useEffect(() => {
         dispatch(GetpurchaseRecord('firstRender', productPerPage, '', userdata.email));
         setProductPerPage(5);
@@ -270,7 +280,8 @@ export const PurchaseHistory = ({ userdata }) => {
     }, []);
 
     useEffect(() => {
-        if (Object.keys(getStoreState.processInfo.processData1).length !== 0) {
+        if (getStoreState.processInfo.processData1 !== '' || getStoreState.processInfo.processData2 !== '') {
+
             setListData(getStoreState.processInfo.processData2);
 
             const firstItem = getStoreState.processInfo.processData1.firstOfPage;
@@ -278,19 +289,22 @@ export const PurchaseHistory = ({ userdata }) => {
             const firstIndex = getStoreState.processInfo.processData1.firstOfAllList;
             const lastIndex = getStoreState.processInfo.processData1.lastOfAllList;
 
-            if (firstItem?.data().purchaseNumber === firstIndex?.data().purchaseNumber) {
-                setIsDataFirst(true);
-            }
-            else {
-                setIsDataFirst(false);
+            if (Object.keys(firstItem).length !== 0) {
+                if (firstItem?.data().purchaseNumber === firstIndex?.data().purchaseNumber) {
+                    setIsDataFirst(true);
+                }
+                else {
+                    setIsDataFirst(false);
+                };
+
+                if (lastItem?.data().purchaseNumber === lastIndex?.data().purchaseNumber) {
+                    setIsDataLast(true);
+                }
+                else {
+                    setIsDataLast(false);
+                };
             };
 
-            if (lastItem?.data().purchaseNumber === lastIndex?.data().purchaseNumber) {
-                setIsDataLast(true);
-            }
-            else {
-                setIsDataLast(false);
-            };
         };
 
         // return () => {
@@ -310,9 +324,9 @@ export const PurchaseHistory = ({ userdata }) => {
                     </SearchButton>
                 </SearchBar>
 
-                <hr />
+                {/* <hr /> */}
 
-                <SearchBar>
+                {/* <SearchBar>
                     <SearchDateInput>
                         <InputDate type='date' />
                         <InputDate type='date' />
@@ -321,7 +335,7 @@ export const PurchaseHistory = ({ userdata }) => {
                     <SearchButton>
                         조회
                     </SearchButton>
-                </SearchBar>
+                </SearchBar> */}
 
 
 
@@ -335,7 +349,7 @@ export const PurchaseHistory = ({ userdata }) => {
                     <History key={index}>
                         <HistoryState>
                             <p>구매상태</p>
-                            <p>X</p>
+                            <p onClick={() => deleteHistory(ite.purchaseNumber)}>X</p>
                         </HistoryState>
 
                         {ite.purchaseData?.purchaseList.map((item) => (
@@ -354,7 +368,7 @@ export const PurchaseHistory = ({ userdata }) => {
                         ))}
 
                         <HistoryButton>
-                            <button>주문상세</button>
+                            {/* <button>주문상세</button> */}
                         </HistoryButton>
                     </History>
                 ))}

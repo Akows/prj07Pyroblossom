@@ -120,10 +120,17 @@ const SignUp = (userData, navigate) => {
                                     .then(() => {
                                         emailVerifiedProcess(appAuth.currentUser)
                                             .then(() => {
-                                                dispatch({ type: 'COMPLETE' });
-                                                dispatch({ type: 'SIGN_UP_SUCCESS' });
-                                                alert('인증 메일이 발송되었습니다. 이메일 함을 확인해주세요.');
-                                                alert('모든 과정이 완료되었습니다. 회원가입을 환영합니다!');
+                                                signOut(appAuth)
+                                                    .then(() => {
+                                                        dispatch({ type: 'COMPLETE' });
+                                                        dispatch({ type: 'SIGN_UP_SUCCESS' });
+                                                        alert('인증 메일이 발송되었습니다. 이메일 함을 확인해주세요.');
+                                                        alert('모든 과정이 완료되었습니다. 회원가입을 환영합니다!');
+                                                    })
+                                                    .catch((error) => {
+                                                        dispatch({ type: 'ERROR', payload: createErrorData(error) });
+                                                        navigate('/', { replace: true });
+                                                    });
                                             })
                                             // 이메일 인증 메일 발송에 문제가 생겼을 경우.
                                             .catch((error) => {

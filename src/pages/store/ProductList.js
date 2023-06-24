@@ -228,6 +228,7 @@ export const ProductList = () => {
     const [listData, setListData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
+    // eslint-disable-next-line
     const searchSubCategory = () => {
         dispatch(GetProductList('subCategorySearch', 10, keyword));
     };

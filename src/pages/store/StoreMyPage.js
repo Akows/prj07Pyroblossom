@@ -277,10 +277,11 @@ export const StoreMyPage = () => {
         }
         else {
             setIsAdminLogin(false);
+            setWhatCompoIsShow('history');
 
-            if (getStoreState.flagValue.isRendering) {
-                setWhatCompoIsShow('history');
-            };
+            // if (getStoreState.flagValue.isRendering) {
+            //     setWhatCompoIsShow('history');
+            // };
         };
 
         // eslint-disable-next-line

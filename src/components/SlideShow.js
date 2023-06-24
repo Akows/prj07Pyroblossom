@@ -198,6 +198,7 @@ const Sildeshow = ({ listData }) => {
         showSlide(slideNumber);
     };
 
+    // eslint-disable-next-line
     function useInterval(callback, delay) {
         const savedCallback = useRef();
 
@@ -214,7 +215,7 @@ const Sildeshow = ({ listData }) => {
                 return () => clearInterval(id);
             }
         }, [delay]);
-    }
+    };
 
     const [isLoading, setIsLoading] = useState(true);
 

@@ -242,14 +242,14 @@ export const PointHistory = ({ userdata }) => {
             const firstIndex = getStoreState.processInfo.processData1.firstOfAllList;
             const lastIndex = getStoreState.processInfo.processData1.lastOfAllList;
 
-            if (firstItem?.data().purchaseNumber === firstIndex?.data().purchaseNumber) {
+            if (firstItem?.data().recordNumber === firstIndex?.data().recordNumber) {
                 setIsDataFirst(true);
             }
             else {
                 setIsDataFirst(false);
             };
 
-            if (lastItem?.data().purchaseNumber === lastIndex?.data().purchaseNumber) {
+            if (lastItem?.data().recordNumber === lastIndex?.data().recordNumber) {
                 setIsDataLast(true);
             }
             else {
@@ -286,19 +286,18 @@ export const PointHistory = ({ userdata }) => {
 
             <HistoryComponent>
 
-                {listData?.length === 0 && '결제내역이 존재하지 않습니다.'}
+                {listData?.length === 0 && '포인트 내역이 존재하지 않습니다.'}
 
                 {listData?.map((item, index) => (
                     <History key={index}>
                         <HistoryState>
                             <p>{item.recordDate}</p>
-                            <p>X</p>
                         </HistoryState>
                         <HistoryInfo>
 
                             <PointInfo>
                                 <p>{item.recordDesc}</p>
-                                <Point type={item.recordType === '+' ? 'income' : 'outcome'}> + {item.recordNumber}p</Point>
+                                <Point type={item.recordType === '+' ? 'income' : 'outcome'}> {item.recordType === '+' ? '+' : '-'} {item.pointChangeNumber}p</Point>
                                 <p>잔액 {item.leftoverPoint}p</p>
                             </PointInfo>
 
@@ -312,13 +311,13 @@ export const PointHistory = ({ userdata }) => {
                 {isDataFirst ?
                     <button>페이지 끝</button>
                     :
-                    <button onClick={() => dispatch(GetPointRecord('prev', productPerPage, ''))}>{'<'}-</button>
+                    <button onClick={() => dispatch(GetPointRecord('prev', productPerPage, userdata.email))}>{'<'}-</button>
                 }
 
                 {isDataLast ?
                     <button>페이지 끝</button>
                     :
-                    <button onClick={() => dispatch(GetPointRecord('next', productPerPage, ''))}>-{'>'}</button>
+                    <button onClick={() => dispatch(GetPointRecord('next', productPerPage, userdata.email))}>-{'>'}</button>
                 }
             </UtilButton>
         </>

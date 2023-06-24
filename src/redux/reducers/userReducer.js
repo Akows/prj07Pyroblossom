@@ -20,10 +20,8 @@ const userReducer = (prevState = initialState, action) => {
 
             // 새로운 작업이 시작될 때 State 초기화.
             case 'STATE_INIT':
-                draft.flagvalue = {
-                    isError: false,
-                    isLoading: false,
-                };
+                draft.flagvalue.isLoading = false;
+                draft.flagvalue.isError = false;
                 draft.errorinfo = {
                     errorCode: '',
                     errorMessage: '',
