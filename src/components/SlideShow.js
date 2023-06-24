@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
+import loadingImg from '../assets/images/Genshin-Impact-Logo.webp';
+
 import leftarrow from '../assets/images/button/btnleft.png';
 import rightarrow from '../assets/images/button/btnright.png';
 
@@ -214,24 +216,33 @@ const Sildeshow = ({ listData }) => {
         }, [delay]);
     }
 
+    const [isLoading, setIsLoading] = useState(true);
+
     useEffect(() => {
-        showSlide(0);
+        if (listData.length !== 0) {
+            setIsLoading(false);
 
-        setProductData({
-            slide1Img: `https://firebasestorage.googleapis.com/v0/b/prj07pyroblossom.appspot.com/o/productsImage%2F${listData[0]?.name}%2F${listData[0]?.productInformationFile?.titleimage}?alt=media&token=bf2eff71-3c5e-4dc2-9706-445f95fd91e8`,
-            slide1Name: listData[0]?.name,
-            slide2Img: `https://firebasestorage.googleapis.com/v0/b/prj07pyroblossom.appspot.com/o/productsImage%2F${listData[1]?.name}%2F${listData[1]?.productInformationFile?.titleimage}?alt=media&token=bf2eff71-3c5e-4dc2-9706-445f95fd91e8`,
-            slide2Name: listData[1]?.name,
-            slide3Img: `https://firebasestorage.googleapis.com/v0/b/prj07pyroblossom.appspot.com/o/productsImage%2F${listData[2]?.name}%2F${listData[2]?.productInformationFile?.titleimage}?alt=media&token=bf2eff71-3c5e-4dc2-9706-445f95fd91e8`,
-            slide3Name: listData[2]?.name,
-            slide4Img: `https://firebasestorage.googleapis.com/v0/b/prj07pyroblossom.appspot.com/o/productsImage%2F${listData[3]?.name}%2F${listData[3]?.productInformationFile?.titleimage}?alt=media&token=bf2eff71-3c5e-4dc2-9706-445f95fd91e8`,
-            slide4Name: listData[3]?.name,
-            slide5Img: `https://firebasestorage.googleapis.com/v0/b/prj07pyroblossom.appspot.com/o/productsImage%2F${listData[4]?.name}%2F${listData[4]?.productInformationFile?.titleimage}?alt=media&token=bf2eff71-3c5e-4dc2-9706-445f95fd91e8`,
-            slide5Name: listData[4]?.name,
-        });
+            showSlide(0);
 
-        setSlideImgSrc(productData.slide1Img);
-        setSlideLinkName(productData.slide1Name);
+            setProductData({
+                slide1Img: `https://firebasestorage.googleapis.com/v0/b/prj07pyroblossom.appspot.com/o/productsImage%2F${listData[0]?.name}%2F${listData[0]?.productInformationFile?.titleimage}?alt=media&token=bf2eff71-3c5e-4dc2-9706-445f95fd91e8`,
+                slide1Name: listData[0]?.name,
+                slide2Img: `https://firebasestorage.googleapis.com/v0/b/prj07pyroblossom.appspot.com/o/productsImage%2F${listData[1]?.name}%2F${listData[1]?.productInformationFile?.titleimage}?alt=media&token=bf2eff71-3c5e-4dc2-9706-445f95fd91e8`,
+                slide2Name: listData[1]?.name,
+                slide3Img: `https://firebasestorage.googleapis.com/v0/b/prj07pyroblossom.appspot.com/o/productsImage%2F${listData[2]?.name}%2F${listData[2]?.productInformationFile?.titleimage}?alt=media&token=bf2eff71-3c5e-4dc2-9706-445f95fd91e8`,
+                slide3Name: listData[2]?.name,
+                slide4Img: `https://firebasestorage.googleapis.com/v0/b/prj07pyroblossom.appspot.com/o/productsImage%2F${listData[3]?.name}%2F${listData[3]?.productInformationFile?.titleimage}?alt=media&token=bf2eff71-3c5e-4dc2-9706-445f95fd91e8`,
+                slide4Name: listData[3]?.name,
+                slide5Img: `https://firebasestorage.googleapis.com/v0/b/prj07pyroblossom.appspot.com/o/productsImage%2F${listData[4]?.name}%2F${listData[4]?.productInformationFile?.titleimage}?alt=media&token=bf2eff71-3c5e-4dc2-9706-445f95fd91e8`,
+                slide5Name: listData[4]?.name,
+            });
+
+            setSlideImgSrc(productData.slide1Img);
+            setSlideLinkName(productData.slide1Name);
+        }
+        else {
+            setIsLoading(true);
+        };
 
         // eslint-disable-next-line
     }, [listData]);
@@ -310,9 +321,16 @@ const Sildeshow = ({ listData }) => {
             <SildeButton src={leftarrow} alt='' onClick={() => { showSlide(currentSlide - 1) }} />
 
             <SildeBlock>
-                <Link to={`/store/productdetail/${slideLinkName}`}>
-                    <SlideImg src={slideImgSrc} />
-                </Link>
+
+                {isLoading ?
+                    <div>
+                        <SlideImg src={loadingImg} alt='' />
+                    </div>
+                    :
+                    <Link to={`/store/productdetail/${slideLinkName}`}>
+                        <SlideImg src={slideImgSrc} alt='' />
+                    </Link>
+                }
 
                 <SlidePointer>
                     <PointerDots>
