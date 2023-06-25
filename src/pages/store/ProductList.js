@@ -51,7 +51,7 @@ const CategoryButton = styled.div`
     justify-content: center;
 `;
 const DropDownButton = styled.div`
-    width: 15%;
+    width: 35%;
     height: 100%;
 
     font-size: 32px;
@@ -259,7 +259,7 @@ export const ProductList = () => {
             {isLoading && <Loading />}
 
             <ProductListTitle>
-                입력하신 '{keyword}'에 대한 검색 결과입니다.
+                '{keyword}'에 대한 검색 결과입니다.
             </ProductListTitle>
 
             {searchtype === 'category' &&
@@ -269,24 +269,34 @@ export const ProductList = () => {
                             {keyword}
                         </DropDownButton>
 
-                        {keyword === '서적' &&
+                        {keyword === '인형, 피규어' &&
                             <TypeButton>
-                                <button>문화</button>
-                                <button>시사</button>
-                                <button>만화</button>
-                                <button>소설</button>
+                                <button value='인형'>인형</button>
+                                <button value='피규어'>피규어</button>
                             </TypeButton>
                         }
 
-                        {keyword === '인형' &&
+                        {keyword === '문구잡화' &&
                             <TypeButton>
-                                <button>봉제인형</button>
-                                <button>케릭터인형</button>
-                                <button>패션인형</button>
-                                <button>유아인형</button>
+                                <button value='마우스패드'>마우스패드</button>
+                                <button value='아크릴스탠드'>아크릴스탠드</button>
+                                <button value='열쇠고리'>열쇠고리</button>
                             </TypeButton>
                         }
 
+                        {keyword === '기타잡화' &&
+                            <TypeButton>
+                                <button value='의류'>의류</button>
+                                <button value='식품'>식품</button>
+                            </TypeButton>
+                        }
+
+                        {keyword === '도서, 음반' &&
+                            <TypeButton>
+                                <button value='도서'>도서</button>
+                                <button value='음반'>음반</button>
+                            </TypeButton>
+                        }
                     </CategoryButton>
                 </ProductListButtonArea>
             }

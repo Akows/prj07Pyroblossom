@@ -175,8 +175,8 @@ const KeywordButtonArea = styled.div`
 `;
 
 const KeywordButton = styled.button`
-    width: 100px;
-    height: 50px;
+    width: 160px;
+    height: 60px;
 
     margin: 2px;
 
@@ -184,8 +184,12 @@ const KeywordButton = styled.button`
     border-radius: 15px;
     background-color: #50596B;
     font-family: 'GIFont';
-    font-size: 16px;
+    font-size: 22px;
     color: #D3BC8E;
+
+    &:hover {
+        color: white;
+    };
 
     @media screen and (max-width: 420px) {
         font-size: 12px;
@@ -535,13 +539,10 @@ export const StoreNavigation = () => {
 
                     <CategoryList isCategoryShow={isCategoryShow}>
                         <KeywordButtonArea>
-                            <KeywordButton onClick={() => onCategorySearch('케이스')}>케이스</KeywordButton>
-                            <KeywordButton onClick={() => onCategorySearch('패드')}>패드</KeywordButton>
-                            <KeywordButton onClick={() => onCategorySearch('문구')}>문구</KeywordButton>
-                            <KeywordButton onClick={() => onCategorySearch('서적')}>서적</KeywordButton>
-                            <KeywordButton onClick={() => onCategorySearch('침구')}>침구</KeywordButton>
-                            <KeywordButton onClick={() => onCategorySearch('피규어')}>피규어</KeywordButton>
-                            <KeywordButton onClick={() => onCategorySearch('인형')}>인형</KeywordButton>
+                            <KeywordButton onClick={() => onCategorySearch('인형, 피규어')}>인형, 피규어</KeywordButton>
+                            <KeywordButton onClick={() => onCategorySearch('문구잡화')}>문구잡화</KeywordButton>
+                            <KeywordButton onClick={() => onCategorySearch('기타잡화')}>기타잡화</KeywordButton>
+                            <KeywordButton onClick={() => onCategorySearch('도서, 음반')}>도서, 음반</KeywordButton>
                         </KeywordButtonArea>
                     </CategoryList>
 
