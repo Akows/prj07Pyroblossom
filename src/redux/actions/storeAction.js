@@ -196,6 +196,8 @@ const GetProductList = (listCallType, itemPerPage, searchKeyword) => {
             else if (listCallType === 'prev') {
                 queryRef = query(storeCollectionRef, orderBy('number'), endBefore(firstOfPage), limitToLast(itemPerPage));
             };
+
+            console.log(queryRef);
             
             // 그리고 쿼리를 기준으로 Doc을 가져온다.
             const allDocumentSnapshots = await getDocs(queryRef);
@@ -208,6 +210,7 @@ const GetProductList = (listCallType, itemPerPage, searchKeyword) => {
             const result = [];
             allDocumentSnapshots.forEach((doc) => {
                 result.push(doc.data());
+                console.log(doc.data());
             });
             returnData.processData2 = result;
         };

@@ -289,7 +289,7 @@ export const AdminProductManagement = ({ setWhatCompoIsShow, setUpdateData }) =>
     const [isDataLast, setIsDataLast] = useState(false);
 
     const keywordSearch = () => {
-        dispatch(GetProductList('keywordsearch', productPerPage, searchKeyword));
+        dispatch(GetProductList('keywordSearch', productPerPage, searchKeyword));
     };
     const onChargeSearchKeyword = (event) => {
         setSearchKeyword(event.target.value);

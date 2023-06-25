@@ -303,15 +303,16 @@ const UploadSaleInfo = styled.div`
         border: none;
     };
 
-    & > input:nth-child(2){
+    & > input:nth-child(1){
         margin-top: 10px;
     };
-    & > select:nth-child(3){
+    & > select:nth-child(2){
         margin-top: 10px;
     };
-    & > input:nth-child(4){
+    & > input:nth-child(3){
         margin-top: 10px;
     };
+
 `;
 
 const UploadProductInfo = styled.div`
@@ -528,12 +529,12 @@ export const AdminProductUpload = ({ isLoading, updateData }) => {
         name: '',
         price: '',
         deliveryFee: '',
-        purchaseQuantityLimit: '',
-        inventory: '',
+        // purchaseQuantityLimit: '',
+        // inventory: '',
         mainCategory: '',
         subCategory: '',
         discountRate: '',
-        rewardAmountRate: '',
+        // rewardAmountRate: '',
         eventType: '',
         eventPoint: '',
     });
@@ -594,7 +595,15 @@ export const AdminProductUpload = ({ isLoading, updateData }) => {
             return;
         };
 
-        // console.log(productInfo, productOptionInfo, productImgFile);
+        if (productImgFile.price === '') {
+            alert('제품 가격은 반드시 입력해야합니다.');
+            return;
+        };
+
+        if (productImgFile.mainCategory === '' || productImgFile.subCategory === '') {
+            alert('제품 분류는 반드시 입력해야합니다.');
+            return;
+        };
 
         dispatch(AddProduct(productInfo, productOptionInfo, productImgFile, navigate));
     };
@@ -714,45 +723,31 @@ export const AdminProductUpload = ({ isLoading, updateData }) => {
                 <p>대분류</p>
                 <select id='mainCategory' value={productInfo.mainCategory || ''} onChange={onChange} required>
                     <option value=''>대분류 선택</option>
-                    <option value='케이스류'>케이스</option>
-                    <option value='패드류'>패드</option>
-                    <option value='문구류'>문구</option>
-                    <option value='서적류'>서적</option>
-                    <option value='침구류'>침구</option>
-                    <option value='피규어'>피규어</option>
-                    <option value='인형'>인형</option>
+                    <option value='인형, 피규어'>인형, 피규어</option>
+                    <option value='문구잡화'>문구잡화</option>
+                    <option value='기타잡화'>기타잡화</option>
+                    <option value='도서, 음반'>도서, 음반</option>
                 </select>
 
                 <p>소분류</p>
                 <select id='subCategory' value={productInfo.subCategory || ''} onChange={onChange} required>
                     <option value=''>소분류 선택</option>
-
-                    {productInfo.mainCategory === '케이스류' && <>
-                        <option value='123'>핸드폰 케이스</option>
-                        <option value=''>노트북 케이스</option>
+                    {productInfo.mainCategory === '인형, 피규어' && <>
+                        <option value='인형'>인형</option>
+                        <option value='피규어'>피규어</option>
                     </>}
-                    {productInfo.mainCategory === '패드류' && <>
-                        <option value='longPad'>장패드</option>
-                        <option value=''>단패드</option>
+                    {productInfo.mainCategory === '문구잡화' && <>
+                        <option value='마우스패드'>마우스패드</option>
+                        <option value='아크릴스탠드'>아크릴스탠드</option>
+                        <option value='열쇠고리'>열쇠고리</option>
                     </>}
-                    {productInfo.mainCategory === '문구류' && <>
-                        <option value=''>아동</option>
-                        <option value=''>14세 이상</option>
+                    {productInfo.mainCategory === '기타잡화' && <>
+                        <option value='의류'>의류</option>
+                        <option value='식품'>식품</option>
                     </>}
-                    {productInfo.mainCategory === '서적류' && <>
-                        <option value=''>만화</option>
-                        <option value=''>소설</option>
-                        <option value=''>아트북</option>
-                    </>}
-                    {productInfo.mainCategory === '침구류' && <>
-                        <option value=''>이불</option>
-                        <option value=''>배개</option>
-                    </>}
-                    {productInfo.mainCategory === '피규어' && <>
-                        <option value=''>PVC</option>
-                    </>}
-                    {productInfo.mainCategory === '인형' && <>
-                        <option value=''>봉제 인형</option>
+                    {productInfo.mainCategory === '도서, 음반' && <>
+                        <option value='도서'>도서</option>
+                        <option value='음반'>음반</option>
                     </>}
                 </select>
 
@@ -935,9 +930,9 @@ export const AdminProductUpload = ({ isLoading, updateData }) => {
             <p>할인 정보 입력</p>
             <UploadSaleInfo>
 
-                <input type='text' id='discountRate' value={productInfo.discountRate || ''} onChange={onChange} placeholder='제품 할인률 입력' />
+                <input type='text' id='discountRate' value={productInfo.discountRate || ''} onChange={onChange} placeholder='제품 기본 할인률 입력' />
 
-                <input type='text' id='rewardAmountRate' value={productInfo.rewardAmountRate || ''} onChange={onChange} placeholder='캐쉬백 포인트 수치 입력' />
+                {/* <input type='text' id='rewardAmountRate' value={productInfo.rewardAmountRate || ''} onChange={onChange} placeholder='캐쉬백 포인트 수치 입력' /> */}
 
                 <select id='eventType' value={productInfo.eventType || ''} onChange={onChange} required>
                     <option value=''>이벤트 종류 선택</option>

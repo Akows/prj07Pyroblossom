@@ -48,7 +48,6 @@ export const PaymentPage = () => {
 
     const [whatComponentIsShow, setWhatComponentIsShow] = useState('orderpurchase');
 
-
     const getUserState = useSelector((state) => state.user);
     const getStoreState = useSelector((state) => state.store);
 
