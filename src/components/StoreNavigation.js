@@ -539,6 +539,7 @@ export const StoreNavigation = () => {
 
                     <CategoryList isCategoryShow={isCategoryShow}>
                         <KeywordButtonArea>
+                            <KeywordButton onClick={() => onCategorySearch('전체상품')}>전체상품</KeywordButton>
                             <KeywordButton onClick={() => onCategorySearch('인형, 피규어')}>인형, 피규어</KeywordButton>
                             <KeywordButton onClick={() => onCategorySearch('문구잡화')}>문구잡화</KeywordButton>
                             <KeywordButton onClick={() => onCategorySearch('기타잡화')}>기타잡화</KeywordButton>

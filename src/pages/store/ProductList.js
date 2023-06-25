@@ -234,7 +234,7 @@ export const ProductList = () => {
             dispatch(GetSearchProductList('keywordSearch', 10, keyword, sortCondition));
         }
         else if (searchtype === 'categorySearch') {
-            dispatch(GetSearchProductList('category', 10, keyword, sortCondition));
+            dispatch(GetSearchProductList('categorySearch', 10, keyword, sortCondition));
         };
         // eslint-disable-next-line
     }, [searchtype, keyword, sortCondition]);

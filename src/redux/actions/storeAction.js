@@ -43,8 +43,8 @@ const AddProduct = (productInfo, productOptionInfo, productImgFile, navigate) =>
                 {
                     number: allProductCount.data().count + 1,
                     name: productInfo.name,
-                    price: productInfo.price,
-                    deliveryFee: productInfo.deliveryFee,
+                    price: parseInt(productInfo.price),
+                    deliveryFee: parseInt(productInfo.deliveryFee),
                     mainCategory: productInfo.mainCategory,
                     subCategory: productInfo.subCategory,
                     productOption: {
@@ -62,37 +62,39 @@ const AddProduct = (productInfo, productOptionInfo, productImgFile, navigate) =>
                         option5: processOptionData.option5SurchargeType,
                     },
                     productOptionSurchargePrice: {
-                        option1: processOptionData.option1SurchargePrice,
-                        option2: processOptionData.option2SurchargePrice,
-                        option3: processOptionData.option3SurchargePrice,
-                        option4: processOptionData.option4SurchargePrice,
-                        option5: processOptionData.option5SurchargePrice,
+                        option1: parseInt(processOptionData.option1SurchargePrice),
+                        option2: parseInt(processOptionData.option2SurchargePrice),
+                        option3: parseInt(processOptionData.option3SurchargePrice),
+                        option4: parseInt(processOptionData.option4SurchargePrice),
+                        option5: parseInt(processOptionData.option5SurchargePrice),
                     },
                     productOptionPurchaseQuantityLimit: {
-                        option1: processOptionData.option1PurchaseQuantityLimit,
-                        option2: processOptionData.option2PurchaseQuantityLimit,
-                        option3: processOptionData.option3PurchaseQuantityLimit,
-                        option4: processOptionData.option4PurchaseQuantityLimit,
-                        option5: processOptionData.option5PurchaseQuantityLimit,
+                        option1: parseInt(processOptionData.option1PurchaseQuantityLimit),
+                        option2: parseInt(processOptionData.option2PurchaseQuantityLimit),
+                        option3: parseInt(processOptionData.option3PurchaseQuantityLimit),
+                        option4: parseInt(processOptionData.option4PurchaseQuantityLimit),
+                        option5: parseInt(processOptionData.option5PurchaseQuantityLimit),
                     },
                     productOptionInventory: {
-                        option1: processOptionData.option1Inventory,
-                        option2: processOptionData.option2Inventory,
-                        option3: processOptionData.option3Inventory,
-                        option4: processOptionData.option4Inventory,
-                        option5: processOptionData.option5Inventory,
+                        option1: parseInt(processOptionData.option1Inventory),
+                        option2: parseInt(processOptionData.option2Inventory),
+                        option3: parseInt(processOptionData.option3Inventory),
+                        option4: parseInt(processOptionData.option4Inventory),
+                        option5: parseInt(processOptionData.option5Inventory),
                     },
                     productOptionSalesRate: {
-                        option1: processOptionData.option1SalesRate,
-                        option2: processOptionData.option2SalesRate,
-                        option3: processOptionData.option3SalesRate,
-                        option4: processOptionData.option4SalesRate,
-                        option5: processOptionData.option5SalesRate,
+                        option1: parseInt(processOptionData.option1SalesRate),
+                        option2: parseInt(processOptionData.option2SalesRate),
+                        option3: parseInt(processOptionData.option3SalesRate),
+                        option4: parseInt(processOptionData.option4SalesRate),
+                        option5: parseInt(processOptionData.option5SalesRate),
                     },
-                    discountRate: productInfo.discountRate,
+                    productSalesRate : 0,
+                    productReviews : 0,
+                    discountRate: parseInt(productInfo.discountRate),
                     // rewardAmountRate: productInfo.rewardAmountRate,
                     eventType: productInfo.eventType,
-                    eventPoint: productInfo.eventPoint,
+                    eventPoint: parseInt(productInfo.eventPoint),
                     productInformationFile: {
                         titleimage: productImgFile.titleImage[0].name,
                         infoimage1: infoFileNames[0],
@@ -237,6 +239,8 @@ const GetSearchProductList = (listCallType, itemPerPage, keyword, sortCondition)
         dispatch({ type: 'STORE_STATE_INIT' });
         dispatch({ type: 'STORE_LOADING' });
 
+        console.log(listCallType, itemPerPage, keyword, sortCondition);
+
         const returnData = {
             processData1: {
                 firstOfPage: {},
@@ -245,6 +249,21 @@ const GetSearchProductList = (listCallType, itemPerPage, keyword, sortCondition)
                 lastOfAllList: {},
             },
             processData2: [],
+        };
+
+        let sortConditionEng = '';
+
+        if (sortCondition === '인기도순') {
+            sortConditionEng = 'productSalesRate';
+        };
+        if (sortCondition === '높은 가격순' || sortCondition === '낮은 가격순') {
+            sortConditionEng = 'price';
+        };
+        if (sortCondition === '리뷰 많은순') {
+            sortConditionEng = 'productReviews';
+        };
+        if (sortCondition === '등록일 순') {
+            sortConditionEng = 'registrationDate';
         };
 
         const calculateBothEndsIndex = async () => {
@@ -256,8 +275,16 @@ const GetSearchProductList = (listCallType, itemPerPage, keyword, sortCondition)
                 LastQueryRef = query(storeCollectionRef, orderBy('number', 'asc'), where('name', '==', keyword), where('productDisclosure', '==', true), limitToLast(1));
             }
             else if (listCallType === 'categorySearch') {
-                firstQueryRef = query(storeCollectionRef, orderBy('number', 'asc'), where('mainCategory', '==', keyword), where('productDisclosure', '==', true), limit(1));
-                LastQueryRef = query(storeCollectionRef, orderBy('number', 'asc'), where('mainCategory', '==', keyword), where('productDisclosure', '==', true), limitToLast(1));
+
+                if (keyword === '전체상품') {
+                    firstQueryRef = query(storeCollectionRef, orderBy('number', 'asc'), where('productDisclosure', '==', true), limit(1));
+                    LastQueryRef = query(storeCollectionRef, orderBy('number', 'asc'), where('productDisclosure', '==', true), limitToLast(1));
+                }
+                else {
+                    firstQueryRef = query(storeCollectionRef, orderBy('number', 'asc'), where('mainCategory', '==', keyword), where('productDisclosure', '==', true), limit(1));
+                    LastQueryRef = query(storeCollectionRef, orderBy('number', 'asc'), where('mainCategory', '==', keyword), where('productDisclosure', '==', true), limitToLast(1));
+                };
+
             };
             
             const firstDocumentSnapshots = await getDocs(firstQueryRef);
@@ -271,47 +298,51 @@ const GetSearchProductList = (listCallType, itemPerPage, keyword, sortCondition)
 
             let queryRef = '';
 
-            let sortConditionEng = '';
 
-            if (sortCondition === '인기도순') {
-
+            if (listCallType === 'keywordSearch') {
+                if (sortCondition === '높은 가격순') {
+                    queryRef = query(storeCollectionRef, orderBy(sortConditionEng, 'desc'), where('name', '==', keyword), where('productDisclosure', '==', true), limit(itemPerPage));
+                }
+                else {
+                    queryRef = query(storeCollectionRef, orderBy(sortConditionEng, 'asc'), where('name', '==', keyword), where('productDisclosure', '==', true), limit(itemPerPage));
+                };
+            }
+            else if (listCallType === 'categorySearch') {
+                if (keyword === '전체상품') {
+                    if (sortCondition === '높은 가격순') {
+                        queryRef = query(storeCollectionRef, orderBy(sortConditionEng, 'desc'), where('productDisclosure', '==', true), limit(itemPerPage));
+                    }
+                    else {
+                        queryRef = query(storeCollectionRef, orderBy(sortConditionEng, 'asc'), where('productDisclosure', '==', true), limit(itemPerPage));
+                    };
+                }
+                else {
+                    if (sortCondition === '높은 가격순') {
+                        queryRef = query(storeCollectionRef, orderBy(sortConditionEng, 'desc'), where('mainCategory', '==', keyword), where('productDisclosure', '==', true), limit(itemPerPage));
+                    }
+                    else {
+                        queryRef = query(storeCollectionRef, orderBy(sortConditionEng, 'asc'), where('mainCategory', '==', keyword), where('productDisclosure', '==', true), limit(itemPerPage));
+                    };
+                };
             };
 
-
-            // if (listCallType === 'keywordSearch') {
-            //     if (sortCondition === '높은 가격순') {
-            //         queryRef = query(storeCollectionRef, orderBy(sortCondition, 'desc'), where('name', '==', searchKeyword), where('productDisclosure', '==', true), limit(itemPerPage));
-            //     }
-            //     else {
-            //         queryRef = query(storeCollectionRef, orderBy(sortCondition, 'asc'), where('name', '==', searchKeyword), where('productDisclosure', '==', true), limit(itemPerPage));
-            //     };
-            // }
-            // else if (listCallType === 'categorySearch') {
-            //     if (sortCondition === '높은 가격순') {
-            //         queryRef = query(storeCollectionRef, orderBy(sortCondition, 'desc'), where('mainCategory', '==', searchKeyword), where('productDisclosure', '==', true), limit(itemPerPage));
-            //     }
-            //     else {
-            //         queryRef = query(storeCollectionRef, orderBy(sortCondition, 'asc'), where('mainCategory', '==', searchKeyword), where('productDisclosure', '==', true), limit(itemPerPage));
-            //     };
-            // };
-
-            // const { firstOfPage, lastOfPage } = getState().store.processInfo.processData1;
-            // if (listCallType === 'next') {
-            //     if (sortCondition === '높은 가격순') {
-            //         queryRef = query(storeCollectionRef, orderBy(sortCondition, 'desc'), where('name', '==', searchKeyword), where('productDisclosure', '==', true), startAfter(lastOfPage), limit(itemPerPage));
-            //     }
-            //     else {
-            //         queryRef = query(storeCollectionRef, orderBy(sortCondition, 'asc'), where('name', '==', searchKeyword), where('productDisclosure', '==', true), startAfter(lastOfPage), limit(itemPerPage));
-            //     };
-            // }
-            // else if (listCallType === 'prev') {
-            //     if (sortCondition === '높은 가격순') {
-            //         queryRef = query(storeCollectionRef, orderBy(sortCondition, 'desc'), where('name', '==', searchKeyword), where('productDisclosure', '==', true), endBefore(firstOfPage), limit(itemPerPage));
-            //     }
-            //     else {
-            //         queryRef = query(storeCollectionRef, orderBy(sortCondition, 'asc'), where('name', '==', searchKeyword), where('productDisclosure', '==', true), endBefore(firstOfPage), limit(itemPerPage));
-            //     };
-            // };
+            const { firstOfPage, lastOfPage } = getState().store.processInfo.processData1;
+            if (listCallType === 'next') {
+                if (sortCondition === '높은 가격순') {
+                    queryRef = query(storeCollectionRef, orderBy(sortConditionEng, 'desc'), where('name', '==', keyword), where('productDisclosure', '==', true), startAfter(lastOfPage), limit(itemPerPage));
+                }
+                else {
+                    queryRef = query(storeCollectionRef, orderBy(sortConditionEng, 'asc'), where('name', '==', keyword), where('productDisclosure', '==', true), startAfter(lastOfPage), limit(itemPerPage));
+                };
+            }
+            else if (listCallType === 'prev') {
+                if (sortCondition === '높은 가격순') {
+                    queryRef = query(storeCollectionRef, orderBy(sortConditionEng, 'desc'), where('name', '==', keyword), where('productDisclosure', '==', true), endBefore(firstOfPage), limit(itemPerPage));
+                }
+                else {
+                    queryRef = query(storeCollectionRef, orderBy(sortConditionEng, 'asc'), where('name', '==', keyword), where('productDisclosure', '==', true), endBefore(firstOfPage), limit(itemPerPage));
+                };
+            };
 
             const allDocumentSnapshots = await getDocs(queryRef);
 
@@ -321,7 +352,6 @@ const GetSearchProductList = (listCallType, itemPerPage, keyword, sortCondition)
             const result = [];
             allDocumentSnapshots.forEach((doc) => {
                 result.push(doc.data());
-                console.log(doc.data());
             });
             returnData.processData2 = result;
         };
@@ -412,10 +442,8 @@ const UpdateProduct = (updateNeedData, productInfo, productOptionInfo, productIm
                 {
                     number: updateNeedData.number,
                     name: productInfo.name,
-                    price: productInfo.price,
-                    deliveryFee: productInfo.deliveryFee,
-                    purchaseQuantityLimit: productInfo.purchaseQuantityLimit,
-                    inventory: productInfo.inventory,
+                    price: parseInt(productInfo.price),
+                    deliveryFee: parseInt(productInfo.deliveryFee),
                     mainCategory: productInfo.mainCategory,
                     subCategory: productInfo.subCategory,
                     productOption: {
@@ -433,30 +461,30 @@ const UpdateProduct = (updateNeedData, productInfo, productOptionInfo, productIm
                         option5: processOptionData.option5SurchargeType,
                     },
                     productOptionSurchargePrice: {
-                        option1: processOptionData.option1SurchargePrice,
-                        option2: processOptionData.option2SurchargePrice,
-                        option3: processOptionData.option3SurchargePrice,
-                        option4: processOptionData.option4SurchargePrice,
-                        option5: processOptionData.option5SurchargePrice,
+                        option1: parseInt(processOptionData.option1SurchargePrice),
+                        option2: parseInt(processOptionData.option2SurchargePrice),
+                        option3: parseInt(processOptionData.option3SurchargePrice),
+                        option4: parseInt(processOptionData.option4SurchargePrice),
+                        option5: parseInt(processOptionData.option5SurchargePrice),
                     },
                     productOptionPurchaseQuantityLimit: {
-                        option1: processOptionData.option1PurchaseQuantityLimit,
-                        option2: processOptionData.option2PurchaseQuantityLimit,
-                        option3: processOptionData.option3PurchaseQuantityLimit,
-                        option4: processOptionData.option4PurchaseQuantityLimit,
-                        option5: processOptionData.option5PurchaseQuantityLimit,
+                        option1: parseInt(processOptionData.option1PurchaseQuantityLimit),
+                        option2: parseInt(processOptionData.option2PurchaseQuantityLimit),
+                        option3: parseInt(processOptionData.option3PurchaseQuantityLimit),
+                        option4: parseInt(processOptionData.option4PurchaseQuantityLimit),
+                        option5: parseInt(processOptionData.option5PurchaseQuantityLimit),
                     },
                     productOptionInventory: {
-                        option1: processOptionData.option1Inventory,
-                        option2: processOptionData.option2Inventory,
-                        option3: processOptionData.option3Inventory,
-                        option4: processOptionData.option4Inventory,
-                        option5: processOptionData.option5Inventory,
+                        option1: parseInt(processOptionData.option1Inventory),
+                        option2: parseInt(processOptionData.option2Inventory),
+                        option3: parseInt(processOptionData.option3Inventory),
+                        option4: parseInt(processOptionData.option4Inventory),
+                        option5: parseInt(processOptionData.option5Inventory),
                     },
-                    discountRate: productInfo.discountRate,
-                    rewardAmountRate: productInfo.rewardAmountRate,
+                    discountRate: parseInt(productInfo.discountRate),
+                    // rewardAmountRate: productInfo.rewardAmountRate,
                     eventType: productInfo.eventType,
-                    eventPoint: productInfo.eventPoint,
+                    eventPoint: parseInt(productInfo.eventPoint),
                     productInformationFile: {
                         titleimage: productImgFile.titleImage[0].name,
                         infoimage1: infoFileNames[0],
@@ -598,20 +626,14 @@ const PurchaseProduct = (purchaseData, productData, userData, navigate) => {
 
         // 제품의 재고량과 판매량을 수정.
         const updataProductInfo = async () => {
-            const docRef = doc(storeCollectionRef, productData.name);
+            const docRef = doc(storeCollectionRef, productData[0].name);
             const docSnap = await getDoc(docRef);
 
-            beforePoint = parseInt(docSnap.data().point);
-
-            if (beforePoint < purchaseData.totalAmount) {
-                throw errorCode.storeError.InsufficientPoint;
-            };
-
-            let option1Sales = '';
-            let option2Sales = '';
-            let option3Sales = '';
-            let option4Sales = '';
-            let option5Sales = '';
+            let option1Sales = 0;
+            let option2Sales = 0;
+            let option3Sales = 0;
+            let option4Sales = 0;
+            let option5Sales = 0;
 
             // eslint-disable-next-line
             purchaseData.purchaseList.map((item) => {
@@ -638,19 +660,23 @@ const PurchaseProduct = (purchaseData, productData, userData, navigate) => {
 
             await setDoc(docRef, {
                 productOptionInventory: {
-                    option1: productData.productOptionInventory.option1 - option1Sales,
-                    option2: productData.productOptionInventory.option2 - option2Sales,
-                    option3: productData.productOptionInventory.option3 - option3Sales,
-                    option4: productData.productOptionInventory.option4 - option4Sales,
-                    option5: productData.productOptionInventory.option5 - option5Sales,
+                    option1: parseInt(docSnap.data().productOptionInventory.option1 - option1Sales),
+                    option2: parseInt(docSnap.data().productOptionInventory.option2 - option2Sales),
+                    option3: parseInt(docSnap.data().productOptionInventory.option3 - option3Sales),
+                    option4: parseInt(docSnap.data().productOptionInventory.option4 - option4Sales),
+                    option5: parseInt(docSnap.data().productOptionInventory.option5 - option5Sales),
                 },
                 productOptionSalesRate: {
-                    option1: productData.productOptionSalesRate.option1 + option1Sales,
-                    option2: productData.productOptionSalesRate.option2 + option2Sales,
-                    option3: productData.productOptionSalesRate.option3 + option3Sales,
-                    option4: productData.productOptionSalesRate.option4 + option4Sales,
-                    option5: productData.productOptionSalesRate.option5 + option5Sales,
+                    option1: parseInt(docSnap.data().productOptionSalesRate.option1 + option1Sales),
+                    option2: parseInt(docSnap.data().productOptionSalesRate.option2 + option2Sales),
+                    option3: parseInt(docSnap.data().productOptionSalesRate.option3 + option3Sales),
+                    option4: parseInt(docSnap.data().productOptionSalesRate.option4 + option4Sales),
+                    option5: parseInt(docSnap.data().productOptionSalesRate.option5 + option5Sales),
                 },
+            }, { merge: true });
+
+            await setDoc(docRef, {
+                productSalesRate : parseInt(docSnap.data().productSalesRate) + parseInt(purchaseData.totalQuantity),
             }, { merge: true });
         };
 
@@ -680,7 +706,13 @@ const PurchaseProduct = (purchaseData, productData, userData, navigate) => {
             .then(() => {
                 recordPointData()
                 .then(() => {
-                    dispatch({ type: 'STORE_COMPLETE' });
+                    updataProductInfo()
+                    .then(() => {
+                        dispatch({ type: 'STORE_COMPLETE' });
+                    })
+                    .catch((error) => {
+                        dispatch({ type: 'STORE_ERROR', payload: createErrorData(error) });
+                    });
                 })
                 .catch((error) => {
                     dispatch({ type: 'STORE_ERROR', payload: createErrorData(error) });
