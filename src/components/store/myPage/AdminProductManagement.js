@@ -308,16 +308,10 @@ export const AdminProductManagement = ({ setWhatCompoIsShow, setUpdateData }) =>
         };
     };
 
-
-
     const productUpdate = (item) => {
         setWhatCompoIsShow('productupload');
         setUpdateData(item);
     };
-
-
-
-
 
     useEffect(() => {
         dispatch(GetProductList('firstRender', productPerPage, searchKeyword));
@@ -379,71 +373,75 @@ export const AdminProductManagement = ({ setWhatCompoIsShow, setUpdateData }) =>
 
             <ProductList>
 
-                {listData?.length === 0 && '상품이 존재하지 않습니다.'}
+                {listData?.length === 0 ?
+                    '상품이 존재하지 않습니다.'
+                    :
+                    <>
+                        {listData?.map((item) => (
+                            <Product key={item.number}>
+                                {/* <input type='checkbox' checked={checkedItem} onChange={setCheckedItem} /> */}
 
-                {listData?.map((item) => (
-                    <Product key={item.number}>
-                        {/* <input type='checkbox' checked={checkedItem} onChange={setCheckedItem} /> */}
+                                <ProductInfo>
+                                    <ProductImg>
+                                        <img src={`https://firebasestorage.googleapis.com/v0/b/prj07pyroblossom.appspot.com/o/productsImage%2F${item.name}%2F${item.productInformationFile.titleimage}?alt=media&token=bf2eff71-3c5e-4dc2-9706-445f95fd91e8`} alt='' />
+                                    </ProductImg>
+                                    <Infomation>
+                                        <p>제품번호 : {item.number}</p>
+                                        <p>제품명 : {item.name}</p>
+                                        <p>제품 가격 : {item.price}원</p>
+                                        <p></p>
+                                        <p>할인률 : {item.discountRate}%</p>
+                                        <p>제품분류 : {item.mainCategory} {'>'} {item.subCategory}</p>
 
-                        <ProductInfo>
-                            <ProductImg>
-                                <img src={`https://firebasestorage.googleapis.com/v0/b/prj07pyroblossom.appspot.com/o/productsImage%2F${item.name}%2F${item.productInformationFile.titleimage}?alt=media&token=bf2eff71-3c5e-4dc2-9706-445f95fd91e8`} alt='' />
-                            </ProductImg>
-                            <Infomation>
-                                <p>제품번호 : {item.number}</p>
-                                <p>제품명 : {item.name}</p>
-                                <p>제품 가격 : {item.price}원</p>
-                                <p></p>
-                                <p>할인률 : {item.discountRate}%</p>
-                                <p>제품분류 : {item.mainCategory} {'>'} {item.subCategory}</p>
+                                        {item.productOption.option1 !== '옵션없음' ?
+                                            <p>{item.productOption.option1}, {item.productOptionSurchargePrice.option1}원, {item.productOptionInventory.option1}개 남음. 구매제한 {item.productOptionPurchaseQuantityLimit.option1}개. 판매량 {item.productOptionSalesRate.option1}개.</p>
+                                            :
+                                            <p></p>
+                                        }
+                                        {item.productOption.option2 !== '옵션없음' ?
+                                            <p>{item.productOption.option2}, {item.productOptionSurchargePrice.option2}원, {item.productOptionInventory.option2}개 남음. 구매제한 {item.productOptionPurchaseQuantityLimit.option2}개. 판매량 {item.productOptionSalesRate.option2}개.</p>
+                                            :
+                                            <p></p>
+                                        }
+                                        {item.productOption.option3 !== '옵션없음' ?
+                                            <p>{item.productOption.option3}, {item.productOptionSurchargePrice.option3}원, {item.productOptionInventory.option3}개 남음. 구매제한 {item.productOptionPurchaseQuantityLimit.option3}개. 판매량 {item.productOptionSalesRate.option3}개.</p>
+                                            :
+                                            <p></p>
+                                        }
+                                        {item.productOption.option4 !== '옵션없음' ?
+                                            <p>{item.productOption.option4}, {item.productOptionSurchargePrice.option4}원, {item.productOptionInventory.option4}개 남음. 구매제한 {item.productOptionPurchaseQuantityLimit.option4}개. 판매량 {item.productOptionSalesRate.option4}개.</p>
+                                            :
+                                            <p></p>
+                                        }
+                                        {item.productOption.option5 !== '옵션없음' ?
+                                            <p>{item.productOption.option5}, {item.productOptionSurchargePrice.option5}원, {item.productOptionInventory.option5}개 남음. 구매제한 {item.productOptionPurchaseQuantityLimit.option5}개. 판매량 {item.productOptionSalesRate.option5}개.</p>
+                                            :
+                                            <p></p>
+                                        }
 
-                                {item.productOption.option1 !== '옵션없음' ?
-                                    <p>{item.productOption.option1}, {item.productOptionSurchargePrice.option1}원, {item.productOptionInventory.option1}개 남음. 구매제한 {item.productOptionPurchaseQuantityLimit.option1}개 한정.</p>
-                                    :
-                                    <p></p>
-                                }
-                                {item.productOption.option2 !== '옵션없음' ?
-                                    <p>{item.productOption.option2}, {item.productOptionSurchargePrice.option2}원, {item.productOptionInventory.option2}개 남음. 구매제한 {item.productOptionPurchaseQuantityLimit.option2}개 한정.</p>
-                                    :
-                                    <p></p>
-                                }
-                                {item.productOption.option3 !== '옵션없음' ?
-                                    <p>{item.productOption.option3}, {item.productOptionSurchargePrice.option3}원, {item.productOptionInventory.option3}개 남음. 구매제한 {item.productOptionPurchaseQuantityLimit.option3}개 한정.</p>
-                                    :
-                                    <p></p>
-                                }
-                                {item.productOption.option4 !== '옵션없음' ?
-                                    <p>{item.productOption.option4}, {item.productOptionSurchargePrice.option4}원, {item.productOptionInventory.option4}개 남음. 구매제한 {item.productOptionPurchaseQuantityLimit.option4}개 한정.</p>
-                                    :
-                                    <p></p>
-                                }
-                                {item.productOption.option5 !== '옵션없음' ?
-                                    <p>{item.productOption.option5}, {item.productOptionSurchargePrice.option5}원, {item.productOptionInventory.option5}개 남음. 구매제한 {item.productOptionPurchaseQuantityLimit.option5}개 한정.</p>
-                                    :
-                                    <p></p>
-                                }
+                                        <p>보너스포인트 : {item.rewardAmountRate}P</p>
+                                        <p>진행중인 이벤트 : {item.eventType}.</p>
+                                        <p>이벤트포인트 : {item.eventPoint}P</p>
 
-                                <p>보너스포인트 : {item.rewardAmountRate}P</p>
-                                <p>진행중인 이벤트 : {item.eventType}.</p>
-                                <p>이벤트포인트 : {item.eventPoint}P</p>
+                                    </Infomation>
+                                </ProductInfo>
 
-                            </Infomation>
-                        </ProductInfo>
+                                <ProductUtil>
+                                    <ProductOpen>
+                                        <p>판매 상태</p>
+                                        <p onClick={() => onChangeProductDisclosure(item.name, item.productDisclosure)}>{item.productDisclosure ? '공개' : '비공개'}</p>
+                                    </ProductOpen>
 
-                        <ProductUtil>
-                            <ProductOpen>
-                                <p>판매 상태</p>
-                                <p onClick={() => onChangeProductDisclosure(item.name, item.productDisclosure)}>{item.productDisclosure ? '공개' : '비공개'}</p>
-                            </ProductOpen>
+                                    <ProductOpen>
+                                        <p>정보 수정</p>
+                                        <button onClick={() => productUpdate(item)}>수정</button>
+                                    </ProductOpen>
 
-                            <ProductOpen>
-                                <p>정보 수정</p>
-                                <button onClick={() => productUpdate(item)}>수정</button>
-                            </ProductOpen>
-
-                        </ProductUtil>
-                    </Product>
-                ))}
+                                </ProductUtil>
+                            </Product>
+                        ))}
+                    </>
+                }
 
             </ProductList>
 

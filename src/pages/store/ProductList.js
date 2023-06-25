@@ -231,16 +231,13 @@ export const ProductList = () => {
 
     useEffect(() => {
         if (searchtype === 'keywordSearch') {
-            // dispatch(GetSearchProductList('keywordSearch', 10, keyword, subCategoryKeyword, sortCondition));
+            dispatch(GetSearchProductList('keywordSearch', 10, keyword, sortCondition));
         }
         else if (searchtype === 'categorySearch') {
-            // dispatch(GetSearchProductList('categorySearch', 10, keyword, subCategoryKeyword, sortCondition));
-        }
-        else if (subCategoryKeyword !== '') {
-            // dispatch(GetSearchProductList('subCategorySearch', 10, keyword, subCategoryKeyword, sortCondition));
+            dispatch(GetSearchProductList('category', 10, keyword, sortCondition));
         };
         // eslint-disable-next-line
-    }, [subCategoryKeyword, sortCondition]);
+    }, [searchtype, keyword, sortCondition]);
 
     useEffect(() => {
         setIsLoading(getStoreState.flagValue.isLoading);
@@ -261,7 +258,7 @@ export const ProductList = () => {
                 '{keyword}'에 대한 검색 결과입니다.
             </ProductListTitle>
 
-            {searchtype === 'category' &&
+            {searchtype === 'categorySearch' &&
                 <ProductListButtonArea>
                     <CategoryButton>
                         <DropDownButton>

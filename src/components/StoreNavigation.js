@@ -428,7 +428,7 @@ export const StoreNavigation = () => {
 
     const onCategorySearch = (keyword) => {
 
-        navigate(`/store/productlist/category/${keyword}`);
+        navigate(`/store/productlist/categorySearch/${keyword}`);
         setSearchKeyword('');
         setIsCategoryShow(false);
     };

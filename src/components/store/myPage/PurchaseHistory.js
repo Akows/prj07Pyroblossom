@@ -289,22 +289,23 @@ export const PurchaseHistory = ({ userdata }) => {
             const firstIndex = getStoreState.processInfo.processData1.firstOfAllList;
             const lastIndex = getStoreState.processInfo.processData1.lastOfAllList;
 
-            if (Object.keys(firstItem).length !== 0) {
-                if (firstItem?.data().purchaseNumber === firstIndex?.data().purchaseNumber) {
-                    setIsDataFirst(true);
-                }
-                else {
-                    setIsDataFirst(false);
-                };
+            if (firstItem) {
+                if (Object.keys(firstItem).length !== 0) {
+                    if (firstItem?.data().purchaseNumber === firstIndex?.data().purchaseNumber) {
+                        setIsDataFirst(true);
+                    }
+                    else {
+                        setIsDataFirst(false);
+                    };
 
-                if (lastItem?.data().purchaseNumber === lastIndex?.data().purchaseNumber) {
-                    setIsDataLast(true);
-                }
-                else {
-                    setIsDataLast(false);
+                    if (lastItem?.data().purchaseNumber === lastIndex?.data().purchaseNumber) {
+                        setIsDataLast(true);
+                    }
+                    else {
+                        setIsDataLast(false);
+                    };
                 };
             };
-
         };
 
         // return () => {
