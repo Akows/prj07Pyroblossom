@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 import productimg from '../../assets/images/testImg/testproductimg.jpg';
 import { Loading } from '../../components/Loading';
-import { GetProductList } from '../../redux/actions/storeAction';
+import { GetSearchProductList } from '../../redux/actions/storeAction';
 
 const BackGround = styled.div`
     width: 100%;
@@ -218,30 +218,29 @@ const ProductInfo = styled.div`
 
 export const ProductList = () => {
 
+    const dispatch = useDispatch();
+    const getStoreState = useSelector((state) => state.store);
+
     const { searchtype } = useParams(); // 일반 검색시에는 keywordSearch, 카테고리 검색은 category.
     const { keyword } = useParams(); // 일반 검색시에는 검색값, 카테고리 검색은 카테고리 이름.
-
-    const dispatch = useDispatch();
-
-    const getStoreState = useSelector((state) => state.store);
+    const [subCategoryKeyword, setSubCategoryKeyword] = useState('');
+    const [sortCondition, setSortCondition] = useState('인기도순');
 
     const [listData, setListData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
-    // eslint-disable-next-line
-    const searchSubCategory = () => {
-        dispatch(GetProductList('subCategorySearch', 10, keyword));
-    };
-
     useEffect(() => {
         if (searchtype === 'keywordSearch') {
-            dispatch(GetProductList('keywordSearch', 10, keyword));
+            // dispatch(GetSearchProductList('keywordSearch', 10, keyword, subCategoryKeyword, sortCondition));
         }
-        else {
-            dispatch(GetProductList('categorySearch', 10, keyword));
+        else if (searchtype === 'categorySearch') {
+            // dispatch(GetSearchProductList('categorySearch', 10, keyword, subCategoryKeyword, sortCondition));
+        }
+        else if (subCategoryKeyword !== '') {
+            // dispatch(GetSearchProductList('subCategorySearch', 10, keyword, subCategoryKeyword, sortCondition));
         };
         // eslint-disable-next-line
-    }, []);
+    }, [subCategoryKeyword, sortCondition]);
 
     useEffect(() => {
         setIsLoading(getStoreState.flagValue.isLoading);
@@ -271,30 +270,30 @@ export const ProductList = () => {
 
                         {keyword === '인형, 피규어' &&
                             <TypeButton>
-                                <button value='인형'>인형</button>
-                                <button value='피규어'>피규어</button>
+                                <button onClick={() => setSubCategoryKeyword('인형')}>인형</button>
+                                <button onClick={() => setSubCategoryKeyword('피규어')}>피규어</button>
                             </TypeButton>
                         }
 
                         {keyword === '문구잡화' &&
                             <TypeButton>
-                                <button value='마우스패드'>마우스패드</button>
-                                <button value='아크릴스탠드'>아크릴스탠드</button>
-                                <button value='열쇠고리'>열쇠고리</button>
+                                <button onClick={() => setSubCategoryKeyword('마우스패드')}>마우스패드</button>
+                                <button onClick={() => setSubCategoryKeyword('아크릴스탠드')}>아크릴스탠드</button>
+                                <button onClick={() => setSubCategoryKeyword('열쇠고리')}>열쇠고리</button>
                             </TypeButton>
                         }
 
                         {keyword === '기타잡화' &&
                             <TypeButton>
-                                <button value='의류'>의류</button>
-                                <button value='식품'>식품</button>
+                                <button onClick={() => setSubCategoryKeyword('의류')}>의류</button>
+                                <button onClick={() => setSubCategoryKeyword('식품')}>식품</button>
                             </TypeButton>
                         }
 
                         {keyword === '도서, 음반' &&
                             <TypeButton>
-                                <button value='도서'>도서</button>
-                                <button value='음반'>음반</button>
+                                <button onClick={() => setSubCategoryKeyword('도서')}>도서</button>
+                                <button onClick={() => setSubCategoryKeyword('음반')}>음반</button>
                             </TypeButton>
                         }
                     </CategoryButton>
@@ -304,11 +303,11 @@ export const ProductList = () => {
             <ProductListArea>
 
                 <ListType>
-                    <p>인기도순</p>
-                    <p>낮은 가격순</p>
-                    <p>높은 가격순</p>
-                    <p>리뷰 많은순</p>
-                    <p>등록일 순</p>
+                    <p onClick={() => setSortCondition('인기도순')}>인기도순</p>
+                    <p onClick={() => setSortCondition('낮은 가격순')}>낮은 가격순</p>
+                    <p onClick={() => setSortCondition('높은 가격순')}>높은 가격순</p>
+                    <p onClick={() => setSortCondition('리뷰 많은순')}>리뷰 많은순</p>
+                    <p onClick={() => setSortCondition('등록일 순')}>등록일 순</p>
                 </ListType>
 
                 <hr />

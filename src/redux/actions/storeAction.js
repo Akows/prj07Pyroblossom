@@ -178,12 +178,6 @@ const GetProductList = (listCallType, itemPerPage, searchKeyword) => {
             // 검색일 때, where 함수를 사용하여 조건검색으로 데이터를 조회해온다.
             else if (listCallType === 'keywordSearch') {
                 queryRef = query(storeCollectionRef, orderBy('number'), where('name', '==', searchKeyword), limit(itemPerPage));
-            }
-            else if (listCallType === 'categorySearch') {
-                queryRef = query(storeCollectionRef, orderBy('number'), where('mainCategory', '==', searchKeyword), limit(itemPerPage));
-            }
-            else if (listCallType === 'subCategorySearch') {
-                queryRef = query(storeCollectionRef, orderBy('number'), where('subCategory', '==', searchKeyword), limit(itemPerPage));
             };
 
             // 다른 페이지로 이동할 경우, 페이지 이동을 위한 데이터 Index를 바탕으로 데이터를 조회해온다.
@@ -233,6 +227,130 @@ const GetProductList = (listCallType, itemPerPage, searchKeyword) => {
     };
 };
 
+const GetSearchProductList = (listCallType, itemPerPage, searchKeyword, subCategoryKeyword, sortCondition) => {
+    return (dispatch, getState) => {
+        console.log(listCallType, itemPerPage, searchKeyword, subCategoryKeyword, sortCondition);
+
+        dispatch({ type: 'STORE_STATE_INIT' });
+        dispatch({ type: 'STORE_LOADING' });
+
+        let subKeyword = '';
+
+
+        const returnData = {
+            processData1: {
+                firstOfPage: {},
+                lastOfPage: {},
+                firstOfAllList: {},
+                lastOfAllList: {},
+            },
+            processData2: [],
+        };
+
+        const calculateBothEndsIndex = async () => {
+            let firstQueryRef = '';
+            let LastQueryRef = '';
+
+            if (listCallType === 'keywordSearch') {
+                firstQueryRef = query(storeCollectionRef, orderBy('number', 'asc'), where('name', '==', searchKeyword), where('productDisclosure', '==', true), limit(1));
+                LastQueryRef = query(storeCollectionRef, orderBy('number', 'asc'), where('name', '==', searchKeyword), where('productDisclosure', '==', true), limitToLast(1));
+            }
+            else if (listCallType === 'categorySearch') {
+                firstQueryRef = query(storeCollectionRef, orderBy('number', 'asc'), where('mainCategory', '==', searchKeyword), where('productDisclosure', '==', true), limit(1));
+                LastQueryRef = query(storeCollectionRef, orderBy('number', 'asc'), where('mainCategory', '==', searchKeyword), where('productDisclosure', '==', true), limitToLast(1));
+            }
+            else if (listCallType === 'subCategorySearch') {
+                firstQueryRef = query(storeCollectionRef, orderBy('number', 'asc'), where('subCategory', '==', subCategoryKeyword), where('productDisclosure', '==', true), limit(1));
+                LastQueryRef = query(storeCollectionRef, orderBy('number', 'asc'), where('subCategory', '==', subCategoryKeyword), where('productDisclosure', '==', true), limitToLast(1));
+            };
+            
+            const firstDocumentSnapshots = await getDocs(firstQueryRef);
+            const lastDocumentSnapshots = await getDocs(LastQueryRef);
+
+            returnData.processData1.firstOfAllList = firstDocumentSnapshots.docs[0];
+            returnData.processData1.lastOfAllList = lastDocumentSnapshots.docs[0];
+        };
+
+        const calculateProductPerPage = async () => {
+
+            let queryRef = '';
+
+            if (listCallType === 'keywordSearch') {
+                if (sortCondition === '높은 가격순') {
+                    queryRef = query(storeCollectionRef, orderBy(sortCondition, 'desc'), where('name', '==', searchKeyword), where('productDisclosure', '==', true), limit(itemPerPage));
+                }
+                else {
+                    queryRef = query(storeCollectionRef, orderBy(sortCondition, 'asc'), where('name', '==', searchKeyword), where('productDisclosure', '==', true), limit(itemPerPage));
+                };
+            }
+            else if (listCallType === 'categorySearch') {
+                if (sortCondition === '높은 가격순') {
+                    queryRef = query(storeCollectionRef, orderBy(sortCondition, 'desc'), where('mainCategory', '==', searchKeyword), where('productDisclosure', '==', true), limit(itemPerPage));
+                }
+                else {
+                    queryRef = query(storeCollectionRef, orderBy(sortCondition, 'asc'), where('mainCategory', '==', searchKeyword), where('productDisclosure', '==', true), limit(itemPerPage));
+                };
+            }
+            else if (listCallType === 'categorySearch') {
+                if (sortCondition === '높은 가격순') {
+                    queryRef = query(storeCollectionRef, orderBy(sortCondition, 'desc'), where('subCategory', '==', searchKeyword), where('productDisclosure', '==', true), limit(itemPerPage));
+                }
+                else {
+                    queryRef = query(storeCollectionRef, orderBy(sortCondition, 'asc'), where('subCategory', '==', searchKeyword), where('productDisclosure', '==', true), limit(itemPerPage));
+                };
+            };
+
+            const { firstOfPage, lastOfPage } = getState().store.processInfo.processData1;
+            if (listCallType === 'next') {
+                if (sortCondition === '높은 가격순') {
+                    queryRef = query(storeCollectionRef, orderBy(sortCondition, 'desc'), where('name', '==', searchKeyword), where('productDisclosure', '==', true), startAfter(lastOfPage), limit(itemPerPage));
+                }
+                else {
+                    queryRef = query(storeCollectionRef, orderBy(sortCondition, 'asc'), where('name', '==', searchKeyword), where('productDisclosure', '==', true), startAfter(lastOfPage), limit(itemPerPage));
+                };
+            }
+            else if (listCallType === 'prev') {
+                if (sortCondition === '높은 가격순') {
+                    queryRef = query(storeCollectionRef, orderBy(sortCondition, 'desc'), where('name', '==', searchKeyword), where('productDisclosure', '==', true), endBefore(firstOfPage), limit(itemPerPage));
+                }
+                else {
+                    queryRef = query(storeCollectionRef, orderBy(sortCondition, 'asc'), where('name', '==', searchKeyword), where('productDisclosure', '==', true), endBefore(firstOfPage), limit(itemPerPage));
+                };
+            };
+
+            const allDocumentSnapshots = await getDocs(queryRef);
+
+            returnData.processData1.firstOfPage = allDocumentSnapshots.docs[0];
+            returnData.processData1.lastOfPage = allDocumentSnapshots.docs[allDocumentSnapshots.docs.length - 1];
+
+            const result = [];
+            allDocumentSnapshots.forEach((doc) => {
+                result.push(doc.data());
+                console.log(doc.data());
+            });
+            returnData.processData2 = result;
+        };
+
+        calculateBothEndsIndex()
+        .then(() => {
+            calculateProductPerPage()
+            .then(() => {
+                dispatch({ type: 'STORE_COMPLETE' });
+                dispatch({ type: 'STORE_GET_PRODUCTLIST', payload: returnData});
+            })
+            .catch((error) => {
+                dispatch({ type: 'STORE_ERROR', payload: createErrorData(error) });
+            });
+        })
+        .catch((error) => {
+            dispatch({ type: 'STORE_ERROR', payload: createErrorData(error) });
+        });
+
+    };
+};
+
+
+
 const GetProductInfo = (productName) => {
     return (dispatch, getState) => {
         dispatch({ type: 'STORE_STATE_INIT' });
@@ -267,6 +385,8 @@ const GetProductInfo = (productName) => {
 
     };
 };
+
+
 
 
 
@@ -775,7 +895,7 @@ const GetPointRecord = (listCallType, itemPerPage, userEmail) => {
     };
 };
 
-export { Test1, AddProduct, GetProductList, GetProductInfo, UpdateProduct, ChangeProductDisclosure, GoToPurchasePage, PurchaseProduct, ChargePoint, GetpurchaseRecord, DeletePurchaseRecord, GetPointRecord };
+export { Test1, AddProduct, GetProductList, GetSearchProductList, GetProductInfo, UpdateProduct, ChangeProductDisclosure, GoToPurchasePage, PurchaseProduct, ChargePoint, GetpurchaseRecord, DeletePurchaseRecord, GetPointRecord };
 
 
 
