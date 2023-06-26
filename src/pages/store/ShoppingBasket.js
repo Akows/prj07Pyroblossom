@@ -277,8 +277,7 @@ export const ShoppingBasket = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [isError, setIsError] = useState(false);
 
-    const [dataList, setDataList] = useState([]);
-    const [isDataEmpty, setIsDataEmpty] = useState(true);
+    const [listData, setListData] = useState([]);
 
     const onPurchase = () => {
 
@@ -290,15 +289,11 @@ export const ShoppingBasket = () => {
     }, []);
 
     useEffect(() => {
-        const data = getStoreState.basketData
-        console.log(data);
+        setListData(getStoreState.basketData);
+        console.log(listData);
 
-        setDataList([{}]);
-        console.log(dataList);
-
-        setIsDataEmpty(false);
         // eslint-disable-next-line
-    }, [getStoreState.basketData]);
+    }, [getStoreState.basketData, listData]);
 
     useEffect(() => {
         setIsLoading(getStoreState.flagValue.isLoading);
@@ -326,11 +321,11 @@ export const ShoppingBasket = () => {
 
                     <UserComponent>
 
-                        {dataList?.map((item1) => (
-                            <Basket key={item1.basketNumber}>
+                        {listData.map((item) => (
+                            <Basket key={item.basketNumber}>
                                 {/* <input type='checkbox' /> */}
 
-                                {item1.PurchaseList.map((item2) => (
+                                {item.purchaseList.map((item2) => (
                                     <BasketInfo>
                                         <ProductImg>
                                             <img src='' alt='' />
@@ -342,6 +337,7 @@ export const ShoppingBasket = () => {
                                         </ProductInfo>
                                     </BasketInfo>
                                 ))}
+
                             </Basket>
                         ))}
 
