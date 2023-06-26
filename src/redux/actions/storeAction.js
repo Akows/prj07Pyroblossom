@@ -1,7 +1,7 @@
 import { deleteDoc, doc, endBefore, getCountFromServer, getDoc, getDocs, limit, limitToLast, orderBy, query, setDoc, startAfter, updateDoc, where } from 'firebase/firestore';
 import { ref, uploadBytes } from 'firebase/storage';
 import { createErrorData, errorCode } from '../../configs/errorCodes';
-import { timeStamp, storeCollectionRef, storageRef, purchaseRecordCollectionRef, userCollectionRef, pointRecordCollectionRef } from '../../configs/firebase/config'
+import { timeStamp, storeCollectionRef, storageRef, purchaseRecordCollectionRef, userCollectionRef, pointRecordCollectionRef, shoppingBasketCollectionRef } from '../../configs/firebase/config'
 import { dateFormat, productOptionInfoProcess } from '../../functions/storeFunction';
 
 const Test1 = () => {
@@ -994,17 +994,63 @@ const GetPointRecord = (listCallType, itemPerPage, userEmail) => {
     };
 };
 
-const AddShoppingBasket = (userdata, productData, purchaseList, totalQuantity, totalAmount, navigate) => {
+const AddShoppingBasket = (userData, productData, purchaseList, totalQuantity, totalAmount, navigate) => {
     return (dispatch, getState) => {
 
-        console.log(userdata, productData, purchaseList, totalQuantity, totalAmount);
+        dispatch({ type: 'STORE_STATE_INIT' });
+        dispatch({ type: 'STORE_LOADING' });
 
-        // dispatch({ type: 'STORE_STATE_INIT' });
-        // dispatch({ type: 'STORE_LOADING' });
+        const addressInfo = {
+            address: '',
+            address2: '',
+        };
 
+        // 우선 유저의 주소값을 가져와서 준비된 객체에 저장해준다.
+        const getUserInfo = async () => {
+            const docRef = doc(userCollectionRef, userData.email);
+            const docSnap = await getDoc(docRef);
 
-        // dispatch({ type: 'STORE_COMPLETE' });
-        // dispatch({ type: 'STORE_ERROR' });
+            addressInfo.address = docSnap.data().address;
+            addressInfo.address2 = docSnap.data().address2;
+        };
+
+        // 다음으로는 장바구니 DB에 데이터를 저장해준다.
+        const addBasket = async () => {
+            const querys = query(shoppingBasketCollectionRef);
+            const allPurchaseRecordCount = await getCountFromServer(querys);
+
+            const docRef = doc(shoppingBasketCollectionRef, `${allPurchaseRecordCount.data().count + 1}`);
+            const createdTime = timeStamp.fromDate(new Date());
+
+            await setDoc(docRef,
+                {
+                    basketNumber: allPurchaseRecordCount.data().count + 1,
+                    userEmail: userData.email,
+                    address: addressInfo.address,
+                    address2: addressInfo.address2,
+                    productData: productData,
+                    purchaseList: purchaseList,
+                    totalQuantity: totalQuantity,
+                    totalAmount: totalAmount,
+                    date: createdTime,
+                }
+            );
+        };
+
+        getUserInfo()
+        .then(() => {
+            addBasket()
+            .then(() => {
+                dispatch({ type: 'STORE_COMPLETE' });
+                navigate('/store/mypage/shoppingbasket', { replace: true });
+            })
+            .catch((error) => {
+                dispatch({ type: 'STORE_ERROR', payload: createErrorData(error) });
+            });
+        })
+        .catch((error) => {
+            dispatch({ type: 'STORE_ERROR', payload: createErrorData(error) });
+        });
     };
 };
 
