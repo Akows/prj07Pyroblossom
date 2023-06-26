@@ -10,8 +10,9 @@ import { MyPageNavigation } from '../../components/store/myPage/MyPageNavigation
 import { PointHistory } from '../../components/store/myPage/PointHistory';
 
 import { PurchaseHistory } from '../../components/store/myPage/PurchaseHistory';
-import { ShoppingBasket } from '../../components/store/myPage/ShoppingBasket';
+import { ShoppingBasket } from './ShoppingBasket';
 import { GetUserData } from '../../redux/actions/userAction';
+import { Link } from 'react-router-dom';
 
 const BackGround = styled.div`
     width: 100%;
@@ -214,6 +215,41 @@ const UserPointRecharge = styled.div`
     };
 `;
 
+const BasketButton = styled.div`
+    width: 200px;
+    height: 50px;
+    margin-top: 20px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+    border-radius: 5px;
+    background-color: #D3BC8E;
+
+    font-family: 'GIFont';
+    font-size: 16px;
+
+    &:hover {
+        background-color: #414147;
+        color: #D3BC8E;
+    };
+    & > a {
+        width: 100%;
+        height: 100%;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        color: #414147;
+    };
+`;
+
+
 const AdminInnerContents = styled.div`
     width: 1200px;
     height: 100%;
@@ -332,6 +368,12 @@ export const StoreMyPage = () => {
                                 <button onClick={() => setIsShowModal(true)}>포인트 충전하기</button>
                             </UserPointRecharge>
 
+                            <BasketButton>
+                                <Link to='/store/mypage/shoppingbasket'>
+                                    장바구니 보기
+                                </Link>
+                            </BasketButton>
+
                         </UserProfile>
 
                     </UserInfoArea>
@@ -344,17 +386,13 @@ export const StoreMyPage = () => {
                                 <CompoButton onClick={() => setWhatComponentsRender('history')}>
                                     결제내역
                                 </CompoButton>
-                                <CompoButton onClick={() => setWhatComponentsRender('basket')}>
-                                    장바구니
-                                </CompoButton>
+
                                 <CompoButton onClick={() => setWhatComponentsRender('consumption')}>
                                     포인트 내역
                                 </CompoButton>
                             </UserCompoButton>
 
                             {whatCompoIsShow === 'history' && <PurchaseHistory userdata={getUserState.userdata} />}
-
-                            {whatCompoIsShow === 'basket' && <ShoppingBasket />}
 
                             {whatCompoIsShow === 'consumption' && <PointHistory userdata={getUserState.userdata} />}
 

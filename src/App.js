@@ -24,6 +24,7 @@ import { StoreMyPage } from './pages/store/StoreMyPage';
 import { PaymentPage } from './pages/store/PaymentPage';
 import { Footer } from './components/Footer';
 import { Loading } from './components/Loading';
+import { ShoppingBasket } from './pages/store/ShoppingBasket';
 
 
 const AppBackGround = styled.div`
@@ -108,16 +109,10 @@ function App() {
           <Route path='payment' element={getUserState.flagvalue.isLogin ? <PaymentPage /> : <Navigate to='/store' replace={true} />} />
         </Route>
 
-        <Route path='store/mypage' element={<NoNavLayout />} >
+        <Route path='store/mypage/*' element={<NoNavLayout />} >
           <Route index element={getUserState.flagvalue.isLogin ? <StoreMyPage /> : <Navigate to='/store' replace={true} />} />
+          <Route path='shoppingbasket' element={getUserState.flagvalue.isLogin ? <ShoppingBasket /> : <Navigate to='/store' replace={true} />} />
         </Route>
-
-
-
-
-
-
-
 
 
 

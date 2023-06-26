@@ -1,7 +1,53 @@
 import React from 'react'
 import styled from 'styled-components';
+import { MyPageNavigation } from '../../components/store/myPage/MyPageNavigation';
 
-import productimg from '../../../assets/images/testImg/testproductimg.jpg';
+const BackGround = styled.div`
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    background-color: rgba( 65, 71, 89, 1 );
+
+    color: #D3BC8E;
+`;
+
+const InnerContents = styled.div`
+    width: 1200px;
+    height: 100%;
+
+    margin-top: 20px;
+    margin-bottom: 50px;
+
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: center;
+
+    @media screen and (max-width: 1200px) {
+        width: 100%;
+        flex-direction: column;
+        align-items: center;
+    };
+`;
+
+const ComponentArea = styled.div`
+    width: 68%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+
+    @media screen and (max-width: 1200px) {
+        width: 95%;
+    };
+`;
 
 const UserUtilButton = styled.div`
     width: 100%;
@@ -226,88 +272,97 @@ export const ShoppingBasket = () => {
     };
 
     return (
-        <>
-            <UserUtilButton>
+        <BackGround>
+            <MyPageNavigation />
 
-                <div>
-                    <input type='checkbox' />
-                    <p>전체 선택</p>
-                </div>
+            <InnerContents>
 
-                <button>전체 삭제</button>
-
-            </UserUtilButton>
-
-            <UserComponent>
-
-                <Basket>
-                    <input type='checkbox' />
-
-                    <BasketInfo>
-                        <ProductImg>
-                            <img src={productimg} alt='' />
-                        </ProductImg>
-                        <ProductInfo>
-                            <p>04.13 구매</p>
-                            <p>통통폭탄인형</p>
-                            <p>1개</p>
-                            <p>30,000원, 무료배송</p>
-
-                        </ProductInfo>
-                    </BasketInfo>
-                </Basket>
+                <ComponentArea>
 
 
+                    <UserUtilButton>
 
+                        <div>
+                            <input type='checkbox' />
+                            <p>전체 선택</p>
+                        </div>
 
+                        <button>전체 삭제</button>
 
+                    </UserUtilButton>
 
+                    <UserComponent>
 
-            </UserComponent>
+                        <Basket>
+                            <input type='checkbox' />
 
-            <PurchaseInfo>
+                            <BasketInfo>
+                                <ProductImg>
+                                    <img src='' alt='' />
+                                </ProductImg>
+                                <ProductInfo>
+                                    <p>04.13 구매</p>
+                                    <p>통통폭탄인형</p>
+                                    <p>1개</p>
+                                    <p>30,000원, 무료배송</p>
 
-                <Info1>
-                    <p>선택상품금액</p>
-                    <p>30,000원</p>
-                </Info1>
-
-                <p> + </p>
-
-                <Info2>
-                    <p>총배송비</p>
-                    <p>0원</p>
-                </Info2>
-
-                <p> + </p>
-
-                <Info3>
-                    <p>총할인금액</p>
-                    <p>5,000원</p>
-                </Info3>
+                                </ProductInfo>
+                            </BasketInfo>
+                        </Basket>
 
 
 
-            </PurchaseInfo>
-
-            <PurchaseInfo>
-                <Info4>
-                    <p>총주문금액</p>
-                    <p>25,000원</p>
-                </Info4>
-
-            </PurchaseInfo>
-
-            <PurchaseInfo>
-
-                <PurchaseInfoButton onClick={onPurchase}>
-                    구매하기
-                </PurchaseInfoButton>
-
-            </PurchaseInfo>
 
 
-        </>
+
+
+                    </UserComponent>
+
+                    <PurchaseInfo>
+
+                        <Info1>
+                            <p>선택상품금액</p>
+                            <p>30,000원</p>
+                        </Info1>
+
+                        <p> + </p>
+
+                        <Info2>
+                            <p>총배송비</p>
+                            <p>0원</p>
+                        </Info2>
+
+                        <p> + </p>
+
+                        <Info3>
+                            <p>총할인금액</p>
+                            <p>5,000원</p>
+                        </Info3>
+
+
+
+                    </PurchaseInfo>
+
+                    <PurchaseInfo>
+                        <Info4>
+                            <p>총주문금액</p>
+                            <p>25,000원</p>
+                        </Info4>
+
+                    </PurchaseInfo>
+
+                    <PurchaseInfo>
+
+                        <PurchaseInfoButton onClick={onPurchase}>
+                            구매하기
+                        </PurchaseInfoButton>
+
+                    </PurchaseInfo>
+
+                </ComponentArea>
+
+            </InnerContents>
+        </BackGround>
     );
 };
 

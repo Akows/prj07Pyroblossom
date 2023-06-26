@@ -88,8 +88,10 @@ export const MyPageNavigation = ({ isAdminLogin }) => {
                     <img src={Imagesrc2} alt='' />
                 </Link>
                 <NavText>
-                    {isAdminLogin && '관리페이지'}
-                    {!isAdminLogin && '마이페이지'}
+                    <Link to='/store/mypage'>
+                        {isAdminLogin && '관리페이지'}
+                        {!isAdminLogin && '마이페이지'}
+                    </Link>
                 </NavText>
             </LogoAndCompoButton>
 
