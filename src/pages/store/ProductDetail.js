@@ -7,7 +7,7 @@ import { QnA } from '../../components/store/productDetail/QnA';
 import { ProductInfomation } from '../../components/store/productDetail/ProductInfomation';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { GetProductInfo, GoToPurchasePage } from '../../redux/actions/storeAction';
+import { AddShoppingBasket, GetProductInfo, GoToPurchasePage } from '../../redux/actions/storeAction';
 
 const SpecialCharacter = styled.p`
     margin-left: 2px;
@@ -386,7 +386,7 @@ const PurchaseOption2 = styled.div`
 
 const PurchaseUtil = styled.div`
     width: 100%;
-    height: 60px;
+    height: 30px;
 
     display: flex;
     flex-direction: row;
@@ -397,7 +397,7 @@ const PurchaseUtil = styled.div`
     margin-bottom: 15px;
 
     & > button {
-        width: 45%;
+        width: 60%;
         height: 100%;
 
         border: none;
@@ -633,6 +633,21 @@ export const ProductDetail = () => {
         setTotalQuantity(totalQuantity - item.purchaseQuantity);
     };
 
+    const onAddShoppingBasket = () => {
+        if (purchaseList.length === 0) {
+            alert('하나 이상의 옵션을 선택해야합니다.');
+            return;
+        };
+
+        if (!isLogin) {
+            alert('로그인한 회원만 장바구니 기능을 사용할 수 있습니다.');
+            return;
+        };
+
+        dispatch(AddShoppingBasket(getUserState.userdata, productData, purchaseList, totalQuantity, totalAmount, navigate));
+    };
+
+
     const onBuy = () => {
         if (purchaseList.length === 0) {
             alert('하나 이상의 옵션을 선택해야합니다.');
@@ -771,8 +786,8 @@ export const ProductDetail = () => {
                             </PurchasePrice>
 
                             <PurchaseUtil>
-                                <button>찜하기</button>
-                                <button>장바구니</button>
+                                {/* <button>찜하기</button> */}
+                                <button onClick={onAddShoppingBasket}>장바구니에 담기</button>
                             </PurchaseUtil>
 
                             <PurchaseButton ref={OtherInfoScrollMovePoint} isSale={productData[0]?.inventory <= 0}>

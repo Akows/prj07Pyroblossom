@@ -994,7 +994,45 @@ const GetPointRecord = (listCallType, itemPerPage, userEmail) => {
     };
 };
 
-export { Test1, AddProduct, GetProductList, GetSearchProductList, GetProductInfo, UpdateProduct, ChangeProductDisclosure, GoToPurchasePage, PurchaseProduct, ChargePoint, GetpurchaseRecord, DeletePurchaseRecord, GetPointRecord };
+const AddShoppingBasket = (userdata, productData, purchaseList, totalQuantity, totalAmount, navigate) => {
+    return (dispatch, getState) => {
+
+        console.log(userdata, productData, purchaseList, totalQuantity, totalAmount);
+
+        // dispatch({ type: 'STORE_STATE_INIT' });
+        // dispatch({ type: 'STORE_LOADING' });
+
+
+        // dispatch({ type: 'STORE_COMPLETE' });
+        // dispatch({ type: 'STORE_ERROR' });
+    };
+};
+
+const DeleteShoppingBasket = () => {
+    return (dispatch, getState) => {
+        dispatch({ type: 'STORE_STATE_INIT' });
+        dispatch({ type: 'STORE_LOADING' });
+
+
+        dispatch({ type: 'STORE_COMPLETE' });
+        dispatch({ type: 'STORE_ERROR' });
+    };
+};
+
+const GetShoppingBasket = () => {
+    return (dispatch, getState) => {
+        dispatch({ type: 'STORE_STATE_INIT' });
+        dispatch({ type: 'STORE_LOADING' });
+
+        
+        dispatch({ type: 'STORE_COMPLETE' });
+        dispatch({ type: 'STORE_ERROR' });
+    };
+};
+
+
+
+export { Test1, AddProduct, GetProductList, GetSearchProductList, GetProductInfo, UpdateProduct, ChangeProductDisclosure, GoToPurchasePage, PurchaseProduct, ChargePoint, GetpurchaseRecord, DeletePurchaseRecord, GetPointRecord, AddShoppingBasket, DeleteShoppingBasket, GetShoppingBasket };
 
 
 

@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { MyPageNavigation } from '../../components/store/myPage/MyPageNavigation';
 
@@ -267,9 +268,22 @@ const ProductInfo = styled.div`
 
 export const ShoppingBasket = () => {
 
+    const dispatch = useDispatch();
+
+    const getUserState = useSelector((state) => state.user);
+    const getStoreState = useSelector((state) => state.store);
+
+    const [isLoading, setIsLoading] = useState(false);
+    const [isError, setIsError] = useState(false);
+
     const onPurchase = () => {
 
     };
+
+    useEffect(() => {
+        setIsLoading(getStoreState.flagValue.isLoading);
+        setIsError(getStoreState.flagValue.isError);
+    }, [getStoreState.flagValue]);
 
     return (
         <BackGround>

@@ -10,7 +10,6 @@ import { MyPageNavigation } from '../../components/store/myPage/MyPageNavigation
 import { PointHistory } from '../../components/store/myPage/PointHistory';
 
 import { PurchaseHistory } from '../../components/store/myPage/PurchaseHistory';
-import { ShoppingBasket } from './ShoppingBasket';
 import { GetUserData } from '../../redux/actions/userAction';
 import { Link } from 'react-router-dom';
 
