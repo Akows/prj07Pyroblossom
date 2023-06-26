@@ -1065,18 +1065,32 @@ const DeleteShoppingBasket = () => {
     };
 };
 
-const GetShoppingBasket = () => {
+const GetShoppingBasket = (userEmail) => {
     return (dispatch, getState) => {
         dispatch({ type: 'STORE_STATE_INIT' });
         dispatch({ type: 'STORE_LOADING' });
 
-        
-        dispatch({ type: 'STORE_COMPLETE' });
-        dispatch({ type: 'STORE_ERROR' });
+        const result = [];
+
+        const getData = async () => {
+            const queryRef = query(shoppingBasketCollectionRef, orderBy('basketNumber', 'asc'), where('userEmail', '==', userEmail));
+            const allDocumentSnapshots = await getDocs(queryRef);
+
+            allDocumentSnapshots.forEach((doc) => {
+                result.push(doc.data());
+            });
+        };
+
+        getData()
+        .then(() => {
+            dispatch({ type: 'STORE_COMPLETE' });
+            dispatch({ type: 'STORE_SET_BASKETDATA', payload: result });
+        })
+        .catch((error) => {
+            dispatch({ type: 'STORE_ERROR', payload: createErrorData(error) });
+        });
     };
 };
-
-
 
 export { Test1, AddProduct, GetProductList, GetSearchProductList, GetProductInfo, UpdateProduct, ChangeProductDisclosure, GoToPurchasePage, PurchaseProduct, ChargePoint, GetpurchaseRecord, DeletePurchaseRecord, GetPointRecord, AddShoppingBasket, DeleteShoppingBasket, GetShoppingBasket };
 

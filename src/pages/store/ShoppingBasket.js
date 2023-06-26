@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { MyPageNavigation } from '../../components/store/myPage/MyPageNavigation';
+import { GetShoppingBasket } from '../../redux/actions/storeAction';
 
 const BackGround = styled.div`
     width: 100%;
@@ -276,9 +277,28 @@ export const ShoppingBasket = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [isError, setIsError] = useState(false);
 
+    const [dataList, setDataList] = useState([]);
+    const [isDataEmpty, setIsDataEmpty] = useState(true);
+
     const onPurchase = () => {
 
     };
+
+    useEffect(() => {
+        dispatch(GetShoppingBasket(getUserState.userdata.email));
+        // eslint-disable-next-line
+    }, []);
+
+    useEffect(() => {
+        const data = getStoreState.basketData
+        console.log(data);
+
+        setDataList([{}]);
+        console.log(dataList);
+
+        setIsDataEmpty(false);
+        // eslint-disable-next-line
+    }, [getStoreState.basketData]);
 
     useEffect(() => {
         setIsLoading(getStoreState.flagValue.isLoading);
@@ -293,8 +313,7 @@ export const ShoppingBasket = () => {
 
                 <ComponentArea>
 
-
-                    <UserUtilButton>
+                    {/* <UserUtilButton>
 
                         <div>
                             <input type='checkbox' />
@@ -303,32 +322,54 @@ export const ShoppingBasket = () => {
 
                         <button>전체 삭제</button>
 
-                    </UserUtilButton>
+                    </UserUtilButton> */}
 
                     <UserComponent>
 
-                        <Basket>
-                            <input type='checkbox' />
+                        {dataList?.map((item1) => (
+                            <Basket key={item1.basketNumber}>
+                                {/* <input type='checkbox' /> */}
 
-                            <BasketInfo>
-                                <ProductImg>
-                                    <img src='' alt='' />
-                                </ProductImg>
-                                <ProductInfo>
-                                    <p>04.13 구매</p>
-                                    <p>통통폭탄인형</p>
-                                    <p>1개</p>
-                                    <p>30,000원, 무료배송</p>
-
-                                </ProductInfo>
-                            </BasketInfo>
-                        </Basket>
-
-
-
-
+                                {item1.PurchaseList.map((item2) => (
+                                    <BasketInfo>
+                                        <ProductImg>
+                                            <img src='' alt='' />
+                                        </ProductImg>
+                                        <ProductInfo>
+                                            <p>{item2.optionName}</p>
+                                            <p>{item2.purchaseQuantity}개</p>
+                                            <p>{item2.totalAmount}원, 무료배송</p>
+                                        </ProductInfo>
+                                    </BasketInfo>
+                                ))}
+                            </Basket>
+                        ))}
 
 
+                        {/* {isDataEmpty && '장바구니가 비어있습니다.'} */}
+
+                        {/* {!isDataEmpty &&
+                            <>
+                                {dataList?.map((item1) => (
+                                    <Basket key={item1.basketNumber}>
+                                        <input type='checkbox' /> 
+
+                                        {item1.PurchaseList.map((item2) => (
+                                            <BasketInfo>
+                                                <ProductImg>
+                                                    <img src='' alt='' />
+                                                </ProductImg>
+                                                <ProductInfo>
+                                                    <p>{item2.optionName}</p>
+                                                    <p>{item2.purchaseQuantity}개</p>
+                                                    <p>{item2.totalAmount}원, 무료배송</p>
+                                                </ProductInfo>
+                                            </BasketInfo>
+                                        ))}
+                                    </Basket>
+                                ))}
+                            </>
+                        }  */}
 
                     </UserComponent>
 

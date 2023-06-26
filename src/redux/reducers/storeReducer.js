@@ -13,7 +13,8 @@ const initialState = {
         processData1: {},
         processData2: [],
     },
-    purchaseData: {}
+    purchaseData: {},
+    basketData: {}
 };
 
 const storeReducer = (prevState = initialState, action) => {
@@ -83,7 +84,9 @@ const storeReducer = (prevState = initialState, action) => {
                 draft.purchaseData = {};
                 break;
 
-
+            case 'STORE_SET_BASKETDATA':
+                draft.basketData = action.payload;
+                break;
 
 
 
