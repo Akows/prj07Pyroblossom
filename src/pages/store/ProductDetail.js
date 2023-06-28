@@ -754,18 +754,16 @@ export const ProductDetail = () => {
                                 </Price>
                             </ProductPrice>
 
+                            <p>제품 판매량: {productData[0]?.productSalesRate}</p>
+
                             <EventInfo>
                                 <p>회원님을 위한 해택</p>
                                 <hr />
 
-                                <p>적립포인트 : {productData[0]?.rewardAmountRate}P</p>
-                                <p>이벤트 : {productData[0]?.eventType}, {productData[0]?.eventPoint}P</p>
-                                <p>사은품 : </p>
+                                {/* {productData[0]?.rewardAmountRate !== 0 && <p>적립포인트 : {productData[0]?.rewardAmountRate}P</p>} */}
+                                <p>이벤트 : {productData[0]?.eventType}</p>
+                                <p>이벤트 포인트 : {productData[0]?.eventPoint}P</p>
                             </EventInfo>
-
-
-
-
 
                             <PurchaseInfo>
                                 <p>택배배송 : 무료, 우체국택배</p>

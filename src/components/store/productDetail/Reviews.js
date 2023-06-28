@@ -143,8 +143,48 @@ const ReviewForm = styled.div`
 
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
+    align-items: center;
+    justify-content: flex-start;
+
+    & > input {
+        width: 100%;
+        height: 30px;
+
+        font-family: 'GIFont';
+        font-size: 16px;
+        color: black;
+
+        margin-top: 10px;
+
+        background-color: #aaaaaa;
+        border-radius: 5px;
+        border: none;
+    };
+
+    & > button {
+        width: 120px;
+        height: 30px;
+
+        margin-top: 10px;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        border: none;
+        border-radius: 5px;
+        background-color: #D3BC8E;
+        color: #414147;
+
+        font-family: 'GIFont';
+        font-size: 16px;
+    };
+    
+    & > button:hover {
+        background-color: #414147;
+        color: #D3BC8E;
+    };
 `;
 
 
@@ -257,8 +297,8 @@ export const Reviews = ({ productData, userData }) => {
                         <p>4.6 / 5</p>
                     </ReviewInfoGrade>
                     <ReviewInfoReviewNumber>
-                        <p>모든 리뷰 숫자</p>
-                        <p>2234</p>
+                        <p>리뷰 숫자</p>
+                        <p>{productData?.productReviews}</p>
                     </ReviewInfoReviewNumber>
                     <ReviewInfoAverage>
                         <p>5점 : 1235</p>
@@ -270,10 +310,10 @@ export const Reviews = ({ productData, userData }) => {
                 </ReviewInfoScore>
 
                 <ReviewForm>
-                    <input id='inputTitle' onChange={onChangeInputData} type='text' />
-                    <input id='inputText' onChange={onChangeInputData} type='text' />
+                    <input id='inputTitle' onChange={onChangeInputData} type='text' placeholder='제목을 입력해주세요.' />
+                    <input id='inputText' onChange={onChangeInputData} type='text' placeholder='내용을 입력해주세요.' />
 
-                    <button onClick={() => onCreateReviewAndQnA()}>작성하기</button>
+                    <button onClick={() => onCreateReviewAndQnA()}>리뷰 작성하기</button>
                 </ReviewForm>
 
             </ReviewInfo>
