@@ -146,7 +146,7 @@ const Info3 = styled.div`
     };
 `;
 const Info4 = styled.div`
-    width: 100%;
+    width: 100px;
     height: 100%;
 
     display: flex;
@@ -207,8 +207,8 @@ const Basket = styled.div`
     padding: 10px;
 
     display: flex;
-    flex-direction: row;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-start;
     justify-content: flex-start;
 
     border: 1px solid gray;
@@ -217,6 +217,26 @@ const Basket = styled.div`
     & > input {
         width: 25px;
         height: 25px;
+    };
+
+    & > div:nth-child(2) {
+        width: 100%;
+        height: 30px;
+
+        margin-top: 30px;
+
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: space-between;
+    };
+
+    & > div:nth-child(2) > p {
+        font-size: 22px;
+    };
+
+    & > div:nth-child(2) > p:nth-child(2):hover {
+        color: gray;
     };
 `;
 
@@ -278,8 +298,14 @@ export const ShoppingBasket = () => {
     const [isError, setIsError] = useState(false);
 
     const [listData, setListData] = useState([]);
+    const [productPrice, setProductPrice] = useState(0);
+    const [productDeliveryFee, setProductDeliveryFee] = useState(0);
 
     const onPurchase = () => {
+
+    };
+
+    const onDelete = () => {
 
     };
 
@@ -290,10 +316,25 @@ export const ShoppingBasket = () => {
 
     useEffect(() => {
         setListData(getStoreState.basketData);
-        console.log(listData);
 
         // eslint-disable-next-line
-    }, [getStoreState.basketData, listData]);
+        listData.map((item) => {
+            let result = 0;
+            result += item.productData[0].deliveryFee;
+
+            setProductDeliveryFee(result);
+
+            // eslint-disable-next-line
+            item.purchaseList.map((item2) => {
+                let result = 0;
+                result += item2.totalAmount;
+
+                setProductPrice(result);
+            });
+        });
+
+        // eslint-disable-next-line
+    }, [getStoreState.basketData]);
 
     useEffect(() => {
         setIsLoading(getStoreState.flagValue.isLoading);
@@ -321,7 +362,7 @@ export const ShoppingBasket = () => {
 
                     <UserComponent>
 
-                        {listData.map((item) => (
+                        {listData?.map((item) => (
                             <Basket key={item.basketNumber}>
                                 {/* <input type='checkbox' /> */}
 
@@ -333,71 +374,41 @@ export const ShoppingBasket = () => {
                                         <ProductInfo>
                                             <p>{item2.optionName}</p>
                                             <p>{item2.purchaseQuantity}개</p>
-                                            <p>{item2.totalAmount}원, 무료배송</p>
+                                            <p>{item2.totalAmount}원</p>
                                         </ProductInfo>
                                     </BasketInfo>
                                 ))}
 
+                                <div>
+                                    <p>배송비 {item.productData[0].deliveryFee}원</p>
+
+                                    <p>X</p>
+                                </div>
+
                             </Basket>
                         ))}
-
-
-                        {/* {isDataEmpty && '장바구니가 비어있습니다.'} */}
-
-                        {/* {!isDataEmpty &&
-                            <>
-                                {dataList?.map((item1) => (
-                                    <Basket key={item1.basketNumber}>
-                                        <input type='checkbox' /> 
-
-                                        {item1.PurchaseList.map((item2) => (
-                                            <BasketInfo>
-                                                <ProductImg>
-                                                    <img src='' alt='' />
-                                                </ProductImg>
-                                                <ProductInfo>
-                                                    <p>{item2.optionName}</p>
-                                                    <p>{item2.purchaseQuantity}개</p>
-                                                    <p>{item2.totalAmount}원, 무료배송</p>
-                                                </ProductInfo>
-                                            </BasketInfo>
-                                        ))}
-                                    </Basket>
-                                ))}
-                            </>
-                        }  */}
 
                     </UserComponent>
 
                     <PurchaseInfo>
 
                         <Info1>
-                            <p>선택상품금액</p>
-                            <p>30,000원</p>
+                            <p>제품 가격</p>
+                            <p>{productPrice}원</p>
                         </Info1>
 
                         <p> + </p>
 
                         <Info2>
-                            <p>총배송비</p>
-                            <p>0원</p>
+                            <p>배송비</p>
+                            <p>{productDeliveryFee}원</p>
                         </Info2>
 
-                        <p> + </p>
+                        <p> = </p>
 
-                        <Info3>
-                            <p>총할인금액</p>
-                            <p>5,000원</p>
-                        </Info3>
-
-
-
-                    </PurchaseInfo>
-
-                    <PurchaseInfo>
                         <Info4>
                             <p>총주문금액</p>
-                            <p>25,000원</p>
+                            <p>{productPrice + productDeliveryFee}원</p>
                         </Info4>
 
                     </PurchaseInfo>

@@ -523,8 +523,9 @@ export const ProductDetail = () => {
 
     const [isLogin, setIsLogin] = useState(false);
 
-    const [productData, setProductData] = useState([]);
+    const [isBasketIn, setIsBasketIn] = useState(true);
 
+    const [productData, setProductData] = useState([]);
     const [purchaseList, setPurchaseList] = useState([]);
 
     const [totalQuantity, setTotalQuantity] = useState(0);
@@ -633,6 +634,19 @@ export const ProductDetail = () => {
         setTotalQuantity(totalQuantity - item.purchaseQuantity);
     };
 
+    const onGoShoppingBasket = () => {
+
+        const confirmChoice = window.confirm('이미 장바구니에 추가된 상품입니다. 장바구니로 이동하시겠습니까?');
+
+        if (!confirmChoice) {
+            return;
+        }
+        else {
+            navigate('/store/mypage/shoppingbasket', { replace: true });
+        };
+    };
+
+
     const onAddShoppingBasket = () => {
         if (purchaseList.length === 0) {
             alert('하나 이상의 옵션을 선택해야합니다.');
@@ -678,8 +692,20 @@ export const ProductDetail = () => {
     }, [getUserState.flagvalue]);
 
     useEffect(() => {
-        setProductData(getStoreState.processInfo.processData2);
-    }, [getStoreState.processInfo]);
+
+        if (productData.length === 0) {
+            setProductData(getStoreState.processInfo.processData2);
+
+            if (productData.name === getStoreState.basketData[0].name) {
+                setIsBasketIn(true);
+            }
+            else {
+                setIsBasketIn(false);
+            };
+        };
+
+    }, [getStoreState.processInfo, getStoreState.basketData]);
+
 
     useEffect(() => {
         let result = 0;
@@ -793,7 +819,12 @@ export const ProductDetail = () => {
 
                             <PurchaseUtil>
                                 {/* <button>찜하기</button> */}
-                                <button onClick={onAddShoppingBasket}>장바구니에 담기</button>
+
+                                {isBasketIn ?
+                                    <button onClick={onGoShoppingBasket}>장바구니로 가기</button>
+                                    :
+                                    <button onClick={onAddShoppingBasket}>장바구니에 담기</button>
+                                }
                             </PurchaseUtil>
 
                             <PurchaseButton ref={OtherInfoScrollMovePoint} isSale={productData[0]?.inventory <= 0}>
