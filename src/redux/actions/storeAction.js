@@ -1144,116 +1144,120 @@ const GetShoppingBasket = (userEmail) => {
 
 const createReview = (inputData, userData, productData, navigate) => {
     return (dispatch, getState) => {
-        dispatch({ type: 'STORE_STATE_INIT' });
-        dispatch({ type: 'STORE_LOADING' });
 
-        const process = async () => {
-            const querys = query(reviewCollectionRef);
-            const docCount = await getCountFromServer(querys);
-            const docRef = doc(reviewCollectionRef, `${docCount.data().count + 1}`);
+        console.log(inputData, userData, productData);
 
-            const time = timeStamp.fromDate(new Date());
 
-            await setDoc(docRef,
-                {
-                    docNumber: docCount.data().count + 1,
-                    title: inputData.title,
-                    text: inputData.text,
-                    writer: userData.email,
-                    createdDate: time,
-                }
-            );
-        };
+        // dispatch({ type: 'STORE_STATE_INIT' });
+        // dispatch({ type: 'STORE_LOADING' });
 
-        let beforeReviews = 0;
+        // const process = async () => {
+        //     const querys = query(reviewCollectionRef);
+        //     const docCount = await getCountFromServer(querys);
+        //     const docRef = doc(reviewCollectionRef, `${docCount.data().count + 1}`);
 
-        const updataProductInfo = async () => {
-            const docRef = doc(storeCollectionRef, productData.name);
-            const docSnap = await getDoc(docRef);
+        //     const time = timeStamp.fromDate(new Date());
 
-            beforeReviews = docSnap.data().productReviews;
+        //     await setDoc(docRef,
+        //         {
+        //             docNumber: docCount.data().count + 1,
+        //             title: inputData.title,
+        //             text: inputData.text,
+        //             writer: userData.email,
+        //             createdDate: time,
+        //         }
+        //     );
+        // };
 
-            await setDoc(docRef, {
-                productReviews: beforeReviews + 1,
-            }, { merge: true });
-        };
+        // let beforeReviews = 0;
 
-        let beforePoint = 0;
+        // const updataProductInfo = async () => {
+        //     const docRef = doc(storeCollectionRef, productData.name);
+        //     const docSnap = await getDoc(docRef);
 
-        const updataUserInfo = async () => {
-            const docRef = doc(userCollectionRef, userData.email);
-            const docSnap = await getDoc(docRef);
+        //     beforeReviews = docSnap.data().productReviews;
 
-            beforePoint = parseInt(docSnap.data().point);
+        //     await setDoc(docRef, {
+        //         productReviews: beforeReviews + 1,
+        //     }, { merge: true });
+        // };
 
-            await setDoc(docRef, {
-                point: beforePoint + parseInt(productData.eventPoint),
-            }, { merge: true });
-        };
+        // let beforePoint = 0;
 
-        const recordPointData = async () => {
-            const querys = query(pointRecordCollectionRef);
-            const count = await getCountFromServer(querys);
+        // const updataUserInfo = async () => {
+        //     const docRef = doc(userCollectionRef, userData.email);
+        //     const docSnap = await getDoc(docRef);
 
-            const docRef = doc(pointRecordCollectionRef, `${count.data().count + 1}`);
-            const createdTime = timeStamp.fromDate(new Date());
+        //     beforePoint = parseInt(docSnap.data().point);
 
-            await setDoc(docRef,
-                {
-                    recordNumber: count.data().count + 1,
-                    userEmail: userData.email,
-                    recordType: '+',
-                    pointChangeNumber: parseInt(productData.eventPoint),
-                    recordDesc: '포인트 적립(리뷰 작성).',
-                    recordDate: createdTime,
-                    leftoverPoint: beforePoint + parseInt(productData.eventPoint),
-                }
-            );
-        };
+        //     await setDoc(docRef, {
+        //         point: beforePoint + parseInt(productData.eventPoint),
+        //     }, { merge: true });
+        // };
 
-        process()
-            .then(() => {
-                updataProductInfo()
-                .then(() => {
+        // const recordPointData = async () => {
+        //     const querys = query(pointRecordCollectionRef);
+        //     const count = await getCountFromServer(querys);
 
-                    // 리뷰 이벤트가 있을 경우에만 포인트를 적립하고 DB를 수정.
-                    if (productData.eventType === '리뷰 이벤트') {
-                        updataUserInfo()
-                        .then(() => {
-                            recordPointData()
-                            .then(() => {
-                                dispatch({ type: 'STORE_COMPLETE' });
-                                dispatch({ type: 'STORE_RENDERING_ON' });
-                                navigate(`/store/productdetail/${productData.name}`, { replace: true });
-                            })
-                            .catch((error) => {
-                                dispatch({ type: 'STORE_ERROR', payload: createErrorData(error) });
-                                navigate(`/store/productdetail/${productData.name}`, { replace: true });
-                            });
-                        })
-                        .catch((error) => {
-                            dispatch({ type: 'STORE_ERROR', payload: createErrorData(error) });
-                            navigate(`/store/productdetail/${productData.name}`, { replace: true });
-                        });
-                    }
-                    // 아닐 경우에는 그냥 리뷰만 작성.
-                    else {
-                        dispatch({ type: 'STORE_COMPLETE' });
-                        dispatch({ type: 'STORE_RENDERING_ON' });
-                        navigate(`/store/productdetail/${productData.name}`, { replace: true });
-                    };
+        //     const docRef = doc(pointRecordCollectionRef, `${count.data().count + 1}`);
+        //     const createdTime = timeStamp.fromDate(new Date());
 
-                })
-                .catch((error) => {
-                    dispatch({ type: 'STORE_ERROR', payload: createErrorData(error) });
-                    navigate(`/store/productdetail/${productData.name}`, { replace: true });
-                });
+        //     await setDoc(docRef,
+        //         {
+        //             recordNumber: count.data().count + 1,
+        //             userEmail: userData.email,
+        //             recordType: '+',
+        //             pointChangeNumber: parseInt(productData.eventPoint),
+        //             recordDesc: '포인트 적립(리뷰 작성).',
+        //             recordDate: createdTime,
+        //             leftoverPoint: beforePoint + parseInt(productData.eventPoint),
+        //         }
+        //     );
+        // };
 
-            })
-            .catch((error) => {
-                dispatch({ type: 'STORE_ERROR', payload: createErrorData(error) });
-                navigate(`/store/productdetail/${productData.name}`, { replace: true });
-            });
+        // process()
+        //     .then(() => {
+        //         updataProductInfo()
+        //         .then(() => {
+
+        //             // 리뷰 이벤트가 있을 경우에만 포인트를 적립하고 DB를 수정.
+        //             if (productData.eventType === '리뷰 이벤트') {
+        //                 updataUserInfo()
+        //                 .then(() => {
+        //                     recordPointData()
+        //                     .then(() => {
+        //                         dispatch({ type: 'STORE_COMPLETE' });
+        //                         dispatch({ type: 'STORE_RENDERING_ON' });
+        //                         navigate(`/store/productdetail/${productData.name}`, { replace: true });
+        //                     })
+        //                     .catch((error) => {
+        //                         dispatch({ type: 'STORE_ERROR', payload: createErrorData(error) });
+        //                         navigate(`/store/productdetail/${productData.name}`, { replace: true });
+        //                     });
+        //                 })
+        //                 .catch((error) => {
+        //                     dispatch({ type: 'STORE_ERROR', payload: createErrorData(error) });
+        //                     navigate(`/store/productdetail/${productData.name}`, { replace: true });
+        //                 });
+        //             }
+        //             // 아닐 경우에는 그냥 리뷰만 작성.
+        //             else {
+        //                 dispatch({ type: 'STORE_COMPLETE' });
+        //                 dispatch({ type: 'STORE_RENDERING_ON' });
+        //                 navigate(`/store/productdetail/${productData.name}`, { replace: true });
+        //             };
+
+        //         })
+        //         .catch((error) => {
+        //             dispatch({ type: 'STORE_ERROR', payload: createErrorData(error) });
+        //             navigate(`/store/productdetail/${productData.name}`, { replace: true });
+        //         });
+
+        //     })
+        //     .catch((error) => {
+        //         dispatch({ type: 'STORE_ERROR', payload: createErrorData(error) });
+        //         navigate(`/store/productdetail/${productData.name}`, { replace: true });
+        //     });
     };
 };
 

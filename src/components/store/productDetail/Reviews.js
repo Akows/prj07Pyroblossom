@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 // import star1img from '../../../assets/images/stars/Icon_1_Star.webp';
@@ -6,6 +8,7 @@ import styled from 'styled-components';
 // import star3img from '../../../assets/images/stars/Icon_3_Stars.webp';
 import star4img from '../../../assets/images/stars/Icon_4_Stars.webp';
 import star5img from '../../../assets/images/stars/Icon_5_Stars.webp';
+import { createReview } from '../../../redux/actions/storeAction';
 
 const BackGround = styled.div`
     width: 100%;
@@ -130,6 +133,21 @@ const ReviewInfoAverage = styled.div`
     };
 `;
 
+const ReviewForm = styled.div`
+    width: 95%;
+    height: 80%;
+
+    margin-top: 30px;
+
+    border-top: 2px solid gray;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+`;
+
+
 const Review = styled.div`
     width: 80%;
     height: 150px;
@@ -187,20 +205,35 @@ const UserReview = styled.div`
 
 export const Reviews = ({ productData, userData }) => {
 
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+
     const [inputData, setInputData] = useState({
         inputTitle: '',
         inputText: ''
     });
-
-    const [inputType, setInputType] = useState('review');
 
     const onChangeInputData = (event) => {
         setInputData({ ...inputData, [event.target.id]: event.target.value });
     };
 
     const onCreateReviewAndQnA = () => {
-        console.log(inputData);
-        console.log(productData, userData.userdata);
+
+        if (userData.userdata.email) {
+            const confirmChoice = window.confirm('리뷰를 작성하시겠습니까?');
+
+            if (!confirmChoice) {
+                return;
+            }
+            else {
+                dispatch(createReview(inputData, userData.userdata.email, productData, navigate));
+
+            };
+
+        }
+        else {
+            alert('리뷰 작성은 회원만 가능합니다.');
+        };
     };
 
     return (
@@ -210,10 +243,10 @@ export const Reviews = ({ productData, userData }) => {
                     <p>상품리뷰</p>
                     <p>상품을 구매하신 분들이 남긴 리뷰입니다.</p>
 
-                    {productData.eventType === '리뷰 이벤트' &&
+                    {productData?.eventType === '리뷰 이벤트' &&
                         <>
                             <p>리뷰 작성시 다음과 같은 해택이 제공됩니다.</p>
-                            <p>리뷰 작성 이벤트 포인트 : <FontB>{productData.eventPoint}p</FontB></p>
+                            <p>리뷰 작성 이벤트 포인트 : <FontB>{productData?.eventPoint}p</FontB></p>
                         </>
                     }
 
@@ -236,14 +269,12 @@ export const Reviews = ({ productData, userData }) => {
                     </ReviewInfoAverage>
                 </ReviewInfoScore>
 
-                <ReviewInfoScore>
+                <ReviewForm>
                     <input id='inputTitle' onChange={onChangeInputData} type='text' />
                     <input id='inputText' onChange={onChangeInputData} type='text' />
 
                     <button onClick={() => onCreateReviewAndQnA()}>작성하기</button>
-                </ReviewInfoScore>
-
-
+                </ReviewForm>
 
             </ReviewInfo>
 
