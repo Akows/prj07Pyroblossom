@@ -1054,14 +1054,22 @@ const AddShoppingBasket = (userData, productData, purchaseList, totalQuantity, t
     };
 };
 
-const DeleteShoppingBasket = () => {
+const DeleteShoppingBasket = (userEmail, productName) => {
     return (dispatch, getState) => {
-        dispatch({ type: 'STORE_STATE_INIT' });
-        dispatch({ type: 'STORE_LOADING' });
+        // dispatch({ type: 'STORE_STATE_INIT' });
+        // dispatch({ type: 'STORE_LOADING' });
 
 
-        dispatch({ type: 'STORE_COMPLETE' });
-        dispatch({ type: 'STORE_ERROR' });
+        // dispatch({ type: 'STORE_COMPLETE' });
+        // dispatch({ type: 'STORE_ERROR' });
+
+
+        console.log(userEmail, productName);
+
+        const deleteBasket = async () => {
+
+        };
+
     };
 };
 

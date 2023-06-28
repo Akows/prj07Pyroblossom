@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { MyPageNavigation } from '../../components/store/myPage/MyPageNavigation';
-import { GetShoppingBasket } from '../../redux/actions/storeAction';
+import { DeleteShoppingBasket, GetShoppingBasket } from '../../redux/actions/storeAction';
 
 const BackGround = styled.div`
     width: 100%;
@@ -306,7 +306,7 @@ export const ShoppingBasket = () => {
     };
 
     const onDelete = () => {
-
+        dispatch(DeleteShoppingBasket(listData.userEmail, listData.productData[0].name));
     };
 
     useEffect(() => {
@@ -315,23 +315,26 @@ export const ShoppingBasket = () => {
     }, []);
 
     useEffect(() => {
-        setListData(getStoreState.basketData);
 
-        // eslint-disable-next-line
-        listData.map((item) => {
-            let result = 0;
-            result += item.productData[0].deliveryFee;
-
-            setProductDeliveryFee(result);
+        if (Object.keys(getStoreState.basketData).length !== 0) {
+            setListData(getStoreState.basketData);
 
             // eslint-disable-next-line
-            item.purchaseList.map((item2) => {
+            listData?.map((item) => {
                 let result = 0;
-                result += item2.totalAmount;
+                result += item.productData[0].deliveryFee;
 
-                setProductPrice(result);
+                setProductDeliveryFee(result);
+
+                // eslint-disable-next-line
+                item.purchaseList.map((item2) => {
+                    let result = 0;
+                    result += item2.totalAmount;
+
+                    setProductPrice(result);
+                });
             });
-        });
+        };
 
         // eslint-disable-next-line
     }, [getStoreState.basketData]);
@@ -362,31 +365,35 @@ export const ShoppingBasket = () => {
 
                     <UserComponent>
 
-                        {listData?.map((item) => (
-                            <Basket key={item.basketNumber}>
-                                {/* <input type='checkbox' /> */}
+                        {listData?.length !== 0 &&
+                            <>
+                                {listData?.map((item) => (
+                                    <Basket key={item.basketNumber}>
+                                        {/* <input type='checkbox' /> */}
 
-                                {item.purchaseList.map((item2) => (
-                                    <BasketInfo>
-                                        <ProductImg>
-                                            <img src='' alt='' />
-                                        </ProductImg>
-                                        <ProductInfo>
-                                            <p>{item2.optionName}</p>
-                                            <p>{item2.purchaseQuantity}개</p>
-                                            <p>{item2.totalAmount}원</p>
-                                        </ProductInfo>
-                                    </BasketInfo>
+                                        {item?.purchaseList.map((item2) => (
+                                            <BasketInfo>
+                                                <ProductImg>
+                                                    <img src='' alt='' />
+                                                </ProductImg>
+                                                <ProductInfo>
+                                                    <p>{item2.optionName}</p>
+                                                    <p>{item2.purchaseQuantity}개</p>
+                                                    <p>{item2.totalAmount}원</p>
+                                                </ProductInfo>
+                                            </BasketInfo>
+                                        ))}
+
+                                        <div>
+                                            <p>배송비 {item.productData[0].deliveryFee}원</p>
+
+                                            <p onClick={onDelete}>X</p>
+                                        </div>
+
+                                    </Basket>
                                 ))}
-
-                                <div>
-                                    <p>배송비 {item.productData[0].deliveryFee}원</p>
-
-                                    <p>X</p>
-                                </div>
-
-                            </Basket>
-                        ))}
+                            </>
+                        }
 
                     </UserComponent>
 
