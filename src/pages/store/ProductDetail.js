@@ -679,7 +679,7 @@ export const ProductDetail = () => {
             return;
         };
 
-        dispatch(GoToPurchasePage(purchaseList, totalQuantity, totalAmount, navigate));
+        dispatch(GoToPurchasePage(purchaseList, totalQuantity, totalAmount, navigate, false));
     };
 
     useEffect(() => {

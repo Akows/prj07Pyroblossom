@@ -300,6 +300,7 @@ export const ShoppingBasket = () => {
     const [isError, setIsError] = useState(false);
 
     const [listData, setListData] = useState([]);
+
     const [productPrice, setProductPrice] = useState(0);
     const [productDeliveryFee, setProductDeliveryFee] = useState(0);
 
@@ -315,7 +316,7 @@ export const ShoppingBasket = () => {
     };
 
     const onPurchase = () => {
-        dispatch(GoToPurchasePage(getStoreState.basketData.purchaseList, getStoreState.basketData.totalQuantity, getStoreState.basketData.totalAmount, navigate));
+        dispatch(GoToPurchasePage(getStoreState.basketData, '', '', navigate, true));
     };
 
     useEffect(() => {

@@ -560,24 +560,42 @@ const ChangeProductDisclosure = (productName, productDisclosure, navigate) => {
     };
 };
 
-const GoToPurchasePage = (purchaseList, totalQuantity, totalAmount, navigate) => {
+const GoToPurchasePage = (purchaseList, totalQuantity, totalAmount, navigate, isBasket) => {
     return (dispatch, getState) => {
-        console.log(purchaseList, totalQuantity, totalAmount);
 
+        dispatch({ type: 'STORE_STATE_INIT' });
+        dispatch({ type: 'STORE_LOADING' });
 
-        // dispatch({ type: 'STORE_STATE_INIT' });
-        // dispatch({ type: 'STORE_LOADING' });
+        const data = {
+            purchaseList: [],
+            totalQuantity: 0,
+            totalAmount: 0,
+        };
 
-        // const data = {
-        //     purchaseList: purchaseList,
-        //     totalQuantity: totalQuantity,
-        //     totalAmount: totalAmount,
-        // };
+        if (isBasket) {
+            let totalQuantity = 0;
+            let totalAmount = 0;   
 
-        // dispatch({ type: 'STORE_SAVE_PURCHASEDATA', payload: data });
-        // dispatch({ type: 'STORE_COMPLETE' });
+            // eslint-disable-next-line
+            purchaseList.map((item) => {
+                data.purchaseList.push(item.purchaseList[0]);
+                totalQuantity += item.totalQuantity;
+                totalAmount += item.totalAmount;
+            });
+
+            data.totalQuantity = totalQuantity;
+            data.totalAmount = totalAmount;
+        }
+        else {
+            data.purchaseList = purchaseList;
+            data.totalQuantity = totalQuantity;
+            data.totalAmount = totalAmount;
+        };
+
+        dispatch({ type: 'STORE_SAVE_PURCHASEDATA', payload: data });
+        dispatch({ type: 'STORE_COMPLETE' });
         
-        // navigate('/store/payment', { replace: true });
+        navigate('/store/payment', { replace: true });
     };
 };
 
