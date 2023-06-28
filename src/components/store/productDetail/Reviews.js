@@ -3,9 +3,9 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-// import star1img from '../../../assets/images/stars/Icon_1_Star.webp';
-// import star2img from '../../../assets/images/stars/Icon_2_Stars.webp';
-// import star3img from '../../../assets/images/stars/Icon_3_Stars.webp';
+import star1img from '../../../assets/images/stars/Icon_1_Star.webp';
+import star2img from '../../../assets/images/stars/Icon_2_Stars.webp';
+import star3img from '../../../assets/images/stars/Icon_3_Stars.webp';
 import star4img from '../../../assets/images/stars/Icon_4_Stars.webp';
 import star5img from '../../../assets/images/stars/Icon_5_Stars.webp';
 import { createReview } from '../../../redux/actions/storeAction';
@@ -143,8 +143,28 @@ const ReviewForm = styled.div`
 
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     justify-content: flex-start;
+
+    & > select {
+        width: 10%;
+        height: 30px;
+
+        margin-top: 10px;
+
+        font-family: 'GIFont';
+        font-size: 16px;
+        color: black;
+
+        background-color: white;
+        border-radius: 5px;
+        border: none;
+
+    };
+
+    & > select > option {
+
+    };
 
     & > input {
         width: 100%;
@@ -250,7 +270,8 @@ export const Reviews = ({ productData, userData }) => {
 
     const [inputData, setInputData] = useState({
         inputTitle: '',
-        inputText: ''
+        inputText: '',
+        inputScore: 5,
     });
 
     const onChangeInputData = (event) => {
@@ -259,21 +280,22 @@ export const Reviews = ({ productData, userData }) => {
 
     const onCreateReviewAndQnA = () => {
 
-        if (userData.userdata.email) {
-            const confirmChoice = window.confirm('리뷰를 작성하시겠습니까?');
+        dispatch(createReview(inputData, userData.userdata.email, productData, navigate));
 
-            if (!confirmChoice) {
-                return;
-            }
-            else {
-                dispatch(createReview(inputData, userData.userdata.email, productData, navigate));
+        // if (userData.userdata.email) {
+        //     const confirmChoice = window.confirm('리뷰를 작성하시겠습니까?');
 
-            };
+        //     if (!confirmChoice) {
+        //         return;
+        //     }
+        //     else {
+        //         dispatch(createReview(inputData, userData.userdata.email, productData, navigate));
+        //     };
 
-        }
-        else {
-            alert('리뷰 작성은 회원만 가능합니다.');
-        };
+        // }
+        // else {
+        //     alert('리뷰 작성은 회원만 가능합니다.');
+        // };
     };
 
     return (
@@ -310,8 +332,16 @@ export const Reviews = ({ productData, userData }) => {
                 </ReviewInfoScore>
 
                 <ReviewForm>
-                    <input id='inputTitle' onChange={onChangeInputData} type='text' placeholder='제목을 입력해주세요.' />
-                    <input id='inputText' onChange={onChangeInputData} type='text' placeholder='내용을 입력해주세요.' />
+                    <select id='inputScore' onChange={onChangeInputData} required>
+                        <option value='5' title='../../../assets/images/stars/Icon_5_Stars.webp'>5점</option>
+                        <option value='4'>4점</option>
+                        <option value='3'>3점</option>
+                        <option value='2'>2점</option>
+                        <option value='1'>1점</option>
+                    </select>
+
+                    <input id='inputTitle' onChange={onChangeInputData} type='text' placeholder='제목을 입력해주세요.' required />
+                    <input id='inputText' onChange={onChangeInputData} type='text' placeholder='내용을 입력해주세요.' required />
 
                     <button onClick={() => onCreateReviewAndQnA()}>리뷰 작성하기</button>
                 </ReviewForm>
