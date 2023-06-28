@@ -1,7 +1,7 @@
 import { deleteDoc, doc, endBefore, getCountFromServer, getDoc, getDocs, limit, limitToLast, orderBy, query, setDoc, startAfter, updateDoc, where } from 'firebase/firestore';
 import { ref, uploadBytes } from 'firebase/storage';
 import { createErrorData, errorCode } from '../../configs/errorCodes';
-import { timeStamp, storeCollectionRef, storageRef, purchaseRecordCollectionRef, userCollectionRef, pointRecordCollectionRef, shoppingBasketCollectionRef, reviewAndQnACollectionRef } from '../../configs/firebase/config'
+import { timeStamp, storeCollectionRef, storageRef, purchaseRecordCollectionRef, userCollectionRef, pointRecordCollectionRef, shoppingBasketCollectionRef, reviewCollectionRef } from '../../configs/firebase/config'
 import { dateFormat, productOptionInfoProcess } from '../../functions/storeFunction';
 
 const Test1 = () => {
@@ -1142,22 +1142,21 @@ const GetShoppingBasket = (userEmail) => {
     };
 };
 
-const createReviewAndQnA = (colType, inputData, userData, productData, navigate) => {
+const createReview = (inputData, userData, productData, navigate) => {
     return (dispatch, getState) => {
         dispatch({ type: 'STORE_STATE_INIT' });
         dispatch({ type: 'STORE_LOADING' });
 
         const process = async () => {
-            const querys = query(reviewAndQnACollectionRef);
+            const querys = query(reviewCollectionRef);
             const docCount = await getCountFromServer(querys);
-            const docRef = doc(reviewAndQnACollectionRef, `${docCount.data().count + 1}`);
+            const docRef = doc(reviewCollectionRef, `${docCount.data().count + 1}`);
 
             const time = timeStamp.fromDate(new Date());
 
             await setDoc(docRef,
                 {
                     docNumber: docCount.data().count + 1,
-                    type: colType,
                     title: inputData.title,
                     text: inputData.text,
                     writer: userData.email,
@@ -1217,8 +1216,8 @@ const createReviewAndQnA = (colType, inputData, userData, productData, navigate)
                 updataProductInfo()
                 .then(() => {
 
-                    // 작성 타입이 리뷰이고, 리뷰 이벤트가 있을 경우에만 포인트를 적립하고 DB를 수정.
-                    if (colType === 'reviews' && productData.eventType === '리뷰 이벤트') {
+                    // 리뷰 이벤트가 있을 경우에만 포인트를 적립하고 DB를 수정.
+                    if (productData.eventType === '리뷰 이벤트') {
                         updataUserInfo()
                         .then(() => {
                             recordPointData()
@@ -1258,7 +1257,7 @@ const createReviewAndQnA = (colType, inputData, userData, productData, navigate)
     };
 };
 
-const deleteReviewAndQnA = () => {
+const deleteReview = () => {
     return (dispatch, getState) => {
         dispatch({ type: 'STORE_STATE_INIT' });
         dispatch({ type: 'STORE_LOADING' });
@@ -1266,7 +1265,7 @@ const deleteReviewAndQnA = () => {
         dispatch({ type: 'STORE_ERROR' });
     };
 };
-const updateReviewAndQnA = () => {
+const updateReview = () => {
     return (dispatch, getState) => {
         dispatch({ type: 'STORE_STATE_INIT' });
         dispatch({ type: 'STORE_LOADING' });
@@ -1274,7 +1273,7 @@ const updateReviewAndQnA = () => {
         dispatch({ type: 'STORE_ERROR' });
     };
 };
-const readReviewAndQnA = () => {
+const readReview = () => {
     return (dispatch, getState) => {
         dispatch({ type: 'STORE_STATE_INIT' });
         dispatch({ type: 'STORE_LOADING' });
@@ -1283,7 +1282,7 @@ const readReviewAndQnA = () => {
     };
 };
 
-export { Test1, AddProduct, GetProductList, GetSearchProductList, GetProductInfo, UpdateProduct, ChangeProductDisclosure, GoToPurchasePage, PurchaseProduct, ChargePoint, GetpurchaseRecord, DeletePurchaseRecord, GetPointRecord, AddShoppingBasket, DeleteShoppingBasket, GetShoppingBasket, createReviewAndQnA, deleteReviewAndQnA, updateReviewAndQnA, readReviewAndQnA };
+export { Test1, AddProduct, GetProductList, GetSearchProductList, GetProductInfo, UpdateProduct, ChangeProductDisclosure, GoToPurchasePage, PurchaseProduct, ChargePoint, GetpurchaseRecord, DeletePurchaseRecord, GetPointRecord, AddShoppingBasket, DeleteShoppingBasket, GetShoppingBasket, createReview, deleteReview, updateReview, readReview };
 
 
 

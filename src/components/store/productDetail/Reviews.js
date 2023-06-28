@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components';
 
 // import star1img from '../../../assets/images/stars/Icon_1_Star.webp';
@@ -185,15 +185,38 @@ const UserReview = styled.div`
 `;
 
 
-export const Reviews = ({ eventPoint }) => {
+export const Reviews = ({ productData, userData }) => {
+
+    const [inputData, setInputData] = useState({
+        inputTitle: '',
+        inputText: ''
+    });
+
+    const [inputType, setInputType] = useState('review');
+
+    const onChangeInputData = (event) => {
+        setInputData({ ...inputData, [event.target.id]: event.target.value });
+    };
+
+    const onCreateReviewAndQnA = () => {
+        console.log(inputData);
+        console.log(productData, userData.userdata);
+    };
+
     return (
         <BackGround>
             <ReviewInfo>
                 <ReviewInfoTitle>
                     <p>상품리뷰</p>
                     <p>상품을 구매하신 분들이 남긴 리뷰입니다.</p>
-                    <p>리뷰 작성시 다음과 같은 해택이 제공됩니다.</p>
-                    <p>리뷰 작성 이벤트 포인트 : <FontB>{eventPoint}p</FontB></p>
+
+                    {productData.eventType === '리뷰 이벤트' &&
+                        <>
+                            <p>리뷰 작성시 다음과 같은 해택이 제공됩니다.</p>
+                            <p>리뷰 작성 이벤트 포인트 : <FontB>{productData.eventPoint}p</FontB></p>
+                        </>
+                    }
+
                 </ReviewInfoTitle>
                 <ReviewInfoScore>
                     <ReviewInfoGrade>
@@ -212,6 +235,16 @@ export const Reviews = ({ eventPoint }) => {
                         <p>1점 : 1</p>
                     </ReviewInfoAverage>
                 </ReviewInfoScore>
+
+                <ReviewInfoScore>
+                    <input id='inputTitle' onChange={onChangeInputData} type='text' />
+                    <input id='inputText' onChange={onChangeInputData} type='text' />
+
+                    <button onClick={() => onCreateReviewAndQnA()}>작성하기</button>
+                </ReviewInfoScore>
+
+
+
             </ReviewInfo>
 
             <ReviewList>

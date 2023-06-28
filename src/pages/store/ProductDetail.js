@@ -574,9 +574,6 @@ export const ProductDetail = () => {
     };
 
     const onPurchaseQuantity = (type, item) => {
-
-        console.log(item);
-
         // 깊은 복사로 item 객체를 복사.
         const data = JSON.parse(JSON.stringify(item));
 
@@ -861,7 +858,7 @@ export const ProductDetail = () => {
 
                         <OtherInfoComponentArea>
 
-                            {whatCompoIsShow === 'review' && <Reviews eventPoint={productData[0]?.eventPoint} />}
+                            {whatCompoIsShow === 'review' && <Reviews productData={productData[0]} userData={getUserState} />}
                             {whatCompoIsShow === 'info' && <ProductInfomation />}
                             {whatCompoIsShow === 'qna' && <QnA />}
 
