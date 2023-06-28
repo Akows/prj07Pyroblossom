@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { useDispatch } from 'react-redux';
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -8,7 +8,7 @@ import star2img from '../../../assets/images/stars/Icon_2_Stars.webp';
 import star3img from '../../../assets/images/stars/Icon_3_Stars.webp';
 import star4img from '../../../assets/images/stars/Icon_4_Stars.webp';
 import star5img from '../../../assets/images/stars/Icon_5_Stars.webp';
-import { createReview } from '../../../redux/actions/storeAction';
+import { createReview, GetProductInfo } from '../../../redux/actions/storeAction';
 
 const BackGround = styled.div`
     width: 100%;
@@ -162,10 +162,6 @@ const ReviewForm = styled.div`
 
     };
 
-    & > select > option {
-
-    };
-
     & > input {
         width: 100%;
         height: 30px;
@@ -263,10 +259,17 @@ const UserReview = styled.div`
 `;
 
 
-export const Reviews = ({ productData, userData }) => {
+export const Reviews = ({ userData }) => {
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
+
+    const getStoreState = useSelector((state) => state.store);
+
+    const [isLoading, setIsLoading] = useState(false);
+
+    const [productData, setProductData] = useState({});
+    const [reviewData, setReviewData] = useState([]);
 
     const [inputData, setInputData] = useState({
         inputTitle: '',
@@ -279,24 +282,30 @@ export const Reviews = ({ productData, userData }) => {
     };
 
     const onCreateReviewAndQnA = () => {
+        if (userData.userdata.email) {
+            const confirmChoice = window.confirm('리뷰를 작성하시겠습니까?');
 
-        dispatch(createReview(inputData, userData.userdata.email, productData, navigate));
+            if (!confirmChoice) {
+                return;
+            }
+            else {
+                dispatch(createReview(inputData, userData.userdata.email, productData, navigate));
+            };
 
-        // if (userData.userdata.email) {
-        //     const confirmChoice = window.confirm('리뷰를 작성하시겠습니까?');
-
-        //     if (!confirmChoice) {
-        //         return;
-        //     }
-        //     else {
-        //         dispatch(createReview(inputData, userData.userdata.email, productData, navigate));
-        //     };
-
-        // }
-        // else {
-        //     alert('리뷰 작성은 회원만 가능합니다.');
-        // };
+        }
+        else {
+            alert('리뷰 작성은 회원만 가능합니다.');
+        };
     };
+
+    useEffect(() => {
+        setProductData(getStoreState.processInfo.processData2[0]);
+        setReviewData();
+    }, [getStoreState.processInfo]);
+
+    useEffect(() => {
+        setIsLoading(getStoreState.flagValue.isLoading);
+    }, [getStoreState.flagValue]);
 
     return (
         <BackGround>
@@ -315,25 +324,25 @@ export const Reviews = ({ productData, userData }) => {
                 </ReviewInfoTitle>
                 <ReviewInfoScore>
                     <ReviewInfoGrade>
-                        <p>총 별점</p>
-                        <p>4.6 / 5</p>
+                        <p>별점 평균</p>
+                        <p>{productData?.productScore} / 5</p>
                     </ReviewInfoGrade>
                     <ReviewInfoReviewNumber>
                         <p>리뷰 숫자</p>
                         <p>{productData?.productReviews}</p>
                     </ReviewInfoReviewNumber>
-                    <ReviewInfoAverage>
+                    {/* <ReviewInfoAverage>
                         <p>5점 : 1235</p>
                         <p>4점 : 787</p>
                         <p>3점 : 34</p>
                         <p>2점 : 34</p>
                         <p>1점 : 1</p>
-                    </ReviewInfoAverage>
+                    </ReviewInfoAverage> */}
                 </ReviewInfoScore>
 
                 <ReviewForm>
                     <select id='inputScore' onChange={onChangeInputData} required>
-                        <option value='5' title='../../../assets/images/stars/Icon_5_Stars.webp'>5점</option>
+                        <option value='5'>5점</option>
                         <option value='4'>4점</option>
                         <option value='3'>3점</option>
                         <option value='2'>2점</option>
@@ -349,6 +358,9 @@ export const Reviews = ({ productData, userData }) => {
             </ReviewInfo>
 
             <ReviewList>
+
+
+
 
                 <Review>
                     <UserPic>

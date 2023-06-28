@@ -679,11 +679,12 @@ export const ProductDetail = () => {
         dispatch(GoToPurchasePage(purchaseList, totalQuantity, totalAmount, navigate, false));
     };
 
+    // 리뷰 작성시 isRendering 변수가 변화하면서 제품 데이터를 다시 로딩한다.
     useEffect(() => {
         dispatch(GetProductInfo(id));
         dispatch(GetShoppingBasket(getUserState.userdata.email));
         // eslint-disable-next-line
-    }, []);
+    }, [getStoreState.flagValue.isRendering]);
 
     useEffect(() => {
         setIsLogin(getUserState.flagvalue.isLogin);
