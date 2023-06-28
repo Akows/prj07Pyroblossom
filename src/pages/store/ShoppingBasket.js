@@ -336,10 +336,13 @@ export const ShoppingBasket = () => {
                     setProductPrice(result);
                 });
             });
+        }
+        else {
+            setListData([]);
         };
 
         // eslint-disable-next-line
-    }, [getStoreState.basketData]);
+    }, [getStoreState.basketData, listData]);
 
     useEffect(() => {
         setIsLoading(getStoreState.flagValue.isLoading);

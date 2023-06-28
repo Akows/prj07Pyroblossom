@@ -1042,7 +1042,6 @@ const AddShoppingBasket = (userData, productData, purchaseList, totalQuantity, t
             addBasket()
             .then(() => {
                 dispatch({ type: 'STORE_COMPLETE' });
-                dispatch({ type: 'STORE_CLEAN_BASKETDATA' });
                 navigate('/store/mypage/shoppingbasket', { replace: true });
             })
             .catch((error) => {
@@ -1082,6 +1081,7 @@ const DeleteShoppingBasket = (data, navigate) => {
         deleteBasket()
         .then(() => {
             dispatch({ type: 'STORE_COMPLETE' });
+            dispatch({ type: 'STORE_CLEAN_BASKETDATA' });
             alert('장바구니 내역이 삭제되었습니다.');
             navigate('/store/mypage/shoppingbasket', { replace: true });
         })

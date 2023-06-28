@@ -7,7 +7,7 @@ import { QnA } from '../../components/store/productDetail/QnA';
 import { ProductInfomation } from '../../components/store/productDetail/ProductInfomation';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { AddShoppingBasket, GetProductInfo, GoToPurchasePage } from '../../redux/actions/storeAction';
+import { AddShoppingBasket, GetProductInfo, GetShoppingBasket, GoToPurchasePage } from '../../redux/actions/storeAction';
 
 const SpecialCharacter = styled.p`
     margin-left: 2px;
@@ -684,6 +684,7 @@ export const ProductDetail = () => {
 
     useEffect(() => {
         dispatch(GetProductInfo(id));
+        dispatch(GetShoppingBasket(getUserState.userdata.email));
         // eslint-disable-next-line
     }, []);
 
@@ -696,12 +697,18 @@ export const ProductDetail = () => {
         if (productData.length === 0) {
             setProductData(getStoreState.processInfo.processData2);
 
-            if (productData.name === getStoreState.basketData[0].name) {
-                setIsBasketIn(true);
+            if (Object.keys(getStoreState.basketData).length !== 0) {
+                if (productData[0]?.name === getStoreState.basketData[0].productData[0].name) {
+                    setIsBasketIn(true);
+                }
+                else {
+                    setIsBasketIn(false);
+                };
             }
             else {
                 setIsBasketIn(false);
             };
+
         };
 
     }, [getStoreState.processInfo, getStoreState.basketData]);
