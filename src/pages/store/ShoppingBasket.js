@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { MyPageNavigation } from '../../components/store/myPage/MyPageNavigation';
 import { DeleteShoppingBasket, GetShoppingBasket } from '../../redux/actions/storeAction';
@@ -289,6 +290,7 @@ const ProductInfo = styled.div`
 
 export const ShoppingBasket = () => {
 
+    const navigate = useNavigate();
     const dispatch = useDispatch();
 
     const getUserState = useSelector((state) => state.user);
@@ -306,7 +308,7 @@ export const ShoppingBasket = () => {
     };
 
     const onDelete = () => {
-        dispatch(DeleteShoppingBasket(listData.userEmail, listData.productData[0].name));
+
     };
 
     useEffect(() => {
@@ -365,7 +367,7 @@ export const ShoppingBasket = () => {
 
                     <UserComponent>
 
-                        {listData?.length !== 0 &&
+                        {listData?.length !== 0 ?
                             <>
                                 {listData?.map((item) => (
                                     <Basket key={item.basketNumber}>
@@ -387,46 +389,62 @@ export const ShoppingBasket = () => {
                                         <div>
                                             <p>배송비 {item.productData[0].deliveryFee}원</p>
 
-                                            <p onClick={onDelete}>X</p>
+                                            <p onClick={() => dispatch(DeleteShoppingBasket(item, navigate))}>X</p>
                                         </div>
 
                                     </Basket>
                                 ))}
                             </>
+                            :
+                            '장바구니 내역이 존재하지 않습니다.'
                         }
 
                     </UserComponent>
 
-                    <PurchaseInfo>
+                    {listData?.length !== 0 ?
+                        <>
+                            <PurchaseInfo>
+                                <Info1>
+                                    <p>제품 가격</p>
+                                    <p>{productPrice}원</p>
+                                </Info1>
 
-                        <Info1>
-                            <p>제품 가격</p>
-                            <p>{productPrice}원</p>
-                        </Info1>
+                                <p> + </p>
 
-                        <p> + </p>
+                                <Info2>
+                                    <p>배송비</p>
+                                    <p>{productDeliveryFee}원</p>
+                                </Info2>
 
-                        <Info2>
-                            <p>배송비</p>
-                            <p>{productDeliveryFee}원</p>
-                        </Info2>
+                                <p> = </p>
 
-                        <p> = </p>
+                                <Info4>
+                                    <p>총주문금액</p>
+                                    <p>{productPrice + productDeliveryFee}원</p>
+                                </Info4>
+                            </PurchaseInfo>
 
-                        <Info4>
-                            <p>총주문금액</p>
-                            <p>{productPrice + productDeliveryFee}원</p>
-                        </Info4>
+                            <PurchaseInfo>
 
-                    </PurchaseInfo>
+                                <PurchaseInfoButton onClick={onPurchase}>
+                                    구매하기
+                                </PurchaseInfoButton>
 
-                    <PurchaseInfo>
+                            </PurchaseInfo>
+                        </>
+                        :
+                        <>
+                            <PurchaseInfo>
+                                <br />
+                                <br />
+                            </PurchaseInfo>
 
-                        <PurchaseInfoButton onClick={onPurchase}>
-                            구매하기
-                        </PurchaseInfoButton>
-
-                    </PurchaseInfo>
+                            <PurchaseInfo>
+                                <PurchaseInfoButton>
+                                    비어있는 장바구니
+                                </PurchaseInfoButton>
+                            </PurchaseInfo>
+                        </>}
 
                 </ComponentArea>
 

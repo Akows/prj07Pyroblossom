@@ -1042,6 +1042,7 @@ const AddShoppingBasket = (userData, productData, purchaseList, totalQuantity, t
             addBasket()
             .then(() => {
                 dispatch({ type: 'STORE_COMPLETE' });
+                dispatch({ type: 'STORE_CLEAN_BASKETDATA' });
                 navigate('/store/mypage/shoppingbasket', { replace: true });
             })
             .catch((error) => {
@@ -1054,22 +1055,39 @@ const AddShoppingBasket = (userData, productData, purchaseList, totalQuantity, t
     };
 };
 
-const DeleteShoppingBasket = (userEmail, productName) => {
+const DeleteShoppingBasket = (data, navigate) => {
     return (dispatch, getState) => {
-        // dispatch({ type: 'STORE_STATE_INIT' });
-        // dispatch({ type: 'STORE_LOADING' });
-
-
-        // dispatch({ type: 'STORE_COMPLETE' });
-        // dispatch({ type: 'STORE_ERROR' });
-
-
-        console.log(userEmail, productName);
+        dispatch({ type: 'STORE_STATE_INIT' });
+        dispatch({ type: 'STORE_LOADING' });
 
         const deleteBasket = async () => {
 
+            // 장바구니 데이터 삭제에 앞서 삭제 기능 실행에 필요한 Doc의 id 값을 찾아야한다.
+            const queryRef = query(shoppingBasketCollectionRef, orderBy('basketNumber', 'asc'), where('userEmail', '==', data.userEmail), where('productData', '==', data.productData));
+            const allDocumentSnapshots = await getDocs(queryRef);
+
+            let docId = '';
+
+            // query를 이용한 조건 검색으로 doc의 데이터를 식별한다.
+            allDocumentSnapshots.forEach((doc) => {
+                // console.log(doc.data());
+                // console.log(doc.id);
+
+                docId = doc.id;
+            });
+
+            await deleteDoc(doc(shoppingBasketCollectionRef, docId));
         };
 
+        deleteBasket()
+        .then(() => {
+            dispatch({ type: 'STORE_COMPLETE' });
+            alert('장바구니 내역이 삭제되었습니다.');
+            navigate('/store/mypage/shoppingbasket', { replace: true });
+        })
+        .catch((error) => {
+            dispatch({ type: 'STORE_ERROR', payload: createErrorData(error) });
+        });
     };
 };
 

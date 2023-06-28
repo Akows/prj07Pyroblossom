@@ -87,7 +87,9 @@ const storeReducer = (prevState = initialState, action) => {
             case 'STORE_SET_BASKETDATA':
                 draft.basketData = action.payload;
                 break;
-
+            case 'STORE_CLEAN_BASKETDATA':
+                draft.basketData = {};
+                break;
 
 
 
