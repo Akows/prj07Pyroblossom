@@ -29,8 +29,10 @@ const purchaseRecordCollectionRef = collection(appFireStore, 'purchaseRecord');
 const pointRecordCollectionRef = collection(appFireStore, 'pointRecord');
 // 장바구니 DB Ref.
 const shoppingBasketCollectionRef = collection(appFireStore, 'shoppingBasket');
+// 리뷰와 QnA DB Ref.
+const reviewAndQnACollectionRef = collection(appFireStore, 'reviewAndQnA');
 
 // 파이어베이스 스토리지 Ref.
 const storageRef = ref(appStorage);
 
-export { appFireStore, appAuth, timeStamp, userCollectionRef, storeCollectionRef, purchaseRecordCollectionRef, pointRecordCollectionRef, storageRef, shoppingBasketCollectionRef }
+export { appFireStore, appAuth, timeStamp, userCollectionRef, storeCollectionRef, purchaseRecordCollectionRef, pointRecordCollectionRef, storageRef, shoppingBasketCollectionRef, reviewAndQnACollectionRef }

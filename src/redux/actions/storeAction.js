@@ -1,7 +1,7 @@
 import { deleteDoc, doc, endBefore, getCountFromServer, getDoc, getDocs, limit, limitToLast, orderBy, query, setDoc, startAfter, updateDoc, where } from 'firebase/firestore';
 import { ref, uploadBytes } from 'firebase/storage';
 import { createErrorData, errorCode } from '../../configs/errorCodes';
-import { timeStamp, storeCollectionRef, storageRef, purchaseRecordCollectionRef, userCollectionRef, pointRecordCollectionRef, shoppingBasketCollectionRef } from '../../configs/firebase/config'
+import { timeStamp, storeCollectionRef, storageRef, purchaseRecordCollectionRef, userCollectionRef, pointRecordCollectionRef, shoppingBasketCollectionRef, reviewAndQnACollectionRef } from '../../configs/firebase/config'
 import { dateFormat, productOptionInfoProcess } from '../../functions/storeFunction';
 
 const Test1 = () => {
@@ -585,17 +585,20 @@ const GoToPurchasePage = (purchaseList, totalQuantity, totalAmount, navigate, is
 
             data.totalQuantity = totalQuantity;
             data.totalAmount = totalAmount;
+
+            dispatch({ type: 'STORE_SAVE_PURCHASEDATA', payload: data });
+            dispatch({ type: 'STORE_COMPLETE' });
+            navigate('/store/payment', { replace: true });
         }
         else {
             data.purchaseList = purchaseList;
             data.totalQuantity = totalQuantity;
             data.totalAmount = totalAmount;
-        };
 
-        dispatch({ type: 'STORE_SAVE_PURCHASEDATA', payload: data });
-        dispatch({ type: 'STORE_COMPLETE' });
-        
-        navigate('/store/payment', { replace: true });
+            dispatch({ type: 'STORE_SAVE_PURCHASEDATA', payload: data });
+            dispatch({ type: 'STORE_COMPLETE' });
+            navigate('/store/payment', { replace: true });
+        };
     };
 };
 
@@ -1139,7 +1142,148 @@ const GetShoppingBasket = (userEmail) => {
     };
 };
 
-export { Test1, AddProduct, GetProductList, GetSearchProductList, GetProductInfo, UpdateProduct, ChangeProductDisclosure, GoToPurchasePage, PurchaseProduct, ChargePoint, GetpurchaseRecord, DeletePurchaseRecord, GetPointRecord, AddShoppingBasket, DeleteShoppingBasket, GetShoppingBasket };
+const createReviewAndQnA = (colType, inputData, userData, productData, navigate) => {
+    return (dispatch, getState) => {
+        dispatch({ type: 'STORE_STATE_INIT' });
+        dispatch({ type: 'STORE_LOADING' });
+
+        const process = async () => {
+            const querys = query(reviewAndQnACollectionRef);
+            const docCount = await getCountFromServer(querys);
+            const docRef = doc(reviewAndQnACollectionRef, `${docCount.data().count + 1}`);
+
+            const time = timeStamp.fromDate(new Date());
+
+            await setDoc(docRef,
+                {
+                    docNumber: docCount.data().count + 1,
+                    type: colType,
+                    title: inputData.title,
+                    text: inputData.text,
+                    writer: userData.email,
+                    createdDate: time,
+                }
+            );
+        };
+
+        let beforeReviews = 0;
+
+        const updataProductInfo = async () => {
+            const docRef = doc(storeCollectionRef, productData.name);
+            const docSnap = await getDoc(docRef);
+
+            beforeReviews = docSnap.data().productReviews;
+
+            await setDoc(docRef, {
+                productReviews: beforeReviews + 1,
+            }, { merge: true });
+        };
+
+        let beforePoint = 0;
+
+        const updataUserInfo = async () => {
+            const docRef = doc(userCollectionRef, userData.email);
+            const docSnap = await getDoc(docRef);
+
+            beforePoint = parseInt(docSnap.data().point);
+
+            await setDoc(docRef, {
+                point: beforePoint + parseInt(productData.eventPoint),
+            }, { merge: true });
+        };
+
+        const recordPointData = async () => {
+            const querys = query(pointRecordCollectionRef);
+            const count = await getCountFromServer(querys);
+
+            const docRef = doc(pointRecordCollectionRef, `${count.data().count + 1}`);
+            const createdTime = timeStamp.fromDate(new Date());
+
+            await setDoc(docRef,
+                {
+                    recordNumber: count.data().count + 1,
+                    userEmail: userData.email,
+                    recordType: '+',
+                    pointChangeNumber: parseInt(productData.eventPoint),
+                    recordDesc: '포인트 적립(리뷰 작성).',
+                    recordDate: createdTime,
+                    leftoverPoint: beforePoint + parseInt(productData.eventPoint),
+                }
+            );
+        };
+
+        process()
+            .then(() => {
+                updataProductInfo()
+                .then(() => {
+
+                    // 작성 타입이 리뷰이고, 리뷰 이벤트가 있을 경우에만 포인트를 적립하고 DB를 수정.
+                    if (colType === 'reviews' && productData.eventType === '리뷰 이벤트') {
+                        updataUserInfo()
+                        .then(() => {
+                            recordPointData()
+                            .then(() => {
+                                dispatch({ type: 'STORE_COMPLETE' });
+                                dispatch({ type: 'STORE_RENDERING_ON' });
+                                navigate(`/store/productdetail/${productData.name}`, { replace: true });
+                            })
+                            .catch((error) => {
+                                dispatch({ type: 'STORE_ERROR', payload: createErrorData(error) });
+                                navigate(`/store/productdetail/${productData.name}`, { replace: true });
+                            });
+                        })
+                        .catch((error) => {
+                            dispatch({ type: 'STORE_ERROR', payload: createErrorData(error) });
+                            navigate(`/store/productdetail/${productData.name}`, { replace: true });
+                        });
+                    }
+                    // 아닐 경우에는 그냥 리뷰만 작성.
+                    else {
+                        dispatch({ type: 'STORE_COMPLETE' });
+                        dispatch({ type: 'STORE_RENDERING_ON' });
+                        navigate(`/store/productdetail/${productData.name}`, { replace: true });
+                    };
+
+                })
+                .catch((error) => {
+                    dispatch({ type: 'STORE_ERROR', payload: createErrorData(error) });
+                    navigate(`/store/productdetail/${productData.name}`, { replace: true });
+                });
+
+            })
+            .catch((error) => {
+                dispatch({ type: 'STORE_ERROR', payload: createErrorData(error) });
+                navigate(`/store/productdetail/${productData.name}`, { replace: true });
+            });
+    };
+};
+
+const deleteReviewAndQnA = () => {
+    return (dispatch, getState) => {
+        dispatch({ type: 'STORE_STATE_INIT' });
+        dispatch({ type: 'STORE_LOADING' });
+        dispatch({ type: 'STORE_COMPLETE' });
+        dispatch({ type: 'STORE_ERROR' });
+    };
+};
+const updateReviewAndQnA = () => {
+    return (dispatch, getState) => {
+        dispatch({ type: 'STORE_STATE_INIT' });
+        dispatch({ type: 'STORE_LOADING' });
+        dispatch({ type: 'STORE_COMPLETE' });
+        dispatch({ type: 'STORE_ERROR' });
+    };
+};
+const readReviewAndQnA = () => {
+    return (dispatch, getState) => {
+        dispatch({ type: 'STORE_STATE_INIT' });
+        dispatch({ type: 'STORE_LOADING' });
+        dispatch({ type: 'STORE_COMPLETE' });
+        dispatch({ type: 'STORE_ERROR' });
+    };
+};
+
+export { Test1, AddProduct, GetProductList, GetSearchProductList, GetProductInfo, UpdateProduct, ChangeProductDisclosure, GoToPurchasePage, PurchaseProduct, ChargePoint, GetpurchaseRecord, DeletePurchaseRecord, GetPointRecord, AddShoppingBasket, DeleteShoppingBasket, GetShoppingBasket, createReviewAndQnA, deleteReviewAndQnA, updateReviewAndQnA, readReviewAndQnA };
 
 
 
