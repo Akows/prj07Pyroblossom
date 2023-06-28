@@ -562,19 +562,22 @@ const ChangeProductDisclosure = (productName, productDisclosure, navigate) => {
 
 const GoToPurchasePage = (purchaseList, totalQuantity, totalAmount, navigate) => {
     return (dispatch, getState) => {
-        dispatch({ type: 'STORE_STATE_INIT' });
-        dispatch({ type: 'STORE_LOADING' });
+        console.log(purchaseList, totalQuantity, totalAmount);
 
-        const data = {
-            purchaseList: purchaseList,
-            totalQuantity: totalQuantity,
-            totalAmount: totalAmount,
-        };
 
-        dispatch({ type: 'STORE_SAVE_PURCHASEDATA', payload: data });
-        dispatch({ type: 'STORE_COMPLETE' });
+        // dispatch({ type: 'STORE_STATE_INIT' });
+        // dispatch({ type: 'STORE_LOADING' });
+
+        // const data = {
+        //     purchaseList: purchaseList,
+        //     totalQuantity: totalQuantity,
+        //     totalAmount: totalAmount,
+        // };
+
+        // dispatch({ type: 'STORE_SAVE_PURCHASEDATA', payload: data });
+        // dispatch({ type: 'STORE_COMPLETE' });
         
-        navigate('/store/payment', { replace: true });
+        // navigate('/store/payment', { replace: true });
     };
 };
 

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { MyPageNavigation } from '../../components/store/myPage/MyPageNavigation';
-import { DeleteShoppingBasket, GetShoppingBasket } from '../../redux/actions/storeAction';
+import { DeleteShoppingBasket, GetShoppingBasket, GoToPurchasePage } from '../../redux/actions/storeAction';
 
 const BackGround = styled.div`
     width: 100%;
@@ -303,12 +303,19 @@ export const ShoppingBasket = () => {
     const [productPrice, setProductPrice] = useState(0);
     const [productDeliveryFee, setProductDeliveryFee] = useState(0);
 
-    const onPurchase = () => {
+    const onDelete = (item) => {
+        const choice = window.confirm('장바구니를 삭제하시겠습니까?');
 
+        if (!choice) {
+            return;
+        }
+        else {
+            dispatch(DeleteShoppingBasket(item, navigate))
+        };
     };
 
-    const onDelete = () => {
-
+    const onPurchase = () => {
+        dispatch(GoToPurchasePage(getStoreState.basketData.purchaseList, getStoreState.basketData.totalQuantity, getStoreState.basketData.totalAmount, navigate));
     };
 
     useEffect(() => {
@@ -392,7 +399,7 @@ export const ShoppingBasket = () => {
                                         <div>
                                             <p>배송비 {item.productData[0].deliveryFee}원</p>
 
-                                            <p onClick={() => dispatch(DeleteShoppingBasket(item, navigate))}>X</p>
+                                            <p onClick={() => onDelete(item)}>X</p>
                                         </div>
 
                                     </Basket>
