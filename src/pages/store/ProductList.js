@@ -229,21 +229,21 @@ export const ProductList = () => {
     const [listData, setListData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
+    const subCategorySearch = (keyword) => {
+        dispatch(GetSearchSubCategoryProductList('categorySearch', 10, keyword, sortCondition));
+    };
+
     useEffect(() => {
         // 키워드 검색 기능.
         if (searchtype === 'keywordSearch') {
             dispatch(GetSearchProductList('keywordSearch', 10, keyword, sortCondition));
         }
         // 카테고리 검색 기능.
-        else if (searchtype === 'categorySearch' && subCategoryKeyword === '') {
+        else if (searchtype === 'categorySearch') {
             dispatch(GetSearchProductList('categorySearch', 10, keyword, sortCondition));
         }
-        // 서브 카테고리 검색 기능.
-        else if (searchtype === 'categorySearch' && subCategoryKeyword !== '') {
-            dispatch(GetSearchSubCategoryProductList('categorySearch', 10, subCategoryKeyword, sortCondition));
-        };
         // eslint-disable-next-line
-    }, [searchtype, keyword, sortCondition, subCategoryKeyword]);
+    }, [searchtype, keyword, sortCondition]);
 
     useEffect(() => {
         setIsLoading(getStoreState.flagValue.isLoading);
@@ -273,30 +273,30 @@ export const ProductList = () => {
 
                         {keyword === '인형, 피규어' &&
                             <TypeButton>
-                                <button onClick={() => setSubCategoryKeyword('인형')}>인형</button>
-                                <button onClick={() => setSubCategoryKeyword('피규어')}>피규어</button>
+                                <button onClick={() => subCategorySearch('인형')}>인형</button>
+                                <button onClick={() => subCategorySearch('피규어')}>피규어</button>
                             </TypeButton>
                         }
 
                         {keyword === '문구잡화' &&
                             <TypeButton>
-                                <button onClick={() => setSubCategoryKeyword('마우스패드')}>마우스패드</button>
-                                <button onClick={() => setSubCategoryKeyword('아크릴스탠드')}>아크릴스탠드</button>
-                                <button onClick={() => setSubCategoryKeyword('열쇠고리')}>열쇠고리</button>
+                                <button onClick={() => subCategorySearch('마우스패드')}>마우스패드</button>
+                                <button onClick={() => subCategorySearch('아크릴스탠드')}>아크릴스탠드</button>
+                                <button onClick={() => subCategorySearch('열쇠고리')}>열쇠고리</button>
                             </TypeButton>
                         }
 
                         {keyword === '기타잡화' &&
                             <TypeButton>
-                                <button onClick={() => setSubCategoryKeyword('의류')}>의류</button>
-                                <button onClick={() => setSubCategoryKeyword('식품')}>식품</button>
+                                <button onClick={() => subCategorySearch('의류')}>의류</button>
+                                <button onClick={() => subCategorySearch('식품')}>식품</button>
                             </TypeButton>
                         }
 
                         {keyword === '도서, 음반' &&
                             <TypeButton>
-                                <button onClick={() => setSubCategoryKeyword('도서')}>도서</button>
-                                <button onClick={() => setSubCategoryKeyword('음반')}>음반</button>
+                                <button onClick={() => subCategorySearch('도서')}>도서</button>
+                                <button onClick={() => subCategorySearch('음반')}>음반</button>
                             </TypeButton>
                         }
                     </CategoryButton>
