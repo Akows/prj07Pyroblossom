@@ -1159,7 +1159,7 @@ const CreateReview = (inputData, userData, productData, navigate) => {
                     docNumber: docCount.data().count + 1,
                     title: inputData.inputTitle,
                     text: inputData.inputText,
-                    score: inputData.inputScore,
+                    score: parseInt(inputData.inputScore),
                     writer: userData.displayName,
                     isDelete: false,
                     createdDate: time,
@@ -1263,7 +1263,7 @@ const CreateReview = (inputData, userData, productData, navigate) => {
     };
 };
 
-const DeleteReview = (docData, productData, userData) => {
+const DeleteReview = (docData, productData, userData, navigate) => {
     return (dispatch, getState) => {
         dispatch({ type: 'STORE_STATE_INIT' });
         dispatch({ type: 'STORE_LOADING' });
@@ -1287,11 +1287,11 @@ const DeleteReview = (docData, productData, userData) => {
             const docSnap = await getDoc(docRef);
 
             reviewsCals = docSnap.data().productReviews - 1;
-            beforeScore = docSnap.data().productScore;
+            // beforeScore = docSnap.data().productScore; // 4.5
 
             await setDoc(docRef, {
                 productReviews: parseInt(reviewsCals),
-                productScore: Math.round((parseInt(beforeScore) - parseInt(docData.score)) / parseInt(reviewsCals) * 10) / 10,
+                // productScore: (parseInt(beforeScore) - parseInt(docData.score)) / parseInt(reviewsCals),
             }, { merge: true });
         };
 
@@ -1337,21 +1337,28 @@ const DeleteReview = (docData, productData, userData) => {
                     recordPointData()
                     .then(() => {
                         dispatch({ type: 'STORE_COMPLETE' });
+                        dispatch({ type: 'STORE_RENDERING_ON' });
+                        alert('리뷰 삭제가 완료되었습니다.');
+                        navigate(`/store/productdetail/${productData.name}`, { replace: true });
                     })
                     .catch((error) => {
                         dispatch({ type: 'STORE_ERROR', payload: createErrorData(error) });
+                        navigate(`/store/productdetail/${productData.name}`, { replace: true });
                     });
                 })
                 .catch((error) => {
                     dispatch({ type: 'STORE_ERROR', payload: createErrorData(error) });
+                    navigate(`/store/productdetail/${productData.name}`, { replace: true });
                 });
             })
             .catch((error) => {
                 dispatch({ type: 'STORE_ERROR', payload: createErrorData(error) });
+                navigate(`/store/productdetail/${productData.name}`, { replace: true });
             });
         })
         .catch((error) => {
             dispatch({ type: 'STORE_ERROR', payload: createErrorData(error) });
+            navigate(`/store/productdetail/${productData.name}`, { replace: true });
         });
 
     };

@@ -10,6 +10,7 @@ import star4img from '../../../assets/images/stars/Icon_4_Stars.webp';
 import star5img from '../../../assets/images/stars/Icon_5_Stars.webp';
 
 import { CreateReview, DeleteReview, GetProductInfo, ReadReview } from '../../../redux/actions/storeAction';
+import { Loading } from '../../Loading';
 
 const BackGround = styled.div`
     width: 100%;
@@ -291,8 +292,13 @@ export const Reviews = ({ userData }) => {
             }
             else {
                 dispatch(CreateReview(inputData, userData.userdata, productData, navigate));
-            };
 
+                setInputData({
+                    inputTitle: '',
+                    inputText: '',
+                    inputScore: 5,
+                });
+            };
         }
         else {
             alert('리뷰 작성은 회원만 가능합니다.');
@@ -306,7 +312,7 @@ export const Reviews = ({ userData }) => {
             return;
         }
         else {
-            dispatch(DeleteReview(docNumber, productData, userData));
+            dispatch(DeleteReview(docNumber, productData, userData, navigate));
         };
     };
 
@@ -315,12 +321,7 @@ export const Reviews = ({ userData }) => {
     }, []);
 
     useEffect(() => {
-        if (getStoreState.reviewData.length === 0) {
-            setReviewData([]);
-        }
-        else {
-            setReviewData(getStoreState.reviewData);
-        };
+        setReviewData(getStoreState.reviewData);
     }, [getStoreState.reviewData]);
 
     useEffect(() => {
@@ -332,11 +333,14 @@ export const Reviews = ({ userData }) => {
     }, [getStoreState.flagValue]);
 
     useEffect(() => {
-        dispatch(ReadReview(getStoreState.processInfo.processData2[0], navigate));
+        dispatch(ReadReview(navigate));
     }, [getStoreState.flagValue.isRendering]);
 
     return (
         <BackGround>
+
+            {isLoading && <Loading />}
+
             <ReviewInfo>
                 <ReviewInfoTitle>
                     <p>상품리뷰</p>
@@ -377,10 +381,15 @@ export const Reviews = ({ userData }) => {
                         <option value='1'>1점</option>
                     </select>
 
-                    <input id='inputTitle' onChange={onChangeInputData} type='text' placeholder='제목을 입력해주세요.' required />
-                    <input id='inputText' onChange={onChangeInputData} type='text' placeholder='내용을 입력해주세요.' required />
+                    <input id='inputTitle' value={inputData.inputTitle} onChange={onChangeInputData} type='text' placeholder='제목을 입력해주세요.' required />
+                    <input id='inputText' value={inputData.inputText} onChange={onChangeInputData} type='text' placeholder='내용을 입력해주세요.' required />
 
-                    <button onClick={() => onCreateReviewAndQnA()}>리뷰 작성하기</button>
+                    {isLoading ?
+                        <button>리뷰 작성중..</button>
+                        :
+                        <button onClick={() => onCreateReviewAndQnA()}>리뷰 작성하기</button>
+                    }
+
                 </ReviewForm>
 
             </ReviewInfo>
@@ -397,7 +406,11 @@ export const Reviews = ({ userData }) => {
 
                         <UserReviewInfo>
                             <UserScore>
-                                <img src={star5img} alt=''></img>
+                                {item.score === 5 && <img src={star5img} alt='' />}
+                                {item.score === 4 && <img src={star4img} alt='' />}
+                                {item.score === 3 && <img src={star3img} alt='' />}
+                                {item.score === 2 && <img src={star2img} alt='' />}
+                                {item.score === 1 && <img src={star1img} alt='' />}
                             </UserScore>
                             <UserInfo>
                                 {item.writer} | 23.01.31
