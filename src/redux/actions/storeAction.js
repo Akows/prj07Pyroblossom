@@ -685,6 +685,8 @@ const ChangeProductDisclosure = (productName, productDisclosure, navigate) => {
 const GoToPurchasePage = (purchaseList, totalQuantity, totalAmount, navigate, isBasket) => {
     return (dispatch, getState) => {
 
+        console.log(purchaseList);
+
         dispatch({ type: 'STORE_STATE_INIT' });
         dispatch({ type: 'STORE_LOADING' });
 
@@ -694,6 +696,8 @@ const GoToPurchasePage = (purchaseList, totalQuantity, totalAmount, navigate, is
             totalAmount: 0,
         };
 
+        let data2 = '';
+
         if (isBasket) {
             let totalQuantity = 0;
             let totalAmount = 0;   
@@ -701,6 +705,7 @@ const GoToPurchasePage = (purchaseList, totalQuantity, totalAmount, navigate, is
             // eslint-disable-next-line
             purchaseList.map((item) => {
                 data.purchaseList.push(item.purchaseList[0]);
+                data2 = item.productData;
                 totalQuantity += item.totalQuantity;
                 totalAmount += item.totalAmount;
             });
@@ -708,6 +713,7 @@ const GoToPurchasePage = (purchaseList, totalQuantity, totalAmount, navigate, is
             data.totalQuantity = totalQuantity;
             data.totalAmount = totalAmount;
 
+            dispatch({ type: 'STORE_SAVE_PRODUCTDATA', payload: data2 });
             dispatch({ type: 'STORE_SAVE_PURCHASEDATA', payload: data });
             dispatch({ type: 'STORE_COMPLETE' });
             navigate('/store/payment', { replace: true });
@@ -721,7 +727,7 @@ const GoToPurchasePage = (purchaseList, totalQuantity, totalAmount, navigate, is
             dispatch({ type: 'STORE_COMPLETE' });
             navigate('/store/payment', { replace: true });
         };
-    };
+     };
 };
 
 const PurchaseProduct = (purchaseData, productData, userData, navigate) => {

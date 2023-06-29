@@ -316,33 +316,33 @@ export const ShoppingBasket = () => {
     };
 
     const onPurchase = () => {
-        let totalQuantity = 0;
-        let totalAmount = 0;
+        // let totalQuantity = 0;
+        // let totalAmount = 0;
 
-        const data = {
-            purchaseList: [],
-            totalQuantity: 0,
-            totalAmount: 0,
-        };
+        // const data = {
+        //     purchaseList: [],
+        //     totalQuantity: 0,
+        //     totalAmount: 0,
+        // };
 
-        getStoreState.basketData.map((item) => {
+        // getStoreState.basketData.map((item) => {
 
-            item.purchaseList.map((item2) => {
-                data.purchaseList.push(item2);
-            });
+        //     item.purchaseList.map((item2) => {
+        //         data.purchaseList.push(item2);
+        //     });
 
-            totalQuantity += item.totalQuantity;
-            totalAmount += item.totalAmount;
+        //     totalQuantity += item.totalQuantity;
+        //     totalAmount += item.totalAmount;
 
-        });
+        // });
 
-        data.totalQuantity = totalQuantity;
-        data.totalAmount = totalAmount;
+        // data.totalQuantity = totalQuantity;
+        // data.totalAmount = totalAmount;
 
 
-        console.log(data);
+        // console.log(data);
 
-        // dispatch(GoToPurchasePage(getStoreState.basketData, '', '', navigate, true));
+        dispatch(GoToPurchasePage(getStoreState.basketData, '', '', navigate, true));
     };
 
     useEffect(() => {
