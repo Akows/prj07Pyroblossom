@@ -8,8 +8,9 @@ import star2img from '../../../assets/images/stars/Icon_2_Stars.webp';
 import star3img from '../../../assets/images/stars/Icon_3_Stars.webp';
 import star4img from '../../../assets/images/stars/Icon_4_Stars.webp';
 import star5img from '../../../assets/images/stars/Icon_5_Stars.webp';
+import { dateFormat } from '../../../functions/storeFunction';
 
-import { CreateReview, DeleteReview, GetProductInfo, ReadReview } from '../../../redux/actions/storeAction';
+import { CreateReview, DeleteReview, ReadReview } from '../../../redux/actions/storeAction';
 import { Loading } from '../../Loading';
 
 const BackGround = styled.div`
@@ -37,7 +38,7 @@ const ReviewList = styled.div`
     width: 90%;
     height: 50%;
 
-    margin-top: 100px;
+    margin-top: 30px;
 
     display: flex;
     flex-direction: column;
@@ -116,24 +117,24 @@ const ReviewInfoReviewNumber = styled.div`
     };
 `;
 
-const ReviewInfoAverage = styled.div`
-    width: 33%;
-    height: 120px;
+// const ReviewInfoAverage = styled.div`
+//     width: 33%;
+//     height: 120px;
 
-    margin-top: 10px;
+//     margin-top: 10px;
 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+//     display: flex;
+//     flex-direction: column;
+//     align-items: center;
+//     justify-content: center;
 
-    font-size: 18px;
-    color: #D3BC8E;
+//     font-size: 18px;
+//     color: #D3BC8E;
 
-    & > p {
-        margin-top: 10px;
-    };
-`;
+//     & > p {
+//         margin-top: 10px;
+//     };
+// `;
 
 const ReviewForm = styled.div`
     width: 95%;
@@ -207,8 +208,8 @@ const ReviewForm = styled.div`
 
 
 const Review = styled.div`
-    width: 80%;
-    height: 150px;
+    width: 95%;
+    height: 120px;
 
     color: #D3BC8E;
 
@@ -219,47 +220,109 @@ const Review = styled.div`
 
     border-top: 1px solid gray;
     border-bottom: 1px solid gray;
+
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+    @media screen and (max-width: 900px) {
+        width: 100%;
+        height: 150px;
+
+        flex-direction: column;
+    };
+
+    @media screen and (max-width: 500px) {
+        height: 180px;
+    };
 `;
 
-const UserPic = styled.div`
-    width: 8%;
-    height: 100%;
-`;
+
 const UserReviewInfo = styled.div`
-    width: 92%;
+    width: 30%;
     height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+
+    @media screen and (max-width: 900px) {
+        width: 100%;
+        height: 30%;
+    };
+    @media screen and (max-width: 500px) {
+        margin-bottom: 20px;
+    };
 `;
-
-
 const UserScore = styled.div`
     width: 100%;
-    height: 10%;
+    height: 50%;
 
-    margin-top: 3px;
-    margin-bottom: 3px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
 `;
 const UserInfo = styled.div`
     width: 100%;
-    height: 10%;
+    height: 50%;
 
-    margin-top: 3px;
-    margin-bottom: 3px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
 `;
-const UserProductInfo = styled.div`
-    width: 100%;
-    height: 10%;
 
-    margin-top: 3px;
-    margin-bottom: 3px;
-`;
+
+
+
 const UserReview = styled.div`
-    width: 100%;
-    height: 70%;
+    width: 70%;
+    height: 100%;
     
     margin-top: 3px;
     margin-bottom: 3px;
-`;
 
+    padding: 10px;
+
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+
+    & > div:nth-child(1) {
+        width: 90%;
+        height: 100%;
+    };
+    & > div:nth-child(2) {
+        width: 10%;
+        height: 100%;
+
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+
+        font-size: 32px;
+    };
+
+
+    & > div:nth-child(1) > p:nth-child(1) {
+        font-size: 32px;
+    };
+
+    & > div:nth-child(1) > p:nth-child(2) {
+        font-size: 18px;
+        margin-top: 10px;
+    };
+
+    @media screen and (max-width: 900px) {
+        width: 100%;
+        height: 70%;
+
+        padding: 3px;
+    };
+`;
 
 export const Reviews = ({ userData }) => {
 
@@ -318,6 +381,7 @@ export const Reviews = ({ userData }) => {
 
     useEffect(() => {
         dispatch(ReadReview(navigate));
+        // eslint-disable-next-line
     }, []);
 
     useEffect(() => {
@@ -334,6 +398,7 @@ export const Reviews = ({ userData }) => {
 
     useEffect(() => {
         dispatch(ReadReview(navigate));
+        // eslint-disable-next-line
     }, [getStoreState.flagValue.isRendering]);
 
     return (
@@ -400,11 +465,9 @@ export const Reviews = ({ userData }) => {
 
                 {reviewData?.map((item) => (
                     <Review key={item.docNumber}>
-                        <UserPic>
-                            사진
-                        </UserPic>
 
                         <UserReviewInfo>
+
                             <UserScore>
                                 {item.score === 5 && <img src={star5img} alt='' />}
                                 {item.score === 4 && <img src={star4img} alt='' />}
@@ -413,20 +476,26 @@ export const Reviews = ({ userData }) => {
                                 {item.score === 1 && <img src={star1img} alt='' />}
                             </UserScore>
                             <UserInfo>
-                                {item.writer} | 23.01.31
+                                {item.writer} | {dateFormat(item.createdDate.toDate())}
                             </UserInfo>
-                            <UserProductInfo>
-                                통통폭탄인형
-                            </UserProductInfo>
 
-                            <p onClick={() => onDelete(item, getStoreState.processInfo.processData2[0], userData.userdata)}>X</p>
-
-                            <hr />
-
-                            <UserReview>
-                                {item.title}
-                            </UserReview>
                         </UserReviewInfo>
+
+                        <UserReview>
+
+                            <div>
+                                <p>{item.title}</p>
+                                <p>{item.text}</p>
+                            </div>
+                            <div>
+                                <p onClick={() => onDelete(item, getStoreState.processInfo.processData2[0], userData.userdata)}>X</p>
+
+                            </div>
+
+
+                        </UserReview>
+
+
                     </Review>
                 ))}
 
