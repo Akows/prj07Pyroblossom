@@ -316,7 +316,33 @@ export const ShoppingBasket = () => {
     };
 
     const onPurchase = () => {
-        dispatch(GoToPurchasePage(getStoreState.basketData, '', '', navigate, true));
+        let totalQuantity = 0;
+        let totalAmount = 0;
+
+        const data = {
+            purchaseList: [],
+            totalQuantity: 0,
+            totalAmount: 0,
+        };
+
+        getStoreState.basketData.map((item) => {
+
+            item.purchaseList.map((item2) => {
+                data.purchaseList.push(item2);
+            });
+
+            totalQuantity += item.totalQuantity;
+            totalAmount += item.totalAmount;
+
+        });
+
+        data.totalQuantity = totalQuantity;
+        data.totalAmount = totalAmount;
+
+
+        console.log(data);
+
+        // dispatch(GoToPurchasePage(getStoreState.basketData, '', '', navigate, true));
     };
 
     useEffect(() => {
@@ -387,7 +413,7 @@ export const ShoppingBasket = () => {
                                         {item?.purchaseList.map((item2) => (
                                             <BasketInfo>
                                                 <ProductImg>
-                                                    <img src='' alt='' />
+                                                    <img src={`https://firebasestorage.googleapis.com/v0/b/prj07pyroblossom.appspot.com/o/productsImage%2F${item.productData[0].name}%2F${item.productData[0].productInformationFile.titleimage}?alt=media&token=bf2eff71-3c5e-4dc2-9706-445f95fd91e8`} alt='' />
                                                 </ProductImg>
                                                 <ProductInfo>
                                                     <p>{item2.optionName}</p>
