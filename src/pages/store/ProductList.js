@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import productimg from '../../assets/images/testImg/testproductimg.jpg';
@@ -140,6 +140,11 @@ const ProductLists = styled.div`
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
+
+    & > a {
+        width: 100%;
+        height: 100%;
+    }
 `;
 
 const Product = styled.div`
@@ -297,10 +302,10 @@ export const ProductList = () => {
     };
 
     const prevPage = () => {
-
+        // dispatch(GetProductList('prev', productPerPage, ''))
     };
     const nextPage = () => {
-
+        // dispatch(GetProductList('prev', productPerPage, ''))
     };
 
 
@@ -408,18 +413,20 @@ export const ProductList = () => {
                 <ProductLists>
 
                     {listData.map((item) => (
-                        <Product key={item.number}>
-                            <ProductPic>
-                                <img src={productimg} alt=''></img>
-                            </ProductPic>
+                        <Link to={`/store/productdetail/${item.name}`}>
+                            <Product key={item.number}>
+                                <ProductPic>
+                                    <img src={productimg} alt=''></img>
+                                </ProductPic>
 
-                            <ProductInfo>
-                                <p>{item.name}</p>
-                                <p>{item.price}원 | {item.deliveryFee !== 0 ? `${item.deliveryFee}원` : '무료배송'}</p>
-                                <p>{item.mainCategory} {'>'} {item.subCategory}</p>
-                                {/* <p>리뷰 2334 - 구매 12334 - 등록일 2023.03 - 찜하기 556</p> */}
-                            </ProductInfo>
-                        </Product>
+                                <ProductInfo>
+                                    <p>{item.name}</p>
+                                    <p>{item.price}원 | {item.deliveryFee !== 0 ? `${item.deliveryFee}원` : '무료배송'}</p>
+                                    <p>{item.mainCategory} {'>'} {item.subCategory}</p>
+                                    {/* <p>리뷰 2334 - 구매 12334 - 등록일 2023.03 - 찜하기 556</p> */}
+                                </ProductInfo>
+                            </Product>
+                        </Link>
                     ))}
                 </ProductLists>
 
