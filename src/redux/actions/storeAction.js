@@ -1364,12 +1364,10 @@ const UpdateReview = () => {
         dispatch({ type: 'STORE_ERROR' });
     };
 };
-const ReadReview = (productData, navigate) => {
+const ReadReview = () => {
     return (dispatch, getState) => {
         dispatch({ type: 'STORE_STATE_INIT' });
         dispatch({ type: 'STORE_LOADING' });
-
-        console.log(productData);
 
         const result = [];
 
@@ -1386,11 +1384,11 @@ const ReadReview = (productData, navigate) => {
         .then(() => {
             dispatch({ type: 'STORE_COMPLETE' });
             dispatch({ type: 'STORE_SET_REVIEWDATA', payload: result });
-            navigate(`/store/productdetail/${productData.name}`, { replace: true });
+            // navigate(`/store/productdetail/${productData.name}`, { replace: true });
         })
         .catch((error) => {
             dispatch({ type: 'STORE_ERROR', payload: createErrorData(error) });
-            navigate(`/store/productdetail/${productData.name}`, { replace: true });
+            // navigate(`/store/productdetail/${productData.name}`, { replace: true });
         });
 
     };

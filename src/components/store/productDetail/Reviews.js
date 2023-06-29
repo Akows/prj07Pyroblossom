@@ -311,7 +311,7 @@ export const Reviews = ({ userData }) => {
     };
 
     useEffect(() => {
-        dispatch(ReadReview(getStoreState.processInfo.processData2[0], navigate));
+        dispatch(ReadReview(navigate));
     }, []);
 
     useEffect(() => {
@@ -321,7 +321,6 @@ export const Reviews = ({ userData }) => {
         else {
             setReviewData(getStoreState.reviewData);
         };
-
     }, [getStoreState.reviewData]);
 
     useEffect(() => {
@@ -392,9 +391,9 @@ export const Reviews = ({ userData }) => {
 
                 {reviewData?.map((item) => (
                     <Review key={item.docNumber}>
-                        {/* <UserPic>
+                        <UserPic>
                             사진
-                        </UserPic> */}
+                        </UserPic>
 
                         <UserReviewInfo>
                             <UserScore>

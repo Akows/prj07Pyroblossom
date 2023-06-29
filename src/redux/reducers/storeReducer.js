@@ -15,7 +15,7 @@ const initialState = {
     },
     purchaseData: {},
     basketData: {},
-    reviewData: {}
+    reviewData: []
 };
 
 const storeReducer = (prevState = initialState, action) => {
@@ -96,7 +96,7 @@ const storeReducer = (prevState = initialState, action) => {
                 draft.reviewData = action.payload;
                 break;
             case 'STORE_CLEAN_REVIEWDATA':
-                draft.reviewData = {};
+                draft.reviewData = [];
                 break;
 
 
