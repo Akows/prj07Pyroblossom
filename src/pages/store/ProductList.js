@@ -216,6 +216,67 @@ const ProductInfo = styled.div`
     }
 `;
 
+const UtilButton = styled.div`
+    width: 100%;
+    height: 100%;
+
+    margin-top: 10px;
+    padding: 10px;
+
+    border: 1px solid gray;
+    border-radius: 15px;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    & > div {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    };
+    & > div > input {
+        width: 20px;
+        height: 20px;
+    };
+
+    & > button {
+        width: 100px;
+        height: 30px;
+
+        border: none;
+        border-radius: 5px;
+        background-color: #D3BC8E;
+        color: #414147;
+
+        font-family: 'GIFont';
+        font-size: 16px;
+    };
+    & > button:hover {
+        background-color: #414147;
+        color: #D3BC8E;
+    };
+
+    & > input {
+        width: 400px;
+        height: 30px;
+
+        font-family: 'GIFont';
+        font-size: 16px;
+        color: black;
+
+        background-color: #aaaaaa;
+        border-radius: 5px;
+        border: none;
+
+        @media screen and (max-width: 600px) {
+            width: 70%;
+        };
+    };
+`;
+
 export const ProductList = () => {
 
     const dispatch = useDispatch();
@@ -223,15 +284,25 @@ export const ProductList = () => {
 
     const { searchtype } = useParams(); // 일반 검색시에는 keywordSearch, 카테고리 검색은 category.
     const { keyword } = useParams(); // 일반 검색시에는 검색값, 카테고리 검색은 카테고리 이름.
-    const [subCategoryKeyword, setSubCategoryKeyword] = useState('');
     const [sortCondition, setSortCondition] = useState('인기도순');
 
     const [listData, setListData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
+    const [isDataFirst, setIsDataFirst] = useState(false);
+    const [isDataLast, setIsDataLast] = useState(false);
+
     const subCategorySearch = (keyword) => {
         dispatch(GetSearchSubCategoryProductList('categorySearch', 10, keyword, sortCondition));
     };
+
+    const prevPage = () => {
+
+    };
+    const nextPage = () => {
+
+    };
+
 
     useEffect(() => {
         // 키워드 검색 기능.
@@ -252,6 +323,25 @@ export const ProductList = () => {
     useEffect(() => {
         if (getStoreState.processInfo.processData2 !== '') {
             setListData(getStoreState.processInfo.processData2);
+
+            const firstItem = getStoreState.processInfo.processData1.firstOfPage;
+            const lastItem = getStoreState.processInfo.processData1.lastOfPage;
+            const firstIndex = getStoreState.processInfo.processData1.firstOfAllList;
+            const lastIndex = getStoreState.processInfo.processData1.lastOfAllList;
+
+            if (firstItem?.data().number === firstIndex?.data().number) {
+                setIsDataFirst(true);
+            }
+            else {
+                setIsDataFirst(false);
+            };
+
+            if (lastItem?.data().number === lastIndex?.data().number) {
+                setIsDataLast(true);
+            }
+            else {
+                setIsDataLast(false);
+            };
         };
     }, [getStoreState.processInfo]);
 
@@ -335,6 +425,20 @@ export const ProductList = () => {
 
 
             </ProductListArea>
+
+            <UtilButton>
+                {isDataFirst ?
+                    <button>페이지 끝</button>
+                    :
+                    <button onClick={() => prevPage()}>{'<'}-</button>
+                }
+
+                {isDataLast ?
+                    <button>페이지 끝</button>
+                    :
+                    <button onClick={() => nextPage()}>-{'>'}</button>
+                }
+            </UtilButton>
 
         </BackGround>
     );
