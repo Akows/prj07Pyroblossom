@@ -1142,11 +1142,8 @@ const GetShoppingBasket = (userEmail) => {
     };
 };
 
-const createReview = (inputData, userData, productData, navigate) => {
+const CreateReview = (inputData, userData, productData, navigate) => {
     return (dispatch, getState) => {
-
-        console.log(inputData, userData, productData);
-
         dispatch({ type: 'STORE_STATE_INIT' });
         dispatch({ type: 'STORE_LOADING' });
 
@@ -1163,7 +1160,8 @@ const createReview = (inputData, userData, productData, navigate) => {
                     title: inputData.inputTitle,
                     text: inputData.inputText,
                     score: inputData.inputScore,
-                    writer: userData,
+                    writer: userData.displayName,
+                    isDelete: false,
                     createdDate: time,
                 }
             );
@@ -1188,7 +1186,7 @@ const createReview = (inputData, userData, productData, navigate) => {
         let beforePoint = 0;
 
         const updataUserInfo = async () => {
-            const docRef = doc(userCollectionRef, userData);
+            const docRef = doc(userCollectionRef, userData.email);
             const docSnap = await getDoc(docRef);
 
             beforePoint = parseInt(docSnap.data().point);
@@ -1208,7 +1206,7 @@ const createReview = (inputData, userData, productData, navigate) => {
             await setDoc(docRef,
                 {
                     recordNumber: count.data().count + 1,
-                    userEmail: userData,
+                    userEmail: userData.email,
                     recordType: '+',
                     pointChangeNumber: parseInt(productData.eventPoint),
                     recordDesc: '포인트 적립(리뷰 작성).',
@@ -1265,7 +1263,100 @@ const createReview = (inputData, userData, productData, navigate) => {
     };
 };
 
-const deleteReview = () => {
+const DeleteReview = (docData, productData, userData) => {
+    return (dispatch, getState) => {
+        dispatch({ type: 'STORE_STATE_INIT' });
+        dispatch({ type: 'STORE_LOADING' });
+
+        const updateInfo = async () => {
+            const docRef = doc(reviewCollectionRef, `${docData.docNumber}`);
+            const docSnap = await getDoc(docRef);
+
+            const isDelete = docSnap.data().isDelete;
+
+            await setDoc(docRef, {
+                isDelete: !isDelete,
+            }, { merge: true });
+        };
+
+        let reviewsCals = 0;
+        let beforeScore = 0;
+
+        const updataProductInfo = async () => {
+            const docRef = doc(storeCollectionRef, productData.name);
+            const docSnap = await getDoc(docRef);
+
+            reviewsCals = docSnap.data().productReviews - 1;
+            beforeScore = docSnap.data().productScore;
+
+            await setDoc(docRef, {
+                productReviews: parseInt(reviewsCals),
+                productScore: Math.round((parseInt(beforeScore) - parseInt(docData.score)) / parseInt(reviewsCals) * 10) / 10,
+            }, { merge: true });
+        };
+
+        let beforePoint = 0;
+
+        const updataUserInfo = async () => {
+            const docRef = doc(userCollectionRef, userData.email);
+            const docSnap = await getDoc(docRef);
+
+            beforePoint = parseInt(docSnap.data().point);
+
+            await setDoc(docRef, {
+                point: beforePoint - parseInt(productData.eventPoint),
+            }, { merge: true });
+        };
+
+        const recordPointData = async () => {
+            const querys = query(pointRecordCollectionRef);
+            const count = await getCountFromServer(querys);
+
+            const docRef = doc(pointRecordCollectionRef, `${count.data().count + 1}`);
+            const createdTime = timeStamp.fromDate(new Date());
+
+            await setDoc(docRef,
+                {
+                    recordNumber: count.data().count + 1,
+                    userEmail: userData.email,
+                    recordType: '-',
+                    pointChangeNumber: parseInt(productData.eventPoint),
+                    recordDesc: '적립 취소(리뷰 삭제).',
+                    recordDate: createdTime,
+                    leftoverPoint: beforePoint - parseInt(productData.eventPoint),
+                }
+            );
+        };
+
+        updateInfo()
+        .then(() => {
+            updataProductInfo()
+            .then(() => {
+                updataUserInfo()
+                .then(() => {
+                    recordPointData()
+                    .then(() => {
+                        dispatch({ type: 'STORE_COMPLETE' });
+                    })
+                    .catch((error) => {
+                        dispatch({ type: 'STORE_ERROR', payload: createErrorData(error) });
+                    });
+                })
+                .catch((error) => {
+                    dispatch({ type: 'STORE_ERROR', payload: createErrorData(error) });
+                });
+            })
+            .catch((error) => {
+                dispatch({ type: 'STORE_ERROR', payload: createErrorData(error) });
+            });
+        })
+        .catch((error) => {
+            dispatch({ type: 'STORE_ERROR', payload: createErrorData(error) });
+        });
+
+    };
+};
+const UpdateReview = () => {
     return (dispatch, getState) => {
         dispatch({ type: 'STORE_STATE_INIT' });
         dispatch({ type: 'STORE_LOADING' });
@@ -1273,24 +1364,39 @@ const deleteReview = () => {
         dispatch({ type: 'STORE_ERROR' });
     };
 };
-const updateReview = () => {
+const ReadReview = (productData, navigate) => {
     return (dispatch, getState) => {
         dispatch({ type: 'STORE_STATE_INIT' });
         dispatch({ type: 'STORE_LOADING' });
-        dispatch({ type: 'STORE_COMPLETE' });
-        dispatch({ type: 'STORE_ERROR' });
-    };
-};
-const readReview = () => {
-    return (dispatch, getState) => {
-        dispatch({ type: 'STORE_STATE_INIT' });
-        dispatch({ type: 'STORE_LOADING' });
-        dispatch({ type: 'STORE_COMPLETE' });
-        dispatch({ type: 'STORE_ERROR' });
+
+        console.log(productData);
+
+        const result = [];
+
+        const process = async () => {
+            const queryRef = query(reviewCollectionRef, orderBy('docNumber', 'asc'), where('isDelete', '==', false));
+            const documentSnapshots = await getDocs(queryRef);
+
+            documentSnapshots.forEach((doc) => {
+                result.push(doc.data());
+            });
+        };
+
+        process()
+        .then(() => {
+            dispatch({ type: 'STORE_COMPLETE' });
+            dispatch({ type: 'STORE_SET_REVIEWDATA', payload: result });
+            navigate(`/store/productdetail/${productData.name}`, { replace: true });
+        })
+        .catch((error) => {
+            dispatch({ type: 'STORE_ERROR', payload: createErrorData(error) });
+            navigate(`/store/productdetail/${productData.name}`, { replace: true });
+        });
+
     };
 };
 
-export { Test1, AddProduct, GetProductList, GetSearchProductList, GetProductInfo, UpdateProduct, ChangeProductDisclosure, GoToPurchasePage, PurchaseProduct, ChargePoint, GetpurchaseRecord, DeletePurchaseRecord, GetPointRecord, AddShoppingBasket, DeleteShoppingBasket, GetShoppingBasket, createReview, deleteReview, updateReview, readReview };
+export { Test1, AddProduct, GetProductList, GetSearchProductList, GetProductInfo, UpdateProduct, ChangeProductDisclosure, GoToPurchasePage, PurchaseProduct, ChargePoint, GetpurchaseRecord, DeletePurchaseRecord, GetPointRecord, AddShoppingBasket, DeleteShoppingBasket, GetShoppingBasket, CreateReview, DeleteReview, UpdateReview, ReadReview };
 
 
 

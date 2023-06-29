@@ -30,7 +30,7 @@ const pointRecordCollectionRef = collection(appFireStore, 'pointRecord');
 // 장바구니 DB Ref.
 const shoppingBasketCollectionRef = collection(appFireStore, 'shoppingBasket');
 // 리뷰와 QnA DB Ref.
-const reviewCollectionRef = collection(appFireStore, 'reviewAndQnA');
+const reviewCollectionRef = collection(appFireStore, 'reviewRecord');
 
 // 파이어베이스 스토리지 Ref.
 const storageRef = ref(appStorage);

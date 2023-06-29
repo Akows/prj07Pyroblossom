@@ -8,7 +8,8 @@ import star2img from '../../../assets/images/stars/Icon_2_Stars.webp';
 import star3img from '../../../assets/images/stars/Icon_3_Stars.webp';
 import star4img from '../../../assets/images/stars/Icon_4_Stars.webp';
 import star5img from '../../../assets/images/stars/Icon_5_Stars.webp';
-import { createReview, GetProductInfo } from '../../../redux/actions/storeAction';
+
+import { CreateReview, DeleteReview, GetProductInfo, ReadReview } from '../../../redux/actions/storeAction';
 
 const BackGround = styled.div`
     width: 100%;
@@ -289,7 +290,7 @@ export const Reviews = ({ userData }) => {
                 return;
             }
             else {
-                dispatch(createReview(inputData, userData.userdata.email, productData, navigate));
+                dispatch(CreateReview(inputData, userData.userdata, productData, navigate));
             };
 
         }
@@ -298,14 +299,42 @@ export const Reviews = ({ userData }) => {
         };
     };
 
+    const onDelete = (docNumber, productData, userData) => {
+        const confirmChoice = window.confirm('리뷰를 삭제하시겠습니까?');
+
+        if (!confirmChoice) {
+            return;
+        }
+        else {
+            dispatch(DeleteReview(docNumber, productData, userData));
+        };
+    };
+
+    useEffect(() => {
+        dispatch(ReadReview(getStoreState.processInfo.processData2[0], navigate));
+    }, []);
+
+    useEffect(() => {
+        if (getStoreState.reviewData.length === 0) {
+            setReviewData([]);
+        }
+        else {
+            setReviewData(getStoreState.reviewData);
+        };
+
+    }, [getStoreState.reviewData]);
+
     useEffect(() => {
         setProductData(getStoreState.processInfo.processData2[0]);
-        setReviewData();
     }, [getStoreState.processInfo]);
 
     useEffect(() => {
         setIsLoading(getStoreState.flagValue.isLoading);
     }, [getStoreState.flagValue]);
+
+    useEffect(() => {
+        dispatch(ReadReview(getStoreState.processInfo.processData2[0], navigate));
+    }, [getStoreState.flagValue.isRendering]);
 
     return (
         <BackGround>
@@ -359,81 +388,35 @@ export const Reviews = ({ userData }) => {
 
             <ReviewList>
 
+                {reviewData?.length === 0 && '리뷰가 존재하지 않습니다.'}
 
+                {reviewData?.map((item) => (
+                    <Review key={item.docNumber}>
+                        {/* <UserPic>
+                            사진
+                        </UserPic> */}
 
+                        <UserReviewInfo>
+                            <UserScore>
+                                <img src={star5img} alt=''></img>
+                            </UserScore>
+                            <UserInfo>
+                                {item.writer} | 23.01.31
+                            </UserInfo>
+                            <UserProductInfo>
+                                통통폭탄인형
+                            </UserProductInfo>
 
-                <Review>
-                    <UserPic>
-                        사진
-                    </UserPic>
+                            <p onClick={() => onDelete(item, getStoreState.processInfo.processData2[0], userData.userdata)}>X</p>
 
-                    <UserReviewInfo>
-                        <UserScore>
-                            <img src={star5img} alt=''></img>
-                        </UserScore>
-                        <UserInfo>
-                            김철수 | 23.01.31
-                        </UserInfo>
-                        <UserProductInfo>
-                            통통폭탄인형
-                        </UserProductInfo>
+                            <hr />
 
-                        <hr />
-
-                        <UserReview>
-                            푹신하고 좋아요~
-                        </UserReview>
-                    </UserReviewInfo>
-                </Review>
-
-
-                <Review>
-                    <UserPic>
-                        사진
-                    </UserPic>
-
-                    <UserReviewInfo>
-                        <UserScore>
-                            <img src={star4img} alt=''></img>
-                        </UserScore>
-                        <UserInfo>
-                            박영희 | 23.02.03
-                        </UserInfo>
-                        <UserProductInfo>
-                            통통폭탄인형
-                        </UserProductInfo>
-
-                        <hr />
-
-                        <UserReview>
-                            크고 편안해요.
-                        </UserReview>
-                    </UserReviewInfo>
-                </Review>
-
-                <Review>
-                    <UserPic>
-                        사진
-                    </UserPic>
-
-                    <UserReviewInfo>
-                        <UserScore>
-                            <img src={star4img} alt=''></img>
-                        </UserScore>
-                        <UserInfo>
-                            박영희 | 23.02.03
-                        </UserInfo>
-                        <UserProductInfo>
-                            통통폭탄인형
-                        </UserProductInfo>
-
-                        <hr />
-
-                        <UserReview>
-                            크고 편안해요.
-                        </UserReview>
-                    </UserReviewInfo>
-                </Review>
+                            <UserReview>
+                                {item.title}
+                            </UserReview>
+                        </UserReviewInfo>
+                    </Review>
+                ))}
 
             </ReviewList>
         </BackGround>
