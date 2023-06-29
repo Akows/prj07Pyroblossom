@@ -375,6 +375,128 @@ const GetSearchProductList = (listCallType, itemPerPage, keyword, sortCondition)
     };
 };
 
+const GetSearchSubCategoryProductList = (listCallType, itemPerPage, keyword, sortCondition) => {
+    return (dispatch, getState) => {
+
+        dispatch({ type: 'STORE_STATE_INIT' });
+        dispatch({ type: 'STORE_LOADING' });
+
+        console.log(listCallType, itemPerPage, keyword, sortCondition);
+
+        const returnData = {
+            processData1: {
+                firstOfPage: {},
+                lastOfPage: {},
+                firstOfAllList: {},
+                lastOfAllList: {},
+            },
+            processData2: [],
+        };
+
+        let sortConditionEng = '';
+
+        if (sortCondition === '인기도순') {
+            sortConditionEng = 'productSalesRate';
+        };
+        if (sortCondition === '높은 가격순' || sortCondition === '낮은 가격순') {
+            sortConditionEng = 'price';
+        };
+        if (sortCondition === '리뷰 많은순') {
+            sortConditionEng = 'productReviews';
+        };
+        if (sortCondition === '등록일 순') {
+            sortConditionEng = 'registrationDate';
+        };
+
+        const calculateBothEndsIndex = async () => {
+            let firstQueryRef = '';
+            let LastQueryRef = '';
+
+            if (keyword === '전체상품') {
+                firstQueryRef = query(storeCollectionRef, orderBy('number', 'asc'), where('subCategory', '==', keyword), where('productDisclosure', '==', true), limit(1));
+                LastQueryRef = query(storeCollectionRef, orderBy('number', 'asc'), where('subCategory', '==', keyword), where('productDisclosure', '==', true), limitToLast(1));
+            }
+            else {
+                firstQueryRef = query(storeCollectionRef, orderBy('number', 'asc'), where('subCategory', '==', keyword), where('productDisclosure', '==', true), limit(1));
+                LastQueryRef = query(storeCollectionRef, orderBy('number', 'asc'), where('subCategory', '==', keyword), where('productDisclosure', '==', true), limitToLast(1));
+            };
+
+            const firstDocumentSnapshots = await getDocs(firstQueryRef);
+            const lastDocumentSnapshots = await getDocs(LastQueryRef);
+
+            returnData.processData1.firstOfAllList = firstDocumentSnapshots.docs[0];
+            returnData.processData1.lastOfAllList = lastDocumentSnapshots.docs[0];
+        };
+
+        const calculateProductPerPage = async () => {
+
+            let queryRef = '';
+
+            if (keyword === '전체상품') {
+                if (sortCondition === '높은 가격순') {
+                    queryRef = query(storeCollectionRef, orderBy(sortConditionEng, 'desc'), where('subCategory', '==', keyword), where('productDisclosure', '==', true), limit(itemPerPage));
+                }
+                else {
+                    queryRef = query(storeCollectionRef, orderBy(sortConditionEng, 'asc'), where('subCategory', '==', keyword), where('productDisclosure', '==', true), limit(itemPerPage));
+                };
+            }
+            else {
+                if (sortCondition === '높은 가격순') {
+                    queryRef = query(storeCollectionRef, orderBy(sortConditionEng, 'desc'), where('subCategory', '==', keyword), where('productDisclosure', '==', true), limit(itemPerPage));
+                }
+                else {
+                    queryRef = query(storeCollectionRef, orderBy(sortConditionEng, 'asc'), where('subCategory', '==', keyword), where('productDisclosure', '==', true), limit(itemPerPage));
+                };
+            };
+
+            const { firstOfPage, lastOfPage } = getState().store.processInfo.processData1;
+            if (listCallType === 'next') {
+                if (sortCondition === '높은 가격순') {
+                    queryRef = query(storeCollectionRef, orderBy(sortConditionEng, 'desc'), where('subCategory', '==', keyword), where('productDisclosure', '==', true), startAfter(lastOfPage), limit(itemPerPage));
+                }
+                else {
+                    queryRef = query(storeCollectionRef, orderBy(sortConditionEng, 'asc'), where('subCategory', '==', keyword), where('productDisclosure', '==', true), startAfter(lastOfPage), limit(itemPerPage));
+                };
+            }
+            else if (listCallType === 'prev') {
+                if (sortCondition === '높은 가격순') {
+                    queryRef = query(storeCollectionRef, orderBy(sortConditionEng, 'desc'), where('subCategory', '==', keyword), where('productDisclosure', '==', true), endBefore(firstOfPage), limit(itemPerPage));
+                }
+                else {
+                    queryRef = query(storeCollectionRef, orderBy(sortConditionEng, 'asc'), where('subCategory', '==', keyword), where('productDisclosure', '==', true), endBefore(firstOfPage), limit(itemPerPage));
+                };
+            };
+
+            const allDocumentSnapshots = await getDocs(queryRef);
+
+            returnData.processData1.firstOfPage = allDocumentSnapshots.docs[0];
+            returnData.processData1.lastOfPage = allDocumentSnapshots.docs[allDocumentSnapshots.docs.length - 1];
+
+            const result = [];
+            allDocumentSnapshots.forEach((doc) => {
+                result.push(doc.data());
+            });
+            returnData.processData2 = result;
+        };
+
+        calculateBothEndsIndex()
+        .then(() => {
+            calculateProductPerPage()
+            .then(() => {
+                dispatch({ type: 'STORE_COMPLETE' });
+                dispatch({ type: 'STORE_GET_PRODUCTLIST', payload: returnData});
+            })
+            .catch((error) => {
+                dispatch({ type: 'STORE_ERROR', payload: createErrorData(error) });
+            });
+        })
+        .catch((error) => {
+            dispatch({ type: 'STORE_ERROR', payload: createErrorData(error) });
+        });
+
+    };
+};
+
 
 
 const GetProductInfo = (productName) => {
@@ -1280,7 +1402,7 @@ const DeleteReview = (docData, productData, userData, navigate) => {
         };
 
         let reviewsCals = 0;
-        let beforeScore = 0;
+        // let beforeScore = 0;
 
         const updataProductInfo = async () => {
             const docRef = doc(storeCollectionRef, productData.name);
@@ -1401,7 +1523,7 @@ const ReadReview = () => {
     };
 };
 
-export { Test1, AddProduct, GetProductList, GetSearchProductList, GetProductInfo, UpdateProduct, ChangeProductDisclosure, GoToPurchasePage, PurchaseProduct, ChargePoint, GetpurchaseRecord, DeletePurchaseRecord, GetPointRecord, AddShoppingBasket, DeleteShoppingBasket, GetShoppingBasket, CreateReview, DeleteReview, UpdateReview, ReadReview };
+export { Test1, AddProduct, GetProductList, GetSearchProductList, GetSearchSubCategoryProductList, GetProductInfo, UpdateProduct, ChangeProductDisclosure, GoToPurchasePage, PurchaseProduct, ChargePoint, GetpurchaseRecord, DeletePurchaseRecord, GetPointRecord, AddShoppingBasket, DeleteShoppingBasket, GetShoppingBasket, CreateReview, DeleteReview, UpdateReview, ReadReview };
 
 
 

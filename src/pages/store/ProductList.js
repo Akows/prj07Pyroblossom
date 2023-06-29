@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 import productimg from '../../assets/images/testImg/testproductimg.jpg';
 import { Loading } from '../../components/Loading';
-import { GetSearchProductList } from '../../redux/actions/storeAction';
+import { GetSearchProductList, GetSearchSubCategoryProductList } from '../../redux/actions/storeAction';
 
 const BackGround = styled.div`
     width: 100%;
@@ -230,14 +230,20 @@ export const ProductList = () => {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
+        // 키워드 검색 기능.
         if (searchtype === 'keywordSearch') {
             dispatch(GetSearchProductList('keywordSearch', 10, keyword, sortCondition));
         }
-        else if (searchtype === 'categorySearch') {
+        // 카테고리 검색 기능.
+        else if (searchtype === 'categorySearch' && subCategoryKeyword === '') {
             dispatch(GetSearchProductList('categorySearch', 10, keyword, sortCondition));
+        }
+        // 서브 카테고리 검색 기능.
+        else if (searchtype === 'categorySearch' && subCategoryKeyword !== '') {
+            dispatch(GetSearchSubCategoryProductList('categorySearch', 10, subCategoryKeyword, sortCondition));
         };
         // eslint-disable-next-line
-    }, [searchtype, keyword, sortCondition]);
+    }, [searchtype, keyword, sortCondition, subCategoryKeyword]);
 
     useEffect(() => {
         setIsLoading(getStoreState.flagValue.isLoading);
