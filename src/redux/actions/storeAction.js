@@ -133,9 +133,6 @@ const AddProduct = (productInfo, productOptionInfo, productImgFile, navigate) =>
 
 const GetProductList = (listCallType, itemPerPage, searchKeyword) => {
     return (dispatch, getState) => {
-
-        console.log(listCallType, itemPerPage, searchKeyword);
-        
         dispatch({ type: 'STORE_STATE_INIT' });
         dispatch({ type: 'STORE_LOADING' });
 

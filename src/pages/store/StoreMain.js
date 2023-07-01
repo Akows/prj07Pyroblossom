@@ -85,6 +85,21 @@ const StoreSlideShowArea = styled.div`
 
     z-index: 3;
 `;
+
+const ProductDesc = styled.div`
+    width: 100%;
+    height: 30px;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 42px;
+    color: #D3BC8E;
+`;
+
+
 const StoreListArea = styled.div`
     width: 80%;
     height: 100%;
@@ -159,9 +174,11 @@ const TitleSub2Image = styled.div`
 
 const Product = styled.div`
     width: 300px;
-    height: 330px;
+    height: 450px;
 
     margin: 3px;
+
+    margin-bottom: 30px;
 
     &:hover {
         background-color: gray;
@@ -170,7 +187,7 @@ const Product = styled.div`
 `;
 const ProductImg = styled.div`
     width: 100%;
-    height: 80%;
+    height: 60%;
 
     display: flex;
     flex-direction: column;
@@ -186,7 +203,19 @@ const ProductImg = styled.div`
 `;
 const ProductTitle = styled.div`
     width: 100%;
-    height: 20%;
+    height: 40%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    
+    & > div:nth-child(2) {
+
+    };
+    & > p:nth-child(3) {
+        font-size: 24px;
+    };
 `;
 
 const ProductName = styled.div`
@@ -230,7 +259,7 @@ export const StoreMain = () => {
     const deepPoint = useRef();
 
     useEffect(() => {
-        dispatch(GetProductList('commonusergetproduct', 5, ''));
+        dispatch(GetProductList('commonusergetproduct', 9, ''));
 
         observer.current = new IntersectionObserver(entries => {
             entries.forEach((item) => {
@@ -312,9 +341,17 @@ export const StoreMain = () => {
 
                 </StoreTitleArea>
 
+                <br /><br /><br /><br /><br /><br /><br /><br />
+
+                <ProductDesc>오늘의 상품</ProductDesc>
+
                 <StoreSlideShowArea>
                     <Sildeshow listData={slideListData} />
                 </StoreSlideShowArea>
+
+                <br /><br /><br /><br />
+
+                <ProductDesc>신상품</ProductDesc>
 
                 <StoreListArea>
 
