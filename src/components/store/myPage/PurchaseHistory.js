@@ -252,6 +252,8 @@ export const PurchaseHistory = ({ userdata }) => {
     const [searchKeyword, setSearchKeyword] = useState('');
     const [productPerPage, setProductPerPage] = useState(5);
 
+    const [imgList, setImgList] = useState([]);
+
     const [isDataFirst, setIsDataFirst] = useState(false);
     const [isDataLast, setIsDataLast] = useState(false);
 
@@ -315,6 +317,28 @@ export const PurchaseHistory = ({ userdata }) => {
         // eslint-disable-next-line
     }, [getStoreState.processInfo.processData1]);
 
+    useEffect(() => {
+        let name = [];
+
+        if (Array.isArray(listData)) {
+            listData[0].productData.map((item) => {
+                let data = {
+                    imgName: '',
+                    proName: '',
+                };
+
+                data.imgName = item.productInformationFile.titleimage;
+                data.proName = item.name;
+
+                name.push(data);
+            })
+            setImgList(name);
+        };
+
+        // eslint-disable-next-line
+    }, [listData]);
+
+
     return (
         <>
             <UserUtilButton>
@@ -356,7 +380,15 @@ export const PurchaseHistory = ({ userdata }) => {
                         {ite.purchaseData?.purchaseList.map((item) => (
                             <HistoryInfo key={item.optionNumber}>
                                 <ProductImg>
-                                    <img src={`https://firebasestorage.googleapis.com/v0/b/prj07pyroblossom.appspot.com/o/productsImage%2F${item.optionName}%2F${ite.productData[0].productInformationFile?.titleimage}?alt=media&token=bf2eff71-3c5e-4dc2-9706-445f95fd91e8`} alt='' />
+
+                                    {imgList?.map((items) => (
+                                        <>
+                                            {item.optionName === items.proName && <img src={`https://firebasestorage.googleapis.com/v0/b/prj07pyroblossom.appspot.com/o/productsImage%2F${item.optionName}%2F${items.imgName}?alt=media&token=bf2eff71-3c5e-4dc2-9706-445f95fd91e8`} alt='' />}
+                                        </>
+                                    ))}
+
+
+                                    {/* <img src={`https://firebasestorage.googleapis.com/v0/b/prj07pyroblossom.appspot.com/o/productsImage%2F${item.optionName}%2F${ite.productData[0].productInformationFile?.titleimage}?alt=media&token=bf2eff71-3c5e-4dc2-9706-445f95fd91e8`} alt='' /> */}
                                 </ProductImg>
                                 <ProductInfo>
                                     <p>{ite.date}</p>

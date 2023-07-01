@@ -391,16 +391,14 @@ export const OrderPurchase = ({ setWhatComponentIsShow, purchaseData, productDat
     const [imgList, setImgList] = useState([]);
 
     const onSubmit = () => {
-        console.log(imgList);
+        const submitCheck = window.confirm('결제하시겠습니까?');
 
-        // const submitCheck = window.confirm('결제하시겠습니까?');
-
-        // if (!submitCheck) {
-        //     return;
-        // }
-        // else {
-        //     onPurchase(purchaseData, productData, userData);
-        // };
+        if (!submitCheck) {
+            return;
+        }
+        else {
+            onPurchase(purchaseData, productData, userData);
+        };
     };
 
     useEffect(() => {
