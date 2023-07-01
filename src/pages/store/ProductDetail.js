@@ -692,6 +692,10 @@ export const ProductDetail = () => {
 
     useEffect(() => {
 
+        if (productData[0]?.name !== id) {
+            setProductData(getStoreState.processInfo.processData2);
+        };
+
         if (productData.length === 0) {
             setProductData(getStoreState.processInfo.processData2);
 
@@ -706,7 +710,6 @@ export const ProductDetail = () => {
             else {
                 setIsBasketIn(false);
             };
-
         };
 
     }, [getStoreState.processInfo, getStoreState.basketData]);
