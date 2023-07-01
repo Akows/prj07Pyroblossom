@@ -412,13 +412,23 @@ export const OrderPurchase = ({ setWhatComponentIsShow, purchaseData, productDat
         // 따라서 빈 객체일 때에는 map 함수를 사용할 수 없으니 에러가 발생함.
         // 조건문으로 productData가 배열일 때만 map 함수가 동작하도록 한다.
         if (Array.isArray(productData)) {
+            let name = [];
+
             productData.map((item) => {
-                setImgList([...imgList, item.productInformationFile.titleimage]);
+                let data = {
+                    imgName: '',
+                    proName: '',
+                };
+
+                data.imgName = item.productInformationFile.titleimage;
+                data.proName = item.name;
+
+                name.push(data);
             })
+            setImgList(name);
         };
 
     }, [purchaseData, userData, productData]);
-
 
     return (
         <>
@@ -434,15 +444,18 @@ export const OrderPurchase = ({ setWhatComponentIsShow, purchaseData, productDat
 
             <ProductListArea>
 
+
+
                 {purchaseDatas?.map((item) => (
                     <ProductInfo key={item.optionNumber}>
 
                         <ProductImg>
 
-
-                            {/* {imgList?.map((item) => (
-                                <img src={`https://firebasestorage.googleapis.com/v0/b/prj07pyroblossom.appspot.com/o/productsImage%2F${item.optionName}%2F${item.titleimage}?alt=media&token=bf2eff71-3c5e-4dc2-9706-445f95fd91e8`} alt='' />
-                            ))} */}
+                            {imgList?.map((items) => (
+                                <>
+                                    {item.optionName === items.proName && <img src={`https://firebasestorage.googleapis.com/v0/b/prj07pyroblossom.appspot.com/o/productsImage%2F${item.optionName}%2F${items.imgName}?alt=media&token=bf2eff71-3c5e-4dc2-9706-445f95fd91e8`} alt='' />}
+                                </>
+                            ))}
 
                         </ProductImg>
                         <PurchaseInfo>
