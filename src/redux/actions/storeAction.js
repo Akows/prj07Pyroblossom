@@ -700,7 +700,7 @@ const GoToPurchasePage = (purchaseList, totalQuantity, totalAmount, navigate, is
             totalAmount: 0,
         };
 
-        let data2 = '';
+        let data2 = [];
 
         if (isBasket) {
             let totalQuantity = 0;
@@ -708,8 +708,8 @@ const GoToPurchasePage = (purchaseList, totalQuantity, totalAmount, navigate, is
 
             // eslint-disable-next-line
             purchaseList.map((item) => {
-                data.purchaseList.push(item.purchaseList[0]);
-                data2 = item.productData;
+                data.purchaseList.push(item.purchaseList);
+                data2.push(item.productData);
                 totalQuantity += item.totalQuantity;
                 totalAmount += item.totalAmount;
             });
@@ -719,9 +719,8 @@ const GoToPurchasePage = (purchaseList, totalQuantity, totalAmount, navigate, is
 
             // await deleteDoc(doc(shoppingBasketCollectionRef, docId));
 
-
-            dispatch({ type: 'STORE_SAVE_PRODUCTDATA', payload: data2 });
             dispatch({ type: 'STORE_SAVE_PURCHASEDATA', payload: data });
+            dispatch({ type: 'STORE_SAVE_PRODUCTDATA', payload: data2 });
             dispatch({ type: 'STORE_COMPLETE' });
             navigate('/store/payment', { replace: true });
         }
@@ -858,6 +857,11 @@ const PurchaseProduct = (purchaseData, productData, userData, navigate) => {
                 }
             );
         };
+
+        const updateBasketInfo = async () => {
+            
+        };
+
 
         updataUserInfo()
         .then(() => {

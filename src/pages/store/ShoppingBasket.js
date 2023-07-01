@@ -357,14 +357,14 @@ export const ShoppingBasket = () => {
 
             // eslint-disable-next-line
             listData?.map((item) => {
-                let result = 0;
+                let result = item.productData[0].deliveryFee;
                 result += item.productData[0].deliveryFee;
 
                 setProductDeliveryFee(result);
 
                 // eslint-disable-next-line
                 item.purchaseList.map((item2) => {
-                    let result = 0;
+                    let result = item2.totalAmount;
                     result += item2.totalAmount;
 
                     setProductPrice(result);

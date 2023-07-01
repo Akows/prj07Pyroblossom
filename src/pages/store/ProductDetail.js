@@ -694,13 +694,25 @@ export const ProductDetail = () => {
 
         if (productData[0]?.name !== id) {
             setProductData(getStoreState.processInfo.processData2);
+
+            if (Object.keys(getStoreState.basketData).length !== 0) {
+                if (getStoreState.processInfo.processData2[0].name === getStoreState.basketData[0].productData[0].name) {
+                    setIsBasketIn(true);
+                }
+                else {
+                    setIsBasketIn(false);
+                };
+            }
+            else {
+                setIsBasketIn(false);
+            };
         };
 
         if (productData.length === 0) {
             setProductData(getStoreState.processInfo.processData2);
 
             if (Object.keys(getStoreState.basketData).length !== 0) {
-                if (productData[0]?.name === getStoreState.basketData[0].productData[0].name) {
+                if (getStoreState.processInfo.processData2[0].name === getStoreState.basketData[0].productData[0].name) {
                     setIsBasketIn(true);
                 }
                 else {

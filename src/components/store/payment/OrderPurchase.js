@@ -388,22 +388,37 @@ export const OrderPurchase = ({ setWhatComponentIsShow, purchaseData, productDat
     const [purchaseDatas, setPurchaseDatas] = useState([]);
     const [userDatas, setUserDatas] = useState([]);
 
+    const [imgList, setImgList] = useState([]);
+
     const onSubmit = () => {
+        console.log(imgList);
 
-        const submitCheck = window.confirm('결제하시겠습니까?');
+        // const submitCheck = window.confirm('결제하시겠습니까?');
 
-        if (!submitCheck) {
-            return;
-        }
-        else {
-            onPurchase(purchaseData, productData, userData);
-        };
+        // if (!submitCheck) {
+        //     return;
+        // }
+        // else {
+        //     onPurchase(purchaseData, productData, userData);
+        // };
     };
 
     useEffect(() => {
         setPurchaseDatas(purchaseData.purchaseList);
         setUserDatas(userData);
-    }, [purchaseData, userData]);
+
+        // productData는 최초에는 빈 객체.
+        // 데이터가 주입된 이후에는 배열임.
+        // 따라서 빈 객체일 때에는 map 함수를 사용할 수 없으니 에러가 발생함.
+        // 조건문으로 productData가 배열일 때만 map 함수가 동작하도록 한다.
+        if (Array.isArray(productData)) {
+            productData.map((item) => {
+                setImgList([...imgList, item.productInformationFile.titleimage]);
+            })
+        };
+
+    }, [purchaseData, userData, productData]);
+
 
     return (
         <>
@@ -423,7 +438,12 @@ export const OrderPurchase = ({ setWhatComponentIsShow, purchaseData, productDat
                     <ProductInfo key={item.optionNumber}>
 
                         <ProductImg>
-                            <img src={`https://firebasestorage.googleapis.com/v0/b/prj07pyroblossom.appspot.com/o/productsImage%2F${productData[0].name}%2F${productData[0]?.productInformationFile.titleimage}?alt=media&token=bf2eff71-3c5e-4dc2-9706-445f95fd91e8`} alt='' />
+
+
+                            {/* {imgList?.map((item) => (
+                                <img src={`https://firebasestorage.googleapis.com/v0/b/prj07pyroblossom.appspot.com/o/productsImage%2F${item.optionName}%2F${item.titleimage}?alt=media&token=bf2eff71-3c5e-4dc2-9706-445f95fd91e8`} alt='' />
+                            ))} */}
+
                         </ProductImg>
                         <PurchaseInfo>
 

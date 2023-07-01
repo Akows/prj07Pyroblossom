@@ -13,7 +13,11 @@ const initialState = {
         processData1: {},
         processData2: [],
     },
-    purchaseData: {},
+    purchaseData: {
+        purchaseList: [],
+        totalQuantity: 0,
+        totalAmount: 0,
+    },
     basketData: {},
     reviewData: []
 };
@@ -79,11 +83,25 @@ const storeReducer = (prevState = initialState, action) => {
                 break;
 
             case 'STORE_SAVE_PRODUCTDATA':
-                draft.processInfo.processData2 = action.payload;
+
+                // eslint-disable-next-line
+                action.payload.map((item) => {
+                    draft.processInfo.processData2.push(item[0]);
+                });
+
+                // draft.processInfo.processData2 = action.payload;
                 break;
 
             case 'STORE_SAVE_PURCHASEDATA':
-                draft.purchaseData = action.payload;
+
+                // eslint-disable-next-line
+                action.payload.purchaseList.map((item) => {
+                    draft.purchaseData.purchaseList.push(item[0]);
+                });
+                draft.purchaseData.totalQuantity = action.payload.totalQuantity;
+                draft.purchaseData.totalAmount = action.payload.totalAmount;
+
+                // draft.purchaseData = action.payload;
                 break;
             case 'STORE_CLEAN_PURCHASEDATA':
                 draft.purchaseData = {};
