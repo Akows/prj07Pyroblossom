@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-import productimg from '../../assets/images/testImg/testproductimg.jpg';
 import { Loading } from '../../components/Loading';
 import { GetSearchProductList, GetSearchSubCategoryProductList } from '../../redux/actions/storeAction';
 
@@ -221,66 +220,66 @@ const ProductInfo = styled.div`
     }
 `;
 
-const UtilButton = styled.div`
-    width: 100%;
-    height: 100%;
+// const UtilButton = styled.div`
+//     width: 100%;
+//     height: 100%;
 
-    margin-top: 10px;
-    padding: 10px;
+//     margin-top: 10px;
+//     padding: 10px;
 
-    border: 1px solid gray;
-    border-radius: 15px;
+//     border: 1px solid gray;
+//     border-radius: 15px;
 
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
+//     display: flex;
+//     flex-direction: row;
+//     align-items: center;
+//     justify-content: space-between;
 
-    & > div {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
-    };
-    & > div > input {
-        width: 20px;
-        height: 20px;
-    };
+//     & > div {
+//         display: flex;
+//         flex-direction: row;
+//         align-items: center;
+//         justify-content: space-between;
+//     };
+//     & > div > input {
+//         width: 20px;
+//         height: 20px;
+//     };
 
-    & > button {
-        width: 100px;
-        height: 30px;
+//     & > button {
+//         width: 100px;
+//         height: 30px;
 
-        border: none;
-        border-radius: 5px;
-        background-color: #D3BC8E;
-        color: #414147;
+//         border: none;
+//         border-radius: 5px;
+//         background-color: #D3BC8E;
+//         color: #414147;
 
-        font-family: 'GIFont';
-        font-size: 16px;
-    };
-    & > button:hover {
-        background-color: #414147;
-        color: #D3BC8E;
-    };
+//         font-family: 'GIFont';
+//         font-size: 16px;
+//     };
+//     & > button:hover {
+//         background-color: #414147;
+//         color: #D3BC8E;
+//     };
 
-    & > input {
-        width: 400px;
-        height: 30px;
+//     & > input {
+//         width: 400px;
+//         height: 30px;
 
-        font-family: 'GIFont';
-        font-size: 16px;
-        color: black;
+//         font-family: 'GIFont';
+//         font-size: 16px;
+//         color: black;
 
-        background-color: #aaaaaa;
-        border-radius: 5px;
-        border: none;
+//         background-color: #aaaaaa;
+//         border-radius: 5px;
+//         border: none;
 
-        @media screen and (max-width: 600px) {
-            width: 70%;
-        };
-    };
-`;
+//         @media screen and (max-width: 600px) {
+//             width: 70%;
+//         };
+//     };
+// `;
 
 export const ProductList = () => {
 
@@ -294,19 +293,19 @@ export const ProductList = () => {
     const [listData, setListData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
-    const [isDataFirst, setIsDataFirst] = useState(false);
-    const [isDataLast, setIsDataLast] = useState(false);
+    // const [isDataFirst, setIsDataFirst] = useState(false);
+    // const [isDataLast, setIsDataLast] = useState(false);
 
     const subCategorySearch = (keyword) => {
         dispatch(GetSearchSubCategoryProductList('categorySearch', 10, keyword, sortCondition));
     };
 
-    const prevPage = () => {
-        // dispatch(GetProductList('prev', productPerPage, ''))
-    };
-    const nextPage = () => {
-        // dispatch(GetProductList('prev', productPerPage, ''))
-    };
+    // const prevPage = () => {
+    //     // dispatch(GetProductList('prev', productPerPage, ''))
+    // };
+    // const nextPage = () => {
+    //     // dispatch(GetProductList('prev', productPerPage, ''))
+    // };
 
 
     useEffect(() => {
@@ -329,24 +328,24 @@ export const ProductList = () => {
         if (getStoreState.processInfo.processData2 !== '') {
             setListData(getStoreState.processInfo.processData2);
 
-            const firstItem = getStoreState.processInfo.processData1.firstOfPage;
-            const lastItem = getStoreState.processInfo.processData1.lastOfPage;
-            const firstIndex = getStoreState.processInfo.processData1.firstOfAllList;
-            const lastIndex = getStoreState.processInfo.processData1.lastOfAllList;
+            // const firstItem = getStoreState.processInfo.processData1.firstOfPage;
+            // const lastItem = getStoreState.processInfo.processData1.lastOfPage;
+            // const firstIndex = getStoreState.processInfo.processData1.firstOfAllList;
+            // const lastIndex = getStoreState.processInfo.processData1.lastOfAllList;
 
-            if (firstItem?.data().number === firstIndex?.data().number) {
-                setIsDataFirst(true);
-            }
-            else {
-                setIsDataFirst(false);
-            };
+            // if (firstItem?.data().number === firstIndex?.data().number) {
+            //     setIsDataFirst(true);
+            // }
+            // else {
+            //     setIsDataFirst(false);
+            // };
 
-            if (lastItem?.data().number === lastIndex?.data().number) {
-                setIsDataLast(true);
-            }
-            else {
-                setIsDataLast(false);
-            };
+            // if (lastItem?.data().number === lastIndex?.data().number) {
+            //     setIsDataLast(true);
+            // }
+            // else {
+            //     setIsDataLast(false);
+            // };
         };
     }, [getStoreState.processInfo]);
 
@@ -416,7 +415,7 @@ export const ProductList = () => {
                         <Link to={`/store/productdetail/${item.name}`}>
                             <Product key={item.number}>
                                 <ProductPic>
-                                    <img src={productimg} alt=''></img>
+                                    <img src={`https://firebasestorage.googleapis.com/v0/b/prj07pyroblossom.appspot.com/o/productsImage%2F${item.name}%2F${item.productInformationFile?.titleimage}?alt=media&token=bf2eff71-3c5e-4dc2-9706-445f95fd91e8`} alt='' />
                                 </ProductPic>
 
                                 <ProductInfo>
@@ -433,7 +432,7 @@ export const ProductList = () => {
 
             </ProductListArea>
 
-            <UtilButton>
+            {/* <UtilButton>
                 {isDataFirst ?
                     <button>페이지 끝</button>
                     :
@@ -445,7 +444,7 @@ export const ProductList = () => {
                     :
                     <button onClick={() => nextPage()}>-{'>'}</button>
                 }
-            </UtilButton>
+            </UtilButton> */}
 
         </BackGround>
     );
