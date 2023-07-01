@@ -133,6 +133,8 @@ const AddProduct = (productInfo, productOptionInfo, productImgFile, navigate) =>
 
 const GetProductList = (listCallType, itemPerPage, searchKeyword) => {
     return (dispatch, getState) => {
+
+        console.log(listCallType, itemPerPage, searchKeyword);
         
         dispatch({ type: 'STORE_STATE_INIT' });
         dispatch({ type: 'STORE_LOADING' });
@@ -154,8 +156,14 @@ const GetProductList = (listCallType, itemPerPage, searchKeyword) => {
             let LastQueryRef = '';
 
             if (listCallType === 'keywordSearch') {
-                firstQueryRef = query(storeCollectionRef, orderBy('number', 'asc'), where('name', '==', searchKeyword), limit(1));
-                LastQueryRef = query(storeCollectionRef, orderBy('number', 'asc'), where('name', '==', searchKeyword), limitToLast(1));
+                if (searchKeyword === '') {
+                    firstQueryRef = query(storeCollectionRef, orderBy('number', 'asc'), limit(1));
+                    LastQueryRef = query(storeCollectionRef, orderBy('number', 'asc'), limitToLast(1));
+                }
+                else {
+                    firstQueryRef = query(storeCollectionRef, orderBy('number', 'asc'), where('name', '==', searchKeyword), limit(1));
+                    LastQueryRef = query(storeCollectionRef, orderBy('number', 'asc'), where('name', '==', searchKeyword), limitToLast(1));
+                };
             }
             else {
                 firstQueryRef = query(storeCollectionRef, orderBy('number', 'asc'), limit(1));
@@ -212,7 +220,6 @@ const GetProductList = (listCallType, itemPerPage, searchKeyword) => {
             const result = [];
             allDocumentSnapshots.forEach((doc) => {
                 result.push(doc.data());
-                console.log(doc.data());
             });
             returnData.processData2 = result;
         };
@@ -712,6 +719,9 @@ const GoToPurchasePage = (purchaseList, totalQuantity, totalAmount, navigate, is
 
             data.totalQuantity = totalQuantity;
             data.totalAmount = totalAmount;
+
+            // await deleteDoc(doc(shoppingBasketCollectionRef, docId));
+
 
             dispatch({ type: 'STORE_SAVE_PRODUCTDATA', payload: data2 });
             dispatch({ type: 'STORE_SAVE_PURCHASEDATA', payload: data });

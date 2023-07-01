@@ -419,7 +419,7 @@ export const AdminProductManagement = ({ setWhatCompoIsShow, setUpdateData }) =>
                                             <p></p>
                                         }
 
-                                        <p>보너스포인트 : {item.rewardAmountRate}P</p>
+                                        <p>배송비 : {item.deliveryFee}원</p>
                                         <p>진행중인 이벤트 : {item.eventType}.</p>
                                         <p>이벤트포인트 : {item.eventPoint}P</p>
 
