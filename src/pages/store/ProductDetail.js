@@ -142,7 +142,7 @@ const ProductPrice = styled.div`
     margin-bottom: 10px;
 `;
 const SalePer = styled.div`
-    width: 10%;
+    width: 7%;
     height: 100%;
 
     display: flex;
@@ -155,7 +155,7 @@ const SalePer = styled.div`
 `;
 
 const Price = styled.div`
-    width: 90%;
+    width: 93%;
     height: 100%;
 
     display: flex;
@@ -164,7 +164,7 @@ const Price = styled.div`
     justify-content: flex-end;
 `;
 const ListPrice = styled.div`
-    width: 120px;
+    width: 100px;
     height: 100%;
 
     display: flex;
@@ -179,7 +179,7 @@ const ListPrice = styled.div`
     opacity: 0.3;
 `;
 const LastPrice = styled.div`
-    width: 120px;
+    width: 130px;
     height: 100%;
 
     display: flex;
@@ -858,7 +858,7 @@ export const ProductDetail = () => {
                         <OtherInfoComponentArea>
 
                             {whatCompoIsShow === 'review' && <Reviews productData={productData[0]} userData={getUserState} />}
-                            {whatCompoIsShow === 'info' && <ProductInfomation />}
+                            {whatCompoIsShow === 'info' && <ProductInfomation productData={productData[0]} />}
                             {whatCompoIsShow === 'qna' && <QnA />}
 
                         </OtherInfoComponentArea>

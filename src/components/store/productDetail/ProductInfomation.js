@@ -27,15 +27,17 @@ const BackGround = styled.div`
     };
 `;
 
-export const ProductInfomation = () => {
+export const ProductInfomation = ({ productData }) => {
+
     return (
         <BackGround>
-            <img src={infoimg1} alt='' />
-            <img src={infoimg2} alt='' />
-            <img src={infoimg3} alt='' />
-            <img src={infoimg4} alt='' />
-            <img src={infoimg5} alt='' />
-            <img src={infoimg6} alt='' />
+
+            {productData.productInformationFile.infoimage1 !== '' && <img src={`https://firebasestorage.googleapis.com/v0/b/prj07pyroblossom.appspot.com/o/productsInfoImage%2F${productData?.name}%2F${productData?.productInformationFile?.infoimage1}?alt=media&token=044dbc82-5ec8-42b0-b307-551d7ff0ad54`} alt='' />}
+
+            {productData.productInformationFile.infoimage2 !== '' && <img src={`https://firebasestorage.googleapis.com/v0/b/prj07pyroblossom.appspot.com/o/productsInfoImage%2F${productData?.name}%2F${productData?.productInformationFile?.infoimage2}?alt=media&token=bf2eff71-3c5e-4dc2-9706-445f95fd91e8`} alt='' />}
+
+            {productData.productInformationFile.infoimage3 !== '' && <img src={`https://firebasestorage.googleapis.com/v0/b/prj07pyroblossom.appspot.com/o/productsInfoImage%2F${productData?.name}%2F${productData?.productInformationFile?.infoimage3}?alt=media&token=bf2eff71-3c5e-4dc2-9706-445f95fd91e8`} alt='' />}
+
         </BackGround>
     );
 };
