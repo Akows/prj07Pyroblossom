@@ -355,21 +355,23 @@ export const ShoppingBasket = () => {
         if (Object.keys(getStoreState.basketData).length !== 0) {
             setListData(getStoreState.basketData);
 
-            // eslint-disable-next-line
-            listData?.map((item) => {
-                let result = item.productData[0].deliveryFee;
-                result += item.productData[0].deliveryFee;
-
-                setProductDeliveryFee(result);
-
+            if (productPrice === 0) {
                 // eslint-disable-next-line
-                item.purchaseList.map((item2) => {
-                    let result = item2.totalAmount;
-                    result += item2.totalAmount;
+                listData?.map((item) => {
+                    let result = item.productData[0].deliveryFee;
+                    result += item.productData[0].deliveryFee;
 
-                    setProductPrice(result);
+                    setProductDeliveryFee(result);
+
+                    // eslint-disable-next-line
+                    item.purchaseList.map((item2) => {
+                        let result = item2.totalAmount;
+                        result += item2.totalAmount;
+
+                        setProductPrice(result);
+                    });
                 });
-            });
+            };
         }
         else {
             setListData([]);

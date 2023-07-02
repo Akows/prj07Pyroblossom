@@ -419,7 +419,7 @@ export const OrderPurchase = ({ setWhatComponentIsShow, purchaseData, productDat
             let name = [];
 
             // eslint-disable-next-line
-            productData.map((item) => {
+            productData?.map((item) => {
                 let data = {
                     imgName: '',
                     proName: '',

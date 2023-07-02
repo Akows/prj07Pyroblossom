@@ -244,7 +244,7 @@ const GetSearchProductList = (listCallType, itemPerPage, keyword, sortCondition)
         dispatch({ type: 'STORE_STATE_INIT' });
         dispatch({ type: 'STORE_LOADING' });
 
-        console.log(listCallType, itemPerPage, keyword, sortCondition);
+        // console.log(listCallType, itemPerPage, keyword, sortCondition);
 
         const returnData = {
             processData1: {
