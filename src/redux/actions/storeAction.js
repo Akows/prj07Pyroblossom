@@ -689,10 +689,22 @@ const ChangeProductDisclosure = (productName, productDisclosure, navigate) => {
 const GoToPurchasePage = (purchaseList, totalQuantity, totalAmount, navigate, isBasket) => {
     return (dispatch, getState) => {
 
-        console.log(purchaseList);
-
         dispatch({ type: 'STORE_STATE_INIT' });
         dispatch({ type: 'STORE_LOADING' });
+
+        // 결제 페이지로 넘어간 시점에서 기존 장바구니 데이터는 삭제.
+        const process = async () => {
+            const arr = [];
+
+            // eslint-disable-next-line
+            purchaseList.map((item) => {
+                arr.push(item.basketNumber);
+            });
+    
+            for (let i = 0; i < arr.length; i++) {
+                await deleteDoc(doc(shoppingBasketCollectionRef, `${arr[i]}`));
+            };
+        };
 
         const data = {
             purchaseList: [],
@@ -717,7 +729,7 @@ const GoToPurchasePage = (purchaseList, totalQuantity, totalAmount, navigate, is
             data.totalQuantity = totalQuantity;
             data.totalAmount = totalAmount;
 
-            // await deleteDoc(doc(shoppingBasketCollectionRef, docId));
+            process();
 
             dispatch({ type: 'STORE_SAVE_PURCHASEDATA', payload: data });
             dispatch({ type: 'STORE_SAVE_PRODUCTDATA', payload: data2 });
@@ -729,7 +741,9 @@ const GoToPurchasePage = (purchaseList, totalQuantity, totalAmount, navigate, is
             data.totalQuantity = totalQuantity;
             data.totalAmount = totalAmount;
 
-            dispatch({ type: 'STORE_SAVE_PURCHASEDATA', payload: data });
+            console.log(data);
+
+            dispatch({ type: 'STORE_SAVE_PURCHASEDATA2', payload: data });
             dispatch({ type: 'STORE_COMPLETE' });
             navigate('/store/payment', { replace: true });
         };
@@ -857,11 +871,6 @@ const PurchaseProduct = (purchaseData, productData, userData, navigate) => {
                 }
             );
         };
-
-        const updateBasketInfo = async () => {
-            
-        };
-
 
         updataUserInfo()
         .then(() => {

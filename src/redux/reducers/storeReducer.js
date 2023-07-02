@@ -103,6 +103,10 @@ const storeReducer = (prevState = initialState, action) => {
 
                 // draft.purchaseData = action.payload;
                 break;
+            case 'STORE_SAVE_PURCHASEDATA2':
+                draft.purchaseData = action.payload;
+                break;
+
             case 'STORE_CLEAN_PURCHASEDATA':
                 draft.purchaseData = {};
                 break;

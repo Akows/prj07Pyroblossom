@@ -93,11 +93,9 @@ export const PaymentPage = () => {
             {isLoading && <Loading />}
 
             <InnerContents>
-
                 {whatComponentIsShow === 'orderpurchase' && <OrderPurchase setWhatComponentIsShow={setWhatComponentIsShow} purchaseData={purchaseData} productData={productData} userData={userData} onPurchase={onPurchase} />}
 
                 {whatComponentIsShow === 'purchasecomplete' && <PurchaseComplete onClickError={onClickError} purchaseData={purchaseData} productData={productData} userData={userData} isShowModal={isShowModal} setIsShowModal={setIsShowModal} />}
-
             </InnerContents>
 
             <ErrorModal isError={isError} getUserState={getStoreState} onClickError={onClickError} type='store' />

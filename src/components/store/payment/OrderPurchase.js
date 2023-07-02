@@ -402,7 +402,13 @@ export const OrderPurchase = ({ setWhatComponentIsShow, purchaseData, productDat
     };
 
     useEffect(() => {
-        setPurchaseDatas(purchaseData.purchaseList);
+
+        // 데이터가 제대로 들어오기 전에 setState가 실행되어 undefined값 들어감으로써 발생하는 에러를 방지.
+        if (purchaseData.purchaseList) {
+            setPurchaseDatas(purchaseData.purchaseList);
+            console.log(purchaseData.purchaseList === true);
+        };
+
         setUserDatas(userData);
 
         // productData는 최초에는 빈 객체.
@@ -412,6 +418,7 @@ export const OrderPurchase = ({ setWhatComponentIsShow, purchaseData, productDat
         if (Array.isArray(productData)) {
             let name = [];
 
+            // eslint-disable-next-line
             productData.map((item) => {
                 let data = {
                     imgName: '',
@@ -441,8 +448,6 @@ export const OrderPurchase = ({ setWhatComponentIsShow, purchaseData, productDat
             </ProductListButtonArea>
 
             <ProductListArea>
-
-
 
                 {purchaseDatas?.map((item) => (
                     <ProductInfo key={item.optionNumber}>
@@ -483,16 +488,16 @@ export const OrderPurchase = ({ setWhatComponentIsShow, purchaseData, productDat
                             <input type="checkbox" id='formerdeliveryaddress' name='기존배송지' checked />
                             <label htmlFor='formerdeliveryaddress'>기존 배송지</label>
                         </div>
-                        <div>
+                        {/* <div>
                             <input type="checkbox" id='newdeliveryaddress' name='신규배송지' />
                             <label htmlFor='newdeliveryaddress'>신규 배송지</label>
-                        </div>
+                        </div> */}
                     </fieldset>
 
                     <DeliveryAddress>
-                        <input />
-                        <input value={userDatas.address} />
+                        {/* <input /> */}
                         <input value={userDatas.address2} />
+                        <input value={userDatas.address} />
                     </DeliveryAddress>
 
                 </ShippingAddress>

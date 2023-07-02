@@ -321,7 +321,8 @@ export const PurchaseHistory = ({ userdata }) => {
         let name = [];
 
         if (Array.isArray(listData)) {
-            listData[0].productData.map((item) => {
+            // eslint-disable-next-line
+            listData[0]?.productData?.map((item) => {
                 let data = {
                     imgName: '',
                     proName: '',

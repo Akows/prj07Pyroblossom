@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { Reviews } from '../../components/store/productDetail/Reviews';
-import { QnA } from '../../components/store/productDetail/QnA';
+// import { QnA } from '../../components/store/productDetail/QnA';
 import { ProductInfomation } from '../../components/store/productDetail/ProductInfomation';
 
 import { useDispatch, useSelector } from 'react-redux';
@@ -468,7 +468,7 @@ const OtherInfoButtons = styled.div`
     justify-content: center;
 
     & > button {
-        width: 30%;
+        width: 50%;
         height: 100%;
 
         margin: 3px;
@@ -676,6 +676,8 @@ export const ProductDetail = () => {
             return;
         };
 
+        console.log(purchaseList, totalQuantity, totalAmount);
+
         dispatch(GoToPurchasePage(purchaseList, totalQuantity, totalAmount, navigate, false));
     };
 
@@ -724,6 +726,7 @@ export const ProductDetail = () => {
             };
         };
 
+        // eslint-disable-next-line
     }, [getStoreState.processInfo, getStoreState.basketData]);
 
 
@@ -865,16 +868,16 @@ export const ProductDetail = () => {
                             <button onClick={() => setWhatComponentsRender('info')}>
                                 제품정보
                             </button>
-                            <button onClick={() => setWhatComponentsRender('qna')}>
+                            {/* <button onClick={() => setWhatComponentsRender('qna')}>
                                 QnA
-                            </button>
+                            </button> */}
                         </OtherInfoButtons>
 
                         <OtherInfoComponentArea>
 
                             {whatCompoIsShow === 'review' && <Reviews productData={productData[0]} userData={getUserState} />}
                             {whatCompoIsShow === 'info' && <ProductInfomation productData={productData[0]} />}
-                            {whatCompoIsShow === 'qna' && <QnA />}
+                            {/* {whatCompoIsShow === 'qna' && <QnA />} */}
 
                         </OtherInfoComponentArea>
                     </OtherInfo>
