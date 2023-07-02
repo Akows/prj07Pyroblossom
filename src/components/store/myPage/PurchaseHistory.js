@@ -387,7 +387,6 @@ export const PurchaseHistory = ({ userdata }) => {
                                         </>
                                     ))}
 
-
                                     {/* <img src={`https://firebasestorage.googleapis.com/v0/b/prj07pyroblossom.appspot.com/o/productsImage%2F${item.optionName}%2F${ite.productData[0].productInformationFile?.titleimage}?alt=media&token=bf2eff71-3c5e-4dc2-9706-445f95fd91e8`} alt='' /> */}
                                 </ProductImg>
                                 <ProductInfo>
