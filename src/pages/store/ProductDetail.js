@@ -116,7 +116,12 @@ const ProductPayInfo = styled.div`
 
     @media screen and (max-width: 1000px) {
         width: 90%;
-    }
+    };
+
+    & > p {
+        font-size: 18px;
+        color: #D3BC8E;
+    };
 `;
 
 const ProductName = styled.div`

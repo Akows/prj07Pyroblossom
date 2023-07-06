@@ -214,13 +214,13 @@ const ProductTitle = styled.div`
 
     };
     & > p:nth-child(3) {
-        font-size: 24px;
+        font-size: 32px;
     };
 `;
 
 const ProductName = styled.div`
     width: 100%;
-    height: 40%;
+    height: 60%;
 
     font-size: 24px;
     color: #D3BC8E;
@@ -379,7 +379,7 @@ export const StoreMain = () => {
                                     }
                                 </div>
 
-                                <p>{item.price}</p>
+                                <p>{item.price}원</p>
 
                             </ProductTitle>
                         </Product>

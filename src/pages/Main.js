@@ -28,10 +28,10 @@ const BackGround = styled.div`
 
 const Div = styled.div`
     width: 100%;
-    height: 700px;
+    height: 100%;
 
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
 
@@ -41,7 +41,25 @@ const Div = styled.div`
     transition: all 0.5s;
 
     border: 1px solid wheat;
+
+    & > p {
+        margin: 15px;
+        text-align: center;
+    };
+    
+    & > p:nth-child(1) {
+        font-size: 48px;
+        margin-top: 250px;
+        margin-bottom: 50px;
+    };
+    & > p:nth-child(4) {
+        margin-bottom: 250px;
+    };
 `;
+
+const ColorTextRed = styled.b`
+    color: red;
+`
 
 
 export const Main = () => {
@@ -146,19 +164,30 @@ export const Main = () => {
         <>
             <BackGround ref={refs}>
                 <Div>
-                    <h1>텍스트1</h1>
+
+                    <p>프론트엔드 취업을 준비하는 이유승입니다!</p>
+                    <p>본 프로젝트는 React.js, Redux를 중심으로</p>
+                    <p>프론트엔드 기술을 연마하는 것을 목적으로 제작되었습니다.</p>
+                    <p>백엔드 파트에는 구글 <ColorTextRed>파이어베이스</ColorTextRed>를 사용하였습니다!</p>
+
                 </Div>
                 <Div>
-                    <h1>텍스트2</h1>
+
+                    <p>프로젝트의 주요 기능 첫 번째.</p>
+
+                    <p>회원 기능.</p>
+                    <p>회원 가입, 로그인, 로그아웃, 회원정보 조회 및 수정, 회원탈퇴 기능을 구현하였습니다.</p>
+                    <p>또한 각 단계에서 유효성 검사, 중복 검사, 필수 값 입력 검증 기능도 구현되어있습니다.</p>
+
                 </Div>
                 <Div>
-                    <h1>텍스트3</h1>
-                </Div>
-                <Div>
-                    <h1>텍스트4</h1>
-                </Div>
-                <Div>
-                    <h1>텍스트5</h1>
+
+                    <p>프로젝트의 주요 기능 두 번째.</p>
+
+                    <p>굿즈 스토어.</p>
+                    <p>제품 정보 등록, 조회, 수정, 삭제. 제품 정보의 검색, 카테고리 및 조건 정렬을 구현하였습니다.</p>
+                    <p>또한 상품 옵션 선택과 구매, 사용자 리뷰 작성 및 삭제, 장바구니, 슬라이드쇼(버튼 이동 및 드래그/터치 이동), 포인트 적립 및 사용과 내역 조회, 결제 내역 조회 기능도 구현되어있습니다. </p>
+
                 </Div>
             </BackGround>
         </>
