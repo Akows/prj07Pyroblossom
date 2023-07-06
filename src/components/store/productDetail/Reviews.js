@@ -48,7 +48,7 @@ const ReviewList = styled.div`
 `;
 
 const FontB = styled.b`
-    color: blue;
+    color: black;
 `;
 
 const ReviewInfoTitle = styled.div`
@@ -414,7 +414,7 @@ export const Reviews = ({ userData }) => {
                     {productData?.eventType === '리뷰 이벤트' &&
                         <>
                             <p>리뷰 작성시 다음과 같은 해택이 제공됩니다.</p>
-                            <p>리뷰 작성 이벤트 포인트 : <FontB>{productData?.eventPoint}p</FontB></p>
+                            <p>리뷰 작성 이벤트 포인트 : <FontB>{productData?.eventPoint}P</FontB></p>
                         </>
                     }
 
