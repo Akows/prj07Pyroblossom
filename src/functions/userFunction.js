@@ -21,7 +21,7 @@ const checkValidate = (inputdata, checktype) => {
         }
         else {
             return false;
-        }
+        };
     }
     else if (checktype === 'password') {
         if (passwordValidatePattern.test(inputdata)) {
@@ -29,7 +29,7 @@ const checkValidate = (inputdata, checktype) => {
         }
         else {
             return false;
-        }
+        };
     };
 };
 
@@ -45,7 +45,7 @@ const checkDuplication = async (inputdata, checktype) => {
     if (prohibitionList.includes(inputdata)) {
         result = true;
         return result;
-    }
+    };
 
     // 그렇지 않을 경우, 파이어스토어 유저 DB에서 중복 검사 실행.
     // 검사종류와 해당값을 인자로 검색 실행.

@@ -95,9 +95,12 @@ const Sildeshow = ({ listData }) => {
     const [productData, setProductData] = useState({});
 
     const [currentSlide, setCurrentSlide] = useState(0);
+
+
     const [slideImgSrc, setSlideImgSrc] = useState('');
     const [slideLinkName, setSlideLinkName] = useState('');
 
+    // 전체 슬라이드의 길이.
     const slideLength = 5;
 
     const [mouseDownClientX, setMouseDownClientX] = useState(0);
@@ -175,6 +178,7 @@ const Sildeshow = ({ listData }) => {
     const [isActive4, setIsActive4] = useState(false);
     const [isActive5, setIsActive5] = useState(false);
 
+    // 슬라이드를 이동시키는 함수, 동작할 때마다 index의 값을 체크.
     const showSlide = (index) => {
         const listLength = slideLength - 1;
 
@@ -193,6 +197,7 @@ const Sildeshow = ({ listData }) => {
         };
     };
 
+    // 특정 슬라이드로 이동하는 함수. 이전 혹은 다음 슬라이드 이동 기능과 몇 번 슬라이드로 바로 이동하는 기능 모두룰 포함.
     const setSlide = (slideNumber) => {
         setCurrentSlide(slideNumber);
         showSlide(slideNumber);
@@ -209,11 +214,12 @@ const Sildeshow = ({ listData }) => {
         useEffect(() => {
             function tick() {
                 savedCallback.current();
-            }
+            };
+
             if (delay !== null) {
                 let id = setInterval(tick, delay);
                 return () => clearInterval(id);
-            }
+            };
         }, [delay]);
     };
 
@@ -308,7 +314,7 @@ const Sildeshow = ({ listData }) => {
 
         if (currentSlide > slideLength - 2) {
             setCurrentSlide(0);
-        }
+        };
     }, 2000);
 
     return (

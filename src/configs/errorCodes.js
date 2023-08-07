@@ -35,8 +35,6 @@ const errorCode = {
         },
     },
 
-
-
     userSignInError: {
         DuplicationAdminAccount: {
             code: 'USIE001',
@@ -54,14 +52,7 @@ const errorCode = {
             code: 'USIE004',
             message: '파이어베이스 계정 생성이 정상적으로 완료되지 않음.',
         },
-
-
-        error: {
-            code: '',
-            message: '',
-        },
     },
-
 
     userLogInError: {
         LoginFailure: {
@@ -74,6 +65,7 @@ const errorCode = {
         },
 
     },
+
     userLogOutError: {
 
     },

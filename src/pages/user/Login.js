@@ -301,7 +301,7 @@ export const Login = () => {
         }
         else {
             setInputUserData({ ...inputUserData, isAutoLogin: false });
-        }
+        };
     };
 
     // 로그인 기능을 동작하는 함수.

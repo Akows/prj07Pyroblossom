@@ -195,9 +195,10 @@ const logIn = (inputUserData, navigate) => {
                     dispatch({ type: 'COMPLETE' });
                     alert('환영합니다.');
                     navigate('/', { replace: true });
-                } catch (error) {
-                    dispatch({ type: 'ERROR', payload: createErrorData(error) });
                 }
+                catch (error) {
+                    dispatch({ type: 'ERROR', payload: createErrorData(error) });
+                };
             })
             .catch((error) => {
                 dispatch({ type: 'ERROR', payload: createErrorData(error) });

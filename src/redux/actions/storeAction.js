@@ -1,21 +1,21 @@
 import { deleteDoc, doc, endBefore, getCountFromServer, getDoc, getDocs, limit, limitToLast, orderBy, query, setDoc, startAfter, updateDoc, where } from 'firebase/firestore';
 import { ref, uploadBytes } from 'firebase/storage';
+
 import { createErrorData, errorCode } from '../../configs/errorCodes';
 import { timeStamp, storeCollectionRef, storageRef, purchaseRecordCollectionRef, userCollectionRef, pointRecordCollectionRef, shoppingBasketCollectionRef, reviewCollectionRef } from '../../configs/firebase/config'
 import { dateFormat, productOptionInfoProcess } from '../../functions/storeFunction';
 
 const Test1 = () => {
     return (dispatch, getState) => {
-        dispatch({ type: 'STORE_STATE_INIT' });
-        dispatch({ type: 'STORE_LOADING' });
-        dispatch({ type: 'STORE_COMPLETE' });
-        dispatch({ type: 'STORE_ERROR' });
+        // dispatch({ type: 'STORE_STATE_INIT' });
+        // dispatch({ type: 'STORE_LOADING' });
+        // dispatch({ type: 'STORE_COMPLETE' });
+        // dispatch({ type: 'STORE_ERROR' });
     };
 };
 
 const AddProduct = (productInfo, productOptionInfo, productImgFile, navigate) => {
     return (dispatch, getState) => {
-
         dispatch({ type: 'STORE_STATE_INIT' });
         dispatch({ type: 'STORE_LOADING' });
 
