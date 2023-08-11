@@ -212,7 +212,7 @@ const EventInfo = styled.div`
     border: 1px solid black;
 
     & > p {
-        margin: 5px;
+        margin: 10px;
     };
 `;
 
@@ -224,7 +224,8 @@ const PurchaseInfo = styled.div`
     color: #D3BC8E;
 
     & > p {
-        margin: 3px;
+        margin: 5px;
+        margin-bottom: 10px;
     };
 `;
 

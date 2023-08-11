@@ -61,6 +61,12 @@ const ReviewInfoTitle = styled.div`
 
     & > p:nth-child(1) {
         font-size: 32px;
+        margin-bottom: 15px;
+    };
+    & > p:nth-child(2) {
+        margin-bottom: 10px;
+    };
+    & > p:nth-child(3) {
         margin-bottom: 10px;
     };
 `;
