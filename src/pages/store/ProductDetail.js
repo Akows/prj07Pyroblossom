@@ -48,6 +48,11 @@ const ProductTypeShowArea = styled.div`
 
     font-size: 18px;
     color: #D3BC8E;
+
+    @media screen and (max-width: 1200px) {
+        margin-top: 130px;
+        height: 100%;
+    };
 `;
 const ProductInfoArea = styled.div`
     width: 90%;
