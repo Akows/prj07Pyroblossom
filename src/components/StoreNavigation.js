@@ -370,7 +370,7 @@ const UserMenu = styled.div`
     justify-content: space-around;
 
     & > a {
-        border-radius: 100px;
+        /* border-radius: 100px; */
 
         display: flex;
         flex-direction: row;
