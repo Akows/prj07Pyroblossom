@@ -519,7 +519,7 @@ export const StoreNavigation = () => {
                             <>
                                 <UserMenu>
                                     <Link to='/user/login'>
-                                        <FiLogIn size={30} />
+                                        <FiLogIn size={30} color='#D3BC8E' />
                                     </Link>
                                 </UserMenu>
                             </>

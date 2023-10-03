@@ -67,7 +67,7 @@ const InnerContents = styled.div`
 
 const StoreTitleArea = styled.div`
     width: 100%;
-    height: 300px;
+    height: 50px;
 
     margin-top: 120px;
 
@@ -101,7 +101,7 @@ const ProductDesc = styled.div`
 
 
 const StoreListArea = styled.div`
-    width: 80%;
+    width: 90%;
     height: 100%;
 
     margin-top: 80px;
@@ -122,10 +122,10 @@ const TitleMainImage = styled.div`
 
     z-index: 2;
 
-    background-image: url(${MainImagesrc});
+    /* background-image: url(${MainImagesrc});
     background-size: 300px 300px;
     background-position: center;
-    background-repeat: no-repeat;
+    background-repeat: no-repeat; */
 
     @media screen and (max-width: 1000px) {
         width: 100%;
@@ -143,7 +143,7 @@ const TitleSub2Image = styled.div`
     width: 35%;
     height: 100%;
 
-    margin-top: 360px;
+    margin-top: 1200px;
 
     display: flex;
     flex-direction: column;
@@ -174,9 +174,9 @@ const TitleSub2Image = styled.div`
 
 const Product = styled.div`
     width: 300px;
-    height: 450px;
+    height: 400px;
 
-    margin: 3px;
+    margin: 15px;
 
     margin-bottom: 30px;
 
@@ -221,6 +221,8 @@ const ProductTitle = styled.div`
 const ProductName = styled.div`
     width: 100%;
     height: 60%;
+
+    text-align: center;
 
     font-size: 24px;
     color: #D3BC8E;

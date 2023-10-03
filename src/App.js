@@ -91,8 +91,8 @@ function App() {
     <AppBackGround>
       <Routes>
 
-        <Route path='/' element={<Layout />} >
-          <Route index element={<Main />} />
+        <Route path='/' element={<Navigate to='/store' />} >
+          {/* <Route index element={<Main />} /> */}
         </Route>
 
         <Route path='user/*' element={<UserLayout />} >

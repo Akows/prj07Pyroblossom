@@ -267,6 +267,10 @@ const PurchasePrice1 = styled.div`
     height: 100%;
 
     font-size: 18px;
+
+    @media screen and (max-width: 800px) {
+        width: 30%;
+    }
 `;
 const PurchasePrice2 = styled.div`
     width: 80%;
@@ -284,6 +288,10 @@ const PurchasePrice2 = styled.div`
     & > p:nth-child(3) {
         font-size: 24px;
     };
+
+    @media screen and (max-width: 800px) {
+        width: 70%;
+    }
 `;
 
 const PurchaseOption = styled.div`
