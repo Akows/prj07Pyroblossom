@@ -383,7 +383,7 @@ export const StoreMain = () => {
                                     }
                                 </div>
 
-                                <p>{item.price}원</p>
+                                <p>{item.price.toLocaleString()}원</p>
 
                             </ProductTitle>
                         </Product>

@@ -10,8 +10,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AddShoppingBasket, GetProductInfo, GetShoppingBasket, GoToPurchasePage } from '../../redux/actions/storeAction';
 
 const SpecialCharacter = styled.p`
-    margin-left: 2px;
-    margin-right: 2px;
+    margin-left: 10px;
+    margin-right: 10px;
 `;
 
 const BackGround = styled.div`
@@ -165,7 +165,7 @@ const SalePer = styled.div`
 `;
 
 const Price = styled.div`
-    width: 93%;
+    width: 95%;
     height: 100%;
 
     display: flex;
@@ -189,7 +189,7 @@ const ListPrice = styled.div`
     opacity: 0.3;
 `;
 const LastPrice = styled.div`
-    width: 130px;
+    width: 140px;
     height: 100%;
 
     display: flex;
@@ -784,10 +784,10 @@ export const ProductDetail = () => {
 
                                 <Price>
                                     <ListPrice>
-                                        {productData[0]?.price}원
+                                        {productData[0]?.price.toLocaleString()}원
                                     </ListPrice>
                                     <LastPrice>
-                                        {productData[0]?.price - (productData[0]?.price * productData[0]?.discountRate / 100)}원
+                                        {(productData[0]?.price - (productData[0]?.price * productData[0]?.discountRate / 100)).toLocaleString()}원
                                     </LastPrice>
                                 </Price>
                             </ProductPrice>
@@ -805,7 +805,7 @@ export const ProductDetail = () => {
 
                             <PurchaseInfo>
                                 <p>택배배송 : 무료, 우체국택배</p>
-                                <p>도서산간지역 {productData[0]?.deliveryFee}원</p>
+                                <p>도서산간지역 {productData[0]?.deliveryFee.toLocaleString()}원</p>
                                 <hr />
 
                                 <PurchaseSelect onChange={onSelectPurchaseOption}>
@@ -836,7 +836,7 @@ export const ProductDetail = () => {
                                         </div>
 
                                         <div>
-                                            <p>{item.totalAmount}원</p>
+                                            <p>{item.totalAmount.toLocaleString()}원</p>
                                         </div>
 
                                     </PurchaseOption2>
@@ -853,7 +853,7 @@ export const ProductDetail = () => {
 
                                     <SpecialCharacter>&#124;</SpecialCharacter>
 
-                                    <p>{totalAmount}원</p>
+                                    <p>{totalAmount.toLocaleString()}원</p>
                                 </PurchasePrice2>
                             </PurchasePrice>
 
