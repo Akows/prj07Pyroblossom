@@ -89,7 +89,7 @@ const CategoryButton = styled.div`
     };
 `;
 const SearchBar = styled.div`
-    width: 500px;
+    width: 100%;
     height: 100%;
 
     display: flex;
@@ -457,7 +457,7 @@ export const StoreNavigation = () => {
                                         <Link to='/'></Link>
                                     </TitleImage>
                                     <DownMenu>
-                                        <Link to='/store'>굿즈스토어</Link>
+                                        {/* <Link to='/store'>굿즈스토어</Link> */}
                                         {/* <Link to='/'>미구현</Link>
                                         <Link to='/freeboard'>로딩화면테스트</Link> */}
 
@@ -491,9 +491,9 @@ export const StoreNavigation = () => {
                 </TitleArea>
 
                 <MenuArea>
-                    <Menu2>
+                    {/* <Menu2>
                         <Link to='/store'>굿즈스토어</Link>
-                    </Menu2>
+                    </Menu2> */}
                     {/* <Menu2>
                         <Link to='/'>미구현</Link>
                     </Menu2>

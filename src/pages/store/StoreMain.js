@@ -174,11 +174,11 @@ const TitleSub2Image = styled.div`
 
 const Product = styled.div`
     width: 300px;
-    height: 400px;
+    height: 550px;
 
     margin: 15px;
 
-    margin-bottom: 30px;
+    margin-bottom: 10px;
 
     &:hover {
         background-color: gray;
@@ -198,7 +198,7 @@ const ProductImg = styled.div`
 
     & > img {
         width: 100%;
-        height: 250px;
+        height: 330px;
     };
 `;
 const ProductTitle = styled.div`
@@ -211,16 +211,19 @@ const ProductTitle = styled.div`
     align-items: center;
     
     & > div:nth-child(2) {
-
+        
     };
     & > p:nth-child(3) {
+        margin-top: 15px;
         font-size: 32px;
     };
 `;
 
 const ProductName = styled.div`
     width: 100%;
-    height: 60%;
+    height: 50%;
+
+    line-height: 1.3;
 
     text-align: center;
 

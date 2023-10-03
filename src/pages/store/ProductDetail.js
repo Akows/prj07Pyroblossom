@@ -282,7 +282,7 @@ const PurchasePrice2 = styled.div`
     justify-content: flex-end;
 
     & > p:nth-child(1) {
-        font-size: 18px;
+        font-size: 22px;
         opacity: 0.8;
     };
     & > p:nth-child(3) {
