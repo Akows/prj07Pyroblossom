@@ -1,70 +1,151 @@
-# Getting Started with Create React App
+# 개인 프로젝트 07 - Pyro Blossom
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 👥 Member Info
 
-## Available Scripts
+### 이유승
 
-In the project directory, you can run:
+<br/>
 
-### `npm start`
+## 💪🏻프로젝트 목표
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- 게임 ‘원신’을 주제로 하는 가상 온라인 쇼핑몰
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+<br/>
 
-### `npm test`
+## ✔️ 배포링크
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- `Google Firebase Hosting` [🔗Link](https://prj07pyroblossom.web.app/store)
 
-### `npm run build`
+<br/>
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 🛠️ 프로젝트 설명
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### 해당 프로젝트에 대한 상세한 설명은 제 [🔗포트폴리오](https://www.notion.so/6f40078f4a3340a1955b62cf823e4b9a?pvs=4#23e873f37ee749f7a1655c694f3b24f3)에 작성해두었습니다!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+<br/>
 
-### `npm run eject`
+## 🌲프로젝트 구조
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+```bash
+src
+ ┣ assets
+ ┃ ┣ fonts
+ ┃ ┃ ┣ font.css
+ ┃ ┃ ┗ ja-jp.ttf
+ ┃ ┣ images
+ ┃ ┃ ┣ background
+ ┃ ┃ ┃ ┣ loading.gif
+ ┃ ┃ ┃ ┗ upLiyueport2.jpg
+ ┃ ┃ ┣ button
+ ┃ ┃ ┃ ┣ btnleft.png
+ ┃ ┃ ┃ ┗ btnright.png
+ ┃ ┃ ┣ emoji
+ ┃ ┃ ┃ ┣ Icon_Emoji_010_Amber_Save_me.webp
+ ┃ ┃ ┃ ┣ Icon_Emoji_066_Hu_Tao_Reciting_poetry.webp
+ ┃ ┃ ┃ ┗ Icon_Emoji_Kamisato_Ayato_3.webp
+ ┃ ┃ ┣ icon
+ ┃ ┃ ┃ ┗ Element_Pyro.svg
+ ┃ ┃ ┣ stars
+ ┃ ┃ ┃ ┣ Icon_1_Star.webp
+ ┃ ┃ ┃ ┣ Icon_2_Stars.webp
+ ┃ ┃ ┃ ┣ Icon_3_Stars.webp
+ ┃ ┃ ┃ ┣ Icon_4_Stars.webp
+ ┃ ┃ ┃ ┗ Icon_5_Stars.webp
+ ┃ ┃ ┣ testImg
+ ┃ ┃ ┃ ┣ test1.jpg
+ ┃ ┃ ┃ ┣ test2.jpg
+ ┃ ┃ ┃ ┣ test3.jpg
+ ┃ ┃ ┃ ┣ test4.jpg
+ ┃ ┃ ┃ ┣ test5.jpg
+ ┃ ┃ ┃ ┣ test6.jpg
+ ┃ ┃ ┃ ┗ testproductimg.jpg
+ ┃ ┃ ┣ character_eula_portrait.png
+ ┃ ┃ ┣ Character_Klee_Full_Wish.webp
+ ┃ ┃ ┣ Genshin-Impact-Logo.webp
+ ┃ ┃ ┣ Genshin-Impact-LogoW.png
+ ┃ ┃ ┗ System_Shop.webp
+ ┃ ┣ slideshow
+ ┃ ┃ ┣ testimg1.jfif
+ ┃ ┃ ┣ testimg2.jfif
+ ┃ ┃ ┣ testimg3.jfif
+ ┃ ┃ ┣ testimg4.jfif
+ ┃ ┃ ┗ testimg5.jfif
+ ┃ ┗ animation.css
+ ┣ components
+ ┃ ┣ store
+ ┃ ┃ ┣ myPage
+ ┃ ┃ ┃ ┣ AdminProductManagement.js
+ ┃ ┃ ┃ ┣ AdminProductUpload.js
+ ┃ ┃ ┃ ┣ MyPageNavigation.js
+ ┃ ┃ ┃ ┣ PointHistory.js
+ ┃ ┃ ┃ ┗ PurchaseHistory.js
+ ┃ ┃ ┣ payment
+ ┃ ┃ ┃ ┣ OrderPurchase.js
+ ┃ ┃ ┃ ┗ PurchaseComplete.js
+ ┃ ┃ ┣ productDetail
+ ┃ ┃ ┃ ┣ ProductInfomation.js
+ ┃ ┃ ┃ ┣ QnA.js
+ ┃ ┃ ┃ ┗ Reviews.js
+ ┃ ┃ ┗ PointChargeModal.js
+ ┃ ┣ user
+ ┃ ┃ ┣ login
+ ┃ ┃ ┃ ┗ IDAndPasswordSearchModal.js
+ ┃ ┃ ┣ signup
+ ┃ ┃ ┃ ┣ RequestEmailAndPasswordVerify.js
+ ┃ ┃ ┃ ┣ RequestOtherVerify.js
+ ┃ ┃ ┃ ┣ RequestTermsAgreement.js
+ ┃ ┃ ┃ ┗ SignupComplete.js
+ ┃ ┃ ┣ AddressInput.js
+ ┃ ┃ ┗ DeleteAccountModal.js
+ ┃ ┣ ErrorModal.js
+ ┃ ┣ Footer.js
+ ┃ ┣ Loading.js
+ ┃ ┣ Navigation.js
+ ┃ ┣ Pagination.js
+ ┃ ┣ SlideShow.js
+ ┃ ┗ StoreNavigation.js
+ ┣ configs
+ ┃ ┣ firebase
+ ┃ ┃ ┗ config.js
+ ┃ ┗ errorCodes.js
+ ┣ functions
+ ┃ ┣ ScrollToTop.js
+ ┃ ┣ storeFunction.js
+ ┃ ┗ userFunction.js
+ ┣ pages
+ ┃ ┣ admin
+ ┃ ┃ ┗ AdminPage.js
+ ┃ ┣ store
+ ┃ ┃ ┣ PaymentPage.js
+ ┃ ┃ ┣ ProductDetail.js
+ ┃ ┃ ┣ ProductList.js
+ ┃ ┃ ┣ ShoppingBasket.js
+ ┃ ┃ ┣ StoreMain.js
+ ┃ ┃ ┗ StoreMyPage.js
+ ┃ ┣ user
+ ┃ ┃ ┣ Login.js
+ ┃ ┃ ┣ MyPage.js
+ ┃ ┃ ┗ Signup.js
+ ┃ ┗ Main.js
+ ┣ redux
+ ┃ ┣ actions
+ ┃ ┃ ┣ storeAction.js
+ ┃ ┃ ┗ userAction.js
+ ┃ ┣ reducers
+ ┃ ┃ ┣ reducerIndex.js
+ ┃ ┃ ┣ storeReducer.js
+ ┃ ┃ ┗ userReducer.js
+ ┃ ┗ store.js
+ ┣ unused
+ ┃ ┣ Login.js
+ ┃ ┣ RequestEmailVerify.js
+ ┃ ┣ RequestOtherVerify.js
+ ┃ ┣ RequestPasswordVerify.js
+ ┃ ┣ RequestPasswordVerifyV2.js
+ ┃ ┗ RequestTermsAgreement.js
+ ┣ App.css
+ ┣ App.js
+ ┣ index.css
+ ┣ index.js
+ ┗ ResetCSS.css
+```
