@@ -187,7 +187,7 @@ const Product = styled.div`
 `;
 const ProductImg = styled.div`
     width: 100%;
-    height: 60%;
+    height: 55%;
 
     display: flex;
     flex-direction: column;
@@ -198,7 +198,7 @@ const ProductImg = styled.div`
 
     & > img {
         width: 100%;
-        height: 330px;
+        height: 100%;
     };
 `;
 const ProductTitle = styled.div`
